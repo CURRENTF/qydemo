@@ -19,4 +19,6 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="send_phone_verify_code">发送验证码</string>
+    <string name="phone_verify_code">验证码</string>
 </resources>

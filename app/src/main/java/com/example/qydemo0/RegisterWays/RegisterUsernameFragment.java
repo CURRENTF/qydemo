@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.qydemo0.LoginActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -83,10 +84,10 @@ public class RegisterUsernameFragment extends Fragment {
 
     public void getRegisterTokenAndUid(JSONObject json){
         try {
-            GlobalVariable.mInstance.RegisterToken = json.getString("token");
+            GlobalVariable.mInstance.registerToken = json.getString("token");
             GlobalVariable.mInstance.uid = json.getString("uid");
             GlobalVariable.mInstance.isRegisterTokenExisted = true;
-            Log.d("hjt", GlobalVariable.mInstance.RegisterToken);
+            Log.d("hjt", GlobalVariable.mInstance.registerToken);
         } catch (JSONException e){
             Log.d("hjt", e.getMessage());
         }
@@ -114,6 +115,7 @@ public class RegisterUsernameFragment extends Fragment {
                 return;
             }
             getRegisterTokenAndUid(json);
+            toRegister2();
         }
     }
 
@@ -123,4 +125,10 @@ public class RegisterUsernameFragment extends Fragment {
         Button btn = getActivity().findViewById(R.id.button_register_username);
         btn.setOnClickListener(new Register());
     }
+
+    public void toRegister2(){
+        LoginActivity ac = (LoginActivity) getActivity();
+        ac.showRegister2UsernameFragment();
+    }
+
 }

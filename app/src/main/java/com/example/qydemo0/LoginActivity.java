@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.qydemo0.QYpack.Constant;
@@ -27,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     Constant C = new Constant();
 
     private int loginWays[] = {R.id.fragment_username_login, R.id.fragment_phone_login, R.id.fragment_email_login};
-    private int registerWays[] = {R.id.fragment_email_register, R.id.fragment_username_register};
+    private int registerWays[] = {R.id.fragment_email_register, R.id.fragment_username_register, R.id.fragment_username_register2};
 
     public class RegisterToLogin implements View.OnClickListener{
 
@@ -73,6 +74,14 @@ public class LoginActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment f = fm.findFragmentById(frag_id);
         fm.beginTransaction().show(f).commitNow();
+    }
+
+    public void showRegister2UsernameFragment(){
+        hideRegisterFragment();
+        showFragment(C.default_register2_way);
+        EditText phone = findViewById(R.id.edit_text_phone_verify);
+        EditText ph = findViewById(R.id.edit_text_register_phone);
+        phone.setText(ph.getText());
     }
 
     @Override

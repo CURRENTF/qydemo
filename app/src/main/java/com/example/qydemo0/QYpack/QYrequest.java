@@ -26,11 +26,12 @@ public class QYrequest {
      * 同步请求
      */
     public String post(String data, String urll){
-        final String[] msg = {""};
-        final int[] status = {0};
+        Log.e("hjt", "1");
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.e("hjt", "2");
+                GlobalVariable.mInstance.status = 0;
                 OkHttpClient okHttpClient = new OkHttpClient();//创建单例
                 RequestBody body = RequestBody.create(JSON, data);
                 Request request = new Request.Builder()//创建请求
@@ -40,9 +41,8 @@ public class QYrequest {
                 try {
                     Response response = okHttpClient.newCall(request).execute();//执行请求
                     String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
-//                    Log.d("hjt", mContent);
-                    msg[0] = mContent;
-                    status[0] = 1;
+                    GlobalVariable.mInstance.msg = mContent;
+                    GlobalVariable.mInstance.status = 1;
                 } catch (IOException e) {
                     e.printStackTrace();
                     Log.e("hjt", e.toString());
@@ -50,13 +50,15 @@ public class QYrequest {
             }
         });
         thread.start();
-        while (status[0] == 0);
-        return msg[0];
+        Log.e("hjt", "ok");
+        while (GlobalVariable.mInstance.status == 0);
+        Log.e("hjt", "ok2");
+        return GlobalVariable.mInstance.msg;
     }
 
-    OkHttpClient client = new OkHttpClient();
 
     public String post2(String json, String url) throws IOException {
+        OkHttpClient client = new OkHttpClient();
         RequestBody body = RequestBody.create(JSON, json);
         Request request = new Request.Builder()
                 .url(url)

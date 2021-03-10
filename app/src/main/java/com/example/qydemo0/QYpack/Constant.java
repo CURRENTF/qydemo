@@ -11,6 +11,7 @@ public class Constant {
 
     public int default_login_way = R.id.fragment_username_login,
         default_register_way = R.id.fragment_username_register,
+        default_register2_way = R.id.fragment_username_register2,
         HTTP_OK = 200;
 
     public String database = "QYdata";
