@@ -23,6 +23,7 @@ import com.example.qydemo0.LoginActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.MD5encrypt;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
@@ -76,7 +77,8 @@ public class RegisterUsernameFragment extends Fragment {
 
             GenerateJson g = new GenerateJson();
             postRegisterMsg po = new postRegisterMsg();
-            po.execute(g.registerPostJson(username.toString(), password.toString(), phone.toString()), C.register_url, "post");
+            // 密码的加密处理
+            po.execute(g.registerPostJson(username.toString(), MD5encrypt.encrypt(password.toString()), phone.toString()), C.register_url, "post");
 
         }
     }

@@ -1,5 +1,6 @@
 package com.example.qydemo0.LoginWays;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,8 +14,12 @@ import android.widget.TextView;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.MD5encrypt;
+import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -38,12 +43,27 @@ public class LoginUsernameFragment extends Fragment {
             CharSequence username = tv_username.getText();
             TextView tv_password = getActivity().findViewById(R.id.edit_text_login_password);
             CharSequence password = tv_password.getText();
+
             Log.d("hjt", username.toString());
             Log.d("hjt", password.toString());
+
             GenerateJson g = new GenerateJson();
+            PostLoginMsg po = new PostLoginMsg();
+            po.execute(username.toString(), MD5encrypt.encrypt(password.toString()));
+        }
+    }
+
+    class PostLoginMsg extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String data = strings[0], url = strings[1];
             QYrequest htp = new QYrequest();
-            String msg = htp.post(g.loginJson(username.toString(), password.toString(), 0), C.login_url);
-            Log.d("hjt", msg);
+            JSONObject json = MsgProcess.msgProcess(htp.post(data, url));
+            if(json != null){
+                // 该跳转了
+            }
+            return null;
         }
     }
 

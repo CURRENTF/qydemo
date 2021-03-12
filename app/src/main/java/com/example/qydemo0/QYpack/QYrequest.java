@@ -23,7 +23,7 @@ public class QYrequest {
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    Constant C = new Constant();
+    Constant C = Constant.mInstance;
 
     public String post(String data, String urll){
         Log.e("hjt", "2");

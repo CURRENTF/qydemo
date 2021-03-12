@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class GenerateJson {
 
-    Constant C = new Constant();
+    Constant C = Constant.mInstance;
 
     // mark is login pattern
     public String loginJson(String username, String password, int mark){
