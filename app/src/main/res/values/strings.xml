@@ -21,4 +21,5 @@
     <string name="title_notifications">Notifications</string>
     <string name="send_phone_verify_code">发送验证码</string>
     <string name="phone_verify_code">验证码</string>
+    <string name="verify">验证</string>
 </resources>

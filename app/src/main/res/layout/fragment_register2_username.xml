@@ -42,5 +42,12 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:hint="@string/phone_verify_code" />
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_finish_register"
+        android:text="@string/verify"
+        android:layout_gravity="center">
+    </com.google.android.material.button.MaterialButton>
 
 </LinearLayout>

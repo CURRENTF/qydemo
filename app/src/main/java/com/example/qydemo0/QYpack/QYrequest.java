@@ -26,9 +26,6 @@ public class QYrequest {
     Constant C = Constant.mInstance;
 
     public String post(String data, String urll){
-        Log.e("hjt", "2");
-        Log.e("hjt", data);
-        GlobalVariable.mInstance.status = 0;
         OkHttpClient okHttpClient = new OkHttpClient();//创建单例
         RequestBody body = RequestBody.create(JSON, data);
         Request request = new Request.Builder()//创建请求
@@ -41,6 +38,23 @@ public class QYrequest {
             return mContent;
         } catch (IOException e) {
 //            e.printStackTrace();
+            Log.e("hjt", e.toString());
+            return "";
+        }
+    }
+
+
+    public String get(String url){
+        OkHttpClient okHttpClient = new OkHttpClient();//创建单例
+        Request request = new Request.Builder()//创建请求
+                .url(url)
+                .get()
+                .build();
+        try {
+            Response response = okHttpClient.newCall(request).execute();//执行请求
+            String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
+            return mContent;
+        } catch (IOException e) {
             Log.e("hjt", e.toString());
             return "";
         }

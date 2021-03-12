@@ -9,16 +9,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Register2UsernameFragment extends Fragment {
+
+    Constant C = Constant.mInstance;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,10 @@ public class Register2UsernameFragment extends Fragment {
 
     @Override
     public void onStart() {
+        Button btn = getActivity().findViewById(R.id.button_send_register_code);
+        btn.setOnClickListener(new btn());
+        btn = getActivity().findViewById(R.id.button_finish_register);
+        btn.setOnClickListener(new btn());
         super.onStart();
     }
 
@@ -42,20 +56,35 @@ public class Register2UsernameFragment extends Fragment {
         super.onResume();
     }
 
+    class btn implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            EditText et_phone = getActivity().findViewById(R.id.edit_text_register_phone);
+            CharSequence ph = et_phone.getText();
+            switch (v.getId()){
+                case R.id.button_send_register_code:
+                    SendMsgToPhone po = new SendMsgToPhone();
+                    po.execute(GenerateJson.phoneOnlyJson(ph.toString()), C.verify_url);
+                    break;
+                case R.id.button_finish_register:
+                    EditText code = getActivity().findViewById(R.id.edit_text_verify_code);
+                    CharSequence code_content = code.getText();
+                    VerifyCode vc = new VerifyCode();
+                    vc.execute(ph.toString(), code_content.toString(), C.verify_url);
+                    break;
+            }
+        }
+    }
+
     class SendMsgToPhone extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            String data = strings[0], url = strings[1], method = strings[2];
-            url = url + "0/0/";
+            String data = strings[0], url = strings[1];
             QYrequest htp = new QYrequest();
-            if(method.equals("post")){
-                return htp.post(data, url);
-            }
-            else if(method.equals("get")) {
-
-            }
-            return "";
+            url = url + "0/0/";
+            return htp.post(data, url);
         }
 
         @Override
@@ -63,7 +92,33 @@ public class Register2UsernameFragment extends Fragment {
             Log.d("hjtregister2", s);
             JSONObject json = MsgProcess.msgProcess(s);
             if(json != null){
+                Toast toast = null;
+                Toast.makeText(getContext(), "验证码已发送", Toast.LENGTH_LONG).show();
+            }
+            super.onPostExecute(s);
+        }
+    }
 
+    class VerifyCode extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            Map<String, String> map = new HashMap<>();
+            map.put("info", strings[0]);
+            map.put("code", strings[1]);
+            QYrequest htp = new QYrequest();
+            String url = strings[2];
+            url += Json2X.Json2StringForHttpGet(map);
+            return htp.get(url);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("hjtregister2verify", s);
+            JSONObject json = MsgProcess.msgProcess(s);
+            if(json != null){
+                Toast toast = null;
+                Toast.makeText(getContext(), "验证码正确", Toast.LENGTH_LONG).show();
             }
             super.onPostExecute(s);
         }
