@@ -8,7 +8,7 @@ import org.json.JSONObject;
 public class MsgProcess {
 
     public static JSONObject msgProcess(String msg){
-        Constant C = new Constant();
+        Constant C = Constant.mInstance;
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){

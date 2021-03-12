@@ -9,7 +9,7 @@
     tools:context=".RegisterWays.Register2UsernameFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/CL3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -17,26 +17,29 @@
             android:id="@+id/edit_text_phone_verify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:inputType="phone"
+            android:hint="@string/phone_number"
+            app:layout_constraintEnd_toStartOf="@+id/button_send_register_code"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/button_send_register_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/send_phone_verify_code"
+            android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/edit_text_phone_verify"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/edit_text_verify_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:inputType="number"
         android:hint="@string/phone_verify_code" />
 

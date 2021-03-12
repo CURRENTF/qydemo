@@ -26,7 +26,7 @@ public class GlobalVariable {
         // should be empty?
     }
 
-    Constant C = new Constant();
+    Constant C = Constant.mInstance;
 
     public void readAllVar(SharedPreferences sp){
         token = sp.getString("token", "");

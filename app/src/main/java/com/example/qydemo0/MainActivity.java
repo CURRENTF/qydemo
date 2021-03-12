@@ -14,7 +14,7 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 
 public class MainActivity extends AppCompatActivity {
 
-    Constant C = new Constant();
+    Constant C = Constant.mInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

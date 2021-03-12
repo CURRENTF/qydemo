@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");
 
-    Constant C = new Constant();
+    Constant C = Constant.mInstance;
 
     private int loginWays[] = {R.id.fragment_username_login, R.id.fragment_phone_login, R.id.fragment_email_login};
     private int registerWays[] = {R.id.fragment_email_register, R.id.fragment_username_register, R.id.fragment_username_register2};
@@ -76,6 +77,7 @@ public class LoginActivity extends AppCompatActivity {
         fm.beginTransaction().show(f).commitNow();
     }
 
+
     public void showRegister2UsernameFragment(){
         hideRegisterFragment();
         showFragment(C.default_register2_way);
@@ -94,8 +96,6 @@ public class LoginActivity extends AppCompatActivity {
 
         Button btn = findViewById(R.id.button_login_to_register);
         btn.setOnClickListener(new LoginToRegister());
-
-
 
     }
 

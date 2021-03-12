@@ -4,10 +4,13 @@ import com.example.qydemo0.R;
 
 public class Constant {
 
+    public static final Constant mInstance = new Constant();
+
     public String username = "username", email = "email", phone = "phone", password = "password";
 
     public String login_url = "https://api.yhf2000.cn/api/qingying/v1/user/account/login/",
-        register_url = "https://api.yhf2000.cn/api/qingying/v1/user/account/register/";
+        register_url = "https://api.yhf2000.cn/api/qingying/v1/user/account/register/",
+        verify_url = "https://api.yhf2000.cn/api/qingying/v1/user/verify/";
 
     public int default_login_way = R.id.fragment_username_login,
         default_register_way = R.id.fragment_username_register,
@@ -15,5 +18,9 @@ public class Constant {
         HTTP_OK = 200;
 
     public String database = "QYdata";
+
+    private Constant(){
+
+    }
 
 }
