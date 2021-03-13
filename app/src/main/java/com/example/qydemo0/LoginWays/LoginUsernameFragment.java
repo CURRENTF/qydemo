@@ -1,5 +1,7 @@
 package com.example.qydemo0.LoginWays;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -76,6 +78,8 @@ public class LoginUsernameFragment extends Fragment {
                 } catch (JSONException e) {
                     Log.d("hjt doesnt exist token", "ww");
                 }
+                SharedPreferences sp = getActivity().getSharedPreferences(C.database, Context.MODE_PRIVATE);
+                GlobalVariable.mInstance.saveAllVar(sp);
                 Toast toast = null;
                 Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
                 // 该跳转了

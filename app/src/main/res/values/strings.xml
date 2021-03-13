@@ -22,4 +22,8 @@
     <string name="send_phone_verify_code">发送验证码</string>
     <string name="phone_verify_code">验证码</string>
     <string name="verify">验证</string>
+    <string name="posts">动态</string>
+    <string name="my">我的</string>
+    <string name="split">分区</string>
+    <string name="haveFun">娱乐</string>
 </resources>
