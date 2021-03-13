@@ -12,14 +12,19 @@ public class MsgProcess {
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
-                json = new JSONObject(json.getString("data"));
-                return json;
+                try {
+                    json = new JSONObject(json.getString("data"));
+                    return json;
+                }
+                catch (JSONException e){
+                    return json;
+                }
             }
             else {
-                Log.e("hjt", json.getString("msg"));
+                Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {
-            Log.e("hjt", "json");
+            Log.e("hjtMsgProcess", "jsonMsgProcessWrong");
             e.printStackTrace();
         }
         return null;

@@ -107,7 +107,7 @@ public class Register2UsernameFragment extends Fragment {
             map.put("info", strings[0]);
             map.put("code", strings[1]);
             QYrequest htp = new QYrequest();
-            String url = strings[2];
+            String url = strings[2] + "0/0/";
             url += Json2X.Json2StringForHttpGet(map);
             return htp.get(url);
         }

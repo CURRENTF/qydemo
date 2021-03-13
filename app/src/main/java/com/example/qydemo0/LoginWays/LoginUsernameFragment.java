@@ -11,14 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MD5encrypt;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -49,7 +52,7 @@ public class LoginUsernameFragment extends Fragment {
 
             GenerateJson g = new GenerateJson();
             PostLoginMsg po = new PostLoginMsg();
-            po.execute(username.toString(), MD5encrypt.encrypt(password.toString()));
+            po.execute(g.loginJson(username.toString(), MD5encrypt.encrypt(password.toString()), 0), C.login_url);
         }
     }
 
@@ -59,11 +62,25 @@ public class LoginUsernameFragment extends Fragment {
         protected String doInBackground(String... strings) {
             String data = strings[0], url = strings[1];
             QYrequest htp = new QYrequest();
-            JSONObject json = MsgProcess.msgProcess(htp.post(data, url));
+            return htp.post(data, url);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            JSONObject json = MsgProcess.msgProcess(s);
+            Log.d("hjtLoginReturnMsg", s);
             if(json != null){
+                GlobalVariable.mInstance.tokenExisted = true;
+                try {
+                    GlobalVariable.mInstance.token = json.getString("token");
+                } catch (JSONException e) {
+                    Log.d("hjt doesnt exist token", "ww");
+                }
+                Toast toast = null;
+                Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
                 // 该跳转了
             }
-            return null;
+            super.onPostExecute(s);
         }
     }
 
