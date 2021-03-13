@@ -22,11 +22,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);
 
-        Log.d("hjt", "start" + GlobalVariable.mInstance.token);
+        Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
         if(!GlobalVariable.mInstance.tokenExisted){
             Intent it = new Intent();
             it.setComponent(new ComponentName(this, LoginActivity.class));
+            it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(it);
         }
 
