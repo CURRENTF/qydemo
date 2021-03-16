@@ -39,20 +39,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onStart() {
-        Button btn = getActivity().findViewById(R.id.button_add_image);
-        btn.setOnClickListener(this);
-        super.onStart();
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         scrollViewForVideos = getActivity().findViewById(R.id.home_scroll_for_video_cover);
         for(int i = 0; i < GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.size(); i++){
             ImageView img = new ImageView(getActivity());
-            img.setBackgroundColor(getResources().getColor(R.color.black));
+//            img.setBackgroundColor(getResources().getColor(R.color.black));
             Ion.with(img)
                     .placeholder(R.drawable.placeholder_image)
                     .error(R.drawable.error_image)
                     .load(GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.get(i));
             scrollViewForVideos.addView(img);
         }
+    }
+
+    @Override
+    public void onStart() {
+        Button btn = getActivity().findViewById(R.id.button_add_image);
+        btn.setOnClickListener(this);
+        super.onStart();
+        scrollViewForVideos = getActivity().findViewById(R.id.home_scroll_for_video_cover);
     }
 
     @Override
@@ -63,7 +69,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         ImageView img = new ImageView(getActivity());
-        img.setBackgroundColor(getResources().getColor(R.color.black));
+//        img.setBackgroundColor(getResources().getColor(R.color.black));
         Ion.with(img)
                 .placeholder(R.drawable.placeholder_image)
                 .error(R.drawable.error_image)
