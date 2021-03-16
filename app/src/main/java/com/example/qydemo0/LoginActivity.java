@@ -101,6 +101,12 @@ public class LoginActivity extends AppCompatActivity {
         Button btn = findViewById(R.id.button_login_to_register);
         btn.setOnClickListener(new LoginToRegister());
 
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+
+
+
     }
 
 

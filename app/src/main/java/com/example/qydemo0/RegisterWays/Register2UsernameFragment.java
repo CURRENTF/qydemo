@@ -1,5 +1,6 @@
 package com.example.qydemo0.RegisterWays;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -119,6 +121,10 @@ public class Register2UsernameFragment extends Fragment {
             if(json != null){
                 Toast toast = null;
                 Toast.makeText(getContext(), "验证码正确", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
             super.onPostExecute(s);
         }

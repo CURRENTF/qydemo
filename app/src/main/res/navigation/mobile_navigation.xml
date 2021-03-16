@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.qydemo0.ui.notifications.NotificationsFragment"
+        android:id="@+id/navigation_category"
+        android:name="com.example.qydemo0.ui.category.CategoryFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.qydemo0.ui.notifications;
+package com.example.qydemo0.ui.category;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.qydemo0.R;
 
-public class NotificationsFragment extends Fragment {
+public class CategoryFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private CategoryViewModel categoryViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        categoryViewModel =
+                new ViewModelProvider(this).get(CategoryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        categoryViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

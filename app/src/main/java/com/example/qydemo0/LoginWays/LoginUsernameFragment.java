@@ -1,6 +1,7 @@
 package com.example.qydemo0.LoginWays;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -83,6 +85,10 @@ public class LoginUsernameFragment extends Fragment {
                 Toast toast = null;
                 Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
                 // 该跳转了
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
             super.onPostExecute(s);
         }
