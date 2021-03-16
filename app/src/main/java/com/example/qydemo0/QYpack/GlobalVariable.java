@@ -7,6 +7,7 @@ import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.R;
 
 import java.lang.reflect.Field;
+import java.util.Vector;
 
 
 public class GlobalVariable {
@@ -21,6 +22,7 @@ public class GlobalVariable {
 
     public int status = 0;
     public String msg = "";
+    public Vector<String> imgURLForMainHome = new Vector<String>();
 
     private GlobalVariable(){
         // should be empty?
