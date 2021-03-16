@@ -3,6 +3,7 @@ package com.example.qydemo0.QYpack;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.R;
 
@@ -22,7 +23,8 @@ public class GlobalVariable {
 
     public int status = 0;
     public String msg = "";
-    public Vector<String> imgURLForMainHome = new Vector<String>();
+    public FragmentDataForMain fragmentDataForMain = null;
+//    public Vector<String> imgURLForMainHome = new Vector<String>();
 
     private GlobalVariable(){
         // should be empty?

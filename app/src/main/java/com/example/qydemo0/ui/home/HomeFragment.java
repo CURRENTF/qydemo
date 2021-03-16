@@ -44,13 +44,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn.setOnClickListener(this);
         super.onStart();
         scrollViewForVideos = getActivity().findViewById(R.id.home_scroll_for_video_cover);
-        for(int i = 0; i < GlobalVariable.mInstance.imgURLForMainHome.size(); i++){
+        for(int i = 0; i < GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.size(); i++){
             ImageView img = new ImageView(getActivity());
             img.setBackgroundColor(getResources().getColor(R.color.black));
             Ion.with(img)
                     .placeholder(R.drawable.placeholder_image)
                     .error(R.drawable.error_image)
-                    .load(GlobalVariable.mInstance.imgURLForMainHome.get(i));
+                    .load(GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.get(i));
             scrollViewForVideos.addView(img);
         }
     }
@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .error(R.drawable.error_image)
                 .load("https://file.yhf2000.cn/img/defult1.jpeg");
         scrollViewForVideos.addView(img);
-        GlobalVariable.mInstance.imgURLForMainHome.add("https://file.yhf2000.cn/img/defult1.jpeg");
+        GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.add("https://file.yhf2000.cn/img/defult1.jpeg");
         Log.d("hjt", "已添加图片");
     }
 }

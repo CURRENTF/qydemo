@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(it);
             finish();
         }
+
+        GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
+        // TODO: need delete
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
