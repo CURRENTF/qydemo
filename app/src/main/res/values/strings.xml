@@ -28,6 +28,6 @@
     <string name="dashboard">我的</string>
     <string name="home">舞房</string>
     <string name="study_recent">最近学习</string>
-    <string name="learning">学习中</string>
+    <string name="learning_list">学习列表</string>
     <string name="dance_free">随心舞蹈</string>
 </resources>

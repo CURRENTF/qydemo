@@ -76,6 +76,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 .load("https://file.yhf2000.cn/img/defult1.jpeg");
         scrollViewForVideos.addView(img);
         GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.add("https://file.yhf2000.cn/img/defult1.jpeg");
+
+        img = new ImageView(getActivity());
+        Ion.with(img)
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
+                .load("https://file.yhf2000.cn/img/defult1.jpeg");
+        ((LinearLayout)getActivity().findViewById(R.id.top_hot_showcase)).addView(img);
         Log.d("hjt", "已添加图片");
     }
 }
