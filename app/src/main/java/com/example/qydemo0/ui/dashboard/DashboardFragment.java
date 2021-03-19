@@ -56,6 +56,11 @@ public class DashboardFragment extends Fragment {
                     .load(json.getString("img_url"))
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(userAvatar);
+            TextView txt = getActivity().findViewById(R.id.text_username);
+            txt.setText(json.getString("username"));
+            json.put("sign", "haoge tai shuai le 太帅了");
+            txt = getActivity().findViewById(R.id.text_user_sign);
+            txt.setText(json.getString("sign"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

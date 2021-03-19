@@ -21,22 +21,62 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
-        android:background="@drawable/top_radius_user_info">
+        android:background="@drawable/top_radius_user_info"
+        android:paddingBottom="70dp"
+        android:paddingTop="15dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
             android:id="@+id/user_info">
             <ImageView
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="70dp"
-                android:layout_marginHorizontal="20dp"
                 android:scaleType="centerCrop"
                 android:background="@drawable/circle"
-                android:id="@+id/user_avatar"/>
+                android:layout_marginEnd="10dp"
+                android:id="@+id/user_avatar" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/linear_layout_username_sign"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text_username"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="20sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/text_user_sign"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:textColor="@color/exo_black_opacity_60"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_settings"/>
+
         </LinearLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_width="match_parent"
+            android:layout_height="240dp"
+            android:id="@+id/fragment_for_works_activities">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.fragment.app.FragmentContainerView>
     </LinearLayout>
 
 

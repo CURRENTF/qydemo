@@ -4,10 +4,5 @@
     <!--设置渐变-->
     <gradient android:startColor="#ED709C"
         android:endColor="#EC896D"
-        android:angle="145"/>
-    <!-- padding：Button里面的文字与Button边界的间隔 -->
-    <padding
-        android:left="5dp"
-        android:right="5dp"
-        />
+        android:angle="135"/>
 </shape>
