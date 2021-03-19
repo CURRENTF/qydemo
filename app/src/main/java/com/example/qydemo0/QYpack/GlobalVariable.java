@@ -24,7 +24,6 @@ public class GlobalVariable {
     public int status = 0;
     public String msg = "";
     public FragmentDataForMain fragmentDataForMain = null;
-//    public Vector<String> imgURLForMainHome = new Vector<String>();
 
     private GlobalVariable(){
         // should be empty?

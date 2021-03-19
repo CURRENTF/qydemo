@@ -60,6 +60,27 @@ public class QYrequest {
         }
     }
 
+    public String advanceGet(String... strings){
+        int sz = strings.length;
+        String url = strings[0];
+        OkHttpClient okHttpClient = new OkHttpClient();//创建单例
+        Request.Builder tmp = new Request.Builder()//创建请求
+                .url(url)
+                .get();
+        for(int i = 1; i < sz; i += 2){
+            tmp.addHeader(strings[i], strings[i + 1]);
+        }
+        Request request = tmp.build();
+        try {
+            Response response = okHttpClient.newCall(request).execute();//执行请求
+            String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
+            return mContent;
+        } catch (IOException e) {
+            Log.e("hjt", e.toString());
+            return "";
+        }
+    }
+
     // 不知道怎么用
     public String post2(String json, String url) throws IOException {
         OkHttpClient client = new OkHttpClient();

@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         scrollViewForVideos = getActivity().findViewById(R.id.home_scroll_for_video_cover);
         for(int i = 0; i < GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.size(); i++){
             ImageView img = new ImageView(getActivity());
-//            img.setBackgroundColor(getResources().getColor(R.color.black));
             Ion.with(img)
                     .placeholder(R.drawable.placeholder_image)
                     .error(R.drawable.error_image)
@@ -69,20 +68,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         ImageView img = new ImageView(getActivity());
-//        img.setBackgroundColor(getResources().getColor(R.color.black));
         Ion.with(img)
                 .placeholder(R.drawable.placeholder_image)
                 .error(R.drawable.error_image)
-                .load("https://file.yhf2000.cn/img/defult1.jpeg");
+                .load("https://file.yhf2000.cn/img/defult2.jpeg");
         scrollViewForVideos.addView(img);
         GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.add("https://file.yhf2000.cn/img/defult1.jpeg");
-
-        img = new ImageView(getActivity());
-        Ion.with(img)
-                .placeholder(R.drawable.placeholder_image)
-                .error(R.drawable.error_image)
-                .load("https://file.yhf2000.cn/img/defult1.jpeg");
-        ((LinearLayout)getActivity().findViewById(R.id.top_hot_showcase)).addView(img);
         Log.d("hjt", "已添加图片");
     }
+
+
 }
