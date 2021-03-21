@@ -63,7 +63,7 @@
         <fragment
             android:id="@+id/fragment_username_login"
             android:name="com.example.qydemo0.LoginWays.LoginUsernameFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +73,7 @@
         <fragment
             android:id="@+id/fragment_phone_login"
             android:name="com.example.qydemo0.LoginWays.LoginPhoneFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +83,7 @@
         <fragment
             android:id="@+id/fragment_email_login"
             android:name="com.example.qydemo0.LoginWays.LoginEmailFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -93,7 +93,7 @@
         <fragment
             android:id="@+id/fragment_username_register"
             android:name="com.example.qydemo0.RegisterWays.RegisterUsernameFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +103,7 @@
         <fragment
             android:id="@+id/fragment_email_register"
             android:name="com.example.qydemo0.RegisterWays.RegisterEmailFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -113,7 +113,7 @@
         <fragment
             android:id="@+id/fragment_username_register2"
             android:name="com.example.qydemo0.RegisterWays.Register2UsernameFragment"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
