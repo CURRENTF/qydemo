@@ -30,4 +30,8 @@
     <string name="study_recent">最近学习</string>
     <string name="learning_list">学习列表</string>
     <string name="dance_free">随心舞蹈</string>
+    <string name="file_url">文件地址</string>
+    <string name="browse">浏览</string>
+    <string name="no_file_now">未选择文件</string>
+    <string name="get_file_now">已选择文件</string>
 </resources>

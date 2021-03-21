@@ -1,5 +1,6 @@
 package com.example.qydemo0.ui.home;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +24,8 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.UploadActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.koushikdutta.ion.Ion;
 
 import org.json.JSONObject;
@@ -56,6 +60,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         Button btn = getActivity().findViewById(R.id.button_add_image);
         btn.setOnClickListener(this);
+        FloatingActionButton fbtn = getActivity().findViewById(R.id.button_add_my_video);
+        fbtn.setOnClickListener(this);
         super.onStart();
         scrollViewForVideos = getActivity().findViewById(R.id.home_scroll_for_video_cover);
     }
@@ -67,14 +73,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        ImageView img = new ImageView(getActivity());
-        Ion.with(img)
-                .placeholder(R.drawable.placeholder_image)
-                .error(R.drawable.error_image)
-                .load("https://file.yhf2000.cn/img/defult2.jpeg");
-        scrollViewForVideos.addView(img);
-        GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.add("https://file.yhf2000.cn/img/defult1.jpeg");
-        Log.d("hjt", "已添加图片");
+        switch (v.getId()){
+            case R.id.button_add_image:
+                ImageView img = new ImageView(getActivity());
+                Ion.with(img)
+                        .placeholder(R.drawable.placeholder_image)
+                        .error(R.drawable.error_image)
+                        .load("https://file.yhf2000.cn/img/defult1.jpeg");
+                scrollViewForVideos.addView(img);
+                GlobalVariable.mInstance.fragmentDataForMain.imgURLForHome.add("https://file.yhf2000.cn/img/defult1.jpeg");
+                Log.d("hjt", "已添加图片");
+                break;
+
+            case R.id.button_add_my_video:
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), UploadActivity.class);
+                startActivity(intent);
+                break;
+        }
+
     }
 
 

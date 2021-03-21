@@ -1,5 +1,6 @@
 package com.example.qydemo0.ui.dashboard;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.UserSettingActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,21 +46,26 @@ public class DashboardFragment extends Fragment {
             g.execute();
         }
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
+        ImageView img = getActivity().findViewById(R.id.button_user_setting);
+        img.setOnClickListener(new ModifyUserInfo());
     }
 
     void reWriteInfo(JSONObject json){
         GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
         // 设置头像
+        if(getActivity() == null) return;
         ImageView userAvatar = getActivity().findViewById(R.id.user_avatar);
         try {
             json.put("img_url", "https://file.yhf2000.cn/img/defult4.jpeg");
+            if(getActivity() == null) return;
             Glide.with(getActivity())
                     .load(json.getString("img_url"))
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                     .into(userAvatar);
+            if(getActivity() == null) return;
             TextView txt = getActivity().findViewById(R.id.text_username);
             txt.setText(json.getString("username"));
-            json.put("sign", "haoge tai shuai le 太帅了");
+            json.put("sign", "Born to Dance");
             txt = getActivity().findViewById(R.id.text_user_sign);
             txt.setText(json.getString("sign"));
         } catch (JSONException e) {
@@ -84,6 +91,15 @@ public class DashboardFragment extends Fragment {
         }
     }
 
+    class ModifyUserInfo implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), UserSettingActivity.class);
+            startActivity(intent);
+        }
+    }
     
 
 }

@@ -13,6 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
+        <activity android:name=".UserSettingActivity"></activity>
+        <activity android:name=".UploadActivity" />
         <activity android:name=".PlayerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

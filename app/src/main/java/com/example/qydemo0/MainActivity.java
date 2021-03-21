@@ -16,6 +16,7 @@ import android.util.Log;
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.ui.dashboard.DashboardFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,10 +66,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        Log.d("hjtMain", "MainPause");
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
 //        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
+        Log.d("hjtMain", "MainDestroyed");
         super.onDestroy();
     }
 }

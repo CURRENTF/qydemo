@@ -16,6 +16,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="auto"
+        android:id="@+id/button_add_my_video"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginBottom="70dp"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:src="@drawable/ic_add"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

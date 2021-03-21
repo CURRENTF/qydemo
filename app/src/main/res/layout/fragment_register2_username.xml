@@ -15,16 +15,18 @@
 
         <EditText
             android:id="@+id/edit_text_phone_verify"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="phone"
             android:hint="@string/phone_number"
-            android:layout_weight="0.7"/>
+            android:layout_weight="0.7"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/button_send_register_code"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.3"
             android:text="@string/send_phone_verify_code"
             android:layout_marginTop="4dp"/>
     </LinearLayout>
