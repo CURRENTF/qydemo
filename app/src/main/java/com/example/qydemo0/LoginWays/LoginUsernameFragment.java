@@ -77,6 +77,7 @@ public class LoginUsernameFragment extends Fragment {
                 GlobalVariable.mInstance.tokenExisted = true;
                 try {
                     GlobalVariable.mInstance.token = json.getString("token");
+//                    GlobalVariable.mInstance.uid = json.getString("uid");
                 } catch (JSONException e) {
                     Log.d("hjt doesnt exist token", "ww");
                 }

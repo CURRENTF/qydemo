@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);
 
+        Log.d("hjt", GlobalVariable.mInstance.uid + "?");
         Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
         if(!GlobalVariable.mInstance.tokenExisted){

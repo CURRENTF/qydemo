@@ -39,8 +39,20 @@ public class DashboardFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
@@ -52,6 +64,12 @@ public class DashboardFragment extends Fragment {
 
     void reWriteInfo(JSONObject json){
         GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
+        try {
+            GlobalVariable.mInstance.uid = json.getString("uid");
+        } catch (JSONException e) {
+            Log.e("hjtUID", "不存在??");
+            e.printStackTrace();
+        }
         // 设置头像
         if(getActivity() == null) return;
         ImageView userAvatar = getActivity().findViewById(R.id.user_avatar);

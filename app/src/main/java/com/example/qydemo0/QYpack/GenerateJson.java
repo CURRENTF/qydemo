@@ -35,6 +35,15 @@ public class GenerateJson {
         return s;
     }
 
+    public static String universeJson(String... strings){
+        int sz = strings.length;
+        Map<String, String> map = new HashMap<>();
+        for(int i = 1; i < sz; i += 2){
+            map.put(strings[i - 1], strings[i]);
+        }
+        return (new JSONObject(map)).toString();
+    }
+
 
 
 }

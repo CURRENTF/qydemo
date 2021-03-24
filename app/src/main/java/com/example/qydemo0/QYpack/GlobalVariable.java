@@ -21,9 +21,8 @@ public class GlobalVariable {
     public boolean isRegisterTokenExisted = false;
     public String registerToken = "";
 
-    public int status = 0;
-    public String msg = "";
     public FragmentDataForMain fragmentDataForMain = null;
+
 
     private GlobalVariable(){
         // should be empty?

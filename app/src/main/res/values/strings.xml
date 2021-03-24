@@ -34,4 +34,11 @@
     <string name="browse">浏览</string>
     <string name="no_file_now">未选择文件</string>
     <string name="get_file_now">已选择文件</string>
+    <string name="avatar">头像</string>
+    <string name="gender">性别</string>
+    <string name="user_sign">个性签名</string>
+    <string name="upload">上传</string>
+    <string name="video_name">视频名称</string>
+    <string name="video_category">视频分类</string>
+    <string name="introduction">简介</string>
 </resources>
