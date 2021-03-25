@@ -21,4 +21,7 @@
     <color name="qy_button">#51658A</color>
     <color name="qy_real_background">#EEF3F9</color>
     <drawable name="qy_button">#51658A</drawable>
+    <color name="qy_pink">#DFBEC7</color>
+    <color name="qy_button2">#8B7991</color>
+    <drawable name="trans">#00000000 </drawable>
 </resources>

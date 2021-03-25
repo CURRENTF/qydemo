@@ -5,48 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="10dp"
     android:background="@color/qy_real_background"
     tools:context=".UploadActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="0dp"
+        android:orientation="vertical"
+        android:padding="10dp">
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.6"
-            android:text="@string/no_file_now"
-            android:id="@+id/edit_text_file_url"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:id="@+id/button_browse_file"
-            android:text="@string/browse"/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:text="@string/no_file_now"
+                android:id="@+id/edit_text_file_url"/>
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:id="@+id/button_browse_file"
+                android:text="@string/browse"/>
+        </LinearLayout>
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:translationZ="100dp"
+            android:id="@+id/player_for_upload_video">
+
+        </com.google.android.exoplayer2.ui.PlayerView>
     </LinearLayout>
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:translationZ="100dp"
-        android:id="@+id/player_for_upload_video">
 
-    </com.google.android.exoplayer2.ui.PlayerView>
 
     <androidx.cardview.widget.CardView
+        app:contentPadding="5dp"
+        app:cardCornerRadius="10dp"
         android:layout_width="match_parent"
-        android:layout_marginVertical="10dp"
-        android:translationZ="1000dp"
+        android:layout_margin="10dp"
+        app:cardBackgroundColor="@color/qy_pink"
+        app:cardElevation="4dp"
         android:layout_height="wrap_content">
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:translationZ="100dp"
             android:orientation="vertical">
             <EditText
                 android:layout_width="match_parent"
@@ -56,7 +63,6 @@
                 android:hint="@string/video_name"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                style="@style/InputBoxStyle"
                 android:layout_height="wrap_content">
                 <EditText
                     android:layout_width="0dp"
@@ -64,39 +70,23 @@
                     android:inputType="text"
                     android:hint="@string/tag"
                     android:id="@+id/edit_text_video_tag"
-                    style="@style/EditTextStyle"
                     android:layout_height="match_parent"/>
-                <com.allen.library.SuperButton
+                <ImageView
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    app:sSolidColor="@color/qy_button"
                     android:layout_weight="0.4"
-                    android:text="@string/add"
-                    app:sCornersTopRightRadius="10dp"
-                    app:sCornersBottomRightRadius="10dp"/>
+                    android:layout_height="match_parent"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_plus"/>
             </LinearLayout>
-            <LinearLayout
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/EditTextStyle"
-                    android:hint="@string/video_category"/>
+                android:layout_height="wrap_content"
+                android:hint="@string/video_category"/>
 
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/EditTextStyle"
-                    android:hint="@string/introduction"/>
-
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:hint="@string/introduction"/>
 
         </LinearLayout>
 
