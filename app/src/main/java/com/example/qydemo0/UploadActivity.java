@@ -28,6 +28,7 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SHA256;
+import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -45,7 +46,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
     protected SimpleExoPlayer player = null;
     Uri uri = null;
-    URI urii = null;
     Constant C = Constant.mInstance;
 
     @Override
@@ -54,40 +54,10 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_upload);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //请求成功，获得权限，存储到本地
-                Toast.makeText(this, "nc", Toast.LENGTH_LONG).show();
-            } else {
-                //请求被拒绝，提示用户
-                Toast.makeText(this, "wuquanxian", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+
 
     @Override
     protected void onStart() {
-        try {
-            //检测是否有写的权限
-            int permission = ActivityCompat.checkSelfPermission(this,
-                    "android.permission.READ_EXTERNAL_STORAGE");
-
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                // 去申请读的权限，申请权限
-                String[] t = new String[1];
-                t[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
-                ActivityCompat.requestPermissions(this, t, 1);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // 重写onRequestPermissionsResult方法，监听用户点击了同意还是拒绝
 
         Button btn = findViewById(R.id.button_browse_file);
         btn.setOnClickListener(this);
@@ -165,7 +135,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected String doInBackground(String... strings) {
-            String filePath = strings[0], fileName = strings[1], url = strings[2], token = strings[3];
+            String filePath = strings[0], fileName = strings[1], url = strings[2], token = strings[3], file_id = strings[4];
             QYrequest htp = new QYrequest();
             return htp.postWithFile(filePath, fileName, url, token);
         }
@@ -173,11 +143,15 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String msg) {
             Log.d("hjtupload", msg);
-            JSONObject json = MsgProcess.msgProcess(msg);
-            if(json != null){
-                Toast.makeText(UploadActivity.this, "发送成功大概", Toast.LENGTH_SHORT).show();
+            JSONObject json = null;
+            try {
+                json = new JSONObject(msg);
+                ShowProgressDialog.wait.dismiss();
+                if(json.getInt("code") == C.HTTP_OK)  Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            super.onPostExecute(msg);
         }
     }
 
@@ -185,9 +159,15 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     class HashThenPost extends AsyncTask<InputStream, Integer, String>{
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ShowProgressDialog.show(UploadActivity.this, "对视频进行hash处理");
+        }
+
+        @Override
         protected String doInBackground(InputStream... inputStreams) {
             InputStream is = inputStreams[0];
-            byte[] bytes = new byte[1024 * 1000 * 50];
+            byte[] bytes = new byte[1024 * 1000 * 50]; // 50MB
             int len = 0;
             try {
                 len = is.read(bytes);
@@ -198,6 +178,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             byte[] b2 = new byte[len];
             for(int i = 0; i < len; i++) b2[i] = bytes[i];
             String hash = SHA256.hash(b2);
+            ShowProgressDialog.wait.setMessage("哈希完成");
             Log.e("hjtsha256", hash);
             QYrequest htp = new QYrequest();
             return htp.advancePost(GenerateJson.universeJson("file_type", "2", "hash", hash), C.file_upload_verify_url, "Authorization", GlobalVariable.mInstance.token);
@@ -205,28 +186,27 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         @Override
 
         protected void onPostExecute(String s) {
-
+            ShowProgressDialog.wait.setMessage("文件处理完成");
             JSONObject json = MsgProcess.msgProcess(s);
             Log.d("hjtuploadmsg", s);
             if(json != null){
                 try {
                     if(json.getBoolean("rapid_upload")){
+                        ShowProgressDialog.wait.dismiss();
                         Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
                         return;
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                EditText txt = findViewById(R.id.edit_text_file_name);
-                UploadVideo t = new UploadVideo();
-                try {
+                    EditText txt = findViewById(R.id.edit_text_file_name);
+                    UploadVideo t = new UploadVideo();
                     Log.e("hjtUri2RealPath", Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri));
-                    t.execute(Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri), txt.getText().toString(), json.getString("upload_url"), json.getString("token"));
+                    t.execute(Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri), txt.getText().toString(), json.getString("upload_url"), json.getString("token"), json.getString("file_id"));
                 } catch (JSONException e) {
+                    ShowProgressDialog.wait.dismiss();
                     e.printStackTrace();
                 }
             }
             else {
+                ShowProgressDialog.wait.dismiss();
                 Log.e("hjtUploadJsonNull", "??");
             }
             super.onPostExecute(s);

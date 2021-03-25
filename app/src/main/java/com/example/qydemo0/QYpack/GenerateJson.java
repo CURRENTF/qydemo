@@ -43,7 +43,4 @@ public class GenerateJson {
         }
         return (new JSONObject(map)).toString();
     }
-
-
-
 }

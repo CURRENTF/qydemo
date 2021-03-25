@@ -1,17 +1,22 @@
 package com.example.qydemo0;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
@@ -24,7 +29,38 @@ public class MainActivity extends AppCompatActivity {
     Constant C = Constant.mInstance;
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //请求成功，获得权限，存储到本地
+                Toast.makeText(this, "成功获取权限", Toast.LENGTH_LONG).show();
+            } else {
+                //请求被拒绝，提示用户
+                Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(this,
+                    "android.permission.READ_EXTERNAL_STORAGE");
+
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 去申请读的权限，申请权限
+                String[] t = new String[1];
+                t[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
+                ActivityCompat.requestPermissions(this, t, 1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);

@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp"
+    android:background="@color/qy_real_background"
     tools:context=".UploadActivity">
 
     <LinearLayout
@@ -28,28 +31,77 @@
     <com.google.android.exoplayer2.ui.PlayerView
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:translationZ="100dp"
         android:id="@+id/player_for_upload_video">
 
     </com.google.android.exoplayer2.ui.PlayerView>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <EditText
+        android:layout_marginVertical="10dp"
+        android:translationZ="1000dp"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/edit_text_file_name"
-            android:hint="@string/video_name"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/video_category"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/introduction"/>
-    </LinearLayout>
+            android:translationZ="100dp"
+            android:orientation="vertical">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edit_text_file_name"
+                android:inputType="text"
+                android:hint="@string/video_name"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                style="@style/InputBoxStyle"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="0.6"
+                    android:inputType="text"
+                    android:hint="@string/tag"
+                    android:id="@+id/edit_text_video_tag"
+                    style="@style/EditTextStyle"
+                    android:layout_height="match_parent"/>
+                <com.allen.library.SuperButton
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    app:sSolidColor="@color/qy_button"
+                    android:layout_weight="0.4"
+                    android:text="@string/add"
+                    app:sCornersTopRightRadius="10dp"
+                    app:sCornersBottomRightRadius="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/EditTextStyle"
+                    android:hint="@string/video_category"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/EditTextStyle"
+                    android:hint="@string/introduction"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
     <Button
         android:layout_width="match_parent"

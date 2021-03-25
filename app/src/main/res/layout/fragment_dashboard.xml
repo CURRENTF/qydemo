@@ -38,8 +38,8 @@
                 android:layout_marginEnd="10dp"
                 android:id="@+id/user_avatar" />
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:id="@+id/linear_layout_username_sign"
                 android:layout_weight="1">
@@ -50,12 +50,42 @@
                     android:textColor="@color/black"
                     android:gravity="center"
                     android:textSize="20sp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:text="@string/follow"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:id="@+id/text_followers"
+                        android:textStyle="bold"
+                        android:typeface="sans"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.25"
+                        android:text="@string/fan"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="0.25"
+                        android:layout_height="match_parent"
+                        android:id="@+id/text_fans"
+                        android:textStyle="bold"
+                        android:typeface="sans"/>
+                </LinearLayout>
+
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/text_user_sign"
                     android:textSize="12sp"
-                    android:gravity="center"
                     android:textColor="@color/exo_black_opacity_60"/>
             </LinearLayout>
 
@@ -66,6 +96,8 @@
                 android:src="@drawable/ic_settings"/>
 
         </LinearLayout>
+
+
         <androidx.fragment.app.FragmentContainerView
             android:layout_width="match_parent"
             android:layout_height="240dp"

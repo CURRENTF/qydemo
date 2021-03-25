@@ -21,6 +21,7 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
@@ -41,26 +42,42 @@ public class DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
+//            GetUserFans p = new GetUserFans();
+//            p.execute();
         }
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
         ImageView img = getActivity().findViewById(R.id.button_user_setting);
         img.setOnClickListener(new ModifyUserInfo());
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    class GetUserFans extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return htp.advance2Get(GenerateJson.universeJson("ftype", "1"), Constant.mInstance.user_fans, "Authorization", GlobalVariable.mInstance.token);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("hjtfan", s);
+            super.onPostExecute(s);
+        }
+    }
+
 
     void reWriteInfo(JSONObject json){
         GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
