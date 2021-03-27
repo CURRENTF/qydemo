@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.Context;
@@ -16,12 +17,19 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -34,6 +42,7 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,24 +50,41 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class UploadActivity extends AppCompatActivity implements View.OnClickListener{
 
     protected SimpleExoPlayer player = null;
     Uri uri = null;
+    String realURL = null;
     Constant C = Constant.mInstance;
+    GridLayout tagContainer = null;
+    Set<Integer> idSet = new TreeSet<>();
+    Set<String> tagSet = new TreeSet<>();
+    String videoId = null, coverId = null;
+    String[] classfi = null;
+    AutoCompleteTextView clas = null;
+
+    public static void loadCover(ImageView imageView, String url, Context context) {
+
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Glide.with(context)
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(1000000)
+                                .centerCrop()
+                )
+                .load(url)
+                .into(imageView);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-    }
-
-
-
-    @Override
-    protected void onStart() {
-
+        tagContainer = findViewById(R.id.tags);
         Button btn = findViewById(R.id.button_browse_file);
         btn.setOnClickListener(this);
         btn = findViewById(R.id.button_upload_selected_video);
@@ -66,6 +92,20 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         player = new SimpleExoPlayer.Builder(getBaseContext()).build();
         PlayerView p = findViewById(R.id.player_for_upload_video);
         p.setPlayer(player);
+        ImageView addTag = findViewById(R.id.button_add_tag);
+        addTag.setOnClickListener(this);
+        clas = findViewById(R.id.text_class_upload);
+        clas.setThreshold(1);//最多几个字符开始匹配
+        clas.setDropDownHeight(800);//设置下拉菜单高度
+        clas.setDropDownHorizontalOffset(0);//设置下路列表和文本框水平偏移
+        clas.setDropDownVerticalOffset(900);//设置下拉列表和文本框垂直偏移
+        clas.setDropDownWidth(500);//设置下拉列表宽度
+        GetClasInfo g = new GetClasInfo();
+        g.execute();
+    }
+
+    @Override
+    protected void onStart() {
         super.onStart();
     }
 
@@ -90,8 +130,34 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(UploadActivity.this, "未选择视频", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.button_add_tag:
+                EditText tag = findViewById(R.id.edit_text_video_tag);
+                String s = tag.getText().toString();
+                if(s.length() == 0) Toast.makeText(UploadActivity.this, "请填写标签", Toast.LENGTH_SHORT).show();
+                else if(idSet.size() == 5) Toast.makeText(UploadActivity.this, "不要添加太多呀，可以点击标签删除", Toast.LENGTH_SHORT).show();
+                else if(tagSet.contains(s)) Toast.makeText(UploadActivity.this, "该标签已经存在", Toast.LENGTH_SHORT).show();
+                else {
+                    tag.setText("");
+                    TextView newTag = new TextView(this);
+                    int pad = 5;
+                    newTag.setPadding(pad, pad, pad, pad);
+                    newTag.setText(s);
+                    newTag.setBackground(ContextCompat.getDrawable(this, R.drawable.tag));
+                    newTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                    newTag.setTextColor(ContextCompat.getColor(this, R.color.exo_white));
+                    Integer id = View.generateViewId();
+                    idSet.add(id);
+                    newTag.setId(id);
+                    newTag.setOnClickListener(this);
+                    tagSet.add(s);
+                    tagContainer.addView(newTag);
+                }
         }
-
+        if(idSet.contains(v.getId())){
+            idSet.remove(v.getId());
+            tagSet.remove(((TextView)v).getText().toString());
+            tagContainer.removeView(v);
+        }
     }
 
     ActivityResultLauncher launcher = registerForActivityResult(new ResultContract(), new ActivityResultCallback<Uri>() {
@@ -131,6 +197,60 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    class GetClasInfo extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return htp.advanceGet(Constant.mInstance.getClas_url, "Authorization", GlobalVariable.mInstance.token);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            JSONObject json = MsgProcess.msgProcess(s);
+            if(json != null){
+                try {
+                    JSONArray ja = json.getJSONArray("classification");
+                    classfi = new String[ja.length()];
+                    for(int i = 0; i < ja.length(); i++){
+                        classfi[i] = ((JSONObject)ja.get(i)).getString("name");
+                    }
+                    ArrayAdapter<String> adapter =new ArrayAdapter<String>(UploadActivity.this, R.layout.auto_complete_textview, classfi);//适配器
+                    clas.setAdapter(adapter);//设置适配器
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else Log.e("hjtclassification", "null");
+        }
+    }
+
+    class UploadVideoInfo extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String name = strings[0], clas = strings[1],  intro = strings[2];
+            QYrequest htp = new QYrequest();
+            return htp.advancePost(GenerateJson.universeJson("name", name, "introduction", intro, "video", videoId, "cover", coverId, "tag", GenerateJson.listString(3, strings), "classfication", clas), Constant.mInstance.work, "Authorization", GlobalVariable.mInstance.token);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("hjt", s);
+            super.onPostExecute(s);
+        }
+    }
+
+    public String getTags(){
+        String s = "";
+        boolean first = true;
+        for(String t : tagSet){
+            if(!first) s += '.';
+            s += t;
+        }
+        return s;
+    }
+
     class UploadVideo extends AsyncTask<String, Integer, String>{
 
         @Override
@@ -147,8 +267,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             try {
                 json = new JSONObject(msg);
                 ShowProgressDialog.wait.dismiss();
-                if(json.getInt("code") == C.HTTP_OK)  Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
-
+                if(json.getInt("code") == C.HTTP_OK) {
+                    Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                    EditText videoName = findViewById(R.id.edit_text_file_name), videoIntro = findViewById(R.id.edit_text_introduction);
+                    // TODO
+                    String[] t = new String[tagSet.size()];
+                    UploadVideoInfo uploadVideoInfo = new UploadVideoInfo();
+                    uploadVideoInfo.execute(videoName.getText().toString(), clas.getText().toString(), videoIntro.getText().toString(), getTags());
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -198,7 +324,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     EditText txt = findViewById(R.id.edit_text_file_name);
                     UploadVideo t = new UploadVideo();
-                    Log.e("hjtUri2RealPath", Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri));
+                    realURL = Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri);
+                    Log.e("hjtUri2RealPath", realURL);
                     t.execute(Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri), txt.getText().toString(), json.getString("upload_url"), json.getString("token"), json.getString("file_id"));
                 } catch (JSONException e) {
                     ShowProgressDialog.wait.dismiss();

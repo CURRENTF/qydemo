@@ -60,33 +60,65 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/edit_text_file_name"
                 android:inputType="text"
+                android:textSize="14sp"
                 android:hint="@string/video_name"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <EditText
+
                     android:layout_width="0dp"
-                    android:layout_weight="0.6"
+                    android:layout_weight="0.85"
                     android:inputType="text"
                     android:hint="@string/tag"
+                    android:textSize="14sp"
                     android:id="@+id/edit_text_video_tag"
                     android:layout_height="match_parent"/>
                 <ImageView
                     android:layout_width="0dp"
-                    android:layout_weight="0.4"
+                    android:layout_weight="0.1"
                     android:layout_height="match_parent"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_plus"/>
+                    android:id="@+id/button_add_tag"
+                    android:src="@drawable/ic_verified"/>
             </LinearLayout>
-            <EditText
+            <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:useDefaultMargins="true"
+                android:id="@+id/tags"/>
+            <AutoCompleteTextView
+                android:layout_width="match_parent"
+                android:textSize="14sp"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:id="@+id/text_class_upload"
                 android:hint="@string/video_category"/>
 
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/introduction"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.15"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:gravity="top"
+                    android:text="@string/introduction"/>
+                <EditText
+                    android:padding="4dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.85"
+                    android:textSize="14sp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/edit_text_introduction"
+                    android:gravity="top"
+                    android:background="@drawable/big_empty_edittext"
+                    />
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -94,6 +126,7 @@
 
 
     <Button
+        android:layout_marginHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/upload"

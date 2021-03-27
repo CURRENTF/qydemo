@@ -43,4 +43,15 @@ public class GenerateJson {
         }
         return (new JSONObject(map)).toString();
     }
+
+    public static String listString(int startPos, String... strings){
+        String s = "[";
+        for(int i = startPos; i < strings.length; i++){
+            s += '"';
+            s += strings[i];
+            s += '"';
+        }
+        s += ']';
+        return s;
+    }
 }
