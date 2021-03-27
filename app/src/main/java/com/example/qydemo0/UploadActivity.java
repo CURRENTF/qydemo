@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.loader.content.AsyncTaskLoader;
 
 import android.Manifest;
 import android.content.Context;
@@ -34,13 +35,16 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SHA256;
 import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.Uri2RealPath;
+import com.example.qydemo0.QYpack.Video.VideoInfo;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +54,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.channels.AsynchronousChannelGroup;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -160,6 +165,16 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    public String getTags(){
+        String s = "";
+        boolean first = true;
+        for(String t : tagSet){
+            if(!first) s += '.';
+            s += t;
+        }
+        return s;
+    }
+
     ActivityResultLauncher launcher = registerForActivityResult(new ResultContract(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri result) {
@@ -180,7 +195,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         public Intent createIntent(@NonNull Context context, Boolean input) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("video/*");
+            intent.setType("*/*");
             return intent;
         }
 
@@ -190,8 +205,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 return intent.getData();
             }
             else {
-                Toast.makeText(UploadActivity.this, "未选择视频", Toast.LENGTH_SHORT).show();
-                Log.e("hjtGetVideoNull", "oh");
+                Log.e("hjt.GetVideo.Null", "null");
                 return null;
             }
         }
@@ -221,17 +235,18 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     e.printStackTrace();
                 }
             }
-            else Log.e("hjtclassification", "null");
+            else Log.e("hjt.classification", "null");
         }
     }
 
-    class UploadVideoInfo extends AsyncTask<String, Integer, String>{
+
+    class UploadVideoInfo extends AsyncTask<VideoInfo, Integer, String>{
+
 
         @Override
-        protected String doInBackground(String... strings) {
-            String name = strings[0], clas = strings[1],  intro = strings[2];
-            QYrequest htp = new QYrequest();
-            return htp.advancePost(GenerateJson.universeJson("name", name, "introduction", intro, "video", videoId, "cover", coverId, "tag", GenerateJson.listString(3, strings), "classfication", clas), Constant.mInstance.work, "Authorization", GlobalVariable.mInstance.token);
+        protected String doInBackground(VideoInfo... videoInfos) {
+            VideoInfo videoInfo = videoInfos[0];
+            return null;
         }
 
         @Override
@@ -241,102 +256,84 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public String getTags(){
-        String s = "";
-        boolean first = true;
-        for(String t : tagSet){
-            if(!first) s += '.';
-            s += t;
-        }
-        return s;
-    }
-
-    class UploadVideo extends AsyncTask<String, Integer, String>{
+    class UploadVideo extends AsyncTask<String, Integer, Boolean>{
 
         @Override
-        protected String doInBackground(String... strings) {
-            String filePath = strings[0], fileName = strings[1], url = strings[2], token = strings[3], file_id = strings[4];
-            QYrequest htp = new QYrequest();
-            return htp.postWithFile(filePath, fileName, url, token);
+        protected void onPreExecute() {
+            ShowProgressDialog.show(UploadActivity.this, "上传中");
         }
 
         @Override
-        protected void onPostExecute(String msg) {
-            Log.d("hjtupload", msg);
-            JSONObject json = null;
-            try {
-                json = new JSONObject(msg);
-                ShowProgressDialog.wait.dismiss();
-                if(json.getInt("code") == C.HTTP_OK) {
-                    Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
-                    EditText videoName = findViewById(R.id.edit_text_file_name), videoIntro = findViewById(R.id.edit_text_introduction);
-                    // TODO
-                    String[] t = new String[tagSet.size()];
-                    UploadVideoInfo uploadVideoInfo = new UploadVideoInfo();
-                    uploadVideoInfo.execute(videoName.getText().toString(), clas.getText().toString(), videoIntro.getText().toString(), getTags());
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+        protected Boolean doInBackground(String... strings) {
+            String filePath = strings[0], url = strings[1], token = strings[2];
+            QYFile qyFile = new QYFile();
+            return qyFile.uploadFile(url, filePath, token);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean s) {
+            ShowProgressDialog.wait.dismiss();
+            if(s){
+                Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                EditText videoName = findViewById(R.id.edit_text_file_name), videoIntro = findViewById(R.id.edit_text_introduction);
+                UploadVideoInfo uploadVideoInfo = new UploadVideoInfo();
+//                uploadVideoInfo.execute(videoName.getText().toString(), clas.getText().toString(), videoIntro.getText().toString(), getTags());
             }
         }
     }
 
+    class UploadCover extends AsyncTask<String, Integer, String>{
 
-    class HashThenPost extends AsyncTask<InputStream, Integer, String>{
+        @Override
+        protected String doInBackground(String... strings) {
+            String file_path = strings[0], http_url = strings[1];
+            QYFile qyFile = new QYFile();
+            return null;
+        }
+    }
+
+
+    class HashThenPost extends AsyncTask<InputStream, Integer, JSONObject>{
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
             ShowProgressDialog.show(UploadActivity.this, "对视频进行hash处理");
         }
 
         @Override
-        protected String doInBackground(InputStream... inputStreams) {
+        protected JSONObject doInBackground(InputStream... inputStreams) {
             InputStream is = inputStreams[0];
-            byte[] bytes = new byte[1024 * 1000 * 50]; // 50MB
-            int len = 0;
-            try {
-                len = is.read(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Log.e("hjt len", String.valueOf(len));
-            byte[] b2 = new byte[len];
-            for(int i = 0; i < len; i++) b2[i] = bytes[i];
-            String hash = SHA256.hash(b2);
+
+            QYFile qyFile = new QYFile();
+            String hash = qyFile.hash(is, 1024 * 1000 * 50); // 50MB
+
             ShowProgressDialog.wait.setMessage("哈希完成");
             Log.e("hjtsha256", hash);
-            QYrequest htp = new QYrequest();
-            return htp.advancePost(GenerateJson.universeJson("file_type", "2", "hash", hash), C.file_upload_verify_url, "Authorization", GlobalVariable.mInstance.token);
-        }
-        @Override
 
-        protected void onPostExecute(String s) {
-            ShowProgressDialog.wait.setMessage("文件处理完成");
-            JSONObject json = MsgProcess.msgProcess(s);
-            Log.d("hjtuploadmsg", s);
+            return qyFile.verifyFileUpload(Constant.mInstance.file_upload_verify_url, 2, hash);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            ShowProgressDialog.wait.dismiss();
             if(json != null){
                 try {
                     if(json.getBoolean("rapid_upload")){
-                        ShowProgressDialog.wait.dismiss();
                         Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    EditText txt = findViewById(R.id.edit_text_file_name);
-                    UploadVideo t = new UploadVideo();
-                    realURL = Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri);
-                    Log.e("hjtUri2RealPath", realURL);
-                    t.execute(Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri), txt.getText().toString(), json.getString("upload_url"), json.getString("token"), json.getString("file_id"));
+                    UploadVideo uploadVideo = new UploadVideo();
+                    String fileUrl = Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri);
+                    uploadVideo.execute(fileUrl, json.getString("upload_url"), json.getString("token"));
+                    UploadCover uploadCover = new UploadCover();
+                    uploadCover.execute(fileUrl, json.getString("upload_url"));
                 } catch (JSONException e) {
-                    ShowProgressDialog.wait.dismiss();
                     e.printStackTrace();
                 }
             }
             else {
-                ShowProgressDialog.wait.dismiss();
-                Log.e("hjtUploadJsonNull", "??");
+                Log.e("hjt.UploadAC.verify", "JSON_NULL");
             }
-            super.onPostExecute(s);
         }
     }
 }

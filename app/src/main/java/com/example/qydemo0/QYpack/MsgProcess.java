@@ -17,14 +17,14 @@ public class MsgProcess {
                     return json;
                 }
                 catch (JSONException e){
-                    return json;
+                    e.printStackTrace();
                 }
             }
             else {
                 Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {
-            Log.e("hjtMsgProcess", "jsonMsgProcessWrong");
+            Log.e("hjt.MsgProcess", "jsonMsgProcessWrong");
             e.printStackTrace();
         }
         return null;

@@ -88,4 +88,10 @@ dependencies {
 
     // superTextView
     implementation 'com.github.lygttpod:SuperTextView:2.4.5'
+
+    // banner2
+    implementation 'com.youth.banner:banner:2.1.0'
+
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 }

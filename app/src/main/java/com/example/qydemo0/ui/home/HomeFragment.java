@@ -20,13 +20,24 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.qydemo0.Adapter.ImageNetAdapter;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UploadActivity;
+import com.example.qydemo0.bean.DataBean;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.koushikdutta.ion.Ion;
+import com.youth.banner.Banner;
+import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.util.LogUtils;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 import org.json.JSONObject;
 
@@ -35,10 +46,25 @@ import java.util.Vector;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public LinearLayout scrollViewForVideos = null;
+    Unbinder bind;
+
+    @BindView(R.id.banner_ad)
+    Banner banner_ad;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        bind = ButterKnife.bind(this, root);
+        //自定义的图片适配器，也可以使用默认的BannerImageAdapter
+        ImageNetAdapter adapter = new ImageNetAdapter(DataBean.getTestData3());
+
+        banner_ad.setAdapter(adapter)
+                .addBannerLifecycleObserver(this)//添加生命周期观察者
+                .setIndicator(new CircleIndicator(getActivity()))//设置指示器
+                .setOnBannerListener((data, position) -> {
+                    Snackbar.make(banner_ad, ((DataBean) data).title, Snackbar.LENGTH_SHORT).show();
+                    Log.d("hjt","position：" + position);
+                });
         return root;
     }
 
@@ -69,6 +95,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bind.unbind();
     }
 
     @Override
