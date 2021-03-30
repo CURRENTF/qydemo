@@ -6,11 +6,6 @@
         android:topLeftRadius="10dp"
         android:topRightRadius="10dp" />
     <size
-        android:height="80dp"/>
+        android:height="50dp"/>
 
-    <stroke
-        android:width="0.5dp"
-        android:dashGap="1dp"
-        android:dashWidth="0.5dp"
-        android:color="@color/gray"/>
 </shape>

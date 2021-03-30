@@ -46,4 +46,5 @@
     <string name="add">添加</string>
     <string name="tag">标签</string>
     <string name="recommendation">猜你喜欢</string>
+    <string name="choose_pic">选择图片</string>
 </resources>

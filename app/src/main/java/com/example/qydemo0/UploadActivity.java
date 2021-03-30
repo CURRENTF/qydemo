@@ -131,9 +131,9 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                         e.printStackTrace();
                     }
                 }
-                else {
+                else
                     Toast.makeText(UploadActivity.this, "未选择视频", Toast.LENGTH_SHORT).show();
-                }
+
                 break;
             case R.id.button_add_tag:
                 EditText tag = findViewById(R.id.edit_text_video_tag);
@@ -175,7 +175,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         return s;
     }
 
-    ActivityResultLauncher launcher = registerForActivityResult(new ResultContract(), new ActivityResultCallback<Uri>() {
+    ActivityResultLauncher launcher = registerForActivityResult(new QYFile.ResultContract(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri result) {
             if(result == null) return;
@@ -187,29 +187,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             player.play();
         }
     });
-
-    class ResultContract extends ActivityResultContract<Boolean, Uri> {
-
-        @NonNull
-        @Override
-        public Intent createIntent(@NonNull Context context, Boolean input) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");
-            return intent;
-        }
-
-        @Override
-        public Uri parseResult(int resultCode, @Nullable Intent intent) {
-            if (intent != null) {
-                return intent.getData();
-            }
-            else {
-                Log.e("hjt.GetVideo.Null", "null");
-                return null;
-            }
-        }
-    }
 
     class GetClasInfo extends AsyncTask<String, Integer, String>{
 

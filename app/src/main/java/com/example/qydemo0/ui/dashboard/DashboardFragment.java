@@ -23,6 +23,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
@@ -38,10 +39,17 @@ public class DashboardFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
         return root;
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
@@ -53,60 +61,60 @@ public class DashboardFragment extends Fragment {
         img.setOnClickListener(new ModifyUserInfo());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    class GetUserFans extends AsyncTask<String, Integer, String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
-            QYrequest htp = new QYrequest();
-            return htp.advance2Get(GenerateJson.universeJson("ftype", "1"), Constant.mInstance.user_fans, "Authorization", GlobalVariable.mInstance.token);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.e("hjtfan", s);
-            super.onPostExecute(s);
-        }
-    }
-
 
     void reWriteInfo(JSONObject json){
         GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
         try {
             GlobalVariable.mInstance.uid = json.getString("uid");
         } catch (JSONException e) {
-            Log.e("hjtUID", "不存在??");
+            Log.e("hjt.UID", "null");
             e.printStackTrace();
         }
         // 设置头像
+
+        // 防止由于父亲销毁 RE
         if(getActivity() == null) return;
+
         ImageView userAvatar = getActivity().findViewById(R.id.user_avatar);
+        TextView txt = getActivity().findViewById(R.id.text_username);
+
+        if(getActivity() == null) return;
+        String avatar_url, sign;
+        Boolean a = false, b = false;
         try {
-            json.put("img_url", "https://file.yhf2000.cn/img/defult4.jpeg");
-            if(getActivity() == null) return;
-            Glide.with(getActivity())
-                    .load(json.getString("img_url"))
-                    .apply(RequestOptions.bitmapTransform(new CircleCrop()))
-                    .into(userAvatar);
-            if(getActivity() == null) return;
-            TextView txt = getActivity().findViewById(R.id.text_username);
+            avatar_url = json.getString("img_url");
             txt.setText(json.getString("username"));
-            json.put("sign", "Born to Dance");
+            a = true;
+        } catch (JSONException e) {
+            avatar_url = "https://file.yhf2000.cn/img/defult4.jpeg";
+        }
+
+        if(getActivity() == null) return;
+
+        try {
+            sign = json.getString("sign");
             txt = getActivity().findViewById(R.id.text_user_sign);
-            txt.setText(json.getString("sign"));
+            txt.setText(sign);
+            b = true;
+        } catch (JSONException e) {
+            sign = "Born to Dance";
+        }
+
+        if(getActivity() == null) return;
+
+        Img.roundImgUrl(getActivity(), userAvatar, avatar_url);
+
+        try {
+            if(!a) json.put("img_url", "https://file.yhf2000.cn/img/defult4.jpeg");
+            if(!b) json.put("sign", "Born to Dance");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
+
+
+
 
     class GetUserInfo extends AsyncTask<String, Integer, String>{
 
@@ -125,6 +133,21 @@ public class DashboardFragment extends Fragment {
             }
         }
     }
+    class GetUserFans extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return htp.advance2Get(GenerateJson.universeJson("ftype", "1"), Constant.mInstance.user_fans, "Authorization", GlobalVariable.mInstance.token);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("hjtfan", s);
+            super.onPostExecute(s);
+        }
+    }
+
 
     class ModifyUserInfo implements View.OnClickListener {
 
@@ -135,6 +158,4 @@ public class DashboardFragment extends Fragment {
             startActivity(intent);
         }
     }
-    
-
 }

@@ -24,10 +24,10 @@ public class Constant {
         default_register_way = R.id.fragment_username_register,
         default_register2_way = R.id.fragment_username_register2,
         HTTP_OK = 200,
-        pre_items = 10;
+        pre_items = 10,
+        MAX_FILE_SIZE = 1024 * 1024 * 50; // 50MB
 
     public String database = "QYdata";
-
 
 
     private Constant(){

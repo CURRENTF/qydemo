@@ -103,16 +103,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         scrollView.setScrollViewListener(new QYScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(QYScrollView scrollView, int l, int t, int oldl, int oldt) {
-                if (oldt < t && ((t - oldt) > 15)) {// 向上
+                if (oldt < t && ((t - oldt) > 50)) {// 向上
                     Log.e("wangly", "距离："+(oldt < t) +"---"+(t - oldt));
                     Log.e("TAG","向上滑动");
+                    WorkItem w = new WorkItem(getActivity());
+                    scrollViewForVideos.addView(w);
+                    Log.d("hjt", "已添加");
 
                 } else if (oldt > t && (oldt - t) > 15) {// 向下
                     Log.e("wangly", "距离："+(oldt > t) +"---"+(oldt - t));
                     Log.e("TAG"," 向下滑动");
-                    WorkItem w = new WorkItem(getActivity());
-                    scrollViewForVideos.addView(w);
-                    Log.d("hjt", "已添加");
+
                 }
             }
         });

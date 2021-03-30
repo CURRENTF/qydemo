@@ -1,16 +1,35 @@
 package com.example.qydemo0.QYpack;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.renderscript.ScriptGroup;
 import android.util.Log;
+
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class QYFile {
+    public String hashFile(Uri uri, Activity ac){
+        try {
+            InputStream inputStream = ac.getContentResolver().openInputStream(uri);
+            String h = hash(inputStream, Constant.mInstance.MAX_FILE_SIZE);
+            return h;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String hash(InputStream is, int size){
         byte[] bytes = new byte[size]; // 50MB
         int len = 0;
@@ -54,16 +73,45 @@ public class QYFile {
     public Boolean uploadFile(String http_url, String file_url, String token){
         QYrequest htp = new QYrequest();
         String msg = htp.postWithFile(file_url, "no.use", http_url, token);
-        JSONObject jsonObject = MsgProcess.msgProcess(msg);
         Log.d("hjt.QYfile.upload", msg);
-        if(jsonObject == null) return false;
-        else {
-            try {
-                if(jsonObject.getInt("code") == Constant.mInstance.HTTP_OK) return true;
-            } catch (JSONException e) {
-                e.printStackTrace();
+        return MsgProcess.checkMsg(msg);
+    }
+
+    // 返回 file_id
+    public String uploadFileAllIn(String verify_url, String file_url, int file_type, String hash) {
+        JSONObject json = verifyFileUpload(verify_url, file_type, hash);
+        Log.d("hjt.uploadFileAllIn.json", json.toString());
+        try {
+            if(json.getBoolean("rapid_upload") || uploadFile(json.getString("upload_url"), file_url, json.getString("token")))
+                return json.getString("file_id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static class ResultContract extends ActivityResultContract<Boolean, Uri> {
+
+        @NonNull
+        @Override
+        public Intent createIntent(@NonNull Context context, Boolean input) {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            return intent;
+        }
+
+        @Override
+        public Uri parseResult(int resultCode, @Nullable Intent intent) {
+            if (intent != null) {
+                return intent.getData();
+            }
+            else {
+                Log.e("hjt.GetVideo.Null", "null");
+                return null;
             }
         }
-        return false;
     }
+
+
 }

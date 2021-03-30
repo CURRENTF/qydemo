@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/setting_avatar"
         android:background="@color/text_background"
         android:translationZ="10dp"
         android:paddingLeft="10dp"
@@ -53,6 +54,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/text_background"
+        android:id="@+id/setting_username"
         android:translationZ="10dp"
         android:paddingLeft="10dp"
         android:paddingVertical="10dp">
@@ -143,6 +145,7 @@
         android:orientation="horizontal"
         android:background="@color/text_background"
         android:translationZ="10dp"
+        android:id="@+id/setting_sign"
         android:layout_marginBottom="40dp"
         android:paddingLeft="10dp"
         android:paddingVertical="10dp">

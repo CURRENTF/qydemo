@@ -45,6 +45,7 @@ public class GenerateJson {
     }
 
     //升级版本，需要标注类型
+    // list = [string, int]
     public static String universeJson2(String[] strings){
         int sz = strings.length;
         String res = "{";
