@@ -277,7 +277,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
                 EditText videoName = findViewById(R.id.edit_text_file_name), videoIntro = findViewById(R.id.edit_text_introduction);
                 UploadVideoInfo uploadVideoInfo = new UploadVideoInfo();
-//                uploadVideoInfo.execute(videoName.getText().toString(), clas.getText().toString(), videoIntro.getText().toString(), getTags());
+//                uploadVideoInfo.execute(new VideoInfo(videoName.getText().toString(), , videoIntro.getText().toString(),))
             }
         }
     }

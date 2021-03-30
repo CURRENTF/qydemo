@@ -29,4 +29,14 @@ public class MsgProcess {
         }
         return null;
     }
+
+    public static boolean checkMsg(String msg){
+        try {
+            JSONObject json = new JSONObject(msg);
+            if(json.getInt("status") == Constant.mInstance.HTTP_OK) return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

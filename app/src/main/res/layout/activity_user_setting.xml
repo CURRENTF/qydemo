@@ -96,6 +96,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/setting_gender"
         android:background="@color/text_background"
         android:translationZ="10dp"
         android:paddingLeft="10dp"

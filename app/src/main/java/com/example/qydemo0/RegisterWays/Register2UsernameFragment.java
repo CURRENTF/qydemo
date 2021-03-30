@@ -118,8 +118,7 @@ public class Register2UsernameFragment extends Fragment {
         protected void onPostExecute(String s) {
             Log.d("hjtregister2verify", s);
             JSONObject json = MsgProcess.msgProcess(s);
-            if(json != null){
-                Toast toast = null;
+            if(MsgProcess.checkMsg(s)){
                 Toast.makeText(getContext(), "验证码正确", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), MainActivity.class);

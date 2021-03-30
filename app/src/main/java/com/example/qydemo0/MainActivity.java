@@ -16,10 +16,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.ui.dashboard.DashboardFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,6 +30,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
     Constant C = Constant.mInstance;
+    private GestureDetector gestureDetector = null;
+    private GestureListener gestureListener = null;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
-        // TODO: need delete
+        // TODO: need delete maybe not
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -95,7 +100,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 //        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        // 监听向下滑动 不太行， 应该是被scroll抓了
+//        gestureListener = new GestureListener(this);
+//        gestureDetector = new GestureDetector(this, gestureListener);
     }
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        return gestureDetector.onTouchEvent(event);
+//    }
 
     @Override
     protected void onStart() {

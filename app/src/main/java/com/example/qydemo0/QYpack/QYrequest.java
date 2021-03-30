@@ -159,6 +159,44 @@ public class QYrequest {
     }
 
 
+    public String put(String data, String url){
+        OkHttpClient okHttpClient = new OkHttpClient();//创建单例
+        RequestBody body = RequestBody.create(JSON, data);
+        Request request = new Request.Builder()//创建请求
+                .url(url)
+                .put(body)
+                .build();
+        try {
+            Response response = okHttpClient.newCall(request).execute();//执行请求
+            String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
+            return mContent;
+        } catch (IOException e) {
+//            e.printStackTrace();
+            Log.e("hjt", e.toString());
+            return "";
+        }
+    }
+
+    public String advancePut(String data, String url, String... strings){
+        int sz = strings.length;
+        OkHttpClient okHttpClient = new OkHttpClient();//创建单例
+        RequestBody body = RequestBody.create(JSON, data);
+        Request.Builder tmp = new Request.Builder()//创建请求
+                .url(url)
+                .put(body);
+        for(int i = 0; i < sz; i += 2){
+            tmp.addHeader(strings[i], strings[i + 1]);
+        }
+        Request request = tmp.build();
+        try {
+            Response response = okHttpClient.newCall(request).execute();//执行请求
+            String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
+            return mContent;
+        } catch (IOException e) {
+            Log.e("hjt", e.toString());
+            return "";
+        }
+    }
 
 
 }

@@ -44,6 +44,21 @@ public class GenerateJson {
         return (new JSONObject(map)).toString();
     }
 
+    //升级版本，需要标注类型
+    public static String universeJson2(String[] strings){
+        int sz = strings.length;
+        String res = "{";
+        for(int i = 0; i < sz; i += 3){
+            res += '"' + strings[i] + '"' + ':';
+            if(strings[i + 1].equals("string"))
+                res += '"' + strings[i + 2] + '"';
+            else res += strings[i + 2];
+            if(i < sz - 3) res += ',';
+        }
+        res += '}';
+        return res;
+    }
+
     public static String listString(int startPos, String... strings){
         String s = "[";
         for(int i = startPos; i < strings.length; i++){

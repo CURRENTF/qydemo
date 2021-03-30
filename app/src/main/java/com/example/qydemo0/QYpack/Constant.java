@@ -16,12 +16,15 @@ public class Constant {
         file_upload_normal_url = "https://api.yhf2000.cn/api/qingying/v1/file/upload/normal/",
         user_fans = "https://api.yhf2000.cn/api/qingying/v1/user/follow/",
         work = "https://api.yhf2000.cn/api/qingying/v1/work/",
-        getClas_url = "https://api.yhf2000.cn/api/qingying/v1/systematics/classification/";
+        getClas_url = "https://api.yhf2000.cn/api/qingying/v1/systematics/classification/",
+        getRecommendation_url_user = "https://api.yhf2000.cn/api/qingying/v1/recommendation/user/",
+        modifyUserInfo_url = "https://api.yhf2000.cn/api/qingying/v1/user/info/";
 
     public int default_login_way = R.id.fragment_username_login,
         default_register_way = R.id.fragment_username_register,
         default_register2_way = R.id.fragment_username_register2,
-        HTTP_OK = 200;
+        HTTP_OK = 200,
+        pre_items = 10;
 
     public String database = "QYdata";
 

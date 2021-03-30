@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:background="@color/qy_real_background"
     tools:context=".ui.home.HomeFragment">
 
     <Button
@@ -21,16 +23,16 @@
         android:layout_height="wrap_content"
         app:fabSize="auto"
         android:id="@+id/button_add_my_video"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginBottom="70dp"
+        android:layout_margin="15dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:src="@drawable/ic_add"/>
 
     
-    <ScrollView
+    <com.example.qydemo0.Widget.QYScrollView
         android:layout_width="match_parent"
+        android:id="@+id/scroll_home"
         android:layout_height="match_parent">
 
         <LinearLayout
@@ -85,17 +87,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
-                android:layout_marginVertical="10dp"
-                android:textSize="24sp"
+                android:layout_marginVertical="15dp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:text="@string/recommendation"/>
 
 
-
-
         </LinearLayout>
 
-    </ScrollView>
+    </com.example.qydemo0.Widget.QYScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

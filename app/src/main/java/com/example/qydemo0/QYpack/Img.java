@@ -12,6 +12,7 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.io.File;
@@ -71,6 +72,12 @@ public class Img {
         return bitmap;
     }
 
+    public static boolean url2imgView(String img_url, ImageView img, Context context){
+        Glide.with(context)
+                .load(img_url)
+                .into(img);
+        return true;
+    }
 
 
 }
