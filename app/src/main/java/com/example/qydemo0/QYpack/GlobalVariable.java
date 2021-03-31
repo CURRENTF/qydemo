@@ -22,6 +22,7 @@ public class GlobalVariable {
     public String registerToken = "";
 
     public FragmentDataForMain fragmentDataForMain = null;
+    public Context appContext = null;
 
 
     private GlobalVariable(){

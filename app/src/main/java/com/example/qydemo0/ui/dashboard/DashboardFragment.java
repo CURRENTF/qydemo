@@ -24,11 +24,13 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
+import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserSettingActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,8 +55,10 @@ public class DashboardFragment extends Fragment {
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
-//            GetUserFans p = new GetUserFans();
-//            p.execute();
+            GetUserFans p = new GetUserFans();
+            p.execute();
+            GetUserFollows t = new GetUserFollows();
+            t.execute();
         }
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
         ImageView img = getActivity().findViewById(R.id.button_user_setting);
@@ -111,10 +115,26 @@ public class DashboardFragment extends Fragment {
             e.printStackTrace();
         }
 
+        if(GlobalVariable.mInstance.fragmentDataForMain.userFollowers == null) return;
+        TextView txt2 = getActivity().findViewById(R.id.text_followers);
+        txt2.setText(String.valueOf(GlobalVariable.mInstance.fragmentDataForMain.userFollowers.length()));
+        if(GlobalVariable.mInstance.fragmentDataForMain.userFans == null) return;
+        txt2 = getActivity().findViewById(R.id.text_fans);
+        txt2.setText(String.valueOf(GlobalVariable.mInstance.fragmentDataForMain.userFans.length()));
     }
 
-
-
+    void writeFans(JSONArray ja) {
+        if(getActivity() == null) return;
+        GlobalVariable.mInstance.fragmentDataForMain.userFans = ja;
+        TextView txt = getActivity().findViewById(R.id.text_fans);
+        txt.setText(String.valueOf(ja.length()));
+    }
+    void writeFollowers(JSONArray ja){
+        if(getActivity() == null) return;
+        GlobalVariable.mInstance.fragmentDataForMain.userFollowers = ja;
+        TextView txt = getActivity().findViewById(R.id.text_followers);
+        txt.setText(String.valueOf(ja.length()));
+    }
 
     class GetUserInfo extends AsyncTask<String, Integer, String>{
 
@@ -138,12 +158,29 @@ public class DashboardFragment extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            return htp.advance2Get(GenerateJson.universeJson("ftype", "1"), Constant.mInstance.user_fans, "Authorization", GlobalVariable.mInstance.token);
+            return htp.advanceGet(Constant.mInstance.user_fans + Json2X.Json2StringGet("ftype", "1"), "Authorization", GlobalVariable.mInstance.token);
         }
 
         @Override
         protected void onPostExecute(String s) {
-            Log.e("hjtfan", s);
+            Log.e("hjt.fans", s);
+            if(!MsgProcess.checkMsg(s)) return;
+            writeFans(MsgProcess.msgProcessArr(s));
+            super.onPostExecute(s);
+        }
+    }
+    class GetUserFollows extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return htp.advanceGet(Constant.mInstance.user_fans + Json2X.Json2StringGet("ftype", "0"), "Authorization", GlobalVariable.mInstance.token);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e("hjt.followers", s);
+            writeFollowers(MsgProcess.msgProcessArr(s));
             super.onPostExecute(s);
         }
     }

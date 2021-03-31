@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        GlobalVariable.mInstance.appContext = getApplicationContext();
+
         try {
             //检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(this,

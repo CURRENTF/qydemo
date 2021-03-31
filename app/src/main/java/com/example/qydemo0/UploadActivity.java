@@ -78,7 +78,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         Glide.with(context)
                 .setDefaultRequestOptions(
                         new RequestOptions()
-                                .frame(1000000)
+                                .frame(300000)
                                 .centerCrop()
                 )
                 .load(url)
@@ -89,22 +89,27 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+
         tagContainer = findViewById(R.id.tags);
         Button btn = findViewById(R.id.button_browse_file);
         btn.setOnClickListener(this);
         btn = findViewById(R.id.button_upload_selected_video);
         btn.setOnClickListener(this);
+
         player = new SimpleExoPlayer.Builder(getBaseContext()).build();
         PlayerView p = findViewById(R.id.player_for_upload_video);
         p.setPlayer(player);
+
         ImageView addTag = findViewById(R.id.button_add_tag);
         addTag.setOnClickListener(this);
+
         clas = findViewById(R.id.text_class_upload);
         clas.setThreshold(1);//最多几个字符开始匹配
         clas.setDropDownHeight(800);//设置下拉菜单高度
         clas.setDropDownHorizontalOffset(0);//设置下路列表和文本框水平偏移
         clas.setDropDownVerticalOffset(900);//设置下拉列表和文本框垂直偏移
         clas.setDropDownWidth(500);//设置下拉列表宽度
+
         GetClasInfo g = new GetClasInfo();
         g.execute();
     }
@@ -121,7 +126,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 launcher.launch(true);
                 break;
             case R.id.button_upload_selected_video:
-                Log.d("hjt", "...");
                 if(uri != null){
                     HashThenPost h = new HashThenPost();
                     try {

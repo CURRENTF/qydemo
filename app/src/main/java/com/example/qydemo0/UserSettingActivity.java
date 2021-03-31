@@ -175,8 +175,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         ((LinearLayout)findViewById(R.id.setting_sign)).setOnClickListener(this);
     }
 
-    @Override
-    protected void onStart() {
+    void writeInfo(){
         try {
             JSONObject infoJson = GlobalVariable.mInstance.fragmentDataForMain.userInfoJson;
             userAvatar = findViewById(R.id.image_setting_avatar);
@@ -195,6 +194,11 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        writeInfo();
         super.onStart();
     }
 
@@ -232,6 +236,10 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                UpdateInfo info = new UpdateInfo();
+                info.execute();
+            }
             Log.d("hjt.set-avatar", String.valueOf(aBoolean));
             if(aBoolean) {
                 Toast.makeText(UserSettingActivity.this, "头像修改成功", Toast.LENGTH_SHORT).show();
@@ -254,6 +262,10 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                UpdateInfo info = new UpdateInfo();
+                info.execute();
+            }
             if(aBoolean) Toast.makeText(UserSettingActivity.this, "用户名修改成功", Toast.LENGTH_SHORT).show();
             else Toast.makeText(UserSettingActivity.this, "用户名修改失败", Toast.LENGTH_SHORT).show();
         }
@@ -268,8 +280,26 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                UpdateInfo info = new UpdateInfo();
+                info.execute();
+            }
             if(aBoolean) Toast.makeText(UserSettingActivity.this, "个性签名修改成功", Toast.LENGTH_SHORT).show();
             else Toast.makeText(UserSettingActivity.this, "个性签名修改失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    class UpdateInfo extends AsyncTask<String, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            return QYUser.refreshInfo();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean) writeInfo();
+            super.onPostExecute(aBoolean);
         }
     }
 }

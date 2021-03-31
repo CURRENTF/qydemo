@@ -17,4 +17,15 @@ public class Json2X {
         return s;
     }
 
+    // key, value
+    public static String Json2StringGet(String... strings){
+        int sz = strings.length;
+        String s = "?";
+        for(int i = 0; i < sz; i += 2){
+            s += strings[i] + "=" + strings[i + 1];
+            if(i != sz - 2) s += '&';
+        }
+        return s;
+    }
+
 }
