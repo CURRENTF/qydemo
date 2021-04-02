@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.qydemo0"
-        minSdkVersion 21
+        minSdkVersion 29
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -65,5 +65,55 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
 
     // exoplayer
-    implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
+    //implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
+
+    // GSY
+    implementation 'com.shuyu:gsyVideoPlayer-java:8.1.0'
+
+//是否需要ExoPlayer模式
+    implementation 'com.shuyu:GSYVideoPlayer-exo2:8.1.0'
+
+//根据你的需求ijk模式的so
+    implementation 'com.shuyu:gsyVideoPlayer-armv5:8.1.0'
+    implementation 'com.shuyu:gsyVideoPlayer-armv7a:8.1.0'
+    implementation 'com.shuyu:gsyVideoPlayer-arm64:8.1.0'
+    implementation 'com.shuyu:gsyVideoPlayer-x64:8.1.0'
+    implementation 'com.shuyu:gsyVideoPlayer-x86:8.1.0'
+
+    //butterknife
+    implementation 'com.jakewharton:butterknife:10.2.3'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+    //RuntimePermissionsDemo
+    compile 'com.github.hotchemi:permissionsdispatcher:2.3.1'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.1'
+
+    //bumptch
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //Camera
+    implementation "androidx.camera:camera-camera2:1.0.0-beta07"
+    implementation "androidx.camera:camera-view:1.0.0-alpha14"
+    implementation "androidx.camera:camera-extensions:1.0.0-alpha14"
+    implementation "androidx.camera:camera-lifecycle:1.0.0-beta07"
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    //mp4parser
+    compile 'com.googlecode.mp4parser:isoparser:1.1.21'
+
+    //AIUnit
+//    implementation fileTree(dir: 'libs', includes: ['*.aar'])
+
+    implementation(name:'CVUnit-release', ext:'aar')
+    implementation(name:'com.coloros.ocs.base-release-1.0.4-SNAPSHOT', ext:'aar')
+
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'   // aar目录
+    }
 }

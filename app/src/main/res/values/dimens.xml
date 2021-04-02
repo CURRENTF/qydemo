@@ -5,4 +5,10 @@
     <dimen name="appbar_padding">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+
+    <dimen name="post_media_height">200dp</dimen>
+
+    <dimen name="seek_bar_image">150dp</dimen>
+    <dimen name="app_bar_height">@dimen/post_media_height</dimen>
+    <dimen name="text_margin">16dp</dimen>
 </resources>

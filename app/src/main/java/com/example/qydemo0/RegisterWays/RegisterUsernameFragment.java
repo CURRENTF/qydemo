@@ -83,10 +83,10 @@ public class RegisterUsernameFragment extends Fragment {
 
     public void getRegisterTokenAndUid(JSONObject json){
         try {
-            GlobalVariable.mInstance.RegisterToken = json.getString("token");
+            GlobalVariable.mInstance.registerToken = json.getString("token");
             GlobalVariable.mInstance.uid = json.getString("uid");
             GlobalVariable.mInstance.isRegisterTokenExisted = true;
-            Log.d("hjt", GlobalVariable.mInstance.RegisterToken);
+            Log.d("hjt", GlobalVariable.mInstance.registerToken);
         } catch (JSONException e){
             Log.d("hjt", e.getMessage());
         }
