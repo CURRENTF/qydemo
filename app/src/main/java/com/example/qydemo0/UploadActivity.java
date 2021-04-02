@@ -316,6 +316,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     e.printStackTrace();
                 }
             }
+            // hh
             else {
                 Log.e("hjt.UploadAC.verify", "JSON_NULL");
             }
