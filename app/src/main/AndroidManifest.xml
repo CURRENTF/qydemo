@@ -13,7 +13,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 硬件支持 -->
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -31,9 +33,10 @@
             android:name=".LearnDance"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
-        <activity
-            android:name=".HomeActivity"
-            android:label="@string/title_activity_home">
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".UserSettingActivity" />
+        <activity android:name=".UploadActivity" />
+        <activity android:name=".PlayerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,7 +47,6 @@
             android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
-        <activity android:name=".HostActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

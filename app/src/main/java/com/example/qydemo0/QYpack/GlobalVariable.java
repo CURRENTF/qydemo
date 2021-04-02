@@ -3,10 +3,12 @@ package com.example.qydemo0.QYpack;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.R;
 
 import java.lang.reflect.Field;
+import java.util.Vector;
 
 
 public class GlobalVariable {
@@ -19,11 +21,15 @@ public class GlobalVariable {
     public boolean isRegisterTokenExisted = false;
     public String registerToken = "";
 
+    public FragmentDataForMain fragmentDataForMain = null;
+    public Context appContext = null;
+
+
     private GlobalVariable(){
         // should be empty?
     }
 
-    Constant C = new Constant();
+    Constant C = Constant.mInstance;
 
     public void readAllVar(SharedPreferences sp){
         token = sp.getString("token", "");

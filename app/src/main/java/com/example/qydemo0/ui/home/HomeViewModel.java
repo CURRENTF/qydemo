@@ -1,19 +1,24 @@
 package com.example.qydemo0.ui.home;
 
+import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+
+import com.example.qydemo0.R;
+
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class HomeViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
-
-    public HomeViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is home fragment");
+    public MutableLiveData<String> mText;
+    public Vector<String> imgURL;
+    HomeViewModel(){
+        imgURL = new Vector<String>();
     }
 
-    public LiveData<String> getText() {
-        return mText;
-    }
 }

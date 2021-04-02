@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@drawable/round_rectangle"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="30dp"
+        android:background="@color/exo_white">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更改个性签名"
+            android:gravity="center"
+            android:textSize="26sp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/qy_background"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/input_box_border"
+            android:padding="8dp"
+            android:orientation="vertical">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_weight="0.6"
+                android:layout_height="120dp"
+                android:id="@+id/edit_text_setting_sign"
+                android:background="@drawable/big_empty_edittext"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_weight="0.4"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:text="确认"
+                android:id="@+id/button_upload_sign"
+                android:background="@drawable/gradient_color_orange"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

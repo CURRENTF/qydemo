@@ -1,0 +1,9 @@
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- 填充的颜色 -->
+    <solid android:color="#FFFFFF" />
+
+    <corners android:radius="10dp" />
+    <!-- padding：Button里面的文字与Button边界的间隔 -->
+</shape>

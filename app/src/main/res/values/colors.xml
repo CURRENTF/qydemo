@@ -12,10 +12,23 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
-
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="transparent">#00000000</color>
     <color name="btn_rect_alpha">#56b3b3b3</color>
+    <color name="nav_bar">#EEF3F9</color>
+    <color name="qy_background">#51658A</color>
+    <color name="text_background">#EEF3F9</color>
+    <color name="gray">#808080</color>
+    <drawable name="nav_bar">#EEF3F9</drawable>
+    <drawable name="qy_background">#51658A</drawable>
+    <color name="qy_button">#51658A</color>
+    <color name="qy_real_background">#EEF3F9</color>
+    <drawable name="qy_button">#51658A</drawable>
+    <color name="qy_pink">#DFBEC7</color>
+    <color name="qy_button2">#8B7991</color>
+    <drawable name="trans">#00000000 </drawable>
+    <color name="red">#B22222</color>
+>>>>>>> origin/master
 </resources>
