@@ -28,8 +28,8 @@ public class LoginActivity extends AppCompatActivity {
 
     Constant C = Constant.mInstance;
 
-    private int loginWays[] = {R.id.fragment_username_login, R.id.fragment_phone_login, R.id.fragment_email_login};
-    private int registerWays[] = {R.id.fragment_email_register, R.id.fragment_username_register, R.id.fragment_username_register2};
+    private int loginWays[] = {R.id.fragment_username_login};
+    private int registerWays[] = {R.id.fragment_username_register, R.id.fragment_username_register2};
 
     public class RegisterToLogin implements View.OnClickListener{
 
@@ -37,9 +37,9 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View v) {
             hideRegisterFragment();
             showFragment(C.default_login_way);
-            Button btn = findViewById(R.id.button_login_to_register);
+            TextView btn = findViewById(R.id.button_login_to_register);
             btn.setOnClickListener(new LoginToRegister());
-            btn.setText(R.string.register);
+            btn.setText("没有账号？注册一个吧");
         }
     }
 
@@ -49,9 +49,9 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View v) {
             hideLoginFragment();
             showFragment(C.default_register_way);
-            Button btn = findViewById(R.id.button_login_to_register);
+            TextView btn = findViewById(R.id.button_login_to_register);
             btn.setOnClickListener(new RegisterToLogin());
-            btn.setText(R.string.login);
+            btn.setText("我已经拥有账号");
         }
     }
 
@@ -98,16 +98,11 @@ public class LoginActivity extends AppCompatActivity {
         hideLoginFragment(); hideRegisterFragment();
         showFragment(C.default_login_way);
 
-        Button btn = findViewById(R.id.button_login_to_register);
+        TextView btn = findViewById(R.id.button_login_to_register);
         btn.setOnClickListener(new LoginToRegister());
 
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-
-
-
     }
-
-
 }
