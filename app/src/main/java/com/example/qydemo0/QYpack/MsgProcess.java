@@ -44,16 +44,16 @@ public class MsgProcess {
             }
             else {
 
-                if(GlobalVariable.mInstance.appContext != null){
-                    if(!status){
-                        Looper.prepare();
-                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                    }
-                    else {
-                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                    }
-                }
+//                if(GlobalVariable.mInstance.appContext != null){
+//                    if(!status){
+//                        Looper.prepare();
+//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
+//                        Looper.loop();
+//                    }
+//                    else {
+//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
                 Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {
@@ -77,16 +77,16 @@ public class MsgProcess {
             }
             else {
 
-                if(GlobalVariable.mInstance.appContext != null){
-                    if(!status){
-                        Looper.prepare();
-                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                        Looper.loop();
-                    }
-                    else {
-                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                    }
-                }
+//                if(GlobalVariable.mInstance.appContext != null){
+//                    if(!status){
+//                        Looper.prepare();
+//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
+//                        Looper.loop();
+//                    }
+//                    else {
+//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
                 Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {
@@ -101,16 +101,16 @@ public class MsgProcess {
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == Constant.mInstance.HTTP_OK) return true;
-            if(GlobalVariable.mInstance.appContext != null){
-                if(!status){
-                    Looper.prepare();
-                    Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-                else {
-                    Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-                }
-            }
+//            if(GlobalVariable.mInstance.appContext != null){
+//                if(!status){
+//                    Looper.prepare();
+//                    Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
+//                    Looper.loop();
+//                }
+//                else {
+//                    Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
+//                }
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
