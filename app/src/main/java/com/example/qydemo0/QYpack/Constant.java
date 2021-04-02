@@ -23,6 +23,8 @@ public class Constant {
         modifyUserInfo_url = "https://api.yhf2000.cn/api/qingying/v1/user/info/",
         search_url = "https://api.yhf2000.cn/api/qingying/v1/search/work/";
 
+    public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
+
     public int default_login_way = R.id.fragment_username_login,
         default_register_way = R.id.fragment_username_register,
         default_register2_way = R.id.fragment_username_register2,
@@ -31,7 +33,6 @@ public class Constant {
         MAX_FILE_SIZE = 1024 * 1024 * 50; // 50MB
 
     public String database = "QYdata";
-
 
     private Constant(){
 

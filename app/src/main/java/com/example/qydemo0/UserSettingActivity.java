@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -180,6 +181,8 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         try {
             JSONObject infoJson = GlobalVariable.mInstance.fragmentDataForMain.userInfoJson;
             userAvatar = findViewById(R.id.image_setting_avatar);
+            if(infoJson.getString("img_url").equals("null"))
+                infoJson.put("img_url", Constant.mInstance.default_avatar);
             Glide.with(this)
                     .load(infoJson.getString("img_url"))
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))

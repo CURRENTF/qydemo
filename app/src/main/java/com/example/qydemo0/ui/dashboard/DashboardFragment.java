@@ -55,10 +55,6 @@ public class DashboardFragment extends Fragment {
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
-            GetUserFans p = new GetUserFans();
-            p.execute();
-            GetUserFollows t = new GetUserFollows();
-            t.execute();
         }
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
         ImageView img = getActivity().findViewById(R.id.button_user_setting);
@@ -90,13 +86,14 @@ public class DashboardFragment extends Fragment {
             txt.setText(json.getString("username"));
             a = true;
         } catch (JSONException e) {
-            avatar_url = "https://file.yhf2000.cn/img/defult4.jpeg";
+            avatar_url = Constant.mInstance.default_avatar;
         }
 
         if(avatar_url.equals("null")){
-            avatar_url = "https://file.yhf2000.cn/img/defult4.jpeg";
+            avatar_url = Constant.mInstance.default_avatar;
             a = false;
         }
+
 
         if(getActivity() == null) return;
 
@@ -114,18 +111,20 @@ public class DashboardFragment extends Fragment {
         Img.roundImgUrl(getActivity(), userAvatar, avatar_url);
 
         try {
-            if(!a) json.put("img_url", "https://file.yhf2000.cn/img/defult4.jpeg");
+            if(!a) json.put("img_url", Constant.mInstance.default_avatar);
             if(!b) json.put("sign", "Born to Dance");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if(GlobalVariable.mInstance.fragmentDataForMain.userFollowers == null) return;
-        TextView txt2 = getActivity().findViewById(R.id.text_followers);
-        txt2.setText(String.valueOf(GlobalVariable.mInstance.fragmentDataForMain.userFollowers.length()));
-        if(GlobalVariable.mInstance.fragmentDataForMain.userFans == null) return;
-        txt2 = getActivity().findViewById(R.id.text_fans);
-        txt2.setText(String.valueOf(GlobalVariable.mInstance.fragmentDataForMain.userFans.length()));
+        try {
+            TextView txt2 = getActivity().findViewById(R.id.text_followers);
+            txt2.setText(String.valueOf(json.getInt("subscribe_num")));
+            txt2 = getActivity().findViewById(R.id.text_fans);
+            txt2.setText(String.valueOf(json.getInt("followers")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     void writeFans(JSONArray ja) {
