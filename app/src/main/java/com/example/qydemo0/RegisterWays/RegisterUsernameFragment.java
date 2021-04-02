@@ -103,7 +103,7 @@ public class RegisterUsernameFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt", s);
-            JSONObject json = MsgProcess.msgProcess(s);
+            JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
                 getRegisterTokenAndUid(json);
                 toRegister2();

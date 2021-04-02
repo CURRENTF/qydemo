@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
 
 import java.io.IOException;
@@ -104,5 +105,10 @@ public class LoginActivity extends AppCompatActivity {
         if(getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
+
+        GlobalVariable.mInstance.appContext = this;
+
+        View v = findViewById(R.id.container_login);
+        v.getBackground().setAlpha(95);
     }
 }

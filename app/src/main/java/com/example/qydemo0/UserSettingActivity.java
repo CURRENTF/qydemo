@@ -173,6 +173,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         ((LinearLayout)findViewById(R.id.setting_avatar)).setOnClickListener(this);
         ((LinearLayout)findViewById(R.id.setting_username)).setOnClickListener(this);
         ((LinearLayout)findViewById(R.id.setting_sign)).setOnClickListener(this);
+        GlobalVariable.mInstance.appContext = this;
     }
 
     void writeInfo(){
@@ -218,7 +219,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt.changeGender", s);
-            if(MsgProcess.checkMsg(s)) Toast.makeText(UserSettingActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+            if(MsgProcess.checkMsg(s, true)) Toast.makeText(UserSettingActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
         }
     }
 

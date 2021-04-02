@@ -93,6 +93,11 @@ public class DashboardFragment extends Fragment {
             avatar_url = "https://file.yhf2000.cn/img/defult4.jpeg";
         }
 
+        if(avatar_url.equals("null")){
+            avatar_url = "https://file.yhf2000.cn/img/defult4.jpeg";
+            a = false;
+        }
+
         if(getActivity() == null) return;
 
         try {
@@ -147,7 +152,7 @@ public class DashboardFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjtGetUserInfo", s);
-            JSONObject json = MsgProcess.msgProcess(s);
+            JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
                 reWriteInfo(json);
             }
@@ -164,8 +169,8 @@ public class DashboardFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.e("hjt.fans", s);
-            if(!MsgProcess.checkMsg(s)) return;
-            writeFans(MsgProcess.msgProcessArr(s));
+            if(!MsgProcess.checkMsg(s, true)) return;
+            writeFans(MsgProcess.msgProcessArr(s, true));
             super.onPostExecute(s);
         }
     }
@@ -180,7 +185,7 @@ public class DashboardFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.e("hjt.followers", s);
-            writeFollowers(MsgProcess.msgProcessArr(s));
+            writeFollowers(MsgProcess.msgProcessArr(s, true));
             super.onPostExecute(s);
         }
     }

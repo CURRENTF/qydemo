@@ -11,7 +11,7 @@ public class QYUser {
         String msg = htp.advancePut(GenerateJson.universeJson2(data), Constant.mInstance.userInfo_url,
                 "Authorization", GlobalVariable.mInstance.token);
         Log.d("hjt.user.modify", msg);
-        return MsgProcess.checkMsg(msg);
+        return MsgProcess.checkMsg(msg, false);
     }
 
     public static Boolean refreshInfo(){
@@ -20,7 +20,7 @@ public class QYUser {
         String msg = qYrequest.advanceGet(Constant.mInstance.userInfo_url,
                 "Authorization", GlobalVariable.mInstance.token);
         Log.d("hjt.qy.user.refresh", "2" + msg);
-        JSONObject json =  MsgProcess.msgProcess(msg);
+        JSONObject json =  MsgProcess.msgProcess(msg, false);
         if(json != null){
             Log.d("hjt.qy.user.refresh.info", "ok");
             GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;

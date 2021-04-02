@@ -22,7 +22,7 @@ public class Work {
         String msg =  qYrequest.advancePost(GenerateJson.universeJson("name", name, "introduction", intro,
                 "video", videoId, "cover", coverId, "tag", GenerateJson.listString(0, tags), "classification", classification),
                 Constant.mInstance.work, "Authorization", GlobalVariable.mInstance.token);
-        JSONObject jsonObject = MsgProcess.msgProcess(msg);
+        JSONObject jsonObject = MsgProcess.msgProcess(msg, false);
         if(jsonObject == null) return false;
         else return true;
     }

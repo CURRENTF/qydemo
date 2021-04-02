@@ -42,6 +42,7 @@ public class LoginUsernameFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_login_username, container, false);
     }
 
+
     private class Login implements View.OnClickListener{
 
         @Override
@@ -64,6 +65,7 @@ public class LoginUsernameFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... strings) {
+            Log.d("hjt.show", "1");
             String data = strings[0], url = strings[1];
             QYrequest htp = new QYrequest();
             return htp.post(data, url);
@@ -71,7 +73,7 @@ public class LoginUsernameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            JSONObject json = MsgProcess.msgProcess(s);
+            JSONObject json = MsgProcess.msgProcess(s, true);
             Log.d("hjtLoginReturnMsg", s);
             if(json != null){
                 GlobalVariable.mInstance.tokenExisted = true;

@@ -20,7 +20,8 @@ public class Constant {
         work = "https://api.yhf2000.cn/api/qingying/v1/work/",
         getClas_url = "https://api.yhf2000.cn/api/qingying/v1/systematics/classification/",
         getRecommendation_url_user = "https://api.yhf2000.cn/api/qingying/v1/recommendation/user/",
-        modifyUserInfo_url = "https://api.yhf2000.cn/api/qingying/v1/user/info/";
+        modifyUserInfo_url = "https://api.yhf2000.cn/api/qingying/v1/user/info/",
+        search_url = "https://api.yhf2000.cn/api/qingying/v1/search/work/";
 
     public int default_login_way = R.id.fragment_username_login,
         default_register_way = R.id.fragment_username_register,

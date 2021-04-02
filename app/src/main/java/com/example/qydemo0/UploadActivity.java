@@ -112,6 +112,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         GetClasInfo g = new GetClasInfo();
         g.execute();
+
+        GlobalVariable.mInstance.appContext = this;
     }
 
     @Override
@@ -202,7 +204,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(String s) {
-            JSONObject json = MsgProcess.msgProcess(s);
+            Log.d("hjt.upload.get.class", s);
+            JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
                 try {
                     JSONArray ja = json.getJSONArray("classification");
@@ -301,13 +304,14 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 try {
                     if(json.getBoolean("rapid_upload")){
                         Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
-                        return;
                     }
-                    UploadVideo uploadVideo = new UploadVideo();
-                    String fileUrl = Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri);
-                    uploadVideo.execute(fileUrl, json.getString("upload_url"), json.getString("token"));
-                    UploadCover uploadCover = new UploadCover();
-                    uploadCover.execute(fileUrl, json.getString("upload_url"));
+                    else {
+                        UploadVideo uploadVideo = new UploadVideo();
+                        String fileUrl = Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), uri);
+                        uploadVideo.execute(fileUrl, json.getString("upload_url"), json.getString("token"));
+                        UploadCover uploadCover = new UploadCover();
+                        uploadCover.execute(fileUrl, json.getString("upload_url"));
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

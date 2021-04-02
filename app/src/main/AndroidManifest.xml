@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".UserSettingActivity"></activity>
+        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".UserSettingActivity" />
         <activity android:name=".UploadActivity" />
         <activity android:name=".PlayerActivity">
             <intent-filter>

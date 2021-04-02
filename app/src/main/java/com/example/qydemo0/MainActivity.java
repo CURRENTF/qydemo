@@ -89,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        if(getSupportActionBar() != null){
-//            getSupportActionBar().hide();
-//        }
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -100,18 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_category)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        // 监听向下滑动 不太行， 应该是被scroll抓了
-//        gestureListener = new GestureListener(this);
-//        gestureDetector = new GestureDetector(this, gestureListener);
+        GlobalVariable.mInstance.appContext = this;
     }
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//        return gestureDetector.onTouchEvent(event);
-//    }
 
     @Override
     protected void onStart() {
@@ -126,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        GlobalVariable.mInstance.tokenExisted = false;
+//        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         Log.d("hjtMain", "MainDestroyed");

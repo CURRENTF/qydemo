@@ -33,6 +33,7 @@ import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.Video.Work;
 import com.example.qydemo0.R;
+import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.WorkItem;
@@ -122,6 +123,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         btn.setOnClickListener(this);
         FloatingActionButton fbtn = getActivity().findViewById(R.id.button_add_my_video);
         fbtn.setOnClickListener(this);
+        LinearLayout txt = getActivity().findViewById(R.id.button_search);
+        txt.setOnClickListener(this);
 
         super.onStart();
         Log.d("hjt.home_f", "start");
@@ -159,7 +162,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 intent.setClass(getActivity(), UploadActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.button_search:
+                Intent intent2 = new Intent();
+                intent2.setClass(getActivity(), SearchActivity.class);
+                startActivity(intent2);
+                break;
         }
     }
+
 
 }
