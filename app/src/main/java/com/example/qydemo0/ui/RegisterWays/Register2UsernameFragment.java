@@ -1,4 +1,4 @@
-package com.example.qydemo0.RegisterWays;
+package com.example.qydemo0.ui.RegisterWays;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
-import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;

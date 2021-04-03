@@ -35,6 +35,7 @@ public class GenerateJson {
         return s;
     }
 
+    // [key, value, key, ...]
     public static String universeJson(String... strings){
         int sz = strings.length;
         Map<String, String> map = new HashMap<>();
@@ -45,7 +46,10 @@ public class GenerateJson {
     }
 
     //升级版本，需要标注类型
-    // list = [string, int]
+    // list = [string, int, bool]
+    // [key, type_value, value, ...]
+    // ["haoge_age", "int", "23"]
+    // {"haoge_age":23}
     public static String universeJson2(String[] strings){
         int sz = strings.length;
         String res = "{";
@@ -53,6 +57,7 @@ public class GenerateJson {
             res += '"' + strings[i] + '"' + ':';
             if(strings[i + 1].equals("string"))
                 res += '"' + strings[i + 2] + '"';
+            else if(strings[i + 1].equals("int")) res += strings[i + 2];
             else res += strings[i + 2];
             if(i < sz - 3) res += ',';
         }

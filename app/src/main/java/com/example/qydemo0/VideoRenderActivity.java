@@ -4,41 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.aiunit.vision.common.ConnectionCallback;
-import com.coloros.ocs.ai.cv.CVUnit;
 import com.coloros.ocs.ai.cv.CVUnitClient;
-import com.coloros.ocs.base.common.ConnectionResult;
-import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
-import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
+import com.example.qydemo0.QYpack.VideoClip;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import butterknife.BindView;
 import android.media.MediaMetadataRetriever;
 
 import static android.telecom.DisconnectCause.LOCAL;
 import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
 
-public class VideoRander extends AppCompatActivity {
+public class VideoRenderActivity extends AppCompatActivity {
 
     String free_dance_url = "";
 
@@ -55,7 +42,7 @@ public class VideoRander extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video_rander);
+        setContentView(R.layout.activity_video_render);
         final Intent intent = getIntent();
         free_dance_url = intent.getStringExtra("NAME");
         inti_clip_video();
@@ -107,7 +94,7 @@ public class VideoRander extends AppCompatActivity {
         long total_time = getDurationLong(free_dance_url, LOCAL);
         long mid_time = total_time/2;
 
-        videoClip video_clip = new videoClip();
+        VideoClip video_clip = new VideoClip();
         clip_video_url = getExternalCacheDir().getPath();
         if (clip_video_url != null) {
             File dir = new File(clip_video_url + "/videos");
@@ -198,7 +185,7 @@ public class VideoRander extends AppCompatActivity {
     public void showProgressDialog(String title, String message) {
         if (progressDialog == null) {
 
-            progressDialog = ProgressDialog.show(VideoRander.this, title,
+            progressDialog = ProgressDialog.show(VideoRenderActivity.this, title,
                     message, true, false);
         } else if (progressDialog.isShowing()) {
             progressDialog.setTitle(title);

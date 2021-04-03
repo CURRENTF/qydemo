@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +24,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.qydemo0.SwitchVideoModel;
-import com.example.qydemo0.SampleVideo;
+import com.example.qydemo0.QYpack.SampleVideo;
+import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.adapter.CommentExpandAdapter;
 import com.example.qydemo0.bean.Belong;
 import com.example.qydemo0.bean.CommentBean;
@@ -398,7 +397,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, LearnDance.class);
+                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
                 startActivity(intent);
             }
         });
@@ -406,7 +405,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_free_dance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, FreeDance.class);
+                Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
                 startActivity(intent);
             }
         });

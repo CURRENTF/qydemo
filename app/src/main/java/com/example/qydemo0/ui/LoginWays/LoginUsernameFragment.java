@@ -1,4 +1,4 @@
-package com.example.qydemo0.LoginWays;
+package com.example.qydemo0.ui.LoginWays;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,10 +27,6 @@ import com.example.qydemo0.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.MediaType;
 
 public class LoginUsernameFragment extends Fragment {
 

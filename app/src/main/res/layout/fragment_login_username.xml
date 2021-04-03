@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginWays.LoginUsernameFragment" >
+    tools:context=".ui.LoginWays.LoginUsernameFragment" >
 
     <EditText
         android:id="@+id/edit_text_login_username"

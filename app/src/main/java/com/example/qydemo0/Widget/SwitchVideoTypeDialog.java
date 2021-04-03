@@ -1,4 +1,4 @@
-package com.example.qydemo0;
+package com.example.qydemo0.Widget;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.qydemo0.R;
-import com.example.qydemo0.SwitchVideoModel;
+import com.example.qydemo0.QYpack.SwitchVideoModel;
 
 import java.util.List;
 

@@ -30,6 +30,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.qydemo0.QYpack.AudioPlayer;
+import com.example.qydemo0.QYpack.SampleVideo;
+import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -59,7 +62,7 @@ import static android.view.View.GONE;
  * Created by guoshuyu on 2017/6/18.
  */
 
-public class LearnDance extends Activity implements SurfaceHolder.Callback{
+public class LearnDanceActivity extends Activity implements SurfaceHolder.Callback{
 
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
@@ -118,7 +121,7 @@ public class LearnDance extends Activity implements SurfaceHolder.Callback{
     RelativeLayout.LayoutParams people_all = new RelativeLayout.LayoutParams(350, 910);
     RelativeLayout.LayoutParams people_tiny = new RelativeLayout.LayoutParams(1,1);
 
-    public LearnDance() throws IOException {
+    public LearnDanceActivity() throws IOException {
     }
 
     @Override
@@ -181,7 +184,7 @@ public class LearnDance extends Activity implements SurfaceHolder.Callback{
             @Override
             public void onClick(View v) {
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(LearnDance.this, true, true);
+                detailPlayer.startWindowFullscreen(LearnDanceActivity.this, true, true);
             }
         });
 
@@ -384,7 +387,7 @@ public class LearnDance extends Activity implements SurfaceHolder.Callback{
             mCamera = Camera.open();
         }
 
-        LearnDance.CameraSizeComparator sizeComparator = new LearnDance.CameraSizeComparator();
+        LearnDanceActivity.CameraSizeComparator sizeComparator = new LearnDanceActivity.CameraSizeComparator();
         Camera.Parameters parameters = mCamera.getParameters();
 
         if (mSize == null) {
@@ -671,7 +674,7 @@ public class LearnDance extends Activity implements SurfaceHolder.Callback{
     public void showProgressDialog(String title, String message) {
         if (progressDialog == null) {
 
-            progressDialog = ProgressDialog.show(LearnDance.this, title,
+            progressDialog = ProgressDialog.show(LearnDanceActivity.this, title,
                     message, true, false);
         } else if (progressDialog.isShowing()) {
             progressDialog.setTitle(title);

@@ -1,4 +1,4 @@
-package com.example.qydemo0;
+package com.example.qydemo0.QYpack;
 
 public class SwitchVideoModel {
     private String url;

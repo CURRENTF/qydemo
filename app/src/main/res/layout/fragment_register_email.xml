@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterWays.RegisterEmailFragment">
+    tools:context=".ui.RegisterWays.RegisterEmailFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

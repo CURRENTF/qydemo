@@ -28,7 +28,7 @@
                 app:layout_collapseMode="parallax"
                 android:fitsSystemWindows="true">
 
-                <com.example.qydemo0.LandLayoutVideo
+                <com.example.qydemo0.QYpack.LandLayoutVideo
                     android:id="@+id/detail_player"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/post_media_height" />

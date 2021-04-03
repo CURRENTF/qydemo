@@ -22,13 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".VideoRander"></activity>
+        <activity android:name=".VideoRenderActivity"></activity>
         <activity
-            android:name=".FreeDance"
+            android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".LearnDance"
+            android:name=".LearnDanceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
 

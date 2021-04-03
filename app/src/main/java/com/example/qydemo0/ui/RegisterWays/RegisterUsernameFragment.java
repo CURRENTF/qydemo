@@ -1,17 +1,10 @@
-package com.example.qydemo0.RegisterWays;
+package com.example.qydemo0.ui.RegisterWays;
 
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.AsyncTaskLoader;
 
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;

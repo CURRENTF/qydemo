@@ -1,21 +1,18 @@
-package com.example.qydemo0;
+package com.example.qydemo0.QYpack;
 
 import android.content.Context;
 import android.graphics.Matrix;
-import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qydemo0.R;
-import com.example.qydemo0.SwitchVideoModel;
-import com.example.qydemo0.SwitchVideoTypeDialog;
+import com.example.qydemo0.Widget.SwitchVideoTypeDialog;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.utils.GSYVideoType;
 import com.shuyu.gsyvideoplayer.video.base.GSYBaseVideoPlayer;

@@ -1,4 +1,4 @@
-package com.example.qydemo0;
+package com.example.qydemo0.QYpack;
 
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -28,8 +28,8 @@ import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
  * Mail: alanwang6584@gmail.com
  */
 
-public class videoClip {
-    private static final String TAG = videoClip.class.getSimpleName();
+public class VideoClip {
+    private static final String TAG = VideoClip.class.getSimpleName();
 
     /**
      * 裁剪视频

@@ -2,7 +2,6 @@ package com.example.qydemo0;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.AsyncTaskLoader;
 import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,11 +13,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.AsyncPlayer;
-import android.media.MediaMetadataRetriever;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,41 +20,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.aiunit.core.FrameData;
-import com.aiunit.vision.common.ConnectionCallback;
-import com.aiunit.vision.common.FrameInputSlot;
-import com.aiunit.vision.common.FrameOutputSlot;
-import com.coloros.ocs.ai.cv.CVUnit;
 import com.coloros.ocs.ai.cv.CVUnitClient;
-import com.coloros.ocs.base.common.ConnectionResult;
-import com.coloros.ocs.base.common.api.Api;
-import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
-import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
+
 import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
-import android.widget.Toast;
 
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
-import com.example.qydemo0.videoClip;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.util.concurrent.locks.AbstractOwnableSynchronizer;
-
-import static android.media.MediaMetadataRetriever.OPTION_PREVIOUS_SYNC;
-import com.example.qydemo0.ui.dashboard.DashboardFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends AppCompatActivity {
 
@@ -113,10 +85,14 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             //检测是否有写的权限
-            int permission = ActivityCompat.checkSelfPermission(this,
-                    "android.permission.READ_EXTERNAL_STORAGE");
+            int permission0 = ActivityCompat.checkSelfPermission(this,
+                    "android.permission.READ_EXTERNAL_STORAGE"),
+                permission1 = ActivityCompat.checkSelfPermission(this,
+                        "android.permission.CAMERA"),
+                permission2 = ActivityCompat.checkSelfPermission(this,
+                        "android.permission.RECORD_AUDIO");
 
-            if (permission != PackageManager.PERMISSION_GRANTED) {
+            if (permission0 != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED) {
                 // 去申请读的权限，申请权限
                 String[] t = new String[3];
                 t[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
