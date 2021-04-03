@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/text_user_sign"
                     android:textSize="14sp"
-                    android:textColor="@color/exo_black_opacity_60"/>
+                    android:textColor="@color/exo_black_opacity_70"/>
             </LinearLayout>
 
             <ImageView

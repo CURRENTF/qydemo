@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -55,35 +57,9 @@ public class VideoRander extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_rander);
         final Intent intent = getIntent();
-        free_dance_url = intent.getStringExtra("FreeDanceUrl");
+        free_dance_url = intent.getStringExtra("NAME");
         inti_clip_video();
         init_player();
-
-        mCVClient = CVUnit.getVideoStyleTransferDetectorClient
-                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
-            @Override
-            public void onConnectionSucceed() {
-                Log.i("TAG", " authorize connect: onConnectionSucceed");
-            }
-        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(ConnectionResult connectionResult) {
-                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
-            }
-        });
-
-        mCVClient.initService(this, new ConnectionCallback() {
-            @Override
-            public void onServiceConnect() {
-                Log.i("TAG", "initService: onServiceConnect");
-                int startCode = mCVClient.start();
-            }
-
-            @Override
-            public void onServiceDisconnect() {
-                Log.e("TAG", "initService: onServiceDisconnect: ");
-            }
-        });
     }
 
 //    private void init_spinner(){
@@ -99,7 +75,7 @@ public class VideoRander extends AppCompatActivity {
 //        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
 //    }
 
-    private long getDurationLong(String url,int type){
+    public long getDurationLong(String url,int type){
         String duration = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {

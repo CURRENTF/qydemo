@@ -393,11 +393,20 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         loadFirstFrameCover(source1);
 
         Button btn_learn = findViewById(R.id.learn_dance);
+        Button btn_free_dance = (Button) findViewById(R.id.free_dance);
 
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PlayerActivity.this, LearnDance.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_free_dance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayerActivity.this, FreeDance.class);
                 startActivity(intent);
             }
         });
@@ -537,7 +546,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         expandableListView = (CommentExpandableListView) findViewById(R.id.detail_page_lv_comment);
         bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         commentsList = generateTestData();
         initExpandableListView(commentsList);
     }

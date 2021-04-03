@@ -114,13 +114,7 @@ dependencies {
     implementation(name:'CVUnit-release', ext:'aar')
     implementation(name:'com.coloros.ocs.base-release-1.0.4-SNAPSHOT', ext:'aar')
 
-}
-
-repositories {
-    flatDir {
-        dirs 'libs'   // aar目录
-    }
-    implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
+//    implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
 
     // ion
     // get image from url
@@ -144,5 +138,13 @@ repositories {
     implementation 'com.youth.banner:banner:2.1.0'
 
     implementation 'com.jakewharton:butterknife:10.2.3'
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'   // aar目录
+    }
 }

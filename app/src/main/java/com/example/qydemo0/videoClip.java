@@ -1,5 +1,7 @@
 package com.example.qydemo0;
 
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 import android.text.TextUtils;
 import android.util.Log;
 import com.coremedia.iso.boxes.Container;
@@ -13,8 +15,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import static android.telecom.DisconnectCause.LOCAL;
+import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
 
 /**
  * Author: AlanWang4523.
@@ -138,6 +144,48 @@ public class videoClip {
             previous = timeOfSyncSample;
         }
         return timeOfSyncSamples[timeOfSyncSamples.length - 1];
+    }
+
+
+    public Bitmap getCoverFromVideo(String url){
+
+        long CoverTime = getDurationLong(url,LOCAL)/2;
+        MediaMetadataRetriever mmr=new MediaMetadataRetriever();//实例化MediaMetadataRetriever对象
+        File file=new File(url);//实例化File对象，文件路径为/storage/sdcard/Movies/music1.mp4
+        if(file.exists()){
+            mmr.setDataSource(file.getAbsolutePath());//设置数据源为该文件对象指定的绝对路径
+            return mmr.getFrameAtTime(CoverTime);//获得视频第一帧的Bitmap对象
+        }
+        else{
+            return null;
+        }
+    }
+
+    public long getDurationLong(String url,int type){
+        String duration = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            //如果是网络路径
+            if(type == NETWORK){
+                retriever.setDataSource(url,new HashMap<String, String>());
+            }else if(type == LOCAL){//如果是本地路径
+                retriever.setDataSource(url);
+            }
+            duration = retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION);
+        } catch (Exception ex) {
+            Log.d("nihao", "获取音频时长失败");
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+                Log.d("nihao", "释放MediaMetadataRetriever资源失败");
+            }
+        }
+        if(!TextUtils.isEmpty(duration)){
+            return Long.parseLong(duration);
+        }else{
+            return 0;
+        }
     }
 
 }

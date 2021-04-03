@@ -69,8 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private GestureListener gestureListener = null;
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -80,6 +79,23 @@ public class MainActivity extends AppCompatActivity {
                 //请求被拒绝，提示用户
                 Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
             }
+
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                //请求成功，获得权限，存储到本地
+                Toast.makeText(this, "成功获取权限", Toast.LENGTH_LONG).show();
+            } else {
+                //请求被拒绝，提示用户
+                Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
+            }
+
+            if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                //请求成功，获得权限，存储到本地
+                Toast.makeText(this, "成功获取权限", Toast.LENGTH_LONG).show();
+            } else {
+                //请求被拒绝，提示用户
+                Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
+            }
+
         }
     }
 
@@ -93,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         GlobalVariable.mInstance.appContext = getApplicationContext();
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
 
         try {
             //检测是否有写的权限
@@ -101,8 +118,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 // 去申请读的权限，申请权限
-                String[] t = new String[1];
+                String[] t = new String[3];
                 t[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
+                t[1] = Manifest.permission.CAMERA;
+                t[2] = Manifest.permission.RECORD_AUDIO;
                 ActivityCompat.requestPermissions(this, t, 1);
             }
 
@@ -116,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("hjt", GlobalVariable.mInstance.uid + "?");
         Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
-        if(!GlobalVariable.mInstance.tokenExisted){
+        if (!GlobalVariable.mInstance.tokenExisted) {
             Intent it = new Intent();
             it.setComponent(new ComponentName(this, LoginActivity.class));
             it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -129,8 +148,16 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if(getSupportActionBar() != null){
+        Button btn1 = (Button) findViewById(R.id.btn1);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Log.i("StartCode",""+startCode);
+                Intent intent = new Intent(MainActivity.this,PlayerActivity.class);
+                startActivity(intent);
+            }
+        });
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
@@ -144,6 +171,34 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         GlobalVariable.mInstance.appContext = this;
+//        mCVClient = CVUnit.getVideoStyleTransferDetectorClient
+//                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
+//            @Override
+//            public void onConnectionSucceed() {
+//                Log.i("TAG", " authorize connect: onConnectionSucceed");
+//            }
+//        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
+//            @Override
+//            public void onConnectionFailed(ConnectionResult connectionResult) {
+//                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
+//            }
+//        });
+//
+//        mCVClient.initService(this,new
+//
+//                ConnectionCallback() {
+//                    @Override
+//                    public void onServiceConnect () {
+//                        Log.i("TAG", "initService: onServiceConnect");
+//                        startCode = mCVClient.start();
+//                    }
+//
+//                    @Override
+//                    public void onServiceDisconnect () {
+//                        Log.e("TAG", "initService: onServiceDisconnect: ");
+//                    }
+//                });
+
     }
 
     @Override

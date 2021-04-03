@@ -3,6 +3,7 @@ package com.example.qydemo0;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -244,9 +245,9 @@ public class FreeDance extends Activity implements SurfaceHolder.Callback{
             public void onClick(View v) {
                 if(is_compare){
                     stop_compare_video();
-                    /*
-                    跳转渲染界面
-                     */
+                    Intent intent = new Intent(FreeDance.this,VideoRander.class);
+                    intent.putExtra("NAME",path_cur);  // 传递参数，根据需要填写
+                    startActivity(intent);
                 }
             }
         });
@@ -289,7 +290,7 @@ public class FreeDance extends Activity implements SurfaceHolder.Callback{
     }
 
     private void initLearnVideo() {
-        String[] source = {"/sdcard/1/tss11.mp4"};
+        String[] source = {"https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd"};
         for(int i=0;i<all_num;i++){
             SwitchVideoModel switchVideoModel = new SwitchVideoModel("1080P", source[i]);
             List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
@@ -510,7 +511,6 @@ public class FreeDance extends Activity implements SurfaceHolder.Callback{
     private void init_compare_video(){
         is_compare = true;
         reset_learn_view();
-        btn2.setText("返回");
     }
 
     /**
