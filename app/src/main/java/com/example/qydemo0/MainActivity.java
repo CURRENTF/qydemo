@@ -52,21 +52,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
             }
 
-            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                //请求成功，获得权限，存储到本地
-                Toast.makeText(this, "成功获取权限", Toast.LENGTH_LONG).show();
-            } else {
-                //请求被拒绝，提示用户
-                Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
-            }
-
-            if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                //请求成功，获得权限，存储到本地
-                Toast.makeText(this, "成功获取权限", Toast.LENGTH_LONG).show();
-            } else {
-                //请求被拒绝，提示用户
-                Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
-            }
 
         }
     }
@@ -90,14 +75,18 @@ public class MainActivity extends AppCompatActivity {
                 permission1 = ActivityCompat.checkSelfPermission(this,
                         "android.permission.CAMERA"),
                 permission2 = ActivityCompat.checkSelfPermission(this,
-                        "android.permission.RECORD_AUDIO");
+                        "android.permission.RECORD_AUDIO"),
+                    permission3 = ActivityCompat.checkSelfPermission(this,
+                            "android.permission.WRITE_EXTERNAL_STORAGE");
 
-            if (permission0 != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED) {
+            if (permission0 != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED
+                || permission3 != PackageManager.PERMISSION_GRANTED) {
                 // 去申请读的权限，申请权限
-                String[] t = new String[3];
+                String[] t = new String[4];
                 t[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
                 t[1] = Manifest.permission.CAMERA;
                 t[2] = Manifest.permission.RECORD_AUDIO;
+                t[3] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
                 ActivityCompat.requestPermissions(this, t, 1);
             }
 

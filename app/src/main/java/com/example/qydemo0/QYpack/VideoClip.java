@@ -154,7 +154,7 @@ public class VideoClip {
         File file=new File(url);//实例化File对象，文件路径为/storage/sdcard/Movies/music1.mp4
         if(file.exists()){
             mmr.setDataSource(file.getAbsolutePath());//设置数据源为该文件对象指定的绝对路径
-            return mmr.getFrameAtTime(CoverTime);//获得视频第一帧的Bitmap对象
+            return mmr.getFrameAtTime(CoverTime * 1000);//获得视频第一帧的Bitmap对象
         }
         else{
             return null;

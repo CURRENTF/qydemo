@@ -32,23 +32,17 @@ public class Img {
 
     public static String saveImg(Bitmap bitmap, String name, Context context) {
         try {
-            String sdcardPath = System.getenv("EXTERNAL_STORAGE");      //获得sd卡路径
-            String dir = sdcardPath + "/qy_cache/";                    //图片保存的文件夹名
-            File file = new File(dir);                                 //已File来构建
-            if (!file.exists()) {                                     //如果不存在  就mkdirs()创建此文件夹
-                file.mkdirs();
+            String path = context.getExternalCacheDir().getPath();
+            if(path != null){
+                File dir = new File(path + "/pics");
+                if(!dir.exists()) dir.mkdirs();
+                path = dir + "/" + System.currentTimeMillis();
+                File pic = new File(path);
+                Log.d("hjt.IMG.path", path);
+                FileOutputStream outputStream = new FileOutputStream(pic);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                return path;
             }
-            Log.i("Img", "file uri==>" + dir);
-            File mFile = new File(dir + name);                        //将要保存的图片文件
-            if (mFile.exists()) {
-                Toast.makeText(context, "该图片已存在!", Toast.LENGTH_SHORT).show();
-                return null;
-            }
-
-            FileOutputStream outputStream = new FileOutputStream(mFile);     //构建输出流
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);  //compress到输出outputStream
-            Uri uri = Uri.fromFile(mFile);                                  //获得图片的uri
-            return dir + name;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

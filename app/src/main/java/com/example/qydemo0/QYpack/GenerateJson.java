@@ -46,7 +46,7 @@ public class GenerateJson {
     }
 
     //升级版本，需要标注类型
-    // list = [string, int, bool]
+    // list = [string, int, bool, list]
     // [key, type_value, value, ...]
     // ["haoge_age", "int", "23"]
     // {"haoge_age":23}
@@ -71,6 +71,17 @@ public class GenerateJson {
             s += '"';
             s += strings[i];
             s += '"';
+        }
+        s += ']';
+        return s;
+    }
+
+    public static String listStringWithSinglePoint(int startPos, String... strings){
+        String s = "[";
+        for(int i = startPos; i < strings.length; i++){
+            s += '\'';
+            s += strings[i];
+            s += '\'';
         }
         s += ']';
         return s;

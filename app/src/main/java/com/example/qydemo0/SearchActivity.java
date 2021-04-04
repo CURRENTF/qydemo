@@ -85,23 +85,19 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+
     class SearchKey implements View.OnKeyListener {
 
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_ENTER){
-                if(event.getAction() == KeyEvent.ACTION_DOWN){
-                    Search s = new Search();
-                    s.execute(((EditText)findViewById(R.id.edit_text_search)).getText().toString());
-                    search_txt.clearFocus();
-                    hideInput();
-                }
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+                Search s = new Search();
+                s.execute(((EditText)findViewById(R.id.edit_text_search)).getText().toString());
+                search_txt.clearFocus();
+                hideInput();
+                return true;
             }
-            else if(keyCode == KeyEvent.KEYCODE_BACK){
-                if(search_txt.hasFocus()) search_txt.clearFocus();
-                search_txt.setText("");
-            }
-            return true;
+            return false;
         }
     }
 
