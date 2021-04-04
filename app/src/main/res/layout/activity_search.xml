@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container_search"
+    android:background="@color/qy_real_background"
     tools:context=".SearchActivity">
 
     <LinearLayout
@@ -43,7 +44,7 @@
         <com.example.qydemo0.Widget.QYScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp">
+            android:paddingVertical="10dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

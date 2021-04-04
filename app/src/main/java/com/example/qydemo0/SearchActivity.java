@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYScrollView;
@@ -150,6 +151,7 @@ public class SearchActivity extends AppCompatActivity {
                             json.getInt("like_num"), json.getInt("play_num"),
                             json.getString("introduction"));
                     qyScrollView.addView(workItem);
+                    qyScrollView.addView(Img.linearLayoutDivideLine(SearchActivity.this));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

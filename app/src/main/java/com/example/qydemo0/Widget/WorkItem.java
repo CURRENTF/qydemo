@@ -14,6 +14,8 @@ import com.example.qydemo0.R;
 
 public class WorkItem extends LinearLayout {
 
+    public static int height = 120;
+
     private Context mContext = null;
     private View mView = null;
     ImageView cover = null;
@@ -39,7 +41,7 @@ public class WorkItem extends LinearLayout {
         like = mView.findViewById(R.id.text_like_num);
         play = mView.findViewById(R.id.text_play_num);
 
-        Img.url2imgView(cover_url, cover, mContext);
+        Img.url2imgViewRoundRectangle(cover_url, cover, mContext, 20);
         name.setText(video_name);
         like.setText(String.valueOf(like_num));
         play.setText(String.valueOf(play_num));

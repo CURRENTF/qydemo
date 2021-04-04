@@ -33,7 +33,8 @@
     <com.example.qydemo0.Widget.QYScrollView
         android:layout_width="match_parent"
         android:id="@+id/scroll_home"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/home_scroll_for_video_cover"

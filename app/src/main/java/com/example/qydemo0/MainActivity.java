@@ -136,33 +136,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         GlobalVariable.mInstance.appContext = this;
-//        mCVClient = CVUnit.getVideoStyleTransferDetectorClient
-//                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
-//            @Override
-//            public void onConnectionSucceed() {
-//                Log.i("TAG", " authorize connect: onConnectionSucceed");
-//            }
-//        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
-//            @Override
-//            public void onConnectionFailed(ConnectionResult connectionResult) {
-//                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
-//            }
-//        });
-//
-//        mCVClient.initService(this,new
-//
-//                ConnectionCallback() {
-//                    @Override
-//                    public void onServiceConnect () {
-//                        Log.i("TAG", "initService: onServiceConnect");
-//                        startCode = mCVClient.start();
-//                    }
-//
-//                    @Override
-//                    public void onServiceDisconnect () {
-//                        Log.e("TAG", "initService: onServiceDisconnect: ");
-//                    }
-//                });
 
     }
 
@@ -179,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-//        GlobalVariable.mInstance.tokenExisted = false;
+        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         Log.d("hjtMain", "MainDestroyed");

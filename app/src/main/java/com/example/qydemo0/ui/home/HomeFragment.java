@@ -70,28 +70,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    int cnt = 40;
+
     @Override
     public void onStart() {
-//        String p = "no";
-//        if(scrollViewForVideos != null) p = "yes";
-//        Log.d("hjt.home_f", p);
 
-        // 监听scroll的滑动
-        scrollView.setScrollViewListener(new QYScrollView.ScrollViewListener() {
+        scrollView.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
-            public void onScrollChanged(QYScrollView scrollView, int l, int t, int oldl, int oldt) {
-                if (oldt < t && ((t - oldt) > 50)) {// 向上
-                    Log.e("wangly", "距离："+(oldt < t) +"---"+(t - oldt));
-                    Log.e("TAG","向上滑动");
+            public void onScrolledToBottom() {
+                Log.d("hjt.scroll.bottom", "true");
+                for(int i = 0; i < 5; i++) {
                     WorkItem w = new WorkItem(getActivity());
                     scrollViewForVideos.addView(w);
-                    Log.d("hjt", "已添加");
-
-                } else if (oldt > t && (oldt - t) > 15) {// 向下
-                    Log.e("wangly", "距离："+(oldt > t) +"---"+(oldt - t));
-                    Log.e("TAG"," 向下滑动");
-
                 }
+                Log.d("hjt", "已添加");
+            }
+
+            @Override
+            public void onScrolledToTop() {
+                Log.d("hjt.scroll.top", "true");
             }
         });
 
@@ -105,11 +102,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         Log.d("hjt.home_f", "start");
 
-//        for(int i = 1; i <= Constant.mInstance.pre_items; i++){
-//            WorkItem workItem = new WorkItem(getActivity());
-//            int id = View.generateViewId();
-//            workItem.setId(id);
-//        }
     }
 
     @Override
