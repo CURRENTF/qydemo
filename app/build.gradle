@@ -106,7 +106,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
     //mp4parser
-    compile 'com.googlecode.mp4parser:isoparser:1.1.21'
+    implementation 'com.googlecode.mp4parser:isoparser:1.1.21'
 
     //AIUnit
 //    implementation fileTree(dir: 'libs', includes: ['*.aar'])

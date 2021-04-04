@@ -1,4 +1,4 @@
-package com.example.qydemo0.Adapter;
+package com.example.qydemo0.QYAdapter;
 
 import android.os.Build;
 import android.view.ViewGroup;

@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/qy_real_background"
+    android:fitsSystemWindows="true"
     tools:context=".UploadActivity">
 
     <LinearLayout

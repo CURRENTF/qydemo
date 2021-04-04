@@ -72,18 +72,6 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     String[] classfi = null;
     AutoCompleteTextView clas = null;
 
-    public static void loadCover(ImageView imageView, String url, Context context) {
-
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Glide.with(context)
-                .setDefaultRequestOptions(
-                        new RequestOptions()
-                                .frame(300000)
-                                .centerCrop()
-                )
-                .load(url)
-                .into(imageView);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,11 +92,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         addTag.setOnClickListener(this);
 
         clas = findViewById(R.id.text_class_upload);
-        clas.setThreshold(1);//最多几个字符开始匹配
-        clas.setDropDownHeight(800);//设置下拉菜单高度
-        clas.setDropDownHorizontalOffset(0);//设置下路列表和文本框水平偏移
-        clas.setDropDownVerticalOffset(900);//设置下拉列表和文本框垂直偏移
-        clas.setDropDownWidth(500);//设置下拉列表宽度
+        clas.setThreshold(0);//最多几个字符开始匹配
+        clas.setDropDownHeight(500);//设置下拉菜单高度
+        clas.setDropDownHorizontalOffset(10);//设置下路列表和文本框水平偏移
+        clas.setDropDownVerticalOffset(-500-200);//设置下拉列表和文本框垂直偏移
+        clas.setDropDownWidth(800);//设置下拉列表宽度
 
         GetClasInfo g = new GetClasInfo();
         g.execute();

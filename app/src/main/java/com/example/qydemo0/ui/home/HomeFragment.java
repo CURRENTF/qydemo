@@ -1,37 +1,20 @@
 package com.example.qydemo0.ui.home;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.qydemo0.Adapter.ImageNetAdapter;
-import com.example.qydemo0.QYpack.Constant;
-import com.example.qydemo0.QYpack.GestureListener;
+import com.example.qydemo0.QYAdapter.ImageNetAdapter;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.example.qydemo0.QYpack.Img;
-import com.example.qydemo0.QYpack.MsgProcess;
-import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.QYpack.Video.Work;
 import com.example.qydemo0.R;
 import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
@@ -40,19 +23,12 @@ import com.example.qydemo0.Widget.WorkItem;
 import com.example.qydemo0.bean.DataBean;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.koushikdutta.ion.Ion;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.CircleIndicator;
-import com.youth.banner.util.LogUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import org.json.JSONObject;
-
-import java.util.Vector;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
