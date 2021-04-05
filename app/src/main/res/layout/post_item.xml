@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:id="@+id/post_user_img"/>
+            android:id="@+id/post_user_avatar"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -33,24 +33,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="0.4"
+                android:text="6小时前"
                 android:id="@+id/post_time"/>
         </LinearLayout>
-        <ImageView
+        <LinearLayout
             android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:id="@+id/post_fun_img"/>
+            android:layout_height="70dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:paddingVertical="5dp"
+                android:text="+关注"
+                android:textColor="@color/real_pink"
+                android:gravity="center"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_vegetable"
+                android:id="@+id/fun_img"
+                android:scaleType="fitCenter"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:id="@+id/post_main"
         android:orientation="vertical">
         <TextView
-            android:padding="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:id="@+id/post_content"
             android:maxLines="4"/>
         <GridLayout
             android:layout_width="match_parent"
@@ -64,21 +79,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
+            android:background="@color/smoke"
+            android:id="@+id/post_post"
+            android:visibility="gone"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/smoke"
                 android:orientation="horizontal"
-                android:padding="2dp">
+                android:padding="5dp">
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.6"
                     android:layout_height="match_parent"
-                    android:text="\@gsy666"
-                    android:id="@+id/post_forward"
+                    android:text="gsy666"
+                    android:id="@+id/post_forward_username"
                     android:gravity="center_vertical"
-                    android:textColor="@color/light_blue_600"/>
+                    android:textColor="@color/light_blue_900"/>
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.4"
@@ -88,6 +105,13 @@
                     android:textColor="@color/real_pink"
                     android:text="+关注"/>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="红红火火恍恍惚惚或或或或或或或"
+                android:textSize="14sp"
+                android:id="@+id/post_forward_text"/>
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
@@ -97,11 +121,36 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:textSize="20sp"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 android:paddingVertical="5dp"
                 android:paddingHorizontal="2dp"
+                android:text="今日快乐源泉，豪哥太帅了"
                 android:id="@+id/post_forward_name"/>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:id="@+id/post_work"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/post_work_cover"
+                android:src="@drawable/ic_vegetable"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="2dp"
+                android:textColor="@color/black"
+                android:text="今日快乐源泉，豪哥太帅了"
+                android:id="@+id/post_work_name"/>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
@@ -116,7 +165,7 @@
                 android:layout_marginEnd="5dp"
                 android:scaleType="fitXY"/>
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="30dp"
                 android:gravity="center"
@@ -124,7 +173,31 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_marginEnd="5dp"
                 android:src="@drawable/ic_chat"/>
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:id="@+id/post_comment_num"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:layout_marginEnd="30dp"
+                />
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_like"/>
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="0"
+                android:id="@+id/like_num"/>
+
+
+
     </LinearLayout>
 </LinearLayout>
 </LinearLayout>

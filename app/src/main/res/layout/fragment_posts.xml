@@ -1,68 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.posts.PostsFragment"
-    android:layout_marginBottom="50dp"
-    android:orientation="vertical">
+    android:layout_marginBottom="50dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <TextView
-            android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginEnd="30dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:id="@+id/button_post_recommendation"
+                android:text="推荐"/>
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:id="@+id/button_post_follow"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:text="关注"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"/>
+
+        <com.example.qydemo0.Widget.QYScrollView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_marginEnd="30dp"
-            android:textSize="18sp"
-            android:text="推荐"/>
-        <TextView
-            android:layout_width="100dp"
+            android:visibility="visible"
+            android:id="@+id/view_posts_recommendation">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/linear_layout_posts_recommendation">
+
+            </LinearLayout>
+        </com.example.qydemo0.Widget.QYScrollView>
+
+
+        <com.example.qydemo0.Widget.QYScrollView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:textSize="18sp"
-            android:text="关注"/>
+            android:visibility="gone"
+            android:id="@+id/view_posts_follow">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/linear_layout_posts_follow">
+
+            </LinearLayout>
+
+        </com.example.qydemo0.Widget.QYScrollView>
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/gray"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/add_post"
+        android:layout_margin="15dp"/>
 
-
-    <com.example.qydemo0.Widget.QYScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        android:id="@+id/view_posts_recommendation">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/linear_layout_posts_recommendation">
-
-        </LinearLayout>
-    </com.example.qydemo0.Widget.QYScrollView>
-
-
-    <com.example.qydemo0.Widget.QYScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:id="@+id/view_posts_follow">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/linear_layout_posts_follow">
-
-        </LinearLayout>
-
-    </com.example.qydemo0.Widget.QYScrollView>
-
-</LinearLayout>
+</RelativeLayout>

@@ -9,11 +9,14 @@
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
 
     <application
@@ -24,7 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".VideoRenderActivity"></activity>
+        <activity android:name=".UploadPostActivity"></activity>
+        <activity android:name=".DetailPostActivity" />
+        <activity android:name=".VideoRenderActivity" />
         <activity
             android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -33,17 +38,13 @@
             android:name=".LearnDanceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
-
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".SearchActivity" />
         <activity android:name=".UserSettingActivity" />
-
         <activity android:name=".UploadActivity" />
-
         <activity
             android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
-
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
