@@ -120,7 +120,8 @@ public class PostItem extends LinearLayout {
             try {
                 JSONObject work = json.getJSONObject("work");
                 work_json = work.toString();
-                Img.url2imgViewRoundRectangle(work.getString("cover_url"), cover, mContext, 40);
+                JSONObject coverInfo = work.getJSONObject("cover");
+                Img.url2imgViewRoundRectangle(coverInfo.getString("url"), cover, mContext, 40);
                 work_name.setText(work.getString("name"));
                 this.work.setOnClickListener(new GotoWork());
             } catch (JSONException e) {
@@ -142,12 +143,14 @@ public class PostItem extends LinearLayout {
                 TextView forward_text = mView.findViewById(R.id.post_forward_text);
                 forward_text.setText(post.getString("text"));
                 TextView forward_name = mView.findViewById(R.id.post_forward_name);
-                if(post.getString("cover_url").equals("null")){
+                JSONObject coverInfo = post.getJSONObject("cover");
+                if(coverInfo.getString("url").equals("null")){
                     cover.setVisibility(GONE);
                     forward_name.setVisibility(GONE);
                     return;
                 }
-                Img.url2imgViewRoundRectangle(post.getString("cover_url"), cover, mContext, 40);
+                JSONObject coverInfo2 = post.getJSONObject("cover");
+                Img.url2imgViewRoundRectangle(coverInfo2.getString("url"), cover, mContext, 40);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -163,7 +166,7 @@ public class PostItem extends LinearLayout {
                     ImageView img = new ImageView(mContext);
                     img.setLayoutParams(layoutParams);
                     JSONObject jsonObj = (JSONObject) ja.get(0);
-                    Img.url2imgViewRoundRectangle(jsonObj.getString("download_url"), img, mContext, 40);
+                    Img.url2imgViewRoundRectangle(jsonObj.getString("img_url"), img, mContext, 40);
                     LinearLayout l = mView.findViewById(R.id.post_main);
                     l.addView(img);
                 }
@@ -171,7 +174,7 @@ public class PostItem extends LinearLayout {
                     for(int i = 0; i < ja.length(); i++){
                         ImageView img = new ImageView(mContext);
                         JSONObject j = (JSONObject) ja.get(i);
-                        Img.url2imgViewRoundRectangle(j.getString("download_url"), img, mContext, 40);
+                        Img.url2imgViewRoundRectangle(j.getString("img_url"), img, mContext, 40);
                         img_set.addView(img);
                     }
                 }

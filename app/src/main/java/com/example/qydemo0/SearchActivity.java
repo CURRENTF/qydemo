@@ -165,7 +165,8 @@ public class SearchActivity extends AppCompatActivity {
                     JSONObject json = (JSONObject)ja.get(i);
                     Log.d("hjt.search.json", json.toString());
                     WorkItem workItem = new WorkItem(SearchActivity.this);
-                    workItem.init(json.getString("cover_url"), json.getString("name"),
+                    JSONObject coverInfo = json.getJSONObject("cover");
+                    workItem.init(coverInfo.getString("url"), json.getString("name"),
                             json.getInt("like_num"), json.getInt("play_num"),
                             json.getString("introduction"));
                     qyScrollView.addView(workItem);

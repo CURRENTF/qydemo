@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".UploadPostActivity">
 
     <LinearLayout
@@ -11,8 +12,125 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/input_box_border"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:hint="你想分享的一切？"
+                android:gravity="top"
+                android:background="@drawable/empty_edit_text"
+                android:id="@+id/add_post_text"
+                android:layout_height="250dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:textColor="@color/real_pink"
+                android:id="@+id/add_post_remain_number"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginVertical="10dp"
+            android:background="@drawable/gradient_color_orange">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/white"
+                android:text="图片锦集"/>
+            <androidx.appcompat.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/light_blue_900"
+                android:id="@+id/post_method"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginStart="20dp"
+                android:textColor="@color/white"
+                android:text="以作品投递动态"/>
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/grid_img_set"
+            android:layout_gravity="center"
+            android:columnCount="3"
+            android:rowCount="3"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="visible"
+                android:id="@+id/up_img1"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="invisible"
+                android:id="@+id/up_img2"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="invisible"
+                android:id="@+id/up_img3"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="invisible"
+                android:id="@+id/up_img4"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:id="@+id/up_img5"
+                android:visibility="invisible"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="invisible"
+                android:id="@+id/up_img6"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="invisible"
+                android:id="@+id/up_img7"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:id="@+id/up_img8"
+                android:visibility="invisible"
+                android:layout_margin="10dp"/>
+            <ImageView
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:visibility="invisible"
+                android:id="@+id/up_img9"
+                android:layout_margin="10dp"/>
+            
+
+        </GridLayout>
 
 
     </LinearLayout>
+
 
 </RelativeLayout>

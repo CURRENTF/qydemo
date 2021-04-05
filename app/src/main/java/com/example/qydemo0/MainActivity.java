@@ -27,6 +27,7 @@ import android.view.GestureDetector;
 
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
@@ -137,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalVariable.mInstance.appContext = this;
 
+        DeviceInfo.info(this);
+
     }
 
     @Override
@@ -152,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        GlobalVariable.mInstance.tokenExisted = false;
+//        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         Log.d("hjtMain", "MainDestroyed");
