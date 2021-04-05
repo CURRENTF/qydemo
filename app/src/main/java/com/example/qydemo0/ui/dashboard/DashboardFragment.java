@@ -27,6 +27,7 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserSettingActivity;
 
@@ -63,6 +64,7 @@ public class DashboardFragment extends Fragment {
 
 
     void reWriteInfo(JSONObject json){
+        ShowProgressDialog.show(getActivity(), "加载用户信息");
         GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
         try {
             GlobalVariable.mInstance.uid = json.getString("uid");
@@ -125,6 +127,7 @@ public class DashboardFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        ShowProgressDialog.wait.dismiss();
     }
 
     void writeFans(JSONArray ja) {

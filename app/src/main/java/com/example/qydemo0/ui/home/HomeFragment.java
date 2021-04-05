@@ -23,6 +23,7 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
@@ -48,6 +49,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public QYScrollView scrollView = null;
     Unbinder bind;
     public int startPos = 0, len = 20;
+    TimeTool timeTool = new TimeTool();
 
     @BindView(R.id.banner_ad)
     Banner banner_ad;
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         scrollView.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
+                if(!timeTool.checkFreq()) return;
                 GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
                 getUserRecommendation.execute();
                 Log.d("hjt.scroll.bottom", "true");

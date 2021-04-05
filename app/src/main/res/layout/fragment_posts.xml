@@ -60,7 +60,7 @@
         <com.example.qydemo0.Widget.QYScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="invisible"
             android:id="@+id/view_posts_follow">
 
             <LinearLayout

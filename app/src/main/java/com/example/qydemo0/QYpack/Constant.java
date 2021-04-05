@@ -26,7 +26,9 @@ public class Constant {
         search_url = "https://api.yhf2000.cn/api/qingying/v1/search/work/",
         work_url = "https://api.yhf2000.cn/api/qingying/v1/work/",
         follow_url = "https://api.yhf2000.cn/api/qingying/v1/user/follow/",
-        user_recommendation_url = "https://api.yhf2000.cn/api/qingying/v1/recommendation/user/";
+        user_recommendation_url = "https://api.yhf2000.cn/api/qingying/v1/recommendation/user/",
+        post_recommendation_url = "https://api.yhf2000.cn/api/qingying/v1/recommendation/post/",
+        post_url = "https://api.yhf2000.cn/api/qingying/v1/post/";
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
 
@@ -36,7 +38,9 @@ public class Constant {
         HTTP_OK = 200,
         pre_items = 10,
         MAX_FILE_SIZE = 1024 * 1024 * 50,
-        lazy_load_num = 10; // 50MB
+        lazy_load_num = 10,
+        ani_time = 200,
+        least_time = 3000; // 50MB
 
     public String database = "QYdata";
 

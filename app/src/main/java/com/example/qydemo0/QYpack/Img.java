@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
@@ -87,6 +88,18 @@ public class Img {
     public static void url2imgViewRoundRectangle(String img_url, ImageView img, Context context, int radius){
         Glide.with(context)
                 .load(img_url)
+                .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
+                .into(img);
+//        Glide.with(context)
+//                .load(img_url)
+//                .apply(RequestOptions.bitmapTransform(new RoundedCorners(radius)))
+//                .apply(RequestOptions.bitmapTransform(new CenterCrop()))
+//                .into(img);
+    }
+
+    public static void url2imgViewRoundRectangle(Drawable img_b, ImageView img, Context context, int radius){
+        Glide.with(context)
+                .load(img_b)
                 .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
                 .into(img);
 //        Glide.with(context)
