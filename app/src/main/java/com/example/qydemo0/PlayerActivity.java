@@ -1,9 +1,11 @@
 package com.example.qydemo0;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,19 +21,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.stream.BaseGlideUrlLoader;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
-import com.example.qydemo0.adapter.CommentExpandAdapter;
+import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.bean.Belong;
+import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentBean;
 import com.example.qydemo0.bean.CommentDetailBean;
 import com.example.qydemo0.bean.ReplyDetailBean;
+import com.example.qydemo0.bean.WorkBean;
+import com.example.qydemo0.bean.WorkDataBean;
 import com.example.qydemo0.view.CommentExpandableListView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -67,6 +79,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     @BindView(R.id.activity_detail_player)
     RelativeLayout activityDetailPlayer;
 
+    QYrequest work_request = new QYrequest();
+
     private static final String TAG = "MainActivity1";
     private TextView bt_comment;
     private CommentExpandableListView expandableListView;
@@ -74,241 +88,299 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private CommentBean commentBean;
     private List<CommentDetailBean> commentsList;
     private BottomSheetDialog dialog;
+    private Boolean is_follow = false;
 
     private String testJosn2 = "{\n" +
             "    \"status\": 200,\n" +
             "    \"msg\": \"Success\",\n" +
             "    \"data\": [\n" +
             "        {\n" +
-            "            \"cid\": 4,\n" +
-            "            \"text\": \"这个小姐姐是真的好看啊~\",\n" +
-            "            \"like_num\": 2,\n" +
-            "            \"created_time\": \"2021-03-27T21:22:24.087358\",\n" +
-            "            \"is_public\": true,\n" +
-            "            \"is_delete\": false,\n" +
-            "            \"like\": true,\n" +
-            "            \"belong\": {\n" +
-            "                \"uid\": 1,\n" +
-            "                \"username\": \"gsy666\",\n" +
-            "                \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "            },\n" +
-            "            \"replies\": [\n" +
-            "                {\n" +
-            "                    \"cid\": 8,\n" +
-            "                    \"text\": \"是啊是啊，好好看~\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-03-27T21:56:54.080672\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 1,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "                    }\n" +
-            "                },\n" +
-            "                {\n" +
-            "                    \"cid\": 9,\n" +
-            "                    \"text\": \"嘻嘻嘻~\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-03-27T22:05:33.351629\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 1,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"cid\": 6,\n" +
-            "            \"text\": \"老婆！！！\",\n" +
-            "            \"like_num\": 1,\n" +
-            "            \"created_time\": \"2021-03-27T21:38:23.173259\",\n" +
-            "            \"is_public\": true,\n" +
-            "            \"is_delete\": false,\n" +
-            "            \"like\": true,\n" +
-            "            \"belong\": {\n" +
-            "                \"uid\": 1,\n" +
-            "                \"username\": \"gsy666\",\n" +
-            "                \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "            },\n" +
-            "            \"replies\": []\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"cid\": 10,\n" +
-            "            \"text\": \"测试一下崩没崩\",\n" +
+            "            \"cid\": 2,\n" +
+            "            \"text\": \"啦啦啦啦~\",\n" +
             "            \"like_num\": 0,\n" +
-            "            \"created_time\": \"2021-03-28T15:29:59.968934\",\n" +
-            "            \"is_public\": true,\n" +
-            "            \"is_delete\": false,\n" +
-            "            \"like\": false,\n" +
-            "            \"belong\": {\n" +
-            "                \"uid\": 1,\n" +
-            "                \"username\": \"gsy666\",\n" +
-            "                \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "            },\n" +
-            "            \"replies\": [\n" +
-            "                {\n" +
-            "                    \"cid\": 11,\n" +
-            "                    \"text\": \"太好了，没崩！\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-03-28T15:31:41.292740\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 1,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "                    }\n" +
-            "                },\n" +
-            "                {\n" +
-            "                    \"cid\": 12,\n" +
-            "                    \"text\": \"太好了，没崩！\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-03-28T15:32:10.968833\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 1,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "                    }\n" +
-            "                },\n" +
-            "                {\n" +
-            "                    \"cid\": 13,\n" +
-            "                    \"text\": \"太好了，没崩！\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-03-28T15:32:11.413643\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 1,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "                    }\n" +
-            "                },\n" +
-            "                {\n" +
-            "                    \"cid\": 14,\n" +
-            "                    \"text\": \"太好了，没崩！\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-03-28T18:47:03.139941\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 1,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            ]\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"cid\": 7,\n" +
-            "            \"text\": \"神仙姐姐！！！\",\n" +
-            "            \"like_num\": 0,\n" +
-            "            \"created_time\": \"2021-03-27T21:39:43.643840\",\n" +
+            "            \"created_time\": \"2021-04-05T12:34:27.406124\",\n" +
             "            \"is_public\": true,\n" +
             "            \"is_delete\": false,\n" +
             "            \"like\": false,\n" +
             "            \"belong\": {\n" +
             "                \"uid\": 2,\n" +
-            "                \"username\": \"hjt666\",\n" +
-            "                \"img_url\": \"http://n.sinaimg.cn/ent/transform/w630h630/20180208/YrXA-fyrkuxs3657490.jpg\"\n" +
+            "                \"username\": \"gsy666\",\n" +
+            "                \"img_url\": null\n" +
             "            },\n" +
-            "            \"replies\": []\n" +
+            "            \"replies\": null\n" +
             "        },\n" +
             "        {\n" +
-            "            \"cid\": 5,\n" +
-            "            \"text\": \"这个小姐姐爱了爱了！\",\n" +
+            "            \"cid\": 1,\n" +
+            "            \"text\": \"我爱小姐姐~\",\n" +
             "            \"like_num\": 0,\n" +
-            "            \"created_time\": \"2021-03-27T21:23:19.281322\",\n" +
+            "            \"created_time\": \"2021-04-05T12:34:04.883572\",\n" +
             "            \"is_public\": true,\n" +
             "            \"is_delete\": false,\n" +
             "            \"like\": false,\n" +
             "            \"belong\": {\n" +
-            "                \"uid\": 1,\n" +
+            "                \"uid\": 2,\n" +
             "                \"username\": \"gsy666\",\n" +
-            "                \"img_url\": \"http://qimg.hxnews.com/2018/0716/1531706889647.jpg\"\n" +
+            "                \"img_url\": null\n" +
             "            },\n" +
-            "            \"replies\": []\n" +
+            "            \"replies\": [\n" +
+            "                {\n" +
+            "                    \"cid\": 3,\n" +
+            "                    \"text\": \"小姐姐确实好看~\",\n" +
+            "                    \"like_num\": 0,\n" +
+            "                    \"created_time\": \"2021-04-05T12:35:36.948196\",\n" +
+            "                    \"is_public\": true,\n" +
+            "                    \"is_delete\": false,\n" +
+            "                    \"like\": false,\n" +
+            "                    \"belong\": {\n" +
+            "                        \"uid\": 3,\n" +
+            "                        \"username\": \"hjt666\",\n" +
+            "                        \"img_url\": null\n" +
+            "                    },\n" +
+            "                    \"reply_to\": null\n" +
+            "                },\n" +
+            "                {\n" +
+            "                    \"cid\": 4,\n" +
+            "                    \"text\": \"确实好看~\",\n" +
+            "                    \"like_num\": 0,\n" +
+            "                    \"created_time\": \"2021-04-05T12:36:02.285150\",\n" +
+            "                    \"is_public\": true,\n" +
+            "                    \"is_delete\": false,\n" +
+            "                    \"like\": false,\n" +
+            "                    \"belong\": {\n" +
+            "                        \"uid\": 2,\n" +
+            "                        \"username\": \"gsy666\",\n" +
+            "                        \"img_url\": null\n" +
+            "                    },\n" +
+            "                    \"reply_to\": null\n" +
+            "                },\n" +
+            "                {\n" +
+            "                    \"cid\": 5,\n" +
+            "                    \"text\": \"是呀是呀，好看好看~\",\n" +
+            "                    \"like_num\": 0,\n" +
+            "                    \"created_time\": \"2021-04-05T12:36:26.326019\",\n" +
+            "                    \"is_public\": true,\n" +
+            "                    \"is_delete\": false,\n" +
+            "                    \"like\": false,\n" +
+            "                    \"belong\": {\n" +
+            "                        \"uid\": 2,\n" +
+            "                        \"username\": \"gsy666\",\n" +
+            "                        \"img_url\": null\n" +
+            "                    },\n" +
+            "                    \"reply_to\": {\n" +
+            "                        \"uid\": 3,\n" +
+            "                        \"username\": \"hjt666\",\n" +
+            "                        \"img_url\": null\n" +
+            "                    }\n" +
+            "                }\n" +
+            "            ]\n" +
             "        }\n" +
             "    ]\n" +
             "}";
+
+    private String workJson = "{\"id\":8,\"name\":\"飞机\",\"introduction\":\"帅\",\"classifications\":\"女人\",\"tags\":[\"牛肉\"],\"play_num\":0,\"like_num\":0,\"favorites_num\":0,\"video_url\":{\"org\":\"https:\\/\\/file.yhf2000.cn\\/dash\\/da\\/b7\\/dab79fb8a75caf21a150f2cd1f4c28f86d4c0a4c4aa94322f1db472ee7aa4859-UeLIfd.use\\/manifest.mpd\"},\"cover_url\":\"https:\\/\\/file.yhf2000.cn\\/img\\/ff\\/57\\/ff5786d9741a38ea07c18e88806a5bdfcd29f849ade52d445a3bcff35922fd6e-zLTgBX.use\"}";
     private boolean isPlay;
     private boolean isPause;
     private boolean isRelease;
+    private boolean isLikeWork = false, isDislikeWork = false;
+    private TextView video_like_num, video_dislike_num;
 
     private OrientationUtils orientationUtils;
 
     private MediaMetadataRetriever mCoverMedia;
 
-    private ImageView coverImageView;
+    private ImageView coverImageView,like_it,dislike_it;
+    private Button isFollow, isCanceF;
+
+    private Context context = this;
+
+    private WorkBean work_bean = new WorkBean();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         ButterKnife.bind(this);
-        initView();
-        String source1 = "https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd";
-        String name = "1080P";
-        SwitchVideoModel switchVideoModel = new SwitchVideoModel(name, source1);
+        new GetCommentJson().execute(8);
+        new GetWorkJson().execute(8);
+    }
 
-        String source2 = "https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd";
-        String name2 = "720P";
-        SwitchVideoModel switchVideoModel2 = new SwitchVideoModel(name2, source2);
+    private void init_button_and_pager(){
+        Button btn_learn = findViewById(R.id.learn_dance);
+        Button btn_free_dance = (Button) findViewById(R.id.free_dance);
+        btn_learn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        String source3 = "https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd";
-        String name3 = "480P";
-        SwitchVideoModel switchVideoModel3 = new SwitchVideoModel(name3, source3);
+        btn_free_dance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        String source4 = "https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd";
-        String name4 = "360P";
-        SwitchVideoModel switchVideoModel4 = new SwitchVideoModel(name4, source4);
+        LinearLayout detail_pager = findViewById(R.id.detail_page_above_container);
+        LinearLayout comment_pager = findViewById(R.id.detail_page_comment_container);
+        LinearLayout recall_pager = findViewById(R.id.recall_kuang);
+
+        comment_pager.setVisibility(View.GONE);
+        recall_pager.setVisibility(View.GONE);
+        TextView intro = (TextView) findViewById(R.id.introduction);
+        TextView comme = (TextView) findViewById(R.id.comment);
+        intro.setTextColor(context.getResources().getColor(R.color.qy_pink));
+
+        intro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                comment_pager.setVisibility(View.GONE);
+                recall_pager.setVisibility(View.GONE);
+                detail_pager.setVisibility(View.VISIBLE);
+                intro.setTextColor(context.getResources().getColor(R.color.qy_pink));
+                comme.setTextColor(context.getResources().getColor(R.color.gray));
+            }
+        });
+
+        comme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                detail_pager.setVisibility(View.GONE);
+                comment_pager.setVisibility(View.VISIBLE);
+                recall_pager.setVisibility(View.VISIBLE);
+                comme.setTextColor(context.getResources().getColor(R.color.qy_pink));
+                intro.setTextColor(context.getResources().getColor(R.color.gray));
+            }
+        });
+    }
+
+    private void init_work_status(){
+        like_it = findViewById(R.id.video_like);
+        if(work_bean.getData().getIs_like()){
+            isLikeWork = true;
+            like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+        }
+        like_it.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            if(isLikeWork){
+                new WorkChange().execute(-1);
+            } else{
+                new WorkChange().execute(1);
+            }
+            }
+        });
+
+        dislike_it = findViewById(R.id.video_dislike);
+        if(work_bean.getData().getIs_dislike()){
+            isDislikeWork = true;
+            dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+        }
+        dislike_it.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isDislikeWork){
+                    new WorkChange().execute(-2);
+                } else{
+                    new WorkChange().execute(2);
+                }
+            }
+        });
+
+        isFollow = (Button) findViewById(R.id.is_follow);
+        isCanceF = (Button) findViewById(R.id.is_cancel_follow);
+
+        if(work_bean.getData().getIs_follow()==null){
+            isFollow.setVisibility(View.GONE);
+            isCanceF.setVisibility(View.GONE);
+        }
+        else {
+            if (work_bean.getData().getIs_follow()) {
+                isFollow.setVisibility(View.VISIBLE);
+                isCanceF.setVisibility(View.GONE);
+            } else {
+                isCanceF.setVisibility(View.VISIBLE);
+                isFollow.setVisibility(View.GONE);
+            }
+
+            isFollow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String res = work_request.advancePost(GenerateJson.universeJson("target", "int", "" + work_bean.getData().getBelong().getUid()),
+                                    Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
+                            Log.i("关注", res);
+                            Gson gson = new Gson();
+                            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+                            if (call_back_bean.getMsg().equals("Success")) {
+                                isFollow.setVisibility(View.GONE);
+                                isCanceF.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).start();
+                }
+            });
+
+            isCanceF.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String res = work_request.advancePost(GenerateJson.universeJson("target", "int", "" + work_bean.getData().getBelong().getUid()),
+                                    Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
+                            Log.i("取消关注", res);
+                            Gson gson = new Gson();
+                            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+                            if (call_back_bean.getMsg().equals("Success")) {
+                                isCanceF.setVisibility(View.GONE);
+                                isFollow.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }).start();
+                }
+            });
+        }
+    }
+
+    private void init_content(String cur_title, String intros, int like_num, int dislike_num, int play_num, int comment_num){
+        TextView detail_page_title = (TextView) findViewById(R.id.detail_page_title);
+        detail_page_title.setText(cur_title);
+        TextView detail_page_story = (TextView) findViewById(R.id.detail_page_story);
+        detail_page_story.setText(intros);
+        video_like_num = (TextView) findViewById(R.id.video_like_num);
+        if(like_num != 0)
+            video_like_num.setText(""+like_num);
+        else
+            video_like_num.setText("");
+        video_dislike_num = (TextView) findViewById(R.id.video_dislike_num);
+        if(dislike_num != 0)
+            video_dislike_num.setText(""+dislike_num);
+        else
+            video_dislike_num.setText("");
+        TextView video_play_num = (TextView) findViewById(R.id.video_play_num);
+        if(play_num != 0)
+            video_play_num.setText(""+play_num);
+        else
+            video_play_num.setText("");
+        TextView video_comment_num = (TextView) findViewById(R.id.video_comment_num);
+        if(comment_num != 0)
+            video_comment_num.setText(""+comment_num);
+        else
+            video_comment_num.setText("");
+    }
+
+    private void init_player(List<String> sources, String coverUrl){
+        String[] names = {"1080P", "720P", "480P", "360P"};
 
         List<SwitchVideoModel> list = new ArrayList<>();
-        list.add(switchVideoModel);
-        list.add(switchVideoModel2);
-        list.add(switchVideoModel3);
-        list.add(switchVideoModel4);
+        for(int i=0;i<sources.size();i++){
+            list.add(new SwitchVideoModel(names[i],sources.get(i)));
+        }
 
         detailPlayer.setUp(list, true, "韩国小姐姐的舞蹈视频");
 
@@ -389,28 +461,49 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        loadFirstFrameCover(source1);
+        loadFirstFrameCover(coverUrl);
+    }
 
-        Button btn_learn = findViewById(R.id.learn_dance);
-        Button btn_free_dance = (Button) findViewById(R.id.free_dance);
+    private void init_work(String cur_Json){
+        Gson gson = new Gson();
+        work_bean = gson.fromJson(cur_Json, WorkBean.class);
+        List<String> lists = new ArrayList<>();
+        lists.add(work_bean.getData().getVideo_url().getOrg());
+        init_player(lists,work_bean.getData().getCover_url());
+        init_button_and_pager();
+        init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
+                work_bean.getData().getDislike_num(), work_bean.getData().getPlay_num(), work_bean.getData().getComment_num());
+        init_work_status();
+    }
 
-        btn_learn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
-                startActivity(intent);
-            }
-        });
+    private void do_like_btn(){
+        if(isLikeWork){
+            isLikeWork = false;
+            work_bean.getData().setLike_num(work_bean.getData().getLike_num()-1);
+            if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
+            else video_like_num.setText(""+work_bean.getData().getLike_num());
+            like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+        } else{
+            isLikeWork = true;
+            work_bean.getData().setLike_num(work_bean.getData().getLike_num()+1);
+            video_like_num.setText(""+work_bean.getData().getLike_num());
+            like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+        }
+    }
 
-        btn_free_dance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //detailPlayer.
+    private void do_dislike_btn(){
+        if(isDislikeWork){
+            isDislikeWork = false;
+            work_bean.getData().setDislike_num(work_bean.getData().getDislike_num()-1);
+            if(work_bean.getData().getDislike_num() == 0) video_dislike_num.setText("");
+            else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+            dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+        } else{
+            isDislikeWork = true;
+            work_bean.getData().setDislike_num(work_bean.getData().getDislike_num()+1);
+            video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+            dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+        }
     }
 
     @Override
@@ -457,9 +550,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    /**
-     * orientationUtils 和  detailPlayer.onConfigurationChanged 方法是用于触发屏幕旋转的
-     */
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -541,12 +631,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         return mCoverMedia;
     }
 
-    private void initView() {
+    private void initView(List<CommentDetailBean> commentsList) {
         expandableListView = (CommentExpandableListView) findViewById(R.id.detail_page_lv_comment);
         bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        commentsList = generateTestData();
         initExpandableListView(commentsList);
     }
 
@@ -593,9 +682,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
      * func:生成测试数据
      * @return 评论数据
      */
-    private List<CommentDetailBean> generateTestData(){
+    private List<CommentDetailBean> generateTestData(String commentJson){
         Gson gson = new Gson();
-        commentBean = gson.fromJson(testJosn2, CommentBean.class);
+        commentBean = gson.fromJson(commentJson, CommentBean.class);
         List<CommentDetailBean> commentList = commentBean.getData();
         return commentList;
     }
@@ -644,14 +733,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
                     //commentOnWork(commentContent);
                     dialog.dismiss();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-                    Date date = new Date(System.currentTimeMillis());
-                    CommentDetailBean detailBean = new CommentDetailBean(-1,commentContent,0,simpleDateFormat.format(date),
-                            true,false,false,
-                            new Belong(123,"拒绝者","http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
-                            null);
-                    adapter.addTheCommentData(detailBean);
-                    Toast.makeText(PlayerActivity.this,"评论成功",Toast.LENGTH_SHORT).show();
+                    success_commment(commentContent);
 
                 }else {
                     Toast.makeText(PlayerActivity.this,"评论内容不能为空",Toast.LENGTH_SHORT).show();
@@ -681,6 +763,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         dialog.show();
     }
 
+    private void success_commment(String commentContent){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        CommentDetailBean detailBean = new CommentDetailBean(-1,commentContent,0,simpleDateFormat.format(date),
+                true,false,false,
+                new Belong(Integer.valueOf(GlobalVariable.mInstance.uid),
+                        Constant.mInstance.username,
+                        "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),null);
+        adapter.addTheCommentData(detailBean);
+        Toast.makeText(PlayerActivity.this,"评论成功",Toast.LENGTH_SHORT).show();
+    }
+
     /**
      * by moos on 2018/04/20
      * func:弹出回复框
@@ -704,23 +798,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 if(!TextUtils.isEmpty(replyContent)){
 
                     dialog.dismiss();
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
-                    Date date = new Date(System.currentTimeMillis());
-                    ReplyDetailBean detailBean;
-                    if(second_position!=-1) {
-                        detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(-1,
-                                "拒绝者", "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
-                                new Belong(commentsList.get(position).getReplies().get(second_position).getBelong().getUid(),
-                                        commentsList.get(position).getReplies().get(second_position).getBelong().getUsername(),
-                                        commentsList.get(position).getReplies().get(second_position).getBelong().getImg_url()));
-                    } else{
-                        detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(-1,
-                                "拒绝者", "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
-                                null);
-                    }
-                    adapter.addTheReplyData(detailBean, position);
-                    expandableListView.expandGroup(position);
-                    Toast.makeText(PlayerActivity.this,"回复成功",Toast.LENGTH_SHORT).show();
+                    success_reply(replyContent, second_position, position);
                 }else {
                     Toast.makeText(PlayerActivity.this,"回复内容不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -747,6 +825,137 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
         dialog.show();
+    }
+
+    private void success_reply(String replyContent, int second_position, int position){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        Date date = new Date(System.currentTimeMillis());
+        ReplyDetailBean detailBean;
+        if(second_position!=-1) {
+            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(-1,
+                    "拒绝者", "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
+                    new Belong(commentsList.get(position).getReplies().get(second_position).getBelong().getUid(),
+                            commentsList.get(position).getReplies().get(second_position).getBelong().getUsername(),
+                            commentsList.get(position).getReplies().get(second_position).getBelong().getImg_url()));
+        } else{
+            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(-1,
+                    "拒绝者", "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
+                    null);
+        }
+        adapter.addTheReplyData(detailBean, position);
+        expandableListView.expandGroup(position);
+        Toast.makeText(PlayerActivity.this,"回复成功",Toast.LENGTH_SHORT).show();
+    }
+
+    public class GetWorkJson extends AsyncTask<Integer, Void, String>{
+
+        @Override
+        protected String doInBackground(Integer... idd) {
+            String res = work_request.advanceGet(Constant.mInstance.work+idd[0]+"/", "Authorization", GlobalVariable.mInstance.token);
+            Log.i("workJson",res);
+            return res;
+        }
+
+        @Override
+        protected void onPostExecute(String cur_work_json) {
+            super.onPreExecute();
+            init_work(cur_work_json);
+            new WorkChange().execute(0);
+        }
+    }
+
+    public class GetCommentJson extends AsyncTask<Integer, Void, String>{
+
+        @Override
+        protected String doInBackground(Integer... ints) {
+            String res = work_request.advanceGet(Constant.mInstance.comment+"0/"+ints[0]+"/", "Authorization", GlobalVariable.mInstance.token);
+            Log.i("workJson",res);
+            Log.i("token",""+ GlobalVariable.mInstance.token);
+            return res;
+        }
+
+        @Override
+        protected void onPostExecute(String cur_work_json) {
+            super.onPreExecute();
+            initView(generateTestData(testJosn2));
+        }
+    }
+
+    public class WorkChange extends AsyncTask<Integer, Void, Integer>{
+
+        @Override
+        protected Integer doInBackground(Integer... ope) {
+
+            String[] j = new String[0];
+            String res = work_request.advancePut(GenerateJson.universeJson2(j), Constant.mInstance.work+"func/"+work_bean.getData().getId()+"/"+ope[0]+"/","Authorization", GlobalVariable.mInstance.token);
+            Log.i("json",res);
+            Gson gson = new Gson();
+            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+            if(call_back_bean.getMsg().equals("Success"))
+                return ope[0];
+            else
+                return 404;
+        }
+
+        @Override
+        protected void onPostExecute(Integer res_int) {
+            super.onPostExecute(res_int);
+            if(res_int==404)
+                Toast.makeText(PlayerActivity.this,"WRONG!!!",Toast.LENGTH_LONG).show();
+            else {
+                if(res_int == 1 || res_int == -1){
+                    do_like_btn();
+                }
+                else if(res_int == 2 || res_int == -2){
+                    do_dislike_btn();
+                }
+            }
+        }
+    }
+
+    public class doComment extends AsyncTask<String, Void, String>{
+        @Override
+        protected void onPostExecute(String contentt) {
+            super.onPostExecute(contentt);
+            success_commment(contentt);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String res = work_request.advancePost(GenerateJson.universeJson("top", "int", null, "reply", "int", null, "text", "string",strings[0]),
+                    "0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
+            Gson gson = new Gson();
+            CallBackBean call_back = gson.fromJson(res, CallBackBean.class);
+            if(call_back.getMsg().equals("Success"))
+                return strings[0];
+            else
+                return null;
+        }
+    }
+
+    public class doReply extends AsyncTask<String, Void, String[]>{
+        @Override
+        protected void onPostExecute(String[] contentt) {
+            super.onPostExecute(contentt);
+            success_reply(contentt[2],Integer.valueOf(contentt[1]),Integer.valueOf(contentt[0]));
+        }
+
+        @Override
+        protected String[] doInBackground(String... strings) {
+            String res = "";
+            if(Integer.valueOf(strings[1]) != -1)
+            res = work_request.advancePost(GenerateJson.universeJson("top", "int", ""+commentsList.get(Integer.valueOf(strings[0])).getCid(), "reply", "int",""+commentsList.get(Integer.valueOf(strings[0])).getReplies().get(Integer.valueOf(strings[1])).getCid() , "text", "string",strings[2]),
+                    Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
+            else
+                res = work_request.advancePost(GenerateJson.universeJson("top", "int", ""+commentsList.get(Integer.valueOf(strings[0])).getCid(), "reply", "int",""+commentsList.get(Integer.valueOf(strings[0])).getCid() , "text", "string",strings[2]),
+                        Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
+            Gson gson = new Gson();
+            CallBackBean call_back = gson.fromJson(res, CallBackBean.class);
+            if(call_back.getMsg().equals("Success"))
+                return strings;
+            else
+                return null;
+        }
     }
 
 }

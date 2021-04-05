@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="150dp"
+    android:layout_width="match_parent"
+    android:layout_gravity="bottom"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+        android:id="@+id/choice_btns"
+        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/change_background"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="背景替换"
+            android:textColor="@color/qy_pink"
+            android:textAlignment="center"
+            android:layout_toLeftOf="@+id/lj"
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btn_render_choice_on"
+            />
+        
+        <Button
+            android:id="@+id/lj"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:text="滤镜"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_render_choice"
+            />
+        
+        <Button
+            android:id="@+id/change_style"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:textColor="@color/white"
+            android:text="视频风格化"
+            android:textAlignment="center"
+            android:layout_toRightOf="@+id/lj"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/btn_render_choice"
+            />
+        
+    </RelativeLayout>
+
+<HorizontalScrollView
+    android:id="@+id/bg_scrollview"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_marginBottom="10dp"
+    android:layout_below="@+id/choice_btns"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:background="#00000000"
+        >
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:text="原画"
+                android:paddingTop="30dp"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:background="@color/gray"
+                />
+
+            <ImageView
+                android:id="@+id/img0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/airam_dato_on_unsplash"
+                />
+
+            <ImageView
+                android:id="@+id/img1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/christmas_3009949_1920"
+                />
+
+            <ImageView
+                android:id="@+id/img2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/damiano_ferrante_unsplash"
+                />
+
+            <ImageView
+                android:id="@+id/img3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+                        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/design_3289964"
+                />
+
+            <ImageView
+                android:id="@+id/img4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+                        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/efe_kurnaz_unsplash"
+                />
+
+            <ImageView
+                android:id="@+id/img5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/halloween_72939_1280"
+                />
+
+            <ImageView
+                android:id="@+id/img6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+                        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/jonathan_hanna_unsplash"
+                />
+
+            <ImageView
+                android:id="@+id/img7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/lennon_cheng_unsplash"
+                />
+
+            <ImageView
+                android:id="@+id/img8"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+                        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/painting_3135875_1920"
+                />
+
+            <ImageView
+                android:id="@+id/img9"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+                        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/space_4152623_1920"
+                />
+
+            <ImageView
+                android:id="@+id/img10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+                        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/summer_4181783"
+                />
+
+            <ImageView
+                android:id="@+id/img11"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/abstract_2468874_1920"
+                />
+
+            <ImageView
+                android:id="@+id/img12"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+</HorizontalScrollView>
+    
+    <HorizontalScrollView
+        android:id="@+id/lj_scrollview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/choice_btns">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            >
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="原画"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/bl_0"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="锐化滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+
+                <ImageView
+                    android:id="@+id/lj1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_1"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="边缘滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_2"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="模糊滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_3"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="轮廓滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_4"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="浮雕滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_5"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="复古滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_6"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="彩铅滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_7"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="卡通滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj8"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_8"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="赛博朋克滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj9"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bl_9"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_alignParentBottom="true"
+                    android:text="美白滤镜"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:background="@color/qy_pink"
+                    />
+                <ImageView
+                    android:id="@+id/lj10"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+            
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <HorizontalScrollView
+        android:id="@+id/sty_scrollview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/choice_btns"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="right"
+            android:background="#00000000"
+            >
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:text="原风格"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:paddingTop="30dp"
+                    android:background="@color/gray"
+                    />
+                <ImageView
+                    android:id="@+id/sty0"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="110dp"
+                android:layout_height="80dp"
+                android:layout_margin="10dp"
+                >
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/sty1"/>
+
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    android:layout_alignParentBottom="true"-->
+<!--                    android:text="美白滤镜"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:background="@color/qy_pink"-->
+<!--                    />-->
+                <ImageView
+                    android:id="@+id/sty1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/render_on"
+                    />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+</RelativeLayout>

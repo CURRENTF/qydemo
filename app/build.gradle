@@ -93,7 +93,6 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.1'
 
     //bumptch
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
     //Camera
@@ -107,9 +106,6 @@ dependencies {
 
     //mp4parser
     implementation 'com.googlecode.mp4parser:isoparser:1.1.21'
-
-    //AIUnit
-//    implementation fileTree(dir: 'libs', includes: ['*.aar'])
 
     implementation(name:'CVUnit-release', ext:'aar')
     implementation(name:'com.coloros.ocs.base-release-1.0.4-SNAPSHOT', ext:'aar')
