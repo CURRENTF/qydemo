@@ -2,6 +2,8 @@ package com.example.qydemo0.QYpack;
 
 import android.util.Log;
 
+import com.example.qydemo0.Widget.QYScrollView;
+
 import org.json.JSONObject;
 
 public class QYUser {
@@ -27,5 +29,11 @@ public class QYUser {
             return true;
         }
         else return false;
+    }
+
+    public static Boolean follow(int target_uid){
+        QYrequest htp = new QYrequest();
+        String[] data = {"target", "int", String.valueOf(target_uid)};
+        return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.follow_url, "Authorization", GlobalVariable.mInstance.token), false);
     }
 }

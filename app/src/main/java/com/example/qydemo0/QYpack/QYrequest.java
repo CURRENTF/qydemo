@@ -39,12 +39,13 @@ public class QYrequest {
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
-//            e.printStackTrace();
             Log.e("hjt", e.toString());
             return "";
         }
     }
 
+    // GenerateJson.universe2Json("id","int",id,..)
+    // advancePost(data, url, "Authorization", Glob.m.token)
     public String advancePost(String data, String... strings){
         int sz = strings.length;
         String url = strings[0];
@@ -62,7 +63,6 @@ public class QYrequest {
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
-//            e.printStackTrace();
             Log.e("hjt", e.toString());
             return "";
         }
@@ -135,30 +135,6 @@ public class QYrequest {
         }
     }
 
-
-    public String advance2Get(String data, String... strings){
-        RequestBody requestBody = RequestBody.create(JSON, data);
-        int sz = strings.length;
-        String url = strings[0];
-        OkHttpClient okHttpClient = new OkHttpClient();//创建单例
-        Request.Builder tmp = new Request.Builder()//创建请求
-                .url(url)
-                .method("GET", requestBody);
-        for(int i = 1; i < sz; i += 2){
-            tmp.addHeader(strings[i], strings[i + 1]);
-        }
-        Request request = tmp.build();
-        try {
-            Response response = okHttpClient.newCall(request).execute();//执行请求
-            String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
-            return mContent;
-        } catch (IOException e) {
-            Log.e("hjt", e.toString());
-            return "";
-        }
-    }
-
-
     public String put(String data, String url){
         OkHttpClient okHttpClient = new OkHttpClient();//创建单例
         RequestBody body = RequestBody.create(JSON, data);
@@ -186,6 +162,37 @@ public class QYrequest {
                 .put(body);
         for(int i = 0; i < sz; i += 2){
             tmp.addHeader(strings[i], strings[i + 1]);
+        }
+        Request request = tmp.build();
+        try {
+            Response response = okHttpClient.newCall(request).execute();//执行请求
+            String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
+            return mContent;
+        } catch (IOException e) {
+            Log.e("hjt", e.toString());
+            return "";
+        }
+    }
+
+    // get 时 data = null
+    public String advanceMethod(String method, String data, String url, String... headers){
+        int sz = headers.length;
+        OkHttpClient okHttpClient = new OkHttpClient();//创建单例
+        RequestBody body = null;
+        Request.Builder tmp = null;
+        if(!method.equals("GET")) body = RequestBody.create(JSON, data);
+        if(method.equals("GET")){
+            tmp = new Request.Builder()//创建请求
+                    .url(url)
+                    .get();
+        }
+        else {
+            tmp = new Request.Builder()//创建请求
+                    .url(url)
+                    .method(method, body);
+        }
+        for(int i = 0; i < sz; i += 2){
+            tmp.addHeader(headers[i], headers[i + 1]);
         }
         Request request = tmp.build();
         try {

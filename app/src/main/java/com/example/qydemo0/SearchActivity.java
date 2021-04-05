@@ -36,6 +36,7 @@ public class SearchActivity extends AppCompatActivity {
     private int startPos = 0, len = 20;
     public EditText search_txt = null;
     private LinearLayout qyScrollView = null;
+    private QYScrollView qysv = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,8 @@ public class SearchActivity extends AppCompatActivity {
         ConstraintLayout c = findViewById(R.id.container_search);
         c.setOnClickListener(new RemoveFocus());
         qyScrollView = findViewById(R.id.list_for_search);
+        qysv = findViewById(R.id.search_scroll);
+        qysv.setScanScrollChangedListener(new LazyLoad());
     }
 
     /**
@@ -83,6 +86,20 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             search_txt.clearFocus();
+        }
+    }
+
+    class LazyLoad implements QYScrollView.ISmartScrollChangedListener{
+
+        @Override
+        public void onScrolledToBottom() {
+            Search s = new Search();
+            s.execute(search_txt.getText().toString());
+        }
+
+        @Override
+        public void onScrolledToTop() {
+
         }
     }
 
@@ -129,6 +146,7 @@ public class SearchActivity extends AppCompatActivity {
             QYrequest htp = new QYrequest();
             String[] data = {"text", "string", txt,
                     "start", "int", String.valueOf(startPos), "lens", "int", String.valueOf(len)};
+            startPos += len;
             return htp.advancePost(
                     GenerateJson.universeJson2(data),
                     Constant.mInstance.search_url,

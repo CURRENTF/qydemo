@@ -22,7 +22,8 @@ public class Constant {
         getRecommendation_url_user = "https://api.yhf2000.cn/api/qingying/v1/recommendation/user/",
         modifyUserInfo_url = "https://api.yhf2000.cn/api/qingying/v1/user/info/",
         search_url = "https://api.yhf2000.cn/api/qingying/v1/search/work/",
-        work_url = "https://api.yhf2000.cn/api/qingying/v1/work/";
+        work_url = "https://api.yhf2000.cn/api/qingying/v1/work/",
+        follow_url;
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
 

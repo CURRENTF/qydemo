@@ -30,5 +30,6 @@
     <color name="qy_button2">#8B7991</color>
     <drawable name="trans">#00000000 </drawable>
     <color name="red">#B22222</color>
->>>>>>> origin/master
+    <color name="real_pink">#F08080</color>
+    <color name="smoke">#F5F5F5</color>
 </resources>
