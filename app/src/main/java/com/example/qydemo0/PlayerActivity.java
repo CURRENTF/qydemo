@@ -35,7 +35,7 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
-import com.example.qydemo0.adapter.CommentExpandAdapter;
+import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.bean.Belong;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentBean;
