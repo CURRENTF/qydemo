@@ -8,7 +8,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.coloros.ocs.ai.cv.CVUnitClient;
@@ -19,10 +22,15 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import android.media.MediaMetadataRetriever;
+import android.widget.RelativeLayout;
+import android.widget.ThemedSpinnerAdapter;
+import android.widget.Toast;
 
 import static android.telecom.DisconnectCause.LOCAL;
+import static android.view.Gravity.*;
 import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
 
 public class VideoRenderActivity extends AppCompatActivity {
@@ -37,17 +45,88 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     private CVUnitClient mCVClient;
 
+    private int[] render_paras = {0,0,0};
+
+    private Boolean isYuLan = false;
+
 //    OrientationUtils orientationUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-        final Intent intent = getIntent();
-        free_dance_url = intent.getStringExtra("NAME");
+//        final Intent intent = getIntent();
+//        free_dance_url = intent.getStringExtra("NAME");
+        free_dance_url = "/sdcard/Movies/clip_out2.mp4";
         inti_clip_video();
         init_player();
+
+        RelativeLayout.LayoutParams img_full = new RelativeLayout.LayoutParams(100,100);
+        RelativeLayout.LayoutParams img_tiny = new RelativeLayout.LayoutParams(1,1);
+
+        ImageView full_screen = (ImageView) findViewById(R.id.fullscreen);
+        full_screen.setVisibility(View.GONE);
+
+        ImageView render_choice = (ImageView) findViewById(R.id.render_choice);
+        ImageView render_reset = (ImageView) findViewById(R.id.render_reset);
+
+        render_reset.setVisibility(View.GONE);
+
+        render_choice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                render_choice.setVisibility(View.GONE);
+                PopupWindowRight popupWindowRight = new PopupWindowRight(VideoRenderActivity.this);
+                popupWindowRight.showAtLocation(getWindow().getDecorView(), RIGHT | BOTTOM, 0, 0);
+                render_reset.setVisibility(View.VISIBLE);
+
+                render_reset.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        render_paras = popupWindowRight.getRenderParams();
+                        render_reset.setVisibility(View.GONE);
+                        popupWindowRight.dismiss();
+                        render_choice.setVisibility(View.VISIBLE);
+                        isYuLan = true;
+                        showProgressDialog("提示","正在努力加载渲染预览视频...");
+                        new SendClipVideo().execute(clip_video_url);
+                    }
+                });
+
+            }
+        });
+
+        Button btn_render = (Button) findViewById(R.id.start_render);
+        btn_render.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("paras",""+render_paras[0]+" "+render_paras[1]+" "+render_paras[2]);
+                isYuLan = false;
+                new SendClipVideo().execute(free_dance_url);
+            }
+        });
+
     }
+
+//    public class tan extends AsyncTask<Void, Void, Void>{
+//
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//            showRightDialog();
+//        }
+//    }
 
 //    private void init_spinner(){
 //        ArrayAdapter<String> adpter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,ctype);
@@ -60,6 +139,10 @@ public class VideoRenderActivity extends AppCompatActivity {
 //        //获取选中列的值。
 //        String str = spinner.getSelectedItem().toString();
 //        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+//    }
+
+//    private void hideRightDialog() {
+//        popupWindowRight.dismiss();
 //    }
 
     public long getDurationLong(String url,int type){
@@ -163,7 +246,7 @@ public class VideoRenderActivity extends AppCompatActivity {
             videoPlayer.startPlayLogic();
         }
 
-        private void testChangeBackgrond(){
+    private void testChangeBackgrond(){
 
         }
 
@@ -177,7 +260,7 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     }
         
-        private void updatePlayer(String YuLanUrl){
+    private void updatePlayer(String YuLanUrl){
         videoPlayer.setUp(YuLanUrl, true, "渲染视频预览");
         videoPlayer.startPlayLogic();
         }
@@ -196,9 +279,6 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     }
 
-    /*
-     * 隐藏提示加载
-     */
     public void hideProgressDialog() {
 
         if (progressDialog != null && progressDialog.isShowing()) {
@@ -206,22 +286,29 @@ public class VideoRenderActivity extends AppCompatActivity {
         }
 
     }
-        
-        public class SendClipVideo extends AsyncTask<String, Void, String>{
 
-            @Override
-            protected String doInBackground(String... strings) {
-                String cur_total_url = strings[0];
-                String res = "";
-                /*
-                请求
-                 */
-                return res;
-            }
+    public class SendClipVideo extends AsyncTask<String , Void, String>{
 
-            @Override
+        @Override
+        protected String doInBackground(String... strings) {
+
+            String will_do_url = strings[0];
+            String res = "";
+            /*
+            请求结果
+             */
+            return res;
+        }
+
+        @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
+                if(isYuLan){
+                    updatePlayer(s);
+                    hideProgressDialog();
+                } else {
+
+                }
             }
 
         }

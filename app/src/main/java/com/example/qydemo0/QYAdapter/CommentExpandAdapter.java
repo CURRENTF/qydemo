@@ -1,4 +1,4 @@
-package com.example.qydemo0.adapter;
+package com.example.qydemo0.QYAdapter;
 
 import android.content.Context;
 import android.graphics.Color;
