@@ -1,13 +1,22 @@
 package com.example.qydemo0.bean;
 
 public class videoUrlBean {
-    private String org;
+    private String id;
+    private UrlBean url;
 
-    public String getOrg() {
-        return org;
+    public String getId() {
+        return id;
     }
 
-    public void setOrg(String org) {
-        this.org = org;
+    public UrlBean getUrl() {
+        return url;
+    }
+
+    public void setUrl(UrlBean url) {
+        this.url = url;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

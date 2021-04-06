@@ -1,7 +1,9 @@
 package com.example.qydemo0.QYAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.renderscript.Sampler;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -17,12 +19,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.UiThread;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentDetailBean;
 import com.example.qydemo0.bean.ReplyDetailBean;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +55,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     private List<ReplyDetailBean> replyBeanList;
     private Context context;
     private int pageIndex = 1;
+    private QYrequest comment_request = new QYrequest();
 
     public CommentExpandAdapter(Context context, List<CommentDetailBean> commentBeanList) {
         this.context = context;
@@ -127,15 +141,62 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
                 if(commentBeanList.get(groupPosition).getLike()){
-                    commentBeanList.get(groupPosition).setLike(false);
-                    groupHolder.iv_like.setColorFilter(Color.parseColor("#aaaaaa"));
-                    commentBeanList.get(groupPosition).setLike_num(commentBeanList.get(groupPosition).getLike_num()-1);
-                    notifyDataSetChanged();
+                    new Thread(new Runnable(){
+                        @Override
+                        public void run() {
+                            String[] j = new String[0];
+                            String res = comment_request.advancePut(GenerateJson.universeJson2(j),
+                                    Constant.mInstance.comment+"func/"+commentBeanList.get(groupPosition).getCid()+"/-1/",
+                                    "Authorization", GlobalVariable.mInstance.token);
+                            Log.i("reply_call_back",res);
+                            try {
+                                JSONObject res_json = new JSONObject(res);
+                                if(res_json.getString("msg").equals("Success")) {
+                                    commentBeanList.get(groupPosition).setLike(false);
+                                    groupHolder.iv_like.setColorFilter(Color.parseColor("#aaaaaa"));
+                                    commentBeanList.get(groupPosition).setLike_num(commentBeanList.get(groupPosition).getLike_num() - 1);
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                                else{
+                                    Log.i("comment","WRONG!!!");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                 }else {
-                    commentBeanList.get(groupPosition).setLike(true);
-                    groupHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
-                    commentBeanList.get(groupPosition).setLike_num(commentBeanList.get(groupPosition).getLike_num()+1);
-                    notifyDataSetChanged();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] j = new String[0];
+                            String res = comment_request.advancePut(GenerateJson.universeJson2(j),
+                                    Constant.mInstance.comment+"func/"+commentBeanList.get(groupPosition).getCid()+"/1/",
+                                    "Authorization", GlobalVariable.mInstance.token);
+                            Log.i("reply_call_back",res);
+                            Gson gson = new Gson();
+                            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+                            if(call_back_bean.getMsg().equals("Success")) {
+                                commentBeanList.get(groupPosition).setLike(true);
+                                groupHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
+                                commentBeanList.get(groupPosition).setLike_num(commentBeanList.get(groupPosition).getLike_num() + 1);
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                            else{
+                                Log.i("reply","WRONG!!!");
+                            }
+                        }
+                    }).start();
                 }
             }
         });
@@ -179,15 +240,62 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
                 if(commentBeanList.get(groupPosition).getReplies().get(childPosition).getLike()){
-                    commentBeanList.get(groupPosition).getReplies().get(childPosition).setLike(false);
-                    childHolder.iv_like.setColorFilter(Color.parseColor("#aaaaaa"));
-                    commentBeanList.get(groupPosition).setLike_num(commentBeanList.get(groupPosition).getLike_num()-1);
-                    notifyDataSetChanged();
+                    new Thread(new Runnable(){
+                        @Override
+                        public void run() {
+                            String[] j = new String[0];
+                            String res = comment_request.advancePut(GenerateJson.universeJson2(j),
+                                    Constant.mInstance.comment+"func/"+commentBeanList.get(groupPosition).getReplies().get(childPosition).getCid()+"/-1/",
+                                    "Authorization", GlobalVariable.mInstance.token);
+                            Log.i("reply_call_back",res);
+                            try {
+                                JSONObject res_json = new JSONObject(res);
+                                if(res_json.getString("msg").equals("Success")) {
+                                    commentBeanList.get(groupPosition).getReplies().get(childPosition).setLike(false);
+                                    childHolder.iv_like.setColorFilter(Color.parseColor("#aaaaaa"));
+                                    commentBeanList.get(groupPosition).getReplies().get(childPosition).setLike_num(commentBeanList.get(groupPosition).getReplies().get(childPosition).getLike_num() - 1);
+                                    ((Activity) context).runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            notifyDataSetChanged();
+                                        }
+                                    });
+                                }
+                                else{
+                                    Log.i("reply","WRONG!!!");
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
                 }else {
-                    commentBeanList.get(groupPosition).getReplies().get(childPosition).setLike(true);
-                    childHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
-                    commentBeanList.get(groupPosition).setLike_num(commentBeanList.get(groupPosition).getLike_num()+1);
-                    notifyDataSetChanged();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String[] j = new String[0];
+                            String res = comment_request.advancePut(GenerateJson.universeJson2(j),
+                                    Constant.mInstance.comment+"func/"+commentBeanList.get(groupPosition).getReplies().get(childPosition).getCid()+"/1/",
+                                    "Authorization", GlobalVariable.mInstance.token);
+                            Log.i("reply_call_back",res);
+                            Gson gson = new Gson();
+                            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+                            if(call_back_bean.getMsg().equals("Success")) {
+                                commentBeanList.get(groupPosition).getReplies().get(childPosition).setLike(true);
+                                childHolder.iv_like.setColorFilter(Color.parseColor("#FF5C5C"));
+                                commentBeanList.get(groupPosition).getReplies().get(childPosition).setLike_num(commentBeanList.get(groupPosition).getReplies().get(childPosition).getLike_num() + 1);
+                                ((Activity) context).runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                            else{
+                                Log.i("reply","WRONG!!!");
+                            }
+                        }
+                    }).start();
                 }
             }
         });
@@ -284,6 +392,29 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }
 
         notifyDataSetChanged();
+    }
+
+    public class CommentChange extends AsyncTask<Integer, Void, Integer>{
+        @Override
+        protected void onPostExecute(Integer aVoid) {
+            super.onPostExecute(aVoid);
+            if(aVoid!=-1){
+
+            }
+        }
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            String[] j = new String[0];
+            String res = comment_request.advancePut(GenerateJson.universeJson2(j), Constant.mInstance.comment+"func/"+integers[0]+"/"+integers[1]+"/","Authorization", GlobalVariable.mInstance.token);
+            Log.i("json",res);
+            Gson gson = new Gson();
+            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+            if(call_back_bean.getMsg().equals("Success"))
+                return integers[0];
+            else
+                return -1;
+        }
     }
 
 }

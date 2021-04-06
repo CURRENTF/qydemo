@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,10 +29,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.stream.BaseGlideUrlLoader;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
@@ -53,6 +56,10 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +68,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
+import com.example.qydemo0.DataTrans.FragmentDataForMain;
+
+import javax.microedition.khronos.opengles.GL;
 
 /**
  * Created by guoshuyu on 2017/6/18.
@@ -90,92 +101,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private BottomSheetDialog dialog;
     private Boolean is_follow = false;
 
-    private String testJosn2 = "{\n" +
-            "    \"status\": 200,\n" +
-            "    \"msg\": \"Success\",\n" +
-            "    \"data\": [\n" +
-            "        {\n" +
-            "            \"cid\": 2,\n" +
-            "            \"text\": \"啦啦啦啦~\",\n" +
-            "            \"like_num\": 0,\n" +
-            "            \"created_time\": \"2021-04-05T12:34:27.406124\",\n" +
-            "            \"is_public\": true,\n" +
-            "            \"is_delete\": false,\n" +
-            "            \"like\": false,\n" +
-            "            \"belong\": {\n" +
-            "                \"uid\": 2,\n" +
-            "                \"username\": \"gsy666\",\n" +
-            "                \"img_url\": null\n" +
-            "            },\n" +
-            "            \"replies\": null\n" +
-            "        },\n" +
-            "        {\n" +
-            "            \"cid\": 1,\n" +
-            "            \"text\": \"我爱小姐姐~\",\n" +
-            "            \"like_num\": 0,\n" +
-            "            \"created_time\": \"2021-04-05T12:34:04.883572\",\n" +
-            "            \"is_public\": true,\n" +
-            "            \"is_delete\": false,\n" +
-            "            \"like\": false,\n" +
-            "            \"belong\": {\n" +
-            "                \"uid\": 2,\n" +
-            "                \"username\": \"gsy666\",\n" +
-            "                \"img_url\": null\n" +
-            "            },\n" +
-            "            \"replies\": [\n" +
-            "                {\n" +
-            "                    \"cid\": 3,\n" +
-            "                    \"text\": \"小姐姐确实好看~\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-04-05T12:35:36.948196\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 3,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": null\n" +
-            "                    },\n" +
-            "                    \"reply_to\": null\n" +
-            "                },\n" +
-            "                {\n" +
-            "                    \"cid\": 4,\n" +
-            "                    \"text\": \"确实好看~\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-04-05T12:36:02.285150\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": null\n" +
-            "                    },\n" +
-            "                    \"reply_to\": null\n" +
-            "                },\n" +
-            "                {\n" +
-            "                    \"cid\": 5,\n" +
-            "                    \"text\": \"是呀是呀，好看好看~\",\n" +
-            "                    \"like_num\": 0,\n" +
-            "                    \"created_time\": \"2021-04-05T12:36:26.326019\",\n" +
-            "                    \"is_public\": true,\n" +
-            "                    \"is_delete\": false,\n" +
-            "                    \"like\": false,\n" +
-            "                    \"belong\": {\n" +
-            "                        \"uid\": 2,\n" +
-            "                        \"username\": \"gsy666\",\n" +
-            "                        \"img_url\": null\n" +
-            "                    },\n" +
-            "                    \"reply_to\": {\n" +
-            "                        \"uid\": 3,\n" +
-            "                        \"username\": \"hjt666\",\n" +
-            "                        \"img_url\": null\n" +
-            "                    }\n" +
-            "                }\n" +
-            "            ]\n" +
-            "        }\n" +
-            "    ]\n" +
-            "}";
+    private String testJson2 = "{\"status\":200,\"msg\":\"Success\",\"data\":[{\"cid\":1,\"text\":\"我的评论哇\",\"like_num\":0,\"created_time\":\"2021-04-06T21:51:31.906632\",\"is_public\":true,\"is_delete\":false,\"like\":false,\"belong\":{\"uid\":5,\"username\":\"hjt666\",\"img_url\":\"https://file.yhf2000.cn/img/74/76/7476cefafd47dc4102d040c790be27f797765200d66e25bacc4a2e92b1324b7a-AFjRMm.use\"},\"replies\":null}]}";
 
     private String workJson = "{\"id\":8,\"name\":\"飞机\",\"introduction\":\"帅\",\"classifications\":\"女人\",\"tags\":[\"牛肉\"],\"play_num\":0,\"like_num\":0,\"favorites_num\":0,\"video_url\":{\"org\":\"https:\\/\\/file.yhf2000.cn\\/dash\\/da\\/b7\\/dab79fb8a75caf21a150f2cd1f4c28f86d4c0a4c4aa94322f1db472ee7aa4859-UeLIfd.use\\/manifest.mpd\"},\"cover_url\":\"https:\\/\\/file.yhf2000.cn\\/img\\/ff\\/57\\/ff5786d9741a38ea07c18e88806a5bdfcd29f849ade52d445a3bcff35922fd6e-zLTgBX.use\"}";
     private boolean isPlay;
@@ -194,6 +120,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private Context context = this;
 
     private WorkBean work_bean = new WorkBean();
+
+    private FragmentDataForMain  user_info_json =  new FragmentDataForMain();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -298,50 +226,24 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
         else {
             if (work_bean.getData().getIs_follow()) {
-                isFollow.setVisibility(View.VISIBLE);
-                isCanceF.setVisibility(View.GONE);
-            } else {
                 isCanceF.setVisibility(View.VISIBLE);
                 isFollow.setVisibility(View.GONE);
+            } else {
+                isFollow.setVisibility(View.VISIBLE);
+                isCanceF.setVisibility(View.GONE);
             }
 
             isFollow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String res = work_request.advancePost(GenerateJson.universeJson("target", "int", "" + work_bean.getData().getBelong().getUid()),
-                                    Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
-                            Log.i("关注", res);
-                            Gson gson = new Gson();
-                            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-                            if (call_back_bean.getMsg().equals("Success")) {
-                                isFollow.setVisibility(View.GONE);
-                                isCanceF.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }).start();
+                    new doFollow().execute();
                 }
             });
 
             isCanceF.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            String res = work_request.advancePost(GenerateJson.universeJson("target", "int", "" + work_bean.getData().getBelong().getUid()),
-                                    Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
-                            Log.i("取消关注", res);
-                            Gson gson = new Gson();
-                            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-                            if (call_back_bean.getMsg().equals("Success")) {
-                                isCanceF.setVisibility(View.GONE);
-                                isFollow.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }).start();
+                    new cancelFollow().execute();
                 }
             });
         }
@@ -372,6 +274,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             video_comment_num.setText(""+comment_num);
         else
             video_comment_num.setText("");
+        CircleImageView  head_img = (CircleImageView) findViewById(R.id.detail_page_userLogo);
+        Glide.with(context)
+                .load(work_bean.getData().getBelong().getImg_url())
+                .transform(/*new CenterInside(), */new RoundedCorners(50)).into(head_img);
+        TextView user_name = (TextView) findViewById(R.id.detail_page_userName);
+        user_name.setText(work_bean.getData().getBelong().getUsername());
     }
 
     private void init_player(List<String> sources, String coverUrl){
@@ -468,8 +376,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Gson gson = new Gson();
         work_bean = gson.fromJson(cur_Json, WorkBean.class);
         List<String> lists = new ArrayList<>();
-        lists.add(work_bean.getData().getVideo_url().getOrg());
-        init_player(lists,work_bean.getData().getCover_url());
+        lists.add(work_bean.getData().getVideo_url().getUrl().getOrg());
+        init_player(lists,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
                 work_bean.getData().getDislike_num(), work_bean.getData().getPlay_num(), work_bean.getData().getComment_num());
@@ -631,11 +539,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         return mCoverMedia;
     }
 
-    private void initView(List<CommentDetailBean> commentsList) {
+    private void initView() {
         expandableListView = (CommentExpandableListView) findViewById(R.id.detail_page_lv_comment);
         bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initExpandableListView(commentsList);
     }
 
@@ -733,7 +640,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
                     //commentOnWork(commentContent);
                     dialog.dismiss();
-                    success_commment(commentContent);
+                    new doComment().execute(commentContent);
 
                 }else {
                     Toast.makeText(PlayerActivity.this,"评论内容不能为空",Toast.LENGTH_SHORT).show();
@@ -763,22 +670,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         dialog.show();
     }
 
-    private void success_commment(String commentContent){
+    private void success_commment(String commentContent, int cid) throws JSONException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
-        CommentDetailBean detailBean = new CommentDetailBean(-1,commentContent,0,simpleDateFormat.format(date),
+        Log.i("raw_date",String.valueOf(date));
+        CommentDetailBean detailBean = new CommentDetailBean(cid,commentContent,0,simpleDateFormat.format(date),
                 true,false,false,
-                new Belong(Integer.valueOf(GlobalVariable.mInstance.uid),
-                        Constant.mInstance.username,
-                        "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),null);
+                new Belong(Integer.valueOf(user_info_json.userInfoJson.getString("uid")),
+                        user_info_json.userInfoJson.getString("username"), user_info_json.userInfoJson.getString("img_url")),null);
         adapter.addTheCommentData(detailBean);
         Toast.makeText(PlayerActivity.this,"评论成功",Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * by moos on 2018/04/20
-     * func:弹出回复框
-     */
     private void showReplyDialog(final int position, final int second_position){
         dialog = new BottomSheetDialog(this);
         View commentView = LayoutInflater.from(this).inflate(R.layout.comment_dialog_layout,null);
@@ -796,9 +699,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(View view) {
                 String replyContent = commentText.getText().toString().trim();
                 if(!TextUtils.isEmpty(replyContent)){
-
                     dialog.dismiss();
-                    success_reply(replyContent, second_position, position);
+                    new doReply().execute(""+position, ""+second_position, replyContent);
                 }else {
                     Toast.makeText(PlayerActivity.this,"回复内容不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -827,19 +729,19 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         dialog.show();
     }
 
-    private void success_reply(String replyContent, int second_position, int position){
+    private void success_reply(String replyContent, int second_position, int position, int cid) throws JSONException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
         Date date = new Date(System.currentTimeMillis());
         ReplyDetailBean detailBean;
         if(second_position!=-1) {
-            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(-1,
-                    "拒绝者", "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
+            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(Integer.valueOf(GlobalVariable.mInstance.uid),
+                    user_info_json.userInfoJson.getString("username"), user_info_json.userInfoJson.getString("img_url")),
                     new Belong(commentsList.get(position).getReplies().get(second_position).getBelong().getUid(),
                             commentsList.get(position).getReplies().get(second_position).getBelong().getUsername(),
                             commentsList.get(position).getReplies().get(second_position).getBelong().getImg_url()));
         } else{
-            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(-1,
-                    "拒绝者", "http://5b0988e595225.cdn.sohucs.com/images/20190122/c26b0dbc2654438a9dbb93713b335b40.jpeg"),
+            detailBean = new ReplyDetailBean(cid, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(Integer.valueOf(GlobalVariable.mInstance.uid),
+                    user_info_json.userInfoJson.getString("username"), user_info_json.userInfoJson.getString("img_url")),
                     null);
         }
         adapter.addTheReplyData(detailBean, position);
@@ -868,16 +770,19 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected String doInBackground(Integer... ints) {
-            String res = work_request.advanceGet(Constant.mInstance.comment+"0/"+ints[0]+"/", "Authorization", GlobalVariable.mInstance.token);
-            Log.i("workJson",res);
-            Log.i("token",""+ GlobalVariable.mInstance.token);
+            String[] callJson = {"start","int","0","lens","int","20"};
+            String[] ss = new String[0];
+            String res = work_request.advanceMethod("GET",GenerateJson.universeJson2(ss),Constant.mInstance.comment+"0/8/?start=0&lens=20", "Authorization", GlobalVariable.mInstance.token);
+            Log.i("commentJson",res);
+            //Log.i("token",""+ GlobalVariable.mInstance.token);
             return res;
         }
 
         @Override
         protected void onPostExecute(String cur_work_json) {
             super.onPreExecute();
-            initView(generateTestData(testJosn2));
+            commentsList = generateTestData(cur_work_json);
+            initView();
         }
     }
 
@@ -913,22 +818,35 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class doComment extends AsyncTask<String, Void, String>{
+    public class doComment extends AsyncTask<String, Void, String[]>{
         @Override
-        protected void onPostExecute(String contentt) {
+        protected void onPostExecute(String... contentt) {
             super.onPostExecute(contentt);
-            success_commment(contentt);
+            try {
+                success_commment(contentt[0], Integer.valueOf(contentt[1]));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
-        protected String doInBackground(String... strings) {
-            String res = work_request.advancePost(GenerateJson.universeJson("top", "int", null, "reply", "int", null, "text", "string",strings[0]),
-                    "0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
-            Gson gson = new Gson();
-            CallBackBean call_back = gson.fromJson(res, CallBackBean.class);
-            if(call_back.getMsg().equals("Success"))
-                return strings[0];
-            else
+        protected String[] doInBackground(String... strings) {
+            String[] callToJson = {"text", "string",strings[0]};
+            String res = work_request.advancePost(GenerateJson.universeJson(callToJson),
+                    Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
+            try {
+                JSONObject res_jsonobj = new JSONObject(res);
+                Log.i("comment_callback",res);
+                int cid = -1;
+                if(res_jsonobj.getString("msg").equals("Success")) {
+                    String[] res_reply_all = {strings[0], String.valueOf(cid)};
+                    return res_reply_all;
+                }
+                else
+                    return null;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
                 return null;
         }
     }
@@ -937,24 +855,85 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String[] contentt) {
             super.onPostExecute(contentt);
-            success_reply(contentt[2],Integer.valueOf(contentt[1]),Integer.valueOf(contentt[0]));
+            try {
+                success_reply(contentt[2],Integer.valueOf(contentt[1]),Integer.valueOf(contentt[0]),Integer.valueOf(contentt[3]));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
         protected String[] doInBackground(String... strings) {
             String res = "";
-            if(Integer.valueOf(strings[1]) != -1)
-            res = work_request.advancePost(GenerateJson.universeJson("top", "int", ""+commentsList.get(Integer.valueOf(strings[0])).getCid(), "reply", "int",""+commentsList.get(Integer.valueOf(strings[0])).getReplies().get(Integer.valueOf(strings[1])).getCid() , "text", "string",strings[2]),
-                    Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
-            else
-                res = work_request.advancePost(GenerateJson.universeJson("top", "int", ""+commentsList.get(Integer.valueOf(strings[0])).getCid(), "reply", "int",""+commentsList.get(Integer.valueOf(strings[0])).getCid() , "text", "string",strings[2]),
-                        Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
+            if (Integer.valueOf(strings[1]) != -1) {
+                String[] call_to_json = {"top", "int", "" + commentsList.get(Integer.valueOf(strings[0])).getCid(), "reply", "int", "" + commentsList.get(Integer.valueOf(strings[0])).getReplies().get(Integer.valueOf(strings[1])).getCid(), "text", "string", strings[2]};
+                res = work_request.advancePost(GenerateJson.universeJson2(call_to_json),
+                        Constant.mInstance.comment + "0/" + work_bean.getData().getId() + "/", "Authorization", GlobalVariable.mInstance.token);
+            } else {
+                String[] call_to_json = {"top", "int", "" + commentsList.get(Integer.valueOf(strings[0])).getCid(), "reply", "int", "" + commentsList.get(Integer.valueOf(strings[0])).getCid(), "text", "string", strings[2]};
+                res = work_request.advancePost(GenerateJson.universeJson2(call_to_json),
+                        Constant.mInstance.comment + "0/" + work_bean.getData().getId() + "/", "Authorization", GlobalVariable.mInstance.token);
+            }
+            try {
+                int cid=-1;
+                if ((new JSONObject(res)).getString("msg").equals("Success")) {
+                    String[] res_to_reply = {strings[0], strings[1], strings[2], String.valueOf(cid)};
+                    return res_to_reply;
+                }
+                else
+                    return null;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public class doFollow extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+
+            String[] callJson = {"target","int",""+ work_bean.getData().getBelong().getUid()};
+            String res = work_request.advancePost(GenerateJson.universeJson2(callJson),
+                    Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
+            Log.i("关注", res);
             Gson gson = new Gson();
-            CallBackBean call_back = gson.fromJson(res, CallBackBean.class);
-            if(call_back.getMsg().equals("Success"))
-                return strings;
-            else
-                return null;
+            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+            return call_back_bean.getMsg().equals("Success");
+
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            super.onPostExecute(aVoid);
+            if (aVoid) {
+                isFollow.setVisibility(View.GONE);
+                isCanceF.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    public class cancelFollow extends AsyncTask<Void,Void,Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            String[] callJson = {"target","int",""+ work_bean.getData().getBelong().getUid()};
+            String res = work_request.advanceMethod("DELETE",GenerateJson.universeJson2(callJson),
+                    Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
+            Log.i("取消关注", res);
+            Gson gson = new Gson();
+            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+            return call_back_bean.getMsg().equals("Success");
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            super.onPostExecute(aVoid);
+            if (aVoid) {
+                isCanceF.setVisibility(View.GONE);
+                isFollow.setVisibility(View.VISIBLE);
+            }
         }
     }
 

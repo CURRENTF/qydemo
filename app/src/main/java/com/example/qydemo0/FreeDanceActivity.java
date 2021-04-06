@@ -232,7 +232,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             @Override
             public void onClick(View v) {
                 if(!is_compare) {
-                    if (btn1.getText() == "镜子") {
+                    if (btn1.getText().equals("镜子")) {
                         btn1.setText("恢复");
                         surf.setLayoutParams(fill_all);
                     } else {
