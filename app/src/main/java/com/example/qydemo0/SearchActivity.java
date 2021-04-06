@@ -109,6 +109,7 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+                qyScrollView.removeAllViews();
                 Search s = new Search();
                 s.execute(((EditText)findViewById(R.id.edit_text_search)).getText().toString());
                 search_txt.clearFocus();

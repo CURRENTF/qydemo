@@ -87,12 +87,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/learn_info_d"
         android:layout_below="@id/learn_info_r"
-        android:visibility="invisible"
+        android:visibility="visible"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/bottom_round"
+        android:layout_marginHorizontal="10dp"
+        android:paddingVertical="5dp"
         android:orientation="vertical">
+
+        
 
     </LinearLayout>
 

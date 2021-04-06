@@ -72,6 +72,7 @@
             android:id="@+id/grid_img_set"
             android:layout_gravity="center"
             android:columnCount="3"
+            android:visibility="gone"
             android:rowCount="3"
             android:orientation="horizontal">
 
@@ -133,6 +134,24 @@
 
         </GridLayout>
 
+        <com.example.qydemo0.Widget.QYScrollView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:visibility="visible"
+            android:orientation="vertical"
+            android:background="@drawable/input_box_border">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="5dp"
+                android:id="@+id/work_list_for_post">
+
+            </LinearLayout>
+
+        </com.example.qydemo0.Widget.QYScrollView>
+
 
 
     </LinearLayout>
@@ -145,4 +164,7 @@
         android:layout_margin="20dp"
         android:src="@drawable/ic_check_white"
         android:id="@+id/button_upload_post"/>
+
+
+
 </RelativeLayout>

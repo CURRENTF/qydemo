@@ -33,6 +33,8 @@ import com.example.qydemo0.QYpack.Img;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -103,10 +105,13 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
+            g.setVisibility(View.INVISIBLE);
+            switcher = 1;
 
         }
         else {
-
+            g.setVisibility(View.VISIBLE);
+            switcher = 0;
         }
     }
 
@@ -116,7 +121,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == imgs[img_pointer]){
+        if(img_pointer < 9 && v.getId() == imgs[img_pointer]){
             Intent intent = ImageSelector.builder()
                     .useCamera(false) // 设置是否使用拍照
                     .setSingle(false)  //设置是否单选
@@ -129,6 +134,9 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
             if(switcher == 0){
                 UploadImage uploadImage = new UploadImage();
                 uploadImage.execute();
+            }
+            else {
+
             }
         }
     }
@@ -209,10 +217,22 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if(aBoolean)
+            if(aBoolean){
                 Toast.makeText(UploadPostActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+               UploadPostActivity.this.finish();
+            }
             else
                 Toast.makeText(UploadPostActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    class GetMyWork extends AsyncTask<String, Integer, JSONArray>{
+
+        @Override
+        protected JSONArray doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+//            return MsgProcess.msgProcessArr()
+            return null;
         }
     }
 }

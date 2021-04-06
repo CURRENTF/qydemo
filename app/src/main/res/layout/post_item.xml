@@ -3,19 +3,21 @@
     android:id="@+id/work_item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="10dp"
     android:background="@color/white"
+    android:layout_marginVertical="5dp"
+    android:translationZ="2dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="5dp">
         <ImageView
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:id="@+id/post_user_avatar"/>
+            android:id="@+id/post_user_avatar"
+            android:layout_marginEnd="10dp"/>
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -26,9 +28,10 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.6"
                 android:text="yhf2000"
+                android:textStyle="bold"
+                android:textColor="	#FF7F50"
                 android:textSize="18sp"
-                android:id="@+id/post_user_name"
-                android:layout_margin="3dp"/>
+                android:id="@+id/post_user_name"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -57,24 +60,32 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/post_main"
+        android:layout_height="wrap_content"
+
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="14sp"
+            android:textColor="@color/black"
             android:id="@+id/post_content"
-            android:maxLines="4"/>
-        <GridLayout
+            android:layout_margin="15dp"
+            android:maxLines="3"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/post_img_layout"
-            android:visibility="gone"
-            android:columnCount="3"
-            android:rowCount="3">
-        </GridLayout>
+            android:id="@+id/post_main"
+            android:padding="5dp"
+            android:orientation="vertical">
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_img_layout"
+                android:columnCount="3">
+
+            </GridLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -131,7 +142,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"
+            android:visibility="gone"
             android:id="@+id/post_work"
             android:orientation="vertical">
             <ImageView
@@ -159,24 +170,24 @@
             android:paddingHorizontal="10dp"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_forward"
                 android:layout_marginEnd="5dp"
                 android:scaleType="fitXY"/>
             <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="40dp"
+                android:layout_height="20dp"
                 android:layout_marginEnd="30dp"
                 android:gravity="center"
                 android:text="转发"/>
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginEnd="5dp"
                 android:src="@drawable/ic_chat"/>
             <TextView
-                android:layout_width="30dp"
+                android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:id="@+id/post_comment_num"
                 android:layout_gravity="center"
@@ -185,12 +196,12 @@
                 android:layout_marginEnd="30dp"
                 />
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/ic_like"/>
             <TextView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="0"

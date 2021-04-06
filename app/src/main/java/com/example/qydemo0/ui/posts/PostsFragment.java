@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
@@ -54,13 +57,11 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
     private View root = null;
     int[] buttons = {R.id.add_post, R.id.button_post_recommendation, R.id.button_post_follow};
-    LinearLayout rc_layout, f_layout;
+    RelativeLayout rc_layout, f_layout;
     QYScrollView rc_view, f_view;
     int rc_startPos = 0, rc_len = 20;
-    int switcher = 0;
+    int switcher = 0;// 0 rc 1 f
     TimeTool timeTool = new TimeTool();
-    // 0 rc 1 f
-
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -80,8 +81,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        rc_layout = root.findViewById(R.id.linear_layout_posts_recommendation);
-        f_layout = root.findViewById(R.id.linear_layout_posts_follow);
+        rc_layout = root.findViewById(R.id.rela_layout_posts_recommendation);
+        f_layout = root.findViewById(R.id.rela_layout_posts_follow);
         rc_view = root.findViewById(R.id.view_posts_recommendation);
         f_view = root.findViewById(R.id.view_posts_follow);
         rc_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
@@ -91,7 +92,18 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                 GetRecommendationPost getRecommendationPost = new GetRecommendationPost();
                 getRecommendationPost.execute();
             }
-
+            @Override
+            public void onScrolledToTop() {
+                Log.d("hjt.scroll.top", "true");
+            }
+        });
+        f_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
+            @Override
+            public void onScrolledToBottom() {
+                if(!timeTool.checkFreq()) return;
+                GetFollowedPost getFollowedPost = new GetFollowedPost();
+                getFollowedPost.execute();
+            }
             @Override
             public void onScrolledToTop() {
                 Log.d("hjt.scroll.top", "true");
@@ -99,6 +111,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         });
         GetRecommendationPost getRecommendationPost = new GetRecommendationPost();
         getRecommendationPost.execute();
+        GetFollowedPost getFollowedPost = new GetFollowedPost();
+        getFollowedPost.execute();
     }
 
 
@@ -129,17 +143,21 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                 ((TextView)v).setTextColor(getResources().getColor(R.color.red));
                 t = getActivity().findViewById(R.id.button_post_recommendation);
                 t.setTextColor(getResources().getColor(R.color.black));
+                Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_alpha_500ms);
+                rc_view.startAnimation(animation2);
                 ChangeVisibility changeVisibility2 = new ChangeVisibility();
                 changeVisibility2.execute(false);
                 break;
         }
     }
 
+    int lastF_id = -1;
     class GetFollowedPost extends AsyncTask<String, Integer, JSONArray>{
 
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
+            Log.d("hjt.get.followed.post", "1");
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.post_url + "0/", "Authorization", GlobalVariable.mInstance.token), false);
         }
 
@@ -154,6 +172,11 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
                     postItem.init(jsonObject);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+                    if(lastF_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastF_id);
+                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    lastF_id = View.generateViewId();
+                    postItem.setId(lastF_id);
                     f_layout.addView(postItem);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -163,6 +186,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    int lastRc_id = -1;
     class GetRecommendationPost extends AsyncTask<String, Integer, JSONArray>{
         @Override
         protected JSONArray doInBackground(String... strings) {
@@ -184,6 +208,12 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
                     postItem.init(jsonObject);
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastRc_id);
+                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    lastRc_id = View.generateViewId();
+                    postItem.setId(lastRc_id);
+                    postItem.setLayoutParams(layoutParams);
                     rc_layout.addView(postItem);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -217,5 +247,4 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
-
 }
