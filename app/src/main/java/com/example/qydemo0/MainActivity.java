@@ -13,6 +13,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,11 +31,17 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.ui.dashboard.DashboardFragment;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
 
     Constant C = Constant.mInstance;
@@ -140,6 +147,10 @@ public class MainActivity extends AppCompatActivity {
 
         DeviceInfo.info(this);
 
+        if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
+            GetUserInfo g = new GetUserInfo();
+            g.execute();
+        }
     }
 
     @Override
@@ -160,6 +171,24 @@ public class MainActivity extends AppCompatActivity {
         GlobalVariable.mInstance.saveAllVar(sp);
         Log.d("hjtMain", "MainDestroyed");
         super.onDestroy();
+    }
+
+    class GetUserInfo extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return htp.advanceGet(Constant.mInstance.userInfo_url, "Authorization", GlobalVariable.mInstance.token);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.d("hjtGetUserInfo", s);
+            JSONObject json = MsgProcess.msgProcess(s, true);
+            if(json != null){
+                GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
+            }
+        }
     }
 
 }

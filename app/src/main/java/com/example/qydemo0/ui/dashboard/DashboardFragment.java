@@ -65,7 +65,6 @@ public class DashboardFragment extends Fragment {
 
     void reWriteInfo(JSONObject json){
         ShowProgressDialog.show(getActivity(), "加载用户信息");
-        GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
         try {
             GlobalVariable.mInstance.uid = json.getString("uid");
         } catch (JSONException e) {
@@ -156,6 +155,7 @@ public class DashboardFragment extends Fragment {
             Log.d("hjtGetUserInfo", s);
             JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
+                GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
                 reWriteInfo(json);
             }
         }
