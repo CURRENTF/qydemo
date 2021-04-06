@@ -31,13 +31,22 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.AudioPlayer;
+import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.QYFile;
+import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.google.gson.JsonObject;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -121,6 +130,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     RelativeLayout.LayoutParams people_all = new RelativeLayout.LayoutParams(350, 910);
     RelativeLayout.LayoutParams people_tiny = new RelativeLayout.LayoutParams(1,1);
 
+    private QYrequest learn_request = new QYrequest();
+    private  QYFile learn_file = new QYFile();
+
     public LearnDanceActivity() throws IOException {
     }
 
@@ -135,8 +147,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         ButterKnife.bind(this);
 
         initLearnVideo();
-
-        opt.add(R.drawable.l0);
+        Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
+                opt.add(R.drawable.l0);
         opt.add(R.drawable.l1);
 
         is_learn = false;
@@ -286,7 +298,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             @Override
             public void onClick(View v) {
                 if(!is_compare) {
-                    if (btn1.getText() == "镜子") {
+                    if (btn1.getText().equals("镜子")) {
                         btn1.setText("恢复");
                         surf.setLayoutParams(fill_all);
                     } else {
@@ -643,7 +655,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         releaseCamera();
     }
 
-    private class CameraSizeComparator implements Comparator<Camera.Size> {
+    class CameraSizeComparator implements Comparator<Camera.Size> {
         public int compare(Camera.Size lhs, Camera.Size rhs) {
             if (lhs.width == rhs.width) {
                 return 0;
@@ -712,16 +724,22 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         @Override
         protected String doInBackground(String... video_path) {
-            String resJson = "123";
-            /*
-            这里要写发送录好的视频！！！
-             */
+            JSONObject res = (JSONObject) learn_file.verifyFileUpload(Constant.mInstance.file_upload_verify_url,2,learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617626033964.mp4"));
+            String learn_video_id = "";
             try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
+                if(!res.getBoolean("rapid_upload")){
+                    if(!learn_file.uploadFile(Constant.mInstance.file_upload_callback_url, path_cur, res.getString("token"))){
+                        return null;
+                    }
+                }
+
+                learn_video_id = res.getString("file_id");
+
+
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return resJson;
+            return "";
         }
 
         @Override

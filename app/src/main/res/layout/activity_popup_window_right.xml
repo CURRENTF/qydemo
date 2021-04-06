@@ -319,6 +319,27 @@
                 />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="110dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/local"
+                android:background="#bfbfbf"
+                />
+
+            <ImageView
+                android:id="@+id/img_local"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/render_on"
+                />
+        </RelativeLayout>
+
     </LinearLayout>
 </HorizontalScrollView>
     

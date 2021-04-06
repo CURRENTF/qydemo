@@ -4,7 +4,8 @@ import java.util.List;
 
 public class WorkDataBean {
     private int id;
-    private String name,introduction,classifications,cover_url;
+    private String name,introduction,classifications;
+    private CoverBean cover_url = new CoverBean();
     private List<String> tags;
     private videoUrlBean video_url;
     private int play_num, comment_num, like_num, dislike_num, favorites_num, learning_num;
@@ -116,7 +117,11 @@ public class WorkDataBean {
         this.classifications = classifications;
     }
 
-    public void setCover_url(String cover_url) {
+    public CoverBean getCover_url() {
+        return cover_url;
+    }
+
+    public void setCover_url(CoverBean cover_url) {
         this.cover_url = cover_url;
     }
 
@@ -136,9 +141,6 @@ public class WorkDataBean {
         return classifications;
     }
 
-    public String getCover_url() {
-        return cover_url;
-    }
 
     public List<String> getTags() {
         return tags;

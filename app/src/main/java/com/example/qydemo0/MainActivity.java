@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -21,8 +22,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.coloros.ocs.ai.cv.CVUnitClient;
-
 import android.content.pm.PackageManager;
 import android.view.GestureDetector;
 
@@ -31,6 +30,7 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.google.android.exoplayer2.Player;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.ui.dashboard.DashboardFragment;
@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     ImageView img;
-
-    private CVUnitClient mCVClient;
 
     int startCode = -1;
 
@@ -127,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, testStyle.class);
+                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
                 startActivity(intent);
             }
         });

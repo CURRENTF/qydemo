@@ -107,8 +107,8 @@ dependencies {
     //mp4parser
     implementation 'com.googlecode.mp4parser:isoparser:1.1.21'
 
-    implementation(name:'CVUnit-release', ext:'aar')
-    implementation(name:'com.coloros.ocs.base-release-1.0.4-SNAPSHOT', ext:'aar')
+    implementation 'com.github.1993hzw:Androids:1.3'
+
 
 //    implementation 'com.google.android.exoplayer:exoplayer:2.13.2'
 
@@ -148,8 +148,11 @@ dependencies {
 
 }
 
-repositories {
-    flatDir {
-        dirs 'libs'   // aar目录
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
     }
 }

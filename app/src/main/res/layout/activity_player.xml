@@ -91,44 +91,11 @@
                                 android:textSize="14sp"
                                 android:text="LSP大本营" />
 
-                            <LinearLayout
-                                android:id="@+id/detail_page_comment_container"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_marginTop="10dp"
-                                android:orientation="vertical">
-
-                                <!--                    <TextView-->
-                                <!--                        android:layout_width="wrap_content"-->
-                                <!--                        android:layout_height="wrap_content"-->
-                                <!--                        android:layout_marginLeft="18dp"-->
-                                <!--                        android:text="评论"-->
-                                <!--                        android:layout_marginRight="10dp"-->
-                                <!--                        android:textSize="20dp"-->
-                                <!--                        android:textColor="#363636"/>-->
-
-                                <com.example.qydemo0.view.CommentExpandableListView
-                                    android:id="@+id/detail_page_lv_comment"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginBottom="64dp"
-                                    android:divider="@null"
-                                    android:listSelector="@android:color/transparent"
-                                    android:scrollbars="none" />
-
-                            </LinearLayout>
-                            <!--                            <TextView-->
-<!--                                android:id="@+id/detail_page_time"-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="刚刚"-->
-<!--                                android:textSize="12sp"-->
-<!--                                android:layout_marginTop="3dp"-->
-<!--                                android:textColor="#989898"/>-->
                         </LinearLayout>
                         <RelativeLayout
                             android:layout_width="60dp"
                             android:layout_height="20dp"
+                            android:layout_margin="10dp"
                             >
                         <Button
                             android:id="@+id/is_follow"
@@ -312,7 +279,25 @@
                         android:background="#e6e6e6"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/detail_page_comment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="50dp"
+                    android:orientation="vertical">
+                    <com.example.qydemo0.view.CommentExpandableListView
+                        android:id="@+id/detail_page_lv_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="64dp"
+                        android:layout_below="@+id/detail_player"
+                        android:divider="@null"
+                        android:listSelector="@android:color/transparent"
+                        android:scrollbars="none" />
+                </LinearLayout>
+
             </RelativeLayout>
+
 
         </LinearLayout>
 
@@ -322,6 +307,7 @@
         android:id="@+id/detail_player"
         android:layout_width="match_parent"
         android:layout_height="@dimen/post_media_height" />
+
 
     <LinearLayout
         android:id="@+id/recall_kuang"

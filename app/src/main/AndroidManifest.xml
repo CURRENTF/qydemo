@@ -25,6 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".GameActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UploadPostActivity" />
         <activity android:name=".LearningListActivity"></activity>
         <activity android:name=".UploadPostActivity" />
         <activity android:name=".DetailPostActivity" />
@@ -37,14 +42,16 @@
             android:name=".LearnDanceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
-        <activity android:name=".testStyle" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".UserSettingActivity" />
+
         <activity android:name=".UploadActivity" />
+
         <activity
             android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

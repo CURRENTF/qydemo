@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,7 +28,7 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
     private static final String TAG = "PopupWindowRight";
     private View view;
     private int bg_img=0, lj_id = 0, style_img = 0;
-    private ImageView img0,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,
+    private ImageView img0,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img_local,
             lj0,lj1,lj2,lj3,lj4,lj5,lj6,lj7,lj8,lj9,lj10,
             sty0,sty1;
     private Button btn_change_bg,btn_lj,btn_sty;
@@ -85,11 +86,11 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
 
     private void init_btn(Context context) {
         btn_change_bg = view.findViewById(R.id.change_background);
-                btn_lj = view.findViewById(R.id.lj);
-                btn_sty = view.findViewById(R.id.change_style);
+        btn_lj = view.findViewById(R.id.lj);
+        btn_sty = view.findViewById(R.id.change_style);
 
         HorizontalScrollView bg = (HorizontalScrollView) view.findViewById(R.id.bg_scrollview),
-                lj = (HorizontalScrollView) view.findViewById(R.id.lj_scrollview), sty = (HorizontalScrollView) view.findViewById(R.id.sty_scrollview);
+        lj = (HorizontalScrollView) view.findViewById(R.id.lj_scrollview), sty = (HorizontalScrollView) view.findViewById(R.id.sty_scrollview);
         lj.setVisibility(View.GONE);
         sty.setVisibility(View.GONE);
 
@@ -138,6 +139,7 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
             }
         });
     }
+
     private void init_img(Context context) {
 
         img0 = view.findViewById(R.id.img0);
@@ -246,15 +248,30 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
         img12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bg_img = 12;down_process_img();img12.setBackgroundResource(R.drawable.render_on);
+                bg_img = 12;
+                down_process_img();
+                img12.setBackgroundResource(R.drawable.render_on);
             }
         });
 
+        img_local = view.findViewById(R.id.img_local);
+        img_local.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bg_img = -2;
+                down_process_img();
+                img_local.setBackgroundResource(R.drawable.render_on);
+                Intent intent = new Intent("android.intent.action.GET_CONTENT");
+                intent.setType("image/*");
+                ((Activity)context).startActivityForResult(intent, 2);
+            }
+        });
         down_process_img();
 
         img0.setBackgroundResource(R.drawable.render_on);
 
     }
+
     private void init_lj(Context context) {
 
         lj0 = view.findViewById(R.id.lj0);
@@ -400,6 +417,7 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
         img10.setBackgroundResource(R.drawable.render_out);
         img11.setBackgroundResource(R.drawable.render_out);
         img12.setBackgroundResource(R.drawable.render_out);
+        img_local.setBackgroundResource(R.drawable.render_out);
     }
     private void down_process_lj(){
         lj0.setBackgroundResource(R.drawable.render_out);
@@ -423,6 +441,11 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
     public int[] getRenderParams(){
         return new int[]{bg_img, lj_id, style_img};
     }
+
+//    protected  void getImageFromAlbum(Context context){
+//        Intent intent = new Intent(Intent.ACTION_PICK);
+//        intent.setType("image/*");
+//    }
 
     @Override
     public void onClick(View v) {

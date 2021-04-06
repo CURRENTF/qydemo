@@ -1,11 +1,21 @@
 package com.example.qydemo0;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -14,8 +24,15 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.coloros.ocs.ai.cv.CVUnitClient;
+import com.bumptech.glide.Glide;
+import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GenerateJson;
+import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.QYFile;
+import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.VideoClip;
+import com.example.qydemo0.bean.CallBackBean;
+import com.google.gson.Gson;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -29,9 +46,13 @@ import android.widget.RelativeLayout;
 import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static android.telecom.DisconnectCause.LOCAL;
 import static android.view.Gravity.*;
 import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
+import org.json.JSONObject;
 
 public class VideoRenderActivity extends AppCompatActivity {
 
@@ -43,11 +64,14 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private CVUnitClient mCVClient;
-
     private int[] render_paras = {0,0,0};
 
     private Boolean isYuLan = false;
+
+    private String render_img;
+
+    private QYrequest cur_request = new QYrequest();
+    private QYFile cur_file = new QYFile();
 
 //    OrientationUtils orientationUtils;
 
@@ -90,7 +114,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                         render_choice.setVisibility(View.VISIBLE);
                         isYuLan = true;
                         showProgressDialog("提示","正在努力加载渲染预览视频...");
-                        new SendClipVideo().execute(clip_video_url);
+                        new SendRenderVideo().execute(clip_video_url);
                     }
                 });
 
@@ -102,11 +126,11 @@ public class VideoRenderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i("paras",""+render_paras[0]+" "+render_paras[1]+" "+render_paras[2]);
+                showProgressDialog("提示","加载中...");
                 isYuLan = false;
-                new SendClipVideo().execute(free_dance_url);
+                new SendRenderVideo().execute(free_dance_url);
             }
         });
-
     }
 
 //    public class tan extends AsyncTask<Void, Void, Void>{
@@ -287,27 +311,185 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     }
 
-    public class SendClipVideo extends AsyncTask<String , Void, String>{
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==2){
+            if(resultCode == RESULT_OK&&data!=null){
+                if(Build.VERSION.SDK_INT>=19){
+                    render_img = handImage(data);
+                }
+                else{
+                    render_img = handImageLow(data);
+                }
+            }
+
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private String handImage(Intent data){
+        String path =null;
+        Uri uri = data.getData();
+        //根据不同的uri进行不同的解析
+        if (DocumentsContract.isDocumentUri(this,uri)){
+            String docId = DocumentsContract.getDocumentId(uri);
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())){
+                String id = docId.split(":")[1];
+                String selection = MediaStore.Images.Media._ID+"="+id;
+                path = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,selection);
+            }else if("com.android.providers.downloads.documents".equals(uri.getAuthority())){
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),Long.valueOf(docId));
+                path = getImagePath(contentUri,null);
+            }
+        }else if ("content".equalsIgnoreCase(uri.getScheme())){
+            path = getImagePath(uri,null);
+        }else if ("file".equalsIgnoreCase(uri.getScheme())){
+            path = uri.getPath();
+        }
+        return path;
+        //展示图片
+        //displayImage(path);
+    }
+
+
+    //安卓小于4.4的处理方法
+    private String handImageLow(Intent data){
+        Uri uri = data.getData();
+        return getImagePath(uri,null);
+//        displayImage(path);
+    }
+
+    //content类型的uri获取图片路径的方法
+    private String getImagePath(Uri uri,String selection) {
+        String path = null;
+        Cursor cursor = getContentResolver().query(uri,null,selection,null,null);
+        if (cursor!=null){
+            if (cursor.moveToFirst()){
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+//    //根据路径展示图片的方法
+//    private void displayImage(String imagePath){
+//        if (imagePath != null){
+//            Log.i("img_path",imagePath);
+//            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+//            test_img.setImageBitmap(bitmap);
+//        }else{
+//            Toast.makeText(this,"fail to set image",Toast.LENGTH_SHORT).show();
+//        }
+//    }
+
+    public class SendRenderVideo extends AsyncTask<String , Void, String>{
 
         @Override
         protected String doInBackground(String... strings) {
 
             String will_do_url = strings[0];
-            String res = "";
-            /*
-            请求结果
-             */
-            return res;
+
+            JSONObject res_json = cur_file.verifyFileUpload(Constant.mInstance.file_upload_verify_url,2,cur_file.hashFileUrl(will_do_url));
+            int render_video_id = -1;
+            try {
+                if(!res_json.getBoolean("rapid_upload")){
+                    try {
+                        if(!cur_file.uploadFile(Constant.mInstance.file_upload_callback_url, will_do_url, res_json.getString("token"))){
+                            return null;
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                render_video_id = res_json.getInt("file_id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            String img_id,img_mode,lj_id;
+            int render_img_id = -1;
+                if(render_paras[0] == -2){
+
+                        JSONObject res_json1 = cur_file.verifyFileUpload(Constant.mInstance.file_upload_verify_url,0,cur_file.hashFileUrl(render_img));
+
+                    try {
+                        if(!res_json1.getBoolean("rapid_upload")){
+                            if(!cur_file.uploadFile(Constant.mInstance.file_upload_callback_url, render_img, res_json1.getString("token"))){
+                                return null;
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        render_img_id = res_json1.getInt("file_id");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            Boolean choice1 = render_paras[0]==0?false:true,
+                    choice2 = render_paras[1]==0?false:true;
+            String[] callToJson = {"video", "int", ""+render_video_id,
+                    "is_background", "bool", choice1?"true":"false",
+            "img_id", choice1?"string":"int", choice1?(""+render_img_id):"null",
+            "mode", choice1?"bool":"int", choice1?(""+"false"):"null", /*这里加渲染模型！！！！！！！！！！！*/
+            "is_filter","bool",choice2?"true":"false",
+            "filter_id", choice1?"string":"int", choice1?(""+(render_paras[1]-1)):"null"
+            };
+            String resJson = cur_request.advancePost(GenerateJson.universeJson2(callToJson), Constant.mInstance.task_url+"rendering/", "Authorization", GlobalVariable.mInstance.token);
+
+            try {
+                String tid;
+                JSONObject ress_json = new JSONObject(resJson);
+                if(ress_json.getString("msg").equals("Success")){
+                    tid = ress_json.getJSONObject("data").getString("tid");
+                }
+                else return null;
+                while(true){
+                    Thread.sleep(500);
+                    String render_res = cur_request.advancePost(GenerateJson.universeJson("tid",tid),Constant.mInstance.task_url+"task/",
+                            "Authorization", GlobalVariable.mInstance.token);
+                    JSONObject render_res_json = new JSONObject(render_res);
+                    if(!isYuLan){
+                        if(render_res_json.getInt("schedule")!=-1){
+                            return "success";
+                        }
+                    }
+                    if(render_res_json.getInt("schedule") == 100){
+                        return render_res_json.getJSONObject("data").getJSONObject("video_url").getString("1080P");
+                    }
+                }
+            } catch (JSONException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
         }
 
         @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
+            hideProgressDialog();
                 if(isYuLan){
-                    updatePlayer(s);
-                    hideProgressDialog();
-                } else {
-
+                    if(s!=null){
+                        updatePlayer(s);
+                    }
+                    else{
+                        Toast.makeText(VideoRenderActivity.this,"预览失败",Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    Toast.makeText(VideoRenderActivity.this,"开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
             }
 
