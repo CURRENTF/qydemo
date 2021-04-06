@@ -176,7 +176,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             if(jsonArray == null){
-                Log.d("hjt.get.follow.post", "null_json");
+                Log.d("hjt.get.recommendation.post", "null_json");
                 return;
             }
             for(int i = 0; i < jsonArray.length(); i++){

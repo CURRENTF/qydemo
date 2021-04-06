@@ -38,6 +38,7 @@ public class Constant {
         HTTP_OK = 200,
         pre_items = 10,
         MAX_FILE_SIZE = 1024 * 1024 * 50,
+        MAX_POST_TEXT_NUM = 250,
         lazy_load_num = 10,
         ani_time = 200,
         least_time = 3000; // 50MB

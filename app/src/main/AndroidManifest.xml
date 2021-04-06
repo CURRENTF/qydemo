@@ -37,6 +37,7 @@
             android:name=".LearnDanceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
+        <activity android:name=".testStyle" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".UserSettingActivity" />
         <activity android:name=".UploadActivity" />

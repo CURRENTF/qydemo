@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/input_box_border"
             android:orientation="vertical"
             android:padding="10dp">
@@ -25,11 +25,14 @@
                 android:gravity="top"
                 android:background="@drawable/empty_edit_text"
                 android:id="@+id/add_post_text"
-                android:layout_height="250dp"/>
+                android:layout_height="200dp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:textColor="@color/real_pink"
+                android:textSize="16sp"
+                android:gravity="end|center_vertical"
+                android:padding="1dp"
                 android:id="@+id/add_post_remain_number"/>
 
         </LinearLayout>
@@ -127,12 +130,19 @@
                 android:visibility="invisible"
                 android:id="@+id/up_img9"
                 android:layout_margin="10dp"/>
-            
 
         </GridLayout>
 
 
+
     </LinearLayout>
 
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_check_white"
+        android:id="@+id/button_upload_post"/>
 </RelativeLayout>

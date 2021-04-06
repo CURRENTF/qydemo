@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(MainActivity.this, testStyle.class);
                 startActivity(intent);
             }
         });
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-//        GlobalVariable.mInstance.tokenExisted = false;
+        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         Log.d("hjtMain", "MainDestroyed");
