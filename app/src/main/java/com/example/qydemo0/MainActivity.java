@@ -40,6 +40,7 @@ import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);
 
-        Log.d("hjt", GlobalVariable.mInstance.uid + "?");
+        Log.d("hjt.uid", GlobalVariable.mInstance.uid + "?");
         Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
         if (!GlobalVariable.mInstance.tokenExisted) {
@@ -150,6 +151,11 @@ public class MainActivity extends AppCompatActivity {
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
+            try {
+                GlobalVariable.mInstance.uid = GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("uid");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
