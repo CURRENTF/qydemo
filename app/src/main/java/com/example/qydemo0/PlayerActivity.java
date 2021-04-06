@@ -676,8 +676,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Log.i("raw_date",String.valueOf(date));
         CommentDetailBean detailBean = new CommentDetailBean(cid,commentContent,0,simpleDateFormat.format(date),
                 true,false,false,
-                new Belong(Integer.valueOf(user_info_json.userInfoJson.getString("uid")),
-                        user_info_json.userInfoJson.getString("username"), user_info_json.userInfoJson.getString("img_url")),null);
+                new Belong(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getInt("uid"),
+                        GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username"), GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("img_url")),null);
         adapter.addTheCommentData(detailBean);
         Toast.makeText(PlayerActivity.this,"评论成功",Toast.LENGTH_SHORT).show();
     }
@@ -734,14 +734,14 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Date date = new Date(System.currentTimeMillis());
         ReplyDetailBean detailBean;
         if(second_position!=-1) {
-            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(Integer.valueOf(GlobalVariable.mInstance.uid),
-                    user_info_json.userInfoJson.getString("username"), user_info_json.userInfoJson.getString("img_url")),
+            detailBean = new ReplyDetailBean(-1, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getInt("uid"),
+                    GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username"), GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("img_url")),
                     new Belong(commentsList.get(position).getReplies().get(second_position).getBelong().getUid(),
                             commentsList.get(position).getReplies().get(second_position).getBelong().getUsername(),
                             commentsList.get(position).getReplies().get(second_position).getBelong().getImg_url()));
         } else{
-            detailBean = new ReplyDetailBean(cid, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(Integer.valueOf(GlobalVariable.mInstance.uid),
-                    user_info_json.userInfoJson.getString("username"), user_info_json.userInfoJson.getString("img_url")),
+            detailBean = new ReplyDetailBean(cid, replyContent, 0, simpleDateFormat.format(date), true, false, false, new Belong(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getInt("uid"),
+                    GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username"), GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username")),
                     null);
         }
         adapter.addTheReplyData(detailBean, position);
