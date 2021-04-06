@@ -25,13 +25,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ImageScroll"></activity>
         <activity
             android:name=".GameActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".UploadPostActivity" />
-        <activity android:name=".testStyle" />
+        <activity android:name=".LearningListActivity"></activity>
+        <activity android:name=".UploadPostActivity" />
         <activity android:name=".DetailPostActivity" />
         <activity android:name=".VideoRenderActivity" />
         <activity
@@ -44,11 +44,14 @@
             android:screenOrientation="landscape" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".UserSettingActivity" />
+
         <activity android:name=".UploadActivity" />
+
         <activity
             android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,6 +66,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ImageSelectorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity
+            android:name=".PreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity
+            android:name=".ClipImageActivity"/>
     </application>
 
 </manifest>

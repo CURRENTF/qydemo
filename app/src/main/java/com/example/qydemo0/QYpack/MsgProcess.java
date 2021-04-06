@@ -31,6 +31,7 @@ public class MsgProcess {
 
     public static JSONObject msgProcess(String msg, Boolean status){
         Constant C = Constant.mInstance;
+        Log.d("hjt.msgProcess", msg);
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
@@ -64,6 +65,7 @@ public class MsgProcess {
     }
     public static JSONArray msgProcessArr(String msg, Boolean status){
         Constant C = Constant.mInstance;
+        Log.d("hjt.msgProcess.arr", msg);
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
@@ -99,6 +101,7 @@ public class MsgProcess {
 
     public static boolean checkMsg(String msg, Boolean status){
         try {
+            Log.d("hjt.check.msg", msg);
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == Constant.mInstance.HTTP_OK) return true;
 //            if(GlobalVariable.mInstance.appContext != null){

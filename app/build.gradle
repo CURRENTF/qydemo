@@ -140,6 +140,12 @@ dependencies {
     // card cool
     implementation "com.yuyakaido.android:card-stack-view:2.3.4"
 
+    // Image Selector
+//    implementation 'com.github.donkingliang:ImageSelector:2.2.0'
+
+
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
 }
 
 allprojects {

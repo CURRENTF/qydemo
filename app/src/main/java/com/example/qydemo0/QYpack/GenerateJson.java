@@ -71,6 +71,7 @@ public class GenerateJson {
             s += '"';
             s += strings[i];
             s += '"';
+            if(i != strings.length - 1) s += ',';
         }
         s += ']';
         return s;
@@ -82,6 +83,7 @@ public class GenerateJson {
             s += '\'';
             s += strings[i];
             s += '\'';
+            if(i != strings.length - 1) s += ',';
         }
         s += ']';
         return s;

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
@@ -43,7 +44,7 @@ public class Img {
                 File pic = new File(path);
                 Log.d("hjt.IMG.path", path);
                 FileOutputStream outputStream = new FileOutputStream(pic);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
                 return path;
             }
         } catch (FileNotFoundException e) {
@@ -52,30 +53,37 @@ public class Img {
         return null;
     }
 
-    public static Bitmap getBitmapFormUrl(String url) {
+    public static Bitmap getBitmapFormUrl(String url, Context context) {
         Bitmap bitmap = null;
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
-            if (Build.VERSION.SDK_INT >= 14) {
-                retriever.setDataSource(url, new HashMap<String, String>());
-            } else {
-                retriever.setDataSource(url);
-            }
-            /*getFrameAtTime()--->在setDataSource()之后调用此方法。 如果可能，该方法在任何时间位置找到代表性的帧，         并将其作为位图返回。这对于生成输入数据源的缩略图很有用。**/
-
-            bitmap = retriever.getFrameAtTime();
-
-        } catch (IllegalArgumentException e) {
+            bitmap = Glide.with(context)
+                    .asBitmap()
+                    .load(url)
+                    .submit(360, 480).get();
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                retriever.release();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            }
         }
         return bitmap;
     }
+
+    private static Bitmap getDiskBitmap(String pathString){
+        Bitmap bitmap = null;
+        try{
+            File file=new File(pathString);
+            if (file.exists()){
+                bitmap= BitmapFactory.decodeFile(pathString);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    public static String compressWithUrl(String img_url, Context context){
+        Bitmap tmp = getDiskBitmap(img_url);
+        return saveImg(tmp, String.valueOf(System.currentTimeMillis()), context);
+    }
+
 
     public static boolean url2imgView(String img_url, ImageView img, Context context){
         Glide.with(context)
@@ -87,6 +95,18 @@ public class Img {
     public static void url2imgViewRoundRectangle(String img_url, ImageView img, Context context, int radius){
         Glide.with(context)
                 .load(img_url)
+                .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
+                .into(img);
+//        Glide.with(context)
+//                .load(img_url)
+//                .apply(RequestOptions.bitmapTransform(new RoundedCorners(radius)))
+//                .apply(RequestOptions.bitmapTransform(new CenterCrop()))
+//                .into(img);
+    }
+
+    public static void url2imgViewRoundRectangle(Drawable img_b, ImageView img, Context context, int radius){
+        Glide.with(context)
+                .load(img_b)
                 .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
                 .into(img);
 //        Glide.with(context)

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.qydemo0.DetailPostActivity;
 import com.example.qydemo0.PlayerActivity;
+import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.R;
@@ -74,12 +75,17 @@ public class PostItem extends LinearLayout {
     // 1 文字+作品
     // 2 文字+动态
     // 3 文字+图片
+    int mode = 0;
 
     public void init(JSONObject json){
-        int mode = 0;
-        if(json.has("post")) mode = 2;
-        else if(json.has("work")) mode = 1;
-        else if(json.has("img_set")) mode = 3;
+        mode = 0;
+        try {
+            if(!json.getString("post").equals("null")) mode = 2;
+            else if(!json.getString("work").equals("null")) mode = 1;
+            else if(!json.getString("img_set").equals("null")) mode = 3;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.post_item, this, true);
         img_set = mView.findViewById(R.id.post_img_layout);
@@ -92,7 +98,7 @@ public class PostItem extends LinearLayout {
         post_content = mView.findViewById(R.id.post_content);
         try {
             TextView txt = mView.findViewById(R.id.like_num);
-            txt.setText(json.getInt("like_num"));
+            txt.setText(String.valueOf(json.getInt("like_num")));
             txt = mView.findViewById(R.id.post_comment_num);
             txt.setText(json.getString("comment_num"));
         } catch (JSONException e) {
@@ -110,17 +116,19 @@ public class PostItem extends LinearLayout {
             return;
         }
         if(mode == 0){
-            work.setVisibility(GONE);
+//            work.setVisibility(GONE);
 //            post_post.setVisibility(GONE);
 //            img_set.setVisibility(GONE);
         }
         else if(mode == 1){
             cover = mView.findViewById(R.id.post_work_cover);
             work_name = mView.findViewById(R.id.post_work_name);
+            work.setVisibility(VISIBLE);
             try {
                 JSONObject work = json.getJSONObject("work");
                 work_json = work.toString();
-                Img.url2imgViewRoundRectangle(work.getString("cover_url"), cover, mContext, 40);
+                JSONObject coverInfo = work.getJSONObject("cover");
+                Img.url2imgViewRoundRectangle(coverInfo.getString("url"), cover, mContext, 40);
                 work_name.setText(work.getString("name"));
                 this.work.setOnClickListener(new GotoWork());
             } catch (JSONException e) {
@@ -129,7 +137,6 @@ public class PostItem extends LinearLayout {
             }
         }
         else if(mode == 2){
-            work.setVisibility(GONE);
             post_post.setVisibility(VISIBLE);
             post_post.setOnClickListener(new GotoPostDetail());
             cover = mView.findViewById(R.id.post_forward_video_cover);
@@ -142,36 +149,48 @@ public class PostItem extends LinearLayout {
                 TextView forward_text = mView.findViewById(R.id.post_forward_text);
                 forward_text.setText(post.getString("text"));
                 TextView forward_name = mView.findViewById(R.id.post_forward_name);
-                if(post.getString("cover_url").equals("null")){
+                JSONObject coverInfo = post.getJSONObject("cover");
+                if(coverInfo.getString("url").equals("null")){
                     cover.setVisibility(GONE);
                     forward_name.setVisibility(GONE);
                     return;
                 }
-                Img.url2imgViewRoundRectangle(post.getString("cover_url"), cover, mContext, 40);
+                JSONObject coverInfo2 = post.getJSONObject("cover");
+                Img.url2imgViewRoundRectangle(coverInfo2.getString("url"), cover, mContext, 40);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         else {
-            work.setVisibility(GONE);
-            img_set.setVisibility(VISIBLE);
             try {
                 JSONArray ja = json.getJSONArray("img_set");
                 if(ja.length() == 1){
                     LinearLayout.LayoutParams layoutParams =
-                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 200);
+                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,300));
                     ImageView img = new ImageView(mContext);
                     img.setLayoutParams(layoutParams);
                     JSONObject jsonObj = (JSONObject) ja.get(0);
-                    Img.url2imgViewRoundRectangle(jsonObj.getString("download_url"), img, mContext, 40);
+                    Img.url2imgViewRoundRectangle(jsonObj.getString("url"), img, mContext, 20);
                     LinearLayout l = mView.findViewById(R.id.post_main);
                     l.addView(img);
                 }
                 else {
+                    img_set.setVisibility(VISIBLE);
+//                    if(ja.length() == 2){
+//                        Log.d("hjt", "2");
+//                    }
+//                    if(ja.length() == 4){
+//                        Log.d("hjt", "4");
+//                    }
                     for(int i = 0; i < ja.length(); i++){
                         ImageView img = new ImageView(mContext);
                         JSONObject j = (JSONObject) ja.get(i);
-                        Img.url2imgViewRoundRectangle(j.getString("download_url"), img, mContext, 40);
+                        Img.url2imgViewRoundRectangle(j.getString("url"), img, mContext, 20);
+                        LinearLayout.LayoutParams layoutParams =
+                                new LinearLayout.LayoutParams(DeviceInfo.dip2px(mContext, 98), DeviceInfo.dip2px(mContext, 98));
+                        layoutParams.setMargins(DeviceInfo.dip2px(mContext, 5),DeviceInfo.dip2px(mContext, 5),
+                                DeviceInfo.dip2px(mContext, 5),DeviceInfo.dip2px(mContext, 5));
+                        img.setLayoutParams(layoutParams);
                         img_set.addView(img);
                     }
                 }
@@ -179,5 +198,12 @@ public class PostItem extends LinearLayout {
                 e.printStackTrace();
             }
         }
+    }
+
+    public int getQYHeight(){
+        if(mode == 0) return 70 + 70 + 40;
+        else if(mode == 1) return 70 + 230 + 40;
+        else if(mode == 2) return 70 + 40 + 14 + 200 + 30 + 10 + 40;
+        else return 70 + 300;
     }
 }
