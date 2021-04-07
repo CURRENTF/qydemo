@@ -31,7 +31,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".UploadPostActivity" />
         <activity android:name=".LearningListActivity"></activity>
-        <activity android:name=".UploadPostActivity" />
         <activity android:name=".DetailPostActivity" />
         <activity android:name=".VideoRenderActivity" />
         <activity

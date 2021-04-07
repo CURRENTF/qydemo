@@ -119,9 +119,9 @@ public class DashboardFragment extends Fragment {
         }
 
         try {
-            TextView txt2 = getActivity().findViewById(R.id.text_followers);
+            TextView txt2 = getActivity().findViewById(R.id.text_fans);
             txt2.setText(String.valueOf(json.getInt("subscribe_num")));
-            txt2 = getActivity().findViewById(R.id.text_fans);
+            txt2 = getActivity().findViewById(R.id.text_followers);
             txt2.setText(String.valueOf(json.getInt("followers")));
         } catch (JSONException e) {
             e.printStackTrace();

@@ -149,11 +149,7 @@ public class MainActivity extends AppCompatActivity {
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
-            try {
-                GlobalVariable.mInstance.uid = GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("uid");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
         }
     }
 
@@ -191,6 +187,11 @@ public class MainActivity extends AppCompatActivity {
             JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
                 GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
+                try {
+                    GlobalVariable.mInstance.uid = json.getString("uid");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

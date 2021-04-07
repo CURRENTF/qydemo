@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.AsyncTaskLoader;
 
+import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.QYAdapter.ImageNetAdapter;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -38,6 +39,8 @@ import com.youth.banner.indicator.CircleIndicator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -167,14 +170,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                         JSONObject coverInfo = j.getJSONObject("cover");
                         w.init(coverInfo.getString("url"), j.getString("name"), j.getInt("like_num"),
                                 j.getInt("play_num"), j.getString("introduction"));
+                        w.id = j.getInt("id");
                     } catch (JSONException e) {
                         e.printStackTrace();
                         return;
                     }
                     scrollViewForVideos.addView(w);
+                    w.setOnClickListener(new SendWorkId());
                     scrollViewForVideos.addView(Img.linearLayoutDivideLine(getActivity()));
                 }
             }
+        }
+    }
+
+    class SendWorkId implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), PlayerActivity.class);
+            intent.putExtra("id", ((WorkItem)v).id);
+            startActivity(intent);
         }
     }
 }

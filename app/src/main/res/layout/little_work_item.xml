@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/work_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_vegetable"
+        android:layout_gravity="center"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/cover"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:paddingLeft="5dp"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:text="舞舞舞！"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:textColor="@color/black"
+            android:id="@+id/video_name"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingTop="2dp"
+            android:layout_height="0dp"
+            android:gravity="bottom"
+            android:layout_weight="0.4">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_best_choice"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:text="233"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/text_like_num"/>
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/ic_play_button"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:layout_marginLeft="5dp"
+                android:id="@+id/text_play_num"
+                android:text="899"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

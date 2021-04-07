@@ -127,9 +127,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        Bundle bundle = this.getIntent().getExtras();
         ButterKnife.bind(this);
-        new GetCommentJson().execute(8);
-        new GetWorkJson().execute(8);
+        int wid = bundle.getInt("id");
+        Log.d("hjt.wid", String.valueOf(wid));
+        new GetCommentJson().execute(wid);
+        new GetWorkJson().execute(wid);
     }
 
     private void init_button_and_pager(){
@@ -772,7 +775,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected String doInBackground(Integer... ints) {
             String[] callJson = {"start","int","0","lens","int","20"};
             String[] ss = new String[0];
-            String res = work_request.advanceMethod("GET",GenerateJson.universeJson2(ss),Constant.mInstance.comment+"0/8/?start=0&lens=20", "Authorization", GlobalVariable.mInstance.token);
+            String res = work_request.advanceMethod("GET",GenerateJson.universeJson2(ss),Constant.mInstance.comment+"0/"+ints[0]+"/?start=0&lens=20", "Authorization", GlobalVariable.mInstance.token);
             Log.i("commentJson",res);
             //Log.i("token",""+ GlobalVariable.mInstance.token);
             return res;

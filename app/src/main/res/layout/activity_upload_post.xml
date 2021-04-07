@@ -72,7 +72,7 @@
             android:id="@+id/grid_img_set"
             android:layout_gravity="center"
             android:columnCount="3"
-            android:visibility="gone"
+            android:visibility="visible"
             android:rowCount="3"
             android:orientation="horizontal">
 
@@ -137,8 +137,9 @@
         <com.example.qydemo0.Widget.QYScrollView
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:orientation="vertical"
+            android:id="@+id/my_work_list"
             android:background="@drawable/input_box_border">
 
             <LinearLayout
