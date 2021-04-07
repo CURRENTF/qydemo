@@ -50,7 +50,8 @@ public class PostItem extends LinearLayout {
     }
 
 
-    String work_json = null, post_json = null, img_json;
+    String post_json = null, img_json;
+    int work_id = 0;
     TextView btn_follow;
 
     class GotoWork implements View.OnClickListener{
@@ -59,7 +60,7 @@ public class PostItem extends LinearLayout {
         public void onClick(View v) {
             Intent intent = new Intent();
             intent.setClass((Activity)mContext, PlayerActivity.class);
-            intent.putExtra("work", work_json);
+            intent.putExtra("id", work_id);
             ((Activity)mContext).startActivity(intent);
         }
     }
@@ -123,7 +124,12 @@ public class PostItem extends LinearLayout {
 
                     @Override
                     public void onClick(View v) {
-
+                        Follow follow = new Follow();
+                        try {
+                            follow.execute(json.getJSONObject("belong").getInt("uid"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -156,7 +162,7 @@ public class PostItem extends LinearLayout {
             work.setVisibility(VISIBLE);
             try {
                 JSONObject work = json.getJSONObject("work");
-                work_json = work.toString();
+                work_id = work.getInt("id");
                 JSONObject coverInfo = work.getJSONObject("cover");
                 Img.url2imgViewRoundRectangle(coverInfo.getString("url"), cover, mContext, 40);
                 work_name.setText(work.getString("name"));

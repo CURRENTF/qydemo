@@ -321,5 +321,4 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-
 }
