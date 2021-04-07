@@ -17,8 +17,11 @@ import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYScrollView;
+import com.example.qydemo0.Widget.SmartItem;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LearningListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,6 +39,10 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
         view_finished = findViewById(R.id.view_finished);
         progress = findViewById(R.id.btn_progress);
         finished = findViewById(R.id.btn_finished);
+        GetLearningListProgress getLearningListProgress = new GetLearningListProgress();
+        getLearningListProgress.execute();
+        progress.setOnClickListener(this);
+        finished.setOnClickListener(this);
     }
 
     int switcher = 0;
@@ -49,7 +56,10 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
             finished.setTextColor(getColor(R.color.black));
             Animation animation = AnimationUtils.loadAnimation(this
                     , R.anim.ani_right_translate_alpha_500ms);
+            Animation animation2 = AnimationUtils.loadAnimation(this
+                    , R.anim.ani_right_translate_in_alpha_500ms);
             view_finished.startAnimation(animation);
+            view_progress.startAnimation(animation2);
             ChangeVisibility changeVisibility = new ChangeVisibility();
             changeVisibility.execute(switcher == 1);
         }
@@ -60,21 +70,24 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
             finished.setTextColor(getColor(R.color.red));
             Animation animation = AnimationUtils.loadAnimation(this,
                     R.anim.ani_left_translate_alpha_500ms);
+            Animation animation2 = AnimationUtils.loadAnimation(this,
+                    R.anim.ani_left_translate_in_alpha_500ms);
             view_progress.startAnimation(animation);
+            view_finished.startAnimation(animation2);
             ChangeVisibility changeVisibility = new ChangeVisibility();
             changeVisibility.execute(switcher == 1);
         }
     }
 
 
-    int startPos = 0, len = 20;
+    int pr_startPos = 0, pr_len = 20;
     class GetLearningListProgress extends AsyncTask<String, Integer, JSONArray>{
 
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
-                            + Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
+                            + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
                     "Authorization", GlobalVariable.mInstance.token), false);
         }
 
@@ -84,7 +97,50 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
                 Log.e("hjt.learn.list.progress", "null");
             }
             else {
-                // todo
+                pr_startPos += pr_len;
+                for(int i = 0; i < jsonArray.length(); i++){
+                    try {
+                        JSONObject json = jsonArray.getJSONObject(i);
+                        SmartItem smartItem = new SmartItem(LearningListActivity.this);
+                        smartItem.init(json.getJSONObject("work_info"), json.getInt("record_num"),
+                                json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"));
+                        list_progress.addView(smartItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    class GetLearningListFinished extends AsyncTask<String, Integer, JSONArray>{
+
+        @Override
+        protected JSONArray doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "2/"
+                            + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
+                    "Authorization", GlobalVariable.mInstance.token), false);
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            if(jsonArray == null){
+                Log.e("hjt.learn.list.progress", "null");
+            }
+            else {
+                pr_startPos += pr_len;
+                for(int i = 0; i < jsonArray.length(); i++){
+                    try {
+                        JSONObject json = jsonArray.getJSONObject(i);
+                        SmartItem smartItem = new SmartItem(LearningListActivity.this);
+                        smartItem.init(json.getJSONObject("work_info"), json.getInt("record_num"),
+                                json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"));
+                        list_finished.addView(smartItem);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
@@ -103,7 +159,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if(aBoolean){
+            if(!aBoolean){
                 view_progress.setVisibility(View.VISIBLE);
                 view_finished.setVisibility(View.GONE);
             }

@@ -104,8 +104,8 @@ public class PostItem extends LinearLayout {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = inflater.inflate(R.layout.post_item, this, true);
+//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        mView = inflater.inflate(R.layout.post_item, this, true);
         img_set = mView.findViewById(R.id.post_img_layout);
         work = mView.findViewById(R.id.post_work);
         post_post = mView.findViewById(R.id.post_post);

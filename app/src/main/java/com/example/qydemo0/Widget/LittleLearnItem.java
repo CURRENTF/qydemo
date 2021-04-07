@@ -21,7 +21,7 @@ public class LittleLearnItem extends LinearLayout {
     private Context mContext = null;
     private View mView = null;
     ImageView icon;
-    TextView score, remark;
+    TextView score, remark, ser;
 
     public LittleLearnItem(Context context) {
         super(context);
@@ -35,11 +35,13 @@ public class LittleLearnItem extends LinearLayout {
     }
 
     public void init(String json){
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = inflater.inflate(R.layout.little_learn_item, this, true);
+//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        mView = inflater.inflate(R.layout.little_learn_item, this, true);
         icon = mView.findViewById(R.id.medal);
         score = mView.findViewById(R.id.score);
         remark = mView.findViewById(R.id.remark);
+        ser = mView.findViewById(R.id.record_serial);
+
 
 
     }

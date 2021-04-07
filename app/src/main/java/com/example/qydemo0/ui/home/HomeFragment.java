@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.content.AsyncTaskLoader;
 
+import com.example.qydemo0.LearningListActivity;
 import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.QYAdapter.ImageNetAdapter;
 import com.example.qydemo0.QYpack.Constant;
@@ -110,6 +111,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         fbtn.setOnClickListener(this);
         LinearLayout txt = getActivity().findViewById(R.id.button_search);
         txt.setOnClickListener(this);
+        Button btn = getActivity().findViewById(R.id.button_image_learn_list);
+        btn.setOnClickListener(this);
 
         super.onStart();
         Log.d("hjt.home_f", "start");
@@ -140,6 +143,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 Intent intent2 = new Intent();
                 intent2.setClass(getActivity(), SearchActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.button_image_learn_list:
+                Intent intent3 = new Intent();
+                intent3.setClass(getActivity(), LearningListActivity.class);
+                startActivity(intent3);
                 break;
         }
     }

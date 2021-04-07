@@ -134,6 +134,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                 t.setTextColor(getActivity().getColor(R.color.black));
                 Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_right_translate_alpha_500ms);
                 f_view.startAnimation(animation);
+                Animation a2 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_right_translate_in_alpha_500ms);
+                rc_view.startAnimation(a2);
                 ChangeVisibility changeVisibility = new ChangeVisibility();
                 changeVisibility.execute(true);
                 break;
@@ -145,6 +147,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                 t.setTextColor(getResources().getColor(R.color.black));
                 Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_alpha_500ms);
                 rc_view.startAnimation(animation2);
+                Animation a3 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_in_alpha_500ms);
+                f_view.startAnimation(a3);
                 ChangeVisibility changeVisibility2 = new ChangeVisibility();
                 changeVisibility2.execute(false);
                 break;

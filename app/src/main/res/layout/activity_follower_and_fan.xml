@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LearningListActivity">
+    tools:context=".FollowerAndFanActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,17 +21,17 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/red"
-            android:id="@+id/btn_progress"
-            android:text="未完成"/>
+            android:id="@+id/btn_follow"
+            android:text="我的关注"/>
         <TextView
             android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="18sp"
-            android:id="@+id/btn_finished"
+            android:id="@+id/btn_fan"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:text="已完成"/>
+            android:text="我的粉丝"/>
 
     </LinearLayout>
     <ImageView
@@ -41,17 +41,16 @@
         android:id="@+id/divide"
         android:background="@color/black"/>
 
-
     <com.example.qydemo0.Widget.QYScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_progress"
+        android:id="@+id/view_follows"
         android:layout_below="@id/divide"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/learning_list_progress"
+            android:id="@+id/list_follow"
             android:orientation="vertical">
 
         </LinearLayout>
@@ -60,14 +59,14 @@
     <com.example.qydemo0.Widget.QYScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_finished"
+        android:id="@+id/view_fans"
         android:visibility="gone"
         android:layout_below="@id/divide"
         android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/learning_list_finished"
+            android:id="@+id/list_fans"
             android:orientation="vertical">
 
         </LinearLayout>

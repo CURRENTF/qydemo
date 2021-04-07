@@ -75,6 +75,7 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="20dp"
             android:gravity="center"
+            android:id="@+id/goto_fan_follow"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"

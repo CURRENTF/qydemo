@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.qydemo0.FollowerAndFanActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -40,6 +41,15 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View t = root.findViewById(R.id.goto_fan_follow);
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), FollowerAndFanActivity.class);
+                startActivity(intent);
+            }
+        });
         return root;
     }
     @Override
@@ -129,19 +139,6 @@ public class DashboardFragment extends Fragment {
         ShowProgressDialog.wait.dismiss();
     }
 
-    void writeFans(JSONArray ja) {
-        if(getActivity() == null) return;
-        GlobalVariable.mInstance.fragmentDataForMain.userFans = ja;
-        TextView txt = getActivity().findViewById(R.id.text_fans);
-        txt.setText(String.valueOf(ja.length()));
-    }
-    void writeFollowers(JSONArray ja){
-        if(getActivity() == null) return;
-        GlobalVariable.mInstance.fragmentDataForMain.userFollowers = ja;
-        TextView txt = getActivity().findViewById(R.id.text_followers);
-        txt.setText(String.valueOf(ja.length()));
-    }
-
     class GetUserInfo extends AsyncTask<String, Integer, String>{
 
         @Override
@@ -158,37 +155,6 @@ public class DashboardFragment extends Fragment {
                 GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
                 reWriteInfo(json);
             }
-        }
-    }
-    class GetUserFans extends AsyncTask<String, Integer, String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
-            QYrequest htp = new QYrequest();
-            return htp.advanceGet(Constant.mInstance.user_fans + Json2X.Json2StringGet("ftype", "1"), "Authorization", GlobalVariable.mInstance.token);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.e("hjt.fans", s);
-            if(!MsgProcess.checkMsg(s, true)) return;
-            writeFans(MsgProcess.msgProcessArr(s, true));
-            super.onPostExecute(s);
-        }
-    }
-    class GetUserFollows extends AsyncTask<String, Integer, String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
-            QYrequest htp = new QYrequest();
-            return htp.advanceGet(Constant.mInstance.user_fans + Json2X.Json2StringGet("ftype", "0"), "Authorization", GlobalVariable.mInstance.token);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            Log.e("hjt.followers", s);
-            writeFollowers(MsgProcess.msgProcessArr(s, true));
-            super.onPostExecute(s);
         }
     }
 
