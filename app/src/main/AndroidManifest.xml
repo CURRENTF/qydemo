@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FollowerAndFanActivity"></activity>
+        <activity android:name=".UserDetailActivity"></activity>
+        <activity android:name=".FollowerAndFanActivity" />
         <activity android:name=".Test123" />
         <activity android:name=".RenderQueueActivity" />
         <activity
