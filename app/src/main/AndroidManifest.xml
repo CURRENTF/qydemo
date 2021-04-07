@@ -25,6 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Test123"></activity>
+        <activity android:name=".RenderQueueActivity" />
         <activity
             android:name=".GameActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -67,12 +69,11 @@
         </activity>
         <activity
             android:name=".ImageSelectorActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+            android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity
             android:name=".PreviewActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity
-            android:name=".ClipImageActivity"/>
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".ClipImageActivity" />
     </application>
 
 </manifest>

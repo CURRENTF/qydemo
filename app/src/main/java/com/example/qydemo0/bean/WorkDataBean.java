@@ -5,9 +5,9 @@ import java.util.List;
 public class WorkDataBean {
     private int id;
     private String name,introduction,classifications;
-    private CoverBean cover_url = new CoverBean();
+    private CoverBean cover = new CoverBean();
     private List<String> tags;
-    private videoUrlBean video_url;
+    private videoUrlBean video;
     private int play_num, comment_num, like_num, dislike_num, favorites_num, learning_num;
 
     private Boolean is_like, is_dislike, is_follow;
@@ -118,11 +118,11 @@ public class WorkDataBean {
     }
 
     public CoverBean getCover_url() {
-        return cover_url;
+        return cover;
     }
 
     public void setCover_url(CoverBean cover_url) {
-        this.cover_url = cover_url;
+        this.cover = cover_url;
     }
 
     public void setTags(List<String> tags) {
@@ -130,7 +130,7 @@ public class WorkDataBean {
     }
 
     public void setVideo_url(videoUrlBean video_url) {
-        this.video_url = video_url;
+        this.video = video_url;
     }
 
     public String getIntroduction() {
@@ -147,6 +147,6 @@ public class WorkDataBean {
     }
 
     public videoUrlBean getVideo_url() {
-        return video_url;
+        return video;
     }
 }

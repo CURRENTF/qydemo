@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/render_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_vegetable"
+        android:layout_gravity="center"
+        android:layout_marginEnd="20dp"
+        android:id="@+id/cover"/>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:paddingLeft="5dp"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:text="2021年4月1日"
+            android:textSize="16sp"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:id="@+id/video_time"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/video_time"
+            android:layout_marginTop="3dp"
+            android:id="@+id/text_choice"
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:text="背景替换 滤镜"/>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/text_choice"
+            android:layout_weight="0.4"
+            android:id="@+id/process_render"
+            android:max="100"/>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/download_it"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:layout_weight="0.1"
+        android:src="@drawable/download"
+        android:padding="10dp"
+        android:background="@color/gray"
+        />
+
+</LinearLayout>

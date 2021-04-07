@@ -64,6 +64,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -150,7 +151,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
+                ArrayList<String> data1 = new ArrayList<String>();
+                data1.add("1");
+                data1.add(work_bean.getData().getVideo_url().getUrl().getOrg());
+                intent.putStringArrayListExtra("params", data1);
                 startActivity(intent);
+
             }
         });
 
@@ -378,6 +384,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private void init_work(String cur_Json){
         Gson gson = new Gson();
         work_bean = gson.fromJson(cur_Json, WorkBean.class);
+        Log.i("whc123",""+work_bean.getMsg());
         List<String> lists = new ArrayList<>();
         lists.add(work_bean.getData().getVideo_url().getUrl().getOrg());
         init_player(lists,work_bean.getData().getCover_url().getUrl());
@@ -471,7 +478,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         //竖屏全屏
 //        orientationUtils.setEnable(false);
     }
-
 
 
     private GSYVideoPlayer getCurPlay() {
@@ -835,14 +841,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected String[] doInBackground(String... strings) {
             String[] callToJson = {"text", "string",strings[0]};
-            String res = work_request.advancePost(GenerateJson.universeJson(callToJson),
+            String res = work_request.advancePost(GenerateJson.universeJson2(callToJson),
                     Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
             try {
                 JSONObject res_jsonobj = new JSONObject(res);
                 Log.i("comment_callback",res);
-                int cid = -1;
                 if(res_jsonobj.getString("msg").equals("Success")) {
-                    String[] res_reply_all = {strings[0], String.valueOf(cid)};
+                    String[] res_reply_all = {strings[0], String.valueOf(res_jsonobj.getJSONObject("data").getInt("cid"))};
                     return res_reply_all;
                 }
                 else
@@ -878,9 +883,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         Constant.mInstance.comment + "0/" + work_bean.getData().getId() + "/", "Authorization", GlobalVariable.mInstance.token);
             }
             try {
-                int cid=-1;
                 if ((new JSONObject(res)).getString("msg").equals("Success")) {
-                    String[] res_to_reply = {strings[0], strings[1], strings[2], String.valueOf(cid)};
+                    String[] res_to_reply = {strings[0], strings[1], strings[2], String.valueOf((new JSONObject(res)).getJSONObject("data").getInt("cid"))};
                     return res_to_reply;
                 }
                 else

@@ -157,7 +157,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
-            Log.d("hjt.recommedation.json.array", jsonArray.toString());
             startPos += len;
             if(jsonArray == null){
                 Log.d("hjt.get.user.recommendation.fail", "null");

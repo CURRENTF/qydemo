@@ -108,6 +108,13 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
     private TextView changeSpeed;
 
+    private Boolean is_video_input=true;
+
+    private SurfaceView surf;
+
+    private RelativeLayout.LayoutParams fill_all, fill_tiny;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +125,9 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         initViews();
         ButterKnife.bind(this);
 
-        initLearnVideo();
+        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+
+        initLearnVideo(list);
 
         is_learn = false;
 
@@ -203,10 +212,6 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                 super.onAutoComplete(url, objects);
                 if(is_learn && !is_compare){
                     stopRecord();
-                    init_compare_video();
-                    btn3.setText("重录");
-                    detailPlayer.setUp(all_learn_video.get(0),true,"韩舞小姐姐");
-                    detailPlayer.startPlayLogic();
                 }
             }
 
@@ -218,20 +223,24 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
-        SurfaceView surf = findViewById(R.id.sf_view);
+        surf = findViewById(R.id.sf_view);
 
-        RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        fill_all = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
-        RelativeLayout.LayoutParams fill_tiny = new RelativeLayout.LayoutParams(1,1);
+        fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
         btn1 = (Button) findViewById(R.id.mirror_btn);
         btn2 = (Button) findViewById(R.id.next_video);
         btn3 = (Button) findViewById(R.id.learn_now);
-
+        if(list.get(0).equals("1")) {
+            is_video_input = false;
+            btn1.setText("恢复");
+            surf.setLayoutParams(fill_all);
+        }
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!is_compare) {
+                if(!is_compare && is_video_input) {
                     if (btn1.getText().equals("镜子")) {
                         btn1.setText("恢复");
                         surf.setLayoutParams(fill_all);
@@ -249,7 +258,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                 if(is_compare){
                     stop_compare_video();
                     Intent intent = new Intent(FreeDanceActivity.this, VideoRenderActivity.class);
-                    intent.putExtra("NAME",path_cur);  // 传递参数，根据需要填写
+                    intent.putExtra("free_dance_url",path_cur);  // 传递参数，根据需要填写
                     startActivity(intent);
                 }
             }
@@ -267,6 +276,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                 }
                 else{
                     btn3.setText("开始");
+                    if(!is_video_input) surf.setLayoutParams(fill_all);
                     stop_compare_video();
                     detailPlayer.setUp(all_learn_video.get(0),true,"韩舞小姐姐");
                     detailPlayer.startPlayLogic();
@@ -292,10 +302,18 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         detailPlayer.setIs_double(true);
     }
 
-    private void initLearnVideo() {
-        String[] source = {"https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd"};
-        for(int i=0;i<all_num;i++){
-            SwitchVideoModel switchVideoModel = new SwitchVideoModel("1080P", source[i]);
+    private void show_record_result(){
+        init_compare_video();
+        btn3.setText("重录");
+        if(!is_video_input) surf.setLayoutParams(fill_tiny);
+        detailPlayer.setUp(path_cur,true,"");
+        detailPlayer.startPlayLogic();
+    }
+
+    private void initLearnVideo(ArrayList<String> source) {
+//        String[] source = {"https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd"};
+        for(int i=1;i<source.size();i++){
+            SwitchVideoModel switchVideoModel = new SwitchVideoModel("1080P", source.get(i));
             List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
             list.add(switchVideoModel);
             all_learn_video.add(list);
@@ -504,7 +522,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             //重置
             mRecorder.reset();
             showProgressDialog("提示","保存中，请稍等...");
-            new SendUserDanceVideo().execute("123");
+            new waitForSave().execute(path_cur);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -645,30 +663,37 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         super.onBackPressed();
     }
 
-    public class SendUserDanceVideo extends AsyncTask<String, Void, String> {
-
+    public class waitForSave extends AsyncTask<String, Void,Boolean>{
         @Override
-        protected String doInBackground(String... video_path) {
-            String resJson = "123";
-            /*
-            这里要写发送录好的视频！！！
-             */
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        protected void onPostExecute(Boolean is_success) {
+            super.onPostExecute(is_success);
+            hideProgressDialog();
+            if(!is_success){
+                Toast.makeText(FreeDanceActivity.this,"出错啦,请重新录制",Toast.LENGTH_LONG).show();
             }
-            return resJson;
-        }
-
-        @Override
-        protected void onPostExecute(String resJson) {
-            if(resJson != ""){
-                detailPlayer.setUp(path_cur, true, "自由舞视频");
-                detailPlayer.startPlayLogic();
-                hideProgressDialog();
+            else {
+                show_record_result();
             }
         }
 
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            for(int i=0;i<10;i++)
+            {
+                try {
+                    Thread.sleep(500);
+                    File f=new File(strings[0]);
+                    if(f.exists())
+                    {
+                        return true;
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            return false;
+        }
     }
+
 }
