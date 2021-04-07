@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.content.AsyncTaskLoader;
 
 import android.app.Activity;
-import android.app.AsyncNotedAppOp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
