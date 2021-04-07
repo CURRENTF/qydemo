@@ -1,5 +1,6 @@
 package com.example.qydemo0.QYpack;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.qydemo0.Widget.QYScrollView;
@@ -36,4 +37,5 @@ public class QYUser {
         String[] data = {"target", "int", String.valueOf(target_uid)};
         return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.follow_url, "Authorization", GlobalVariable.mInstance.token), false);
     }
+
 }

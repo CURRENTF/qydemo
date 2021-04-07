@@ -49,6 +49,7 @@
                 android:paddingVertical="5dp"
                 android:text="+关注"
                 android:textColor="@color/real_pink"
+                android:id="@+id/btn_follow"
                 android:gravity="center"/>
             <ImageView
                 android:layout_width="match_parent"
@@ -63,14 +64,16 @@
         android:layout_height="wrap_content"
 
         android:orientation="vertical">
+
         <TextView
+            android:id="@+id/post_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:id="@+id/post_content"
             android:layout_margin="15dp"
-            android:maxLines="3"/>
+            android:maxLines="3"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -144,19 +147,30 @@
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:id="@+id/post_work"
+            android:padding="10dp"
             android:orientation="vertical">
-            <ImageView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:id="@+id/post_work_cover"
-                android:src="@drawable/ic_vegetable"/>
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:id="@+id/post_work_cover"
+                    android:src="@drawable/ic_vegetable"/>
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_play2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:paddingVertical="5dp"
-                android:paddingHorizontal="2dp"
+                android:paddingHorizontal="15dp"
                 android:textColor="@color/black"
                 android:text="今日快乐源泉，豪哥太帅了"
                 android:id="@+id/post_work_name"/>

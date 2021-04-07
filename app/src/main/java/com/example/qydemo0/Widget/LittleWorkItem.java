@@ -12,17 +12,17 @@ import android.widget.TextView;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 
-public class WorkItem extends LinearLayout {
+public class LittleWorkItem extends LinearLayout {
 
     public static int height = 120;
 
     private Context mContext = null;
     private View mView = null;
     ImageView cover = null;
-    TextView name = null, intro = null, like = null, play = null;
+    TextView name = null, like = null, play = null;
     public int id = 0;
 
-    public WorkItem(Context context) {
+    public LittleWorkItem(Context context) {
         super(context);
         mContext = context;
         initDf();
@@ -33,12 +33,11 @@ public class WorkItem extends LinearLayout {
         mView = inflater.inflate(R.layout.work_item, this, true);
     }
 
-    public void init(String cover_url, String video_name, int like_num, int play_num, String intro){
+    public void init(String cover_url, String video_name, int like_num, int play_num){
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.work_item, this, true);
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.video_name);
-        this.intro = mView.findViewById(R.id.text_intro);
         like = mView.findViewById(R.id.text_like_num);
         play = mView.findViewById(R.id.text_play_num);
 
@@ -46,12 +45,8 @@ public class WorkItem extends LinearLayout {
         name.setText(video_name);
         like.setText(String.valueOf(like_num));
         play.setText(String.valueOf(play_num));
-        this.intro.setText(intro);
     }
 
-//    public int getQYId(){
-//        return id;
-//    }
 
 
 }

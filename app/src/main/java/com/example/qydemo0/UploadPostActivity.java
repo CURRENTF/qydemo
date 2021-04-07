@@ -5,8 +5,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.AsyncTaskLoader;
 
 import android.app.Activity;
+import android.app.AsyncNotedAppOp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,21 +21,28 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYFile;
+import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.LittleWorkItem;
+import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.utils.ImageSelector;
 import com.example.qydemo0.QYpack.Img;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -74,6 +83,8 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
 
 
 
+    QYScrollView myWork;
+    LinearLayout myWorkList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +105,20 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
         FloatingActionButton fbtn = findViewById(R.id.button_upload_post);
         fbtn.setOnClickListener(this);
+        myWork = findViewById(R.id.my_work_list);
+        myWorkList = findViewById(R.id.work_list_for_post);
+        myWork.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
+            @Override
+            public void onScrolledToBottom() {
+                GetMyWork getMyWork = new GetMyWork();
+                getMyWork.execute();
+            }
+
+            @Override
+            public void onScrolledToTop() {
+
+            }
+        });
     }
 
     @Override
@@ -105,12 +130,18 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
-            g.setVisibility(View.INVISIBLE);
+            g.setVisibility(View.GONE);
+            myWork.setVisibility(View.VISIBLE);
+            FloatingActionButton fbtn = findViewById(R.id.button_upload_post);
+            fbtn.setVisibility(View.GONE);
             switcher = 1;
+            GetMyWork getMyWork = new GetMyWork();
+            getMyWork.execute();
 
         }
         else {
             g.setVisibility(View.VISIBLE);
+            myWork.setVisibility(View.GONE);
             switcher = 0;
         }
     }
@@ -226,13 +257,69 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
+    int workStart = 0, len = 20;
+
     class GetMyWork extends AsyncTask<String, Integer, JSONArray>{
 
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-//            return MsgProcess.msgProcessArr()
-            return null;
+            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", String.valueOf(workStart), "lens", String.valueOf(len)),
+                    "Authorization", GlobalVariable.mInstance.token), false);
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            if(jsonArray == null){
+                Log.d("hjt.get.my.work", null);
+            }
+            else {
+                workStart += len;
+                for(int i = 0; i < jsonArray.length(); i++){
+                    LittleWorkItem item = new LittleWorkItem(UploadPostActivity.this);
+                    try {
+                        JSONObject json = jsonArray.getJSONObject(i);
+                        JSONObject cover = json.getJSONObject("cover");
+                        item.init(cover.getString("url"), json.getString("name"), json.getInt("like_num"), json.getInt("play_num"));
+                        item.id = json.getInt("id");
+                    } catch (JSONException e) {
+                        Log.d("hjt.get.my.work", "json.wrong");
+                        e.printStackTrace();
+                        return;
+                    }
+                    item.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v) {
+                            v.setBackgroundResource(R.drawable.highlight);
+                            UploadPostWorkType uploadPostWorkType = new UploadPostWorkType();
+                            uploadPostWorkType.execute(String.valueOf(((LittleWorkItem)v).id));
+                        }
+                    });
+                    myWorkList.addView(item);
+                }
+            }
         }
     }
+
+    class UploadPostWorkType extends AsyncTask<String, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            String[] data = {"text", "string", p.getText().toString(),
+                    "ap_work", "int", strings[0], "is_public", "bool", "true"};
+            return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                Toast.makeText(UploadPostActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            else Toast.makeText(UploadPostActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

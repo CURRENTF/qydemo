@@ -3,6 +3,7 @@ package com.example.qydemo0.Widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.R;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.koushikdutta.async.http.body.JSONArrayBody;
@@ -49,6 +51,7 @@ public class PostItem extends LinearLayout {
 
 
     String work_json = null, post_json = null, img_json;
+    TextView btn_follow;
 
     class GotoWork implements View.OnClickListener{
 
@@ -67,6 +70,20 @@ public class PostItem extends LinearLayout {
             Intent intent = new Intent();
             intent.setClass((Activity)mContext, DetailPostActivity.class);
             intent.putExtra("post", post_json);
+        }
+    }
+    public class Follow extends AsyncTask<Integer, Integer, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            return QYUser.follow(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                btn_follow.setText("已关注");
+            }
         }
     }
 
@@ -96,7 +113,20 @@ public class PostItem extends LinearLayout {
         username = mView.findViewById(R.id.post_user_name);
         post_time = mView.findViewById(R.id.post_time);
         post_content = mView.findViewById(R.id.post_content);
+        btn_follow = findViewById(R.id.btn_follow);
         try {
+            if(json.getBoolean("follow")){
+                btn_follow.setText("已关注");
+            }
+            else {
+                btn_follow.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+            }
             TextView txt = mView.findViewById(R.id.like_num);
             txt.setText(String.valueOf(json.getInt("like_num")));
             txt = mView.findViewById(R.id.post_comment_num);
