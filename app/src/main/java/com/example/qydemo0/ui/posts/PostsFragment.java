@@ -129,9 +129,9 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
             case R.id.button_post_recommendation:
                 if(switcher == 0) break;
                 switcher = 0;
-                ((TextView)v).setTextColor(getResources().getColor(R.color.red));
+                ((TextView)v).setTextColor(getActivity().getColor(R.color.red));
                 t = getActivity().findViewById(R.id.button_post_follow);
-                t.setTextColor(getResources().getColor(R.color.black));
+                t.setTextColor(getActivity().getColor(R.color.black));
                 Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_right_translate_alpha_500ms);
                 f_view.startAnimation(animation);
                 ChangeVisibility changeVisibility = new ChangeVisibility();

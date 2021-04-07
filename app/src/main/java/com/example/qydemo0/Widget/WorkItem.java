@@ -14,7 +14,6 @@ import com.example.qydemo0.R;
 
 public class WorkItem extends LinearLayout {
 
-    public static int height = 120;
 
     private Context mContext = null;
     private View mView = null;

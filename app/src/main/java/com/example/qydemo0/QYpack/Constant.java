@@ -30,7 +30,9 @@ public class Constant {
         follow_url = "https://api.yhf2000.cn/api/qingying/v1/user/follow/",
         user_recommendation_url = "https://api.yhf2000.cn/api/qingying/v1/recommendation/user/",
         post_recommendation_url = "https://api.yhf2000.cn/api/qingying/v1/recommendation/post/",
-        post_url = "https://api.yhf2000.cn/api/qingying/v1/post/";
+        post_url = "https://api.yhf2000.cn/api/qingying/v1/post/",
+        learn_url = "https://api.yhf2000.cn/api/qingying/v1/learning/",
+        learn_list_url = "https://api.yhf2000.cn/api/qingying/v1/learning/learn/";
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="5dp"
+    android:paddingVertical="10dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#6a6da9"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/medal"
+            android:src="@drawable/ic__gold_medal"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:text="97"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:id="@+id/score"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:layout_height="match_parent"
+            android:textColor="#d3d7d4"
+            android:id="@+id/remark"
+            android:text="你做的很好"
+            android:textSize="16sp"
+            android:layout_gravity="center"
+            android:gravity="start|center_vertical"
+            android:maxLines="1"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
