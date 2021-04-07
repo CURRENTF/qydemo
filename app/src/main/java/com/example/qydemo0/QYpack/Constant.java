@@ -42,7 +42,7 @@ public class Constant {
         MAX_FILE_SIZE = 1024 * 1024 * 50,
         MAX_POST_TEXT_NUM = 250,
         lazy_load_num = 10,
-        ani_time = 200,
+        ani_time = 500,
         least_time = 3000; // 50MB
 
     public String database = "QYdata";

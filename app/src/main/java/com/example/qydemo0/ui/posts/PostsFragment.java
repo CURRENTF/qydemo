@@ -177,6 +177,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                     else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                     lastF_id = View.generateViewId();
                     postItem.setId(lastF_id);
+                    postItem.setLayoutParams(layoutParams);
                     f_layout.addView(postItem);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -239,10 +240,10 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
                 rc_view.setVisibility(View.VISIBLE);
-                f_view.setVisibility(View.INVISIBLE);
+                f_view.setVisibility(View.GONE);
             }
             else {
-                rc_view.setVisibility(View.INVISIBLE);
+                rc_view.setVisibility(View.GONE);
                 f_view.setVisibility(View.VISIBLE);
             }
         }

@@ -147,8 +147,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         ButterKnife.bind(this);
 
         initLearnVideo();
-        Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
-                opt.add(R.drawable.l0);
+//        Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
+        opt.add(R.drawable.l0);
         opt.add(R.drawable.l1);
 
         is_learn = false;

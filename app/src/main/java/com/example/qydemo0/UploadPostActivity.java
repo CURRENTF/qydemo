@@ -140,6 +140,8 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
         else {
             g.setVisibility(View.VISIBLE);
+            FloatingActionButton fbtn = findViewById(R.id.button_upload_post);
+            fbtn.setVisibility(View.VISIBLE);
             myWork.setVisibility(View.GONE);
             switcher = 0;
         }
