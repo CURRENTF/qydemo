@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
+import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 public class SimplePlayerActivity extends AppCompatActivity {
 
@@ -17,14 +20,15 @@ public class SimplePlayerActivity extends AppCompatActivity {
 
     OrientationUtils orientationUtils;
 
-    String source1="";
+    String source1="https://file.yhf2000.cn/dash/f2/61/f261bc0ac6c84b1afbacc18d0bc451f2ba049579919ae63c4a6fc6b02236b9f6-GWuMDd./manifest.mpd";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_player);
-        Bundle bundle = this.getIntent().getBundleExtra("result");
-        source1 = bundle.getString("video_url");
+        PlayerFactory.setPlayManager(Exo2PlayerManager.class);
+//        Bundle bundle = this.getIntent().getBundleExtra("result");
+//        source1 = bundle.getString("video_url");
         init();
     }
 

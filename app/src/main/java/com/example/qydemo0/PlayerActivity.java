@@ -183,8 +183,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
-                startActivity(intent);
+
             }
         });
 
@@ -428,6 +427,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Log.i("whc123",""+work_bean.getMsg());
         List<String> lists = new ArrayList<>();
         lists.add(work_bean.getData().getVideo_url().getUrl().getOrg());
+        //lists.add("https://file.yhf2000.cn/dash/f2/61/f261bc0ac6c84b1afbacc18d0bc451f2ba049579919ae63c4a6fc6b02236b9f6-GWuMDd./manifest.mpd");
         init_player(lists,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
@@ -1029,6 +1029,21 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            return null;
+        }
+    }
+
+    public class readyToJumpToLearn extends AsyncTask<Void, Void, Integer>{
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            //String[] callTo = {"work", "int", ""+wid,}
+            //JSONObject rjs = new JSONObject(cur_request.advancePost())
             return null;
         }
     }

@@ -1,5 +1,9 @@
 package com.example.qydemo0;
 
+/*
+传给我学习项目id, work_id, 开始位置
+ */
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -13,6 +17,8 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.telephony.mbms.MbmsErrors;
+import android.text.BoringLayout;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -39,7 +45,9 @@ import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.koushikdutta.async.http.body.JSONObjectBody;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -92,11 +100,14 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private Boolean is_compare;
     private List<List<Long>> wrong_time = new ArrayList<>();
     private List<List<Boolean>> wrong_id = new ArrayList<>();
+    private int all_learn_depose_video_num = 0;
     private int cur_compare_id = 0;
     private ProgressDialog progressDialog;
     ImageView people_img;
     SeekBar cur_process;
     List<Integer> opt = new ArrayList();
+    private int learning_id = -1;
+    private int segment_id = -1;
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
 
@@ -129,14 +140,14 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private TextView changeSpeed;
 
+    private int wid;
+
     RelativeLayout.LayoutParams people_all = new RelativeLayout.LayoutParams(350, 910);
     RelativeLayout.LayoutParams people_tiny = new RelativeLayout.LayoutParams(1,1);
+    private JSONArray urls_jsonarry = new JSONArray();
 
     private QYrequest learn_request = new QYrequest();
     private  QYFile learn_file = new QYFile();
-
-    public LearnDanceActivity() throws IOException {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,11 +156,23 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         setWindow();
         setContentView(R.layout.activity_learn_dance);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+
+        //学习项目id
+        learning_id = 10;
+        //work id
+        wid = 16;
+        //开始位置
+        current_video_number = 0;
+
+
         initViews();
         ButterKnife.bind(this);
+        new InitAllLearn().execute(wid);
+    }
 
+    private void init_learn_pager(){
         initLearnVideo();
-        //Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
         opt.add(R.drawable.l0);
         opt.add(R.drawable.l1);
 
@@ -175,7 +198,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         //增加封面
         coverImageView = new ImageView(this);
         coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //coverImageView.setImageResource(R.mipmap.xxx1);
+        //\coverImageView.setImageResource(R.mipmap.xxx1);
         detailPlayer.setThumbImageView(coverImageView);
 
         resolveNormalVideoUI();
@@ -214,9 +237,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 detailPlayer.getCurrentPlayer().setIsTouchWigetFull(true);
 
                 if(is_learn && !is_compare){
-                detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
-                detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
-                Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
+                    detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
+                    detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
+                    Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
                     AudioPlayer audioPlayer = null;
                     try {
                         audioPlayer = new AudioPlayer("https://downsc.chinaz.net/Files/DownLoad/sound1/202007/13182.mp3");
@@ -232,7 +255,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                //new SleepNowThenPlay().execute();
+                    //new SleepNowThenPlay().execute();
                 }
             }
 
@@ -240,8 +263,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             public void onAutoComplete(String url, Object... objects) {
                 super.onAutoComplete(url, objects);
                 if(is_learn && !is_compare){
-                stopRecord();
-                if((new File(path_cur)).isFile()) {
+                    stopRecord();
+                    if((new File(path_cur)).isFile()) {
                         System.out.println("Oh yeah yes");
                     }
                 }
@@ -314,18 +337,16 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!is_learn) {
-                    current_video_number++;
-                    if (current_video_number >= all_num) {
-                        current_video_number = 0;
+                try {
+                    if (!is_learn) {
+                        new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
+                    } else if (is_compare) {
+                        stop_compare_video();
+                        detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
+                        detailPlayer.startPlayLogic();
                     }
-                    detailPlayer.setUp(all_learn_video.get(current_video_number), true, "韩国小姐姐的舞蹈视频");
-                    loadFirstFrameCover(all_learn_video.get(current_video_number).get(0).getUrl());
-                    detailPlayer.getCurrentPlayer().startPlayLogic();
-                }else if(is_compare){
-                    stop_compare_video();
-                    detailPlayer.setUp(all_learn_video.get(current_video_number), true, "韩国小姐姐的舞蹈视频");
-                    detailPlayer.startPlayLogic();
+                }catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -363,14 +384,58 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         detailPlayer.setIs_double(true);
     }
 
-    private void initLearnVideo() {
-        String[] source = {"https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd","http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4","http://vjs.zencdn.net/v/oceans.mp4","https://media.w3.org/2010/05/sintel/trailer.mp4"};
-        for(int i=0;i<all_num;i++){
-            SwitchVideoModel switchVideoModel = new SwitchVideoModel("1080P", source[i]);
-            List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
-            list.add(switchVideoModel);
-            all_learn_video.add(list);
+    private void go_to_next_segment(){
+        try {
+        current_video_number++;
+        if (current_video_number >= all_learn_depose_video_num) {
+            current_video_number = 0;
         }
+            detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
+            loadFirstFrameCover(all_learn_video.get(current_video_number).get(0).getUrl());
+            detailPlayer.getCurrentPlayer().startPlayLogic();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initLearnVideo() {
+        try {
+        for(int i=0;i<urls_jsonarry.length();i++){
+
+            JSONObject urls_cur_item = urls_jsonarry.getJSONObject(i).getJSONObject("video").getJSONObject("url");
+
+            SwitchVideoModel switchVideoModel;
+
+            List<SwitchVideoModel> list = new ArrayList<>();
+
+            if(urls_cur_item.has("1080P")){
+                switchVideoModel = new SwitchVideoModel("1080P", urls_cur_item.getString("1080P"));
+                list.add(switchVideoModel);
+            }
+            if(urls_cur_item.has("720P")){
+                switchVideoModel = new SwitchVideoModel("720P", urls_cur_item.getString("720P"));
+                list.add(switchVideoModel);
+            }
+            if(urls_cur_item.has("480P")){
+                switchVideoModel = new SwitchVideoModel("480P", urls_cur_item.getString("480P"));
+                list.add(switchVideoModel);
+            }
+            if(urls_cur_item.has("360P")){
+                switchVideoModel = new SwitchVideoModel("360P", urls_cur_item.getString("360P"));
+                list.add(switchVideoModel);
+            }
+            if(urls_cur_item.has("自动")){
+                switchVideoModel = new SwitchVideoModel("自动", urls_cur_item.getString("自动"));
+                list.add(switchVideoModel);
+            }
+
+            all_learn_video.add(list);
+
+        }
+
+        } catch (JSONException e) {
+                e.printStackTrace();
+            }
     }
 
     private void setWindow() {
@@ -567,6 +632,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             e.printStackTrace();
         }
     }
+
     /**
      * 停止录制
      */
@@ -754,7 +820,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             hideProgressDialog();
             if(resJson != null){
                 try {
-                    detailPlayer.setUp(resJson.getJSONObject("video_url").getString("1080P"), true, "对比视频");
+                    detailPlayer.setUp(resJson.getJSONObject
+                            ("video_url").getString("1080P"), true, "对比视频");
                     wrong_time.clear();
                     JSONArray wrong_time_json = resJson.getJSONObject("evaluation").getJSONArray("error");
                     for(int i=0;i<wrong_time_json.length();i++){
@@ -783,4 +850,65 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         }
 
     }
+
+    public class InitAllLearn extends AsyncTask<Integer, Void ,Boolean>{
+        @Override
+        protected void onPostExecute(Boolean aVoid) {
+            super.onPostExecute(aVoid);
+            if(aVoid)
+                init_learn_pager();
+            else
+                Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            try {
+                JSONObject res_json = new JSONObject(learn_request.advanceGet(Constant.mInstance.work_url+"breakdown/"+integers[0]+"/","Authorization", 
+                        GlobalVariable.mInstance.token));
+                if(!res_json.has("msg") || !res_json.getString("msg").equals("Success")) return null;
+                JSONObject res_data_json = res_json.getJSONObject("data");
+                all_learn_depose_video_num = res_data_json.getInt("segment_num");
+                urls_jsonarry = res_data_json.getJSONArray("segment_info");
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+    }
+
+    public class PostRecord extends AsyncTask<Integer, Void, Boolean>{
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(!aBoolean){
+                Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            try {
+            String[] rjs = {"learning", "int", ""+integers[0], "segment", "int", ""+integers[1], "status", "int", ""+integers[2]};
+                JSONObject rjsr = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(rjs), Constant.mInstance.learn_url + "record/", "Authorization",
+                        GlobalVariable.mInstance.token));
+                if(rjsr.getString("msg").equals("Success")){
+                    if(integers[2]==2) {
+                        go_to_next_segment();
+                        new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
+                    }
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    }
+
 }
