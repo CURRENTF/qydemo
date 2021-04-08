@@ -39,6 +39,9 @@ import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
+import com.example.qydemo0.QYpack.TimeTool;
+import com.example.qydemo0.Widget.QYScrollView;
+import com.example.qydemo0.Widget.WorkItem;
 import com.example.qydemo0.bean.Belong;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentBean;
@@ -56,6 +59,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.listener.LockClickListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -81,7 +85,7 @@ import javax.microedition.khronos.opengles.GL;
 
 public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.post_detail_nested_scroll)
-    NestedScrollView postDetailNestedScroll;
+    QYScrollView postDetailNestedScroll;
 
     //推荐使用StandardGSYVideoPlayer，功能一致
     //CustomGSYVideoPlayer部分功能处于试验阶段
@@ -102,9 +106,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private BottomSheetDialog dialog;
     private Boolean is_follow = false;
 
-    private String testJson2 = "{\"status\":200,\"msg\":\"Success\",\"data\":[{\"cid\":1,\"text\":\"我的评论哇\",\"like_num\":0,\"created_time\":\"2021-04-06T21:51:31.906632\",\"is_public\":true,\"is_delete\":false,\"like\":false,\"belong\":{\"uid\":5,\"username\":\"hjt666\",\"img_url\":\"https://file.yhf2000.cn/img/74/76/7476cefafd47dc4102d040c790be27f797765200d66e25bacc4a2e92b1324b7a-AFjRMm.use\"},\"replies\":null}]}";
-
-    private String workJson = "{\"id\":8,\"name\":\"飞机\",\"introduction\":\"帅\",\"classifications\":\"女人\",\"tags\":[\"牛肉\"],\"play_num\":0,\"like_num\":0,\"favorites_num\":0,\"video_url\":{\"org\":\"https:\\/\\/file.yhf2000.cn\\/dash\\/da\\/b7\\/dab79fb8a75caf21a150f2cd1f4c28f86d4c0a4c4aa94322f1db472ee7aa4859-UeLIfd.use\\/manifest.mpd\"},\"cover_url\":\"https:\\/\\/file.yhf2000.cn\\/img\\/ff\\/57\\/ff5786d9741a38ea07c18e88806a5bdfcd29f849ade52d445a3bcff35922fd6e-zLTgBX.use\"}";
     private boolean isPlay;
     private boolean isPause;
     private boolean isRelease;
@@ -124,21 +125,61 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private FragmentDataForMain  user_info_json =  new FragmentDataForMain();
 
+    private LinearLayout render_content;
+    private List<WorkItem> render_items = new ArrayList<>();
+    private QYrequest cur_request = new QYrequest();
+    private QYScrollView post_detail_nested_scroll = null;
+    TimeTool timeTool = new TimeTool();
+    private int start_next = 0;
+    private int cur_comment_length = 7;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         Bundle bundle = this.getIntent().getExtras();
         ButterKnife.bind(this);
+//        QYScrollView qyscrollview_comment = (QYScrollView) findViewById(R.id.qyscrollview_comment);
         int wid = bundle.getInt("id");
         Log.d("hjt.wid", String.valueOf(wid));
-        new GetCommentJson().execute(wid);
+        new GetCommentJson().execute(wid,0,6);
         new GetWorkJson().execute(wid);
+        render_content = (LinearLayout) findViewById(R.id.Render_content);
+        post_detail_nested_scroll = (QYScrollView) findViewById(R.id.post_detail_nested_scroll);
+        post_detail_nested_scroll.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
+            @Override
+            public void onScrolledToBottom() {
+                if(!timeTool.checkFreq()) return;
+                new getRec().execute(wid,start_next,10);
+                Log.d("hjt.scroll.bottom", "true");
+            }
+
+            @Override
+            public void onScrolledToTop() {
+                Log.d("hjt.scroll.top", "true");
+            }
+        });
+//        qyscrollview_comment.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
+//            @Override
+//            public void onScrolledToBottom() {
+//                if(!timeTool.checkFreq()) return;
+//                new GetCommentJson().execute(wid,0,cur_comment_length);
+//                cur_comment_length+=1;
+//                Log.d("hjt.scroll.bottom", "true");
+//            }
+//
+//            @Override
+//            public void onScrolledToTop() {
+//                Log.d("hjt.scroll.top", "true");
+//            }
+//        });
+
+        new getRec().execute(wid,start_next,10);
     }
 
     private void init_button_and_pager(){
-        Button btn_learn = findViewById(R.id.learn_dance);
-        Button btn_free_dance = (Button) findViewById(R.id.free_dance);
+        ImageView btn_learn = (ImageView) findViewById(R.id.learn_dance);
+        ImageView btn_free_dance = (ImageView) findViewById(R.id.free_dance);
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +193,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(View v) {
                 Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
                 ArrayList<String> data1 = new ArrayList<String>();
-                data1.add("1");
+                data1.add("0");
                 data1.add(work_bean.getData().getVideo_url().getUrl().getOrg());
                 intent.putStringArrayListExtra("params", data1);
                 startActivity(intent);
@@ -175,7 +216,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(View v) {
                 comment_pager.setVisibility(View.GONE);
                 recall_pager.setVisibility(View.GONE);
-                detail_pager.setVisibility(View.VISIBLE);
+                post_detail_nested_scroll.setVisibility(View.VISIBLE);
                 intro.setTextColor(context.getResources().getColor(R.color.qy_pink));
                 comme.setTextColor(context.getResources().getColor(R.color.gray));
             }
@@ -184,7 +225,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         comme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                detail_pager.setVisibility(View.GONE);
+                post_detail_nested_scroll.setVisibility(View.GONE);
                 comment_pager.setVisibility(View.VISIBLE);
                 recall_pager.setVisibility(View.VISIBLE);
                 comme.setTextColor(context.getResources().getColor(R.color.qy_pink));
@@ -779,9 +820,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected String doInBackground(Integer... ints) {
-            String[] callJson = {"start","int","0","lens","int","20"};
             String[] ss = new String[0];
-            String res = work_request.advanceMethod("GET",GenerateJson.universeJson2(ss),Constant.mInstance.comment+"0/"+ints[0]+"/?start=0&lens=20", "Authorization", GlobalVariable.mInstance.token);
+            String res = work_request.advanceMethod("GET",GenerateJson.universeJson2(ss),Constant.mInstance.comment+"0/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2], "Authorization", GlobalVariable.mInstance.token);
             Log.i("commentJson",res);
             //Log.i("token",""+ GlobalVariable.mInstance.token);
             return res;
@@ -941,6 +981,55 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 isCanceF.setVisibility(View.GONE);
                 isFollow.setVisibility(View.VISIBLE);
             }
+        }
+    }
+
+    public class getRec extends AsyncTask<Integer, Void, JSONArray>{
+        @Override
+        protected void onPostExecute(JSONArray aVoid) {
+            super.onPostExecute(aVoid);
+            start_next += 10;
+            for(int i=0;i<aVoid.length();i++)
+            {
+                JSONObject cur_json_object = null;
+                try {
+                    cur_json_object = aVoid.getJSONObject(i);
+                    WorkItem render_item = new WorkItem(PlayerActivity.this);
+                    render_item.init(cur_json_object.getJSONObject("cover").getString("url"),cur_json_object.getString("name"),
+                            cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
+                            cur_json_object.getString("introduction"));
+                    render_items.add(render_item);
+                    render_content.addView(render_item);
+                    JSONObject finalCur_json_object = cur_json_object;
+                    render_item.findViewById(R.id.work_item_layout).setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent();
+                            intent.setClass(PlayerActivity.this, PlayerActivity.class);
+                            try {
+                                intent.putExtra("id", finalCur_json_object.getInt("id"));
+                                startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        protected JSONArray doInBackground(Integer... ints) {
+            JSONObject res_json = null;
+            try {
+                res_json = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/recommendation/work/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2],"Authorization", GlobalVariable.mInstance.token));
+                return(res_json.getJSONArray("data"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 

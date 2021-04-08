@@ -8,6 +8,7 @@ import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +30,7 @@ import com.coloros.ocs.ai.cv.CVUnitClient;
 import com.coloros.ocs.base.common.ConnectionResult;
 import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
 import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 
 import java.io.ByteArrayInputStream;
@@ -48,27 +50,21 @@ public class testStyle extends AppCompatActivity {
     ImageView test_img;
     Bitmap bitmap;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i("onCreate", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_style);
+        test_img = (ImageView) findViewById(R.id.test_img);
         requestPermissions();
-        mBtnConnect = findViewById(R.id.test);
-        //test_img = (ImageView) findViewById(R.id.test_img);
-
         FileInputStream fis = null;
         try {
-            fis = new FileInputStream("/sdcard/DCIM/Camera/IMG_20180820_210432.jpg");
+            fis = new FileInputStream("/sdcard/DCIM/Camera/B612Kaji_20190213_142153_075.jpg");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         bitmap  = BitmapFactory.decodeStream(fis);
-        if (bitmap != null){
-            Log.i("bitmap is ok", "pass");
-        }
-
+        if(bitmap!=null) Log.i("bitmap","pass");
         mCVClient = CVUnit.getVideoStyleTransferDetectorClient
                 (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
             @Override
@@ -86,8 +82,10 @@ public class testStyle extends AppCompatActivity {
             @Override
             public void onServiceConnect() {
                 Log.i("TAG", "initService: onServiceConnect");
-                startCode = mCVClient.start();
-                Log.i("TAG", "initService: start success");
+                int startCode = mCVClient.start();
+                if(startCode==0){
+                    new test_style().execute(bitmap);
+                }
             }
 
             @Override
@@ -95,23 +93,7 @@ public class testStyle extends AppCompatActivity {
                 Log.e("TAG", "initService: onServiceDisconnect: ");
             }
         });
-//
-        mBtnConnect.setOnClickListener( v -> {
-                    if (startCode == 0)
-                    {
-                        new test_style().execute();
-                    } else {
-                        Log.i("startCode", String.valueOf(startCode));
-                    }
-                }
-        );
 
-//        if (mCVClient != null) {
-//            mCVClient.stop();
-//        }
-//
-//        mCVClient.releaseService();
-//        mCVClient = null;
     }
 
     private void requestPermissions() {
@@ -131,15 +113,15 @@ public class testStyle extends AppCompatActivity {
         }
     }
 
-    public class test_style extends AsyncTask<Void, Void, Bitmap>{
+    public class test_style extends AsyncTask<Bitmap, Void, Bitmap> {
         @Override
         protected void onPostExecute(Bitmap aVoid) {
             super.onPostExecute(aVoid);
 
-            Log.i("here","stop");
+            Log.i("here", "stop");
 
-            //test_img.setImageBitmap(aVoid);
-
+            test_img.setImageBitmap(aVoid);
+            //Log.i("save_img",Img.saveImg(aVoid,"hhh.jpg",testStyle.this));
             if (mCVClient != null) {
                 mCVClient.stop();
             }
@@ -148,31 +130,38 @@ public class testStyle extends AppCompatActivity {
         }
 
         @Override
-        protected Bitmap doInBackground(Void... voids) {
+        protected Bitmap doInBackground(Bitmap... voids) {
             FrameInputSlot inputSlot = (FrameInputSlot) mCVClient.createInputSlot();
-            inputSlot.setTargetBitmap(bitmap);
+            inputSlot.setTargetBitmap(voids[0]);
             FrameOutputSlot outputSlot = (FrameOutputSlot) mCVClient.createOutputSlot();
             mCVClient.process(inputSlot, outputSlot);
             FrameData frameData = outputSlot.getOutFrameData();
-            System.out.println("look at here : " + frameData.getData());
-            Log.i("length",""+frameData.getData().length);
-            try {
-                InputStream is = new ByteArrayInputStream(frameData.getData());
-                OutputStream out = new FileOutputStream("/sdcard/1/123121312.jpg");
-                int len=0;
-                byte[] buff = new byte[1024];
-                while ((len = is.read(buff)) != -1) {
-                    out.write(buff, 0, len);
+            byte[] outImageBuffer = frameData.getData();
+            Log.d(TAG, "startProcess: " + outImageBuffer.length);
+            Log.d(TAG, "startProcess outFrame.width = " + frameData.width);
+            Log.d(TAG, "startProcess outFrame.height = " + frameData.height);
+
+// RGB buffer.
+            int[] colors = new int[outImageBuffer.length / 3];
+            for (int j = 0; j < frameData.height; ++j) {
+
+                for (int i = 0; i < frameData.width; ++i) {
+
+                    int red = outImageBuffer[3 * (j * frameData.width + i)];
+
+                    int green = outImageBuffer[3 * (j * frameData.width + i) + 1];
+
+                    int blue = outImageBuffer[3 * (j * frameData.width  + i) + 2];
+
+                    int alpha = 0xFF;
+
+                    colors[j * frameData.width + i] = (alpha << 24) | (red << 16) | (green << 8) | (blue);
                 }
-                is.close();
-                out.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            Bitmap outImageBuffer = BitmapFactory.decodeByteArray(frameData.getData(), 0, frameData.getData().length);
-            return null;
+
+            Bitmap resultBmp = Bitmap.createBitmap(colors, frameData.width, frameData.height, Bitmap.Config.ARGB_8888);
+            System.out.println(String.valueOf(resultBmp==null));
+            return resultBmp;
         }
     }
 

@@ -3,11 +3,41 @@
     android:id="@+id/activity_detail_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/introduction_or_comment"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="200dp"
+        android:orientation="horizontal"
+        >
 
-    <androidx.core.widget.NestedScrollView
+        <TextView
+            android:id="@+id/introduction"
+            android:text="简介"
+            android:textColor="@color/gray"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/comment"
+            android:text="评论"
+            android:textColor="@color/gray"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+    <com.example.qydemo0.Widget.QYScrollView
         android:id="@+id/post_detail_nested_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/introduction_or_comment"
         android:fillViewport="true">
 
         <LinearLayout
@@ -15,43 +45,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/post_media_height" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <LinearLayout
-                    android:id="@+id/introduction_or_comment"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    >
-
-                    <TextView
-                        android:id="@+id/introduction"
-                        android:text="简介"
-                        android:textColor="@color/gray"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        />
-
-                    <TextView
-                        android:id="@+id/comment"
-                        android:text="评论"
-                        android:textColor="@color/gray"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        />
-
-                </LinearLayout>
                 <View
-                    android:layout_below="@+id/introduction_or_comment"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/gray"/>
@@ -59,7 +56,6 @@
                     android:id="@+id/detail_page_above_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/introduction_or_comment"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -75,7 +71,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/bad_smile"
-                            android:layout_marginLeft="16dp"/>
+                            android:layout_marginLeft="10dp"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -93,44 +89,49 @@
 
                         </LinearLayout>
                         <RelativeLayout
-                            android:layout_width="60dp"
-                            android:layout_height="20dp"
+                            android:layout_width="70dp"
+                            android:layout_height="30dp"
                             android:layout_margin="10dp"
                             >
                         <Button
                             android:id="@+id/is_follow"
-                            android:layout_width="60dp"
-                            android:layout_height="20dp"
-                            android:text="+关注"
-                            android:textSize="12dp"
+                            android:layout_width="100dp"
+                            android:layout_height="70dp"
+                            android:text="+ 关注"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:padding="2dp"
-                            android:background="@color/red"
+                            android:background="#FF69B4"
                             />
+
                             <Button
                                 android:id="@+id/is_cancel_follow"
-                                android:layout_width="60dp"
-                                android:layout_height="20dp"
-                                android:text="取消关注"
-                                android:textSize="12dp"
+                                android:layout_width="100dp"
+                                android:layout_height="70dp"
+                                android:text="已关注"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
                                 android:padding="2dp"
-                                android:background="@color/red"
+                                android:background="@color/gray"
                                 />
+
                         </RelativeLayout>
                     </LinearLayout>
                     <TextView
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_height="26dp"
                         android:id="@+id/detail_page_title"
                         android:layout_width="wrap_content"
                         android:layout_marginRight="50dp"
                         android:text="12312132123132111111111"
+                        android:textFontWeight="10"
                         android:textColor="#363636"
                         android:textSize="18sp" />
 
                 <LinearLayout
-                    android:layout_marginTop="5dp"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:orientation="horizontal"
                     >
                     <LinearLayout
@@ -143,7 +144,7 @@
                             android:layout_width="15dp"
                             android:layout_height="15dp"
                             android:src="@drawable/play_number"
-                            android:layout_marginLeft="25dp"/>
+                            android:layout_marginLeft="10dp"/>
 
                         <TextView
                             android:id="@+id/video_play_num"
@@ -166,7 +167,8 @@
                             android:layout_width="15dp"
                             android:layout_height="15dp"
                             android:src="@drawable/comment_tiny"
-                            android:layout_marginLeft="15dp"/>
+                            android:padding="0.7dp"
+                            android:layout_marginLeft="5dp"/>
 
                         <TextView
                             android:id="@+id/video_comment_num"
@@ -182,13 +184,12 @@
                 </LinearLayout>
 
 
-
                     <TextView
-                        android:layout_marginTop="5dp"
                         android:id="@+id/detail_page_story"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="18dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:ellipsize="end"
                         android:maxLines="3"
@@ -197,29 +198,34 @@
                         android:textSize="10sp" />
 
                     <LinearLayout
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:orientation="horizontal"
                         >
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:orientation="vertical"
                             >
                         <ImageView
                             android:id="@+id/video_like"
-                            android:layout_width="38dp"
-                            android:layout_height="38dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:src="@drawable/icon_comment_like"
                             android:layout_marginLeft="20dp"
+                            android:paddingTop="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="10dp"
                             android:padding="6dp"/>
 
                         <TextView
                             android:id="@+id/video_like_num"
                             android:layout_width="38dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
+                            android:layout_marginLeft="25dp"
                             android:text="123"
                             android:textSize="10dp"
                             android:gravity="center"
@@ -229,12 +235,17 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:orientation="vertical"
                             >
                             <ImageView
                                 android:id="@+id/video_dislike"
-                                android:layout_width="38dp"
-                                android:layout_height="38dp"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:paddingTop="10dp"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:paddingBottom="10dp"
                                 android:src="@drawable/dislike"
                                 android:layout_marginLeft="20dp"
                                 android:padding="6dp"/>
@@ -243,30 +254,59 @@
                                 android:id="@+id/video_dislike_num"
                                 android:layout_width="38dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
+                                android:layout_marginLeft="25dp"
                                 android:gravity="center"
                                 android:text="123"
                                 android:textSize="10dp"
                                 />
                         </LinearLayout>
-
-                        <Button
-                            android:id="@+id/learn_dance"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            >
+                        <ImageView
+                            android:src="@drawable/learn_view"
+                            android:id="@+id/learn_dance"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_marginLeft="20dp"
                             android:padding="5dp"
                             android:text="学习"
                             />
-
-                        <Button
-                            android:id="@+id/free_dance"
+                            <TextView
+                            android:layout_width="38dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:text="学习"
+                            android:textSize="10dp"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            >
+                        <ImageView
+                            android:src="@drawable/free_dance_view"
+                            android:id="@+id/free_dance"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_marginLeft="20dp"
                             android:padding="5dp"
-                            android:text="自由舞"
                             />
+                            <TextView
+                            android:layout_width="38dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:text="自由舞"
+                            android:textSize="10dp"
+                            android:gravity="center"
+                            />
+                    </LinearLayout>
 
                     </LinearLayout>
 
@@ -278,22 +318,13 @@
                         android:layout_marginLeft="16dp"
                         android:background="#e6e6e6"/>
                 </LinearLayout>
-
                 <LinearLayout
-                    android:id="@+id/detail_page_comment_container"
+                    android:id="@+id/Render_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="50dp"
+                    android:layout_below="@id/detail_page_above_container"
+                    android:layout_marginTop="5dp"
                     android:orientation="vertical">
-                    <com.example.qydemo0.view.CommentExpandableListView
-                        android:id="@+id/detail_page_lv_comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="64dp"
-                        android:layout_below="@+id/detail_player"
-                        android:divider="@null"
-                        android:listSelector="@android:color/transparent"
-                        android:scrollbars="none" />
                 </LinearLayout>
 
             </RelativeLayout>
@@ -301,7 +332,31 @@
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </com.example.qydemo0.Widget.QYScrollView>
+
+    <com.example.qydemo0.Widget.QYScrollView
+        android:id="@+id/qyscrollview_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/introduction_or_comment"
+        >
+        <LinearLayout
+            android:id="@+id/detail_page_comment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+            <com.example.qydemo0.view.CommentExpandableListView
+                android:id="@+id/detail_page_lv_comment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="64dp"
+                android:layout_below="@+id/detail_player"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" />
+        </LinearLayout>
+    </com.example.qydemo0.Widget.QYScrollView>
 
     <com.example.qydemo0.QYpack.SampleVideo
         android:id="@+id/detail_player"
