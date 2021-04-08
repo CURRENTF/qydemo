@@ -12,6 +12,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qydemo0.DetailPostActivity;
 import com.example.qydemo0.PlayerActivity;
@@ -86,6 +87,9 @@ public class PostItem extends LinearLayout {
             if(aBoolean){
                 btn_follow.setText("已关注");
             }
+            else {
+                Toast.makeText(mContext, "关注失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -119,7 +123,7 @@ public class PostItem extends LinearLayout {
         post_content = mView.findViewById(R.id.post_content);
         btn_follow = findViewById(R.id.btn_follow);
         try {
-            if(json.getBoolean("follow")){
+            if(json.getBoolean("is_follow")){
                 btn_follow.setText("已关注");
             }
             else {
@@ -255,7 +259,10 @@ public class PostItem extends LinearLayout {
                 Intent intent = new Intent();
                 intent.setClass((Activity)mContext, UserDetailActivity.class);
                 try {
-                    intent.putExtra("uid", json.getJSONObject("belong").getInt("uid"));
+                    JSONObject belong = json.getJSONObject("belong");
+                    intent.putExtra("uid", belong.getInt("uid"));
+                    intent.putExtra("username", belong.getString("username"));
+                    intent.putExtra("avatar", belong.getString("img_url"));
                     ((Activity)mContext).startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();

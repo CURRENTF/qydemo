@@ -102,6 +102,7 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
                 for(int i = 0; i < jsonArray.length(); i++){
                     LittleLearnItem item = new LittleLearnItem(mContext);
 //                    item.init()
+                    // todo
                     records.addView(item);
                 }
             }
