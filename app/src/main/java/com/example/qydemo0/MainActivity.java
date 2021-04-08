@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
+                Intent intent = new Intent(MainActivity.this, RenderQueueActivity.class);
                 startActivity(intent);
             }
         });

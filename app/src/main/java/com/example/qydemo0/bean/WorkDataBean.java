@@ -129,8 +129,8 @@ public class WorkDataBean {
         this.tags = tags;
     }
 
-    public void setVideo_url(videoUrlBean video_url) {
-        this.video = video_url;
+    public void setVideo(videoUrlBean video) {
+        this.video = video;
     }
 
     public String getIntroduction() {
@@ -146,7 +146,7 @@ public class WorkDataBean {
         return tags;
     }
 
-    public videoUrlBean getVideo_url() {
+    public videoUrlBean getVideo() {
         return video;
     }
 }

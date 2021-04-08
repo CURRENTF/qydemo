@@ -70,7 +70,7 @@ public class RenderQueueActivity extends AppCompatActivity {
 
         private LeftSlideView mLeftSlideView;
 
-        private String[] parpams = {"123","456","789","123","456","789","123","456","789"};
+        private int ss=0;
 
         private QYrequest cur_request = new QYrequest();
 
@@ -130,22 +130,22 @@ public class RenderQueueActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            TextView head = (TextView) holder.itemView.findViewById(R.id.render_params);
+            head.setText(""+ss);
+            ss++;
             TextView deletee = (TextView) holder.itemView.findViewById(R.id.btn_delete);
             deletee.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(position == 0){
-                        Toast.makeText(mContext, "0", Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(mContext, "其他", Toast.LENGTH_SHORT).show();
-                    }
+                    notifyItemRemoved(position);
+                    notifyAll();
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return parpams.length;
+            return 10;
         }
 
         /**

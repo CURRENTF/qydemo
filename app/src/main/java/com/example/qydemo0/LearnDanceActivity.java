@@ -153,10 +153,6 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private QYrequest learn_request = new QYrequest();
     private  QYFile learn_file = new QYFile();
 
-    public LearnDanceActivity() throws IOException {
-
-    }
-
     boolean mirror_status = false;
 
     @Override
@@ -167,14 +163,14 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         setContentView(R.layout.activity_learn_dance);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
 
         //学习项目id
-        learning_id = 10;
+        learning_id = Integer.valueOf(list.get(0));
         //work id
-        wid = 16;
+        wid = Integer.valueOf(list.get(1));
         //开始位置
-        current_video_number = 0;
-
+        current_video_number = Integer.valueOf(list.get(2));
 
         initViews();
         ButterKnife.bind(this);
@@ -204,7 +200,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         changeSpeed = (TextView) findViewById(R.id.change_speed);
 
-        detailPlayer.setUp(all_learn_video.get(0), true, "韩国小姐姐的舞蹈视频");
+        try {
+            detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         //增加封面
         coverImageView = new ImageView(this);
