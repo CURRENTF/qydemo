@@ -327,7 +327,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                 video_json = json;
                 try {
                     if(json.getBoolean("rapid_upload")){
-                        Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
+//                        Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
                     }
                     else {
                         UploadVideo uploadVideo = new UploadVideo();

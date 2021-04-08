@@ -422,7 +422,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }).start();
 
-                    
+
                 }
             }
         });
@@ -612,7 +612,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         Log.e("list_size", ""+player_urls);
-        
+
         init_player(lists,list_name,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),

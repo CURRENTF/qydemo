@@ -5,8 +5,8 @@
     <translate
         android:fromXDelta="0%p"
         android:toXDelta="0%p"
-        android:fromYDelta="0%p"
-        android:toYDelta="-70%p"
+        android:fromYDelta="0%"
+        android:toYDelta="-70%"
         android:duration="300"/>
     <!--缩放动画标签-->
     <!--    <scale-->
