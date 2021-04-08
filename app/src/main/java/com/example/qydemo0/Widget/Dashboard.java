@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,13 +21,14 @@ import com.example.qydemo0.FollowerAndFanActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
+import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserSettingActivity;
-import com.example.qydemo0.ui.dashboard.DashboardFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,6 +72,21 @@ public class Dashboard extends RelativeLayout {
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
         ImageView img = mView.findViewById(R.id.button_user_setting);
         img.setOnClickListener(new ModifyUserInfo());
+        GetLastWork getLastWork = new GetLastWork();
+        getLastWork.execute();
+        GetLastPost getLastPost = new GetLastPost();
+        getLastPost.execute();
+
+        Handler handler=new Handler();
+        Runnable runnable=new Runnable() {
+            @Override
+            public void run() {
+                GetUserInfo getUserInfo =  new GetUserInfo();
+                getUserInfo.execute();
+                handler.postDelayed(this, 2000);
+            }
+        };
+        handler.postDelayed(runnable, 2000);
     }
 
     void reWriteInfo(JSONObject json){
@@ -136,6 +154,83 @@ public class Dashboard extends RelativeLayout {
         }
         ShowProgressDialog.wait.dismiss();
     }
+
+
+    class GetLastWork extends AsyncTask<String, Integer, JSONArray>{
+
+        TextView workName, like_num, play_num;
+        ImageView img;
+        GetLastWork(){
+            workName = mView.findViewById(R.id.work_name);
+            like_num = mView.findViewById(R.id.like_num_work);
+            play_num = mView.findViewById(R.id.play_num_work);
+            img = mView.findViewById(R.id.img1);
+        }
+
+        @Override
+        protected JSONArray doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return MsgProcess.msgProcessArr(
+                    htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", "0", "lens", "1"),
+                            "Authorization", GlobalVariable.mInstance.token),false
+            );
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            if(jsonArray == null){
+                Log.e("hjt.last.work", "json_null");
+                return;
+            }
+            try {
+                JSONObject json = jsonArray.getJSONObject(0);
+                workName.setText(json.getString("name"));
+                like_num.setText(json.getString("like_num"));
+                play_num.setText(json.getString("play_num"));
+                Img.url2imgViewRoundRectangle(json.getJSONObject("cover").getString("url"), img, getActivity(), 10);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    class GetLastPost extends AsyncTask<String, Integer, JSONArray>{
+
+        TextView postText, like_num, comment_num;
+        ImageView img;
+        GetLastPost(){
+            postText = mView.findViewById(R.id.post_text);
+            like_num = mView.findViewById(R.id.like_num_post);
+            img = mView.findViewById(R.id.img2);
+            comment_num = mView.findViewById(R.id.post_comment_num);
+        }
+
+        @Override
+        protected JSONArray doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return MsgProcess.msgProcessArr(
+                    htp.advanceGet(Constant.mInstance.post_url + "1/" + Json2X.Json2StringGet("user_id", GlobalVariable.mInstance.uid, "start",
+                            "0", "lens", "1"),
+                            "Authorization", GlobalVariable.mInstance.token),false
+            );
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray jsonArray) {
+            if(jsonArray == null){
+                Log.e("hjt.last.work", "json_null");
+                return;
+            }
+            try {
+                JSONObject json = jsonArray.getJSONObject(0);
+                postText.setText(json.getString("text"));
+                like_num.setText(json.getString("like_num"));
+                comment_num.setText(json.getString("comment_num"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     class GetUserInfo extends AsyncTask<String, Integer, String> {
 

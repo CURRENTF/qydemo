@@ -68,6 +68,11 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
         cancelFollow.execute();
     }
 
+    public void hideBtn(){
+        btn.setVisibility(GONE);
+    }
+
+
     class CancelFollow extends AsyncTask<String, Integer, Boolean>{
         @Override
         protected Boolean doInBackground(String... strings) {

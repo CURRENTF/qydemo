@@ -12,6 +12,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qydemo0.DetailPostActivity;
 import com.example.qydemo0.PlayerActivity;
@@ -19,6 +20,7 @@ import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYUser;
+import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserDetailActivity;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -86,6 +88,9 @@ public class PostItem extends LinearLayout {
             if(aBoolean){
                 btn_follow.setText("已关注");
             }
+            else {
+                Toast.makeText(mContext, "关注失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -119,10 +124,10 @@ public class PostItem extends LinearLayout {
         post_content = mView.findViewById(R.id.post_content);
         btn_follow = findViewById(R.id.btn_follow);
         try {
-            if(json.getBoolean("follow")){
+            if(json.getString("follow").equals("true")){
                 btn_follow.setText("已关注");
             }
-            else {
+            else if(json.getString("follow").equals("false")) {
                 btn_follow.setOnClickListener(new View.OnClickListener(){
 
                     @Override
@@ -136,6 +141,9 @@ public class PostItem extends LinearLayout {
                     }
                 });
             }
+            else {
+                btn_follow.setText("");
+            }
             TextView txt = mView.findViewById(R.id.like_num);
             txt.setText(String.valueOf(json.getInt("like_num")));
             txt = mView.findViewById(R.id.post_comment_num);
@@ -147,8 +155,12 @@ public class PostItem extends LinearLayout {
             JSONObject user = json.getJSONObject("belong");
             Img.roundImgUrl((Activity)mContext, avatar, user.getString("img_url"));
             username.setText(user.getString("username"));
-            post_time.setText(json.getString("created_time"));
-            post_content.setText(json.getString("text"));
+            post_time.setText(TimeTool.stringTime(json.getString("created_time")));
+            if(json.getString("text").equals("")){
+                post_content.setVisibility(GONE);
+            }
+            else
+                post_content.setText(json.getString("text"));
         } catch (JSONException e) {
             Log.d("hjt.post.item", "no belong");
             e.printStackTrace();
@@ -215,12 +227,6 @@ public class PostItem extends LinearLayout {
                 }
                 else {
                     img_set.setVisibility(VISIBLE);
-//                    if(ja.length() == 2){
-//                        Log.d("hjt", "2");
-//                    }
-//                    if(ja.length() == 4){
-//                        Log.d("hjt", "4");
-//                    }
                     for(int i = 0; i < ja.length(); i++){
                         ImageView img = new ImageView(mContext);
                         JSONObject j = (JSONObject) ja.get(i);
@@ -255,7 +261,10 @@ public class PostItem extends LinearLayout {
                 Intent intent = new Intent();
                 intent.setClass((Activity)mContext, UserDetailActivity.class);
                 try {
-                    intent.putExtra("uid", json.getJSONObject("belong").getInt("uid"));
+                    JSONObject belong = json.getJSONObject("belong");
+                    intent.putExtra("uid", belong.getInt("uid"));
+                    intent.putExtra("username", belong.getString("username"));
+                    intent.putExtra("avatar", belong.getString("img_url"));
                     ((Activity)mContext).startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();

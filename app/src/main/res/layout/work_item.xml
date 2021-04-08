@@ -10,14 +10,25 @@
     android:background="@color/white"
     android:orientation="horizontal">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="0dp"
         android:layout_weight="0.5"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_vegetable"
-        android:layout_gravity="center"
         android:layout_marginEnd="20dp"
-        android:id="@+id/cover"/>
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_vegetable"
+            android:layout_gravity="center"
+            android:id="@+id/cover"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:id="@+id/fun"/>
+    </RelativeLayout>
+
+
 
     <LinearLayout
         android:layout_width="0dp"
@@ -28,7 +39,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.3"
             android:text="舞舞舞！"
             android:textSize="16sp"
             android:maxLines="2"
@@ -37,11 +48,29 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.2"
             android:id="@+id/text_intro"
             android:textSize="12sp"
-            android:maxLines="2"
+            android:maxLines="1"
             android:text="只能说是不错了哈哈哈哈哈哈哈哈哈哈哈哈"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/author_sign"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="CoolBoy"
+                android:textSize="12sp"
+                android:textColor="@color/real_pink"
+                android:id="@+id/uploader"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:paddingTop="2dp"

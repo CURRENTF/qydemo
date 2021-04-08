@@ -1,9 +1,5 @@
 package com.example.qydemo0;
 
-/*
-传给我学习项目id, work_id, 开始位置
- */
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,6 +13,7 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.telephony.mbms.MbmsErrors;
 import android.text.BoringLayout;
 import android.util.Log;
@@ -28,6 +25,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -39,6 +39,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.AudioPlayer;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYFile;
@@ -46,6 +47,8 @@ import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.google.gson.JsonArray;
+import com.example.qydemo0.Widget.Dashboard;
+import com.example.qydemo0.entry.Image;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.http.body.JSONObjectBody;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
@@ -103,11 +106,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private int all_learn_depose_video_num = 0;
     private int cur_compare_id = 0;
     private ProgressDialog progressDialog;
-    ImageView people_img;
     SeekBar cur_process;
     List<Integer> opt = new ArrayList();
     private int learning_id = -1;
     private int segment_id = -1;
+    RelativeLayout menu_op;
+    ImageView arrow;
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
 
@@ -132,7 +136,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private MediaMetadataRetriever mCoverMedia;
 
-    private Button btn1,btn2,btn3;
+    private ImageView btn1,btn2,btn3;
 
     private ImageView coverImageView, fullScreenView;
     ENPlayView startVideo;
@@ -148,6 +152,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private QYrequest learn_request = new QYrequest();
     private  QYFile learn_file = new QYFile();
+
+    public LearnDanceActivity() throws IOException {
+
+    }
+
+    boolean mirror_status = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,6 +183,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private void init_learn_pager(){
         initLearnVideo();
+        //Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
         opt.add(R.drawable.l0);
         opt.add(R.drawable.l1);
 
@@ -198,7 +209,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         //增加封面
         coverImageView = new ImageView(this);
         coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //\coverImageView.setImageResource(R.mipmap.xxx1);
+        //coverImageView.setImageResource(R.mipmap.xxx1);
         detailPlayer.setThumbImageView(coverImageView);
 
         resolveNormalVideoUI();
@@ -276,22 +287,17 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             }
         });
 
-        people_img = (ImageView) findViewById(R.id.people_img);
-        people_img.setScaleType(ImageView.ScaleType.FIT_XY);
-        people_img.setLayoutParams(people_tiny);
         people_all.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         people_all.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         detailPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
             @Override
             public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
                 if(is_compare){
-                    people_img.setLayoutParams(people_all);
                     for(int i=0;i<wrong_time.size();i++) {
                         if (currentPosition > wrong_time.get(i).get(0)-500 && currentPosition < wrong_time.get(i).get(0) + wrong_time.get(i).get(1)){
                             if(detailPlayer.getSpeed()!=0.25f){
                                 detailPlayer.getMspeed().setText("0.25倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(0.25f, true);
-                                people_img.setImageResource(opt.get(1));
                             }
                             break;
                         }
@@ -299,7 +305,6 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                             if(detailPlayer.getSpeed()==0.25f){
                                 detailPlayer.getMspeed().setText("1倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(1f, true);
-                                people_img.setImageResource(opt.get(0));
                             }
                         }
                     }
@@ -315,19 +320,21 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         RelativeLayout.LayoutParams fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
-        btn1 = (Button) findViewById(R.id.mirror_btn);
-        btn2 = (Button) findViewById(R.id.next_video);
-        btn3 = (Button) findViewById(R.id.learn_now);
+        btn1 = (ImageView) findViewById(R.id.mirror_btn);
+        btn2 = (ImageView) findViewById(R.id.next_video);
+        btn3 = (ImageView) findViewById(R.id.learn_now);
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(!is_compare) {
-                    if (btn1.getText().equals("镜子")) {
-                        btn1.setText("恢复");
+                    if (!mirror_status) {
+//                        btn1.setText("恢复");
+                        mirror_status = true;
                         surf.setLayoutParams(fill_all);
                     } else {
-                        btn1.setText("镜子");
+//                        btn1.setText("镜子");
+                        mirror_status = false;
                         surf.setLayoutParams(fill_tiny);
                     }
                 }
@@ -363,11 +370,62 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 }
             }
         });
+
+        menu_op = findViewById(R.id.expand_menu);
+        arrow = findViewById(R.id.menu_btn);
+        shrink_menu_now();
     }
 
+    void shrink_menu_now(){
+        arrow.setImageResource(R.drawable.ic_down_arrow2);
+        Animation animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, -DeviceInfo.dip2px(this, 250));
+        animation.setDuration(300);
+        menu_op.startAnimation(animation);
+//        animation.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//
+//            }
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                //防止跳动
+//                TranslateAnimation animation2 = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+//                animation2.setDuration(1);
+//                menu_op.startAnimation(animation2);
+//            }
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//
+//            }
+//        });
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                expand_menu_now();
+            }
+        });
+    }
+
+    void expand_menu_now(){
+        arrow.setImageResource(R.drawable.ic_up_arrow2);
+        menu_op.setTranslationY(-DeviceInfo.dip2px(this, 0));
+//        btn1.setVisibility(View.VISIBLE);
+//        btn2.setVisibility(View.VISIBLE);
+//        btn3.setVisibility(View.VISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(this
+                , R.anim.ani_down_translate_300ms);
+        menu_op.startAnimation(animation);
+        arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shrink_menu_now();
+            }
+        });
+    }
+
+
     private void stop_compare_video(){
-        btn2.setText("下一段");
-        people_img.setLayoutParams(people_tiny);
+//        btn2.setText("下一段");
         is_compare = false;
         is_learn = false;
     }
@@ -654,9 +712,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private void init_compare_video(){
         is_compare = true;
         reset_learn_view();
-        btn2.setText("返回");
-        people_img.setLayoutParams(people_all);
-        people_img.setImageResource(R.drawable.l0);
+//        btn2.setText("返回");
     }
 
     /**
@@ -864,7 +920,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         @Override
         protected Boolean doInBackground(Integer... integers) {
             try {
-                JSONObject res_json = new JSONObject(learn_request.advanceGet(Constant.mInstance.work_url+"breakdown/"+integers[0]+"/","Authorization", 
+                JSONObject res_json = new JSONObject(learn_request.advanceGet(Constant.mInstance.work_url+"breakdown/"+integers[0]+"/","Authorization",
                         GlobalVariable.mInstance.token));
                 if(!res_json.has("msg") || !res_json.getString("msg").equals("Success")) return null;
                 JSONObject res_data_json = res_json.getJSONObject("data");

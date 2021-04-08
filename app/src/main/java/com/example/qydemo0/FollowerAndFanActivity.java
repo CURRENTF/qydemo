@@ -93,6 +93,7 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
                     JSONObject json = jsonArray.getJSONObject(i);
                     LittleUserItem littleUserItem = new LittleUserItem(this);
                     littleUserItem.init(json);
+                    if(viewGroup == list_right) littleUserItem.hideBtn();
                     viewGroup.addView(littleUserItem);
                 } catch (JSONException e) {
                     e.printStackTrace();
