@@ -26,6 +26,7 @@ import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.R;
+import com.example.qydemo0.UserDetailActivity;
 import com.example.qydemo0.UserSettingActivity;
 
 import org.json.JSONArray;
@@ -36,6 +37,7 @@ public class Dashboard extends RelativeLayout {
 
     private Activity context;
     private View mView;
+    View work, post;
 
     private Activity getActivity(){
         return context;
@@ -53,16 +55,44 @@ public class Dashboard extends RelativeLayout {
         init();
     }
 
+    void gotoUserDetail(){
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), UserDetailActivity.class);
+        try {
+            intent.putExtra("uid", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("uid"));
+            intent.putExtra("username", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username"));
+            intent.putExtra("avatar", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("img_url"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        getActivity().startActivity(intent);
+    }
+
     void init(){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.fragment_dashboard, this, true);
         View t = mView.findViewById(R.id.goto_fan_follow);
+        work = mView.findViewById(R.id.work);
+        post = mView.findViewById(R.id.post_linear);
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), FollowerAndFanActivity.class);
                 getActivity().startActivity(intent);
+            }
+        });
+        work.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                gotoUserDetail();
+            }
+        });
+        post.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                gotoUserDetail();
             }
         });
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
@@ -77,19 +107,20 @@ public class Dashboard extends RelativeLayout {
         GetLastPost getLastPost = new GetLastPost();
         getLastPost.execute();
 
-//        Handler handler=new Handler();
-//        Runnable runnable=new Runnable() {
-//            @Override
-//            public void run() {
-//                GetUserInfo getUserInfo =  new GetUserInfo();
-//                getUserInfo.execute();
-//                handler.postDelayed(this, 2000);
-//            }
-//        };
-//        handler.postDelayed(runnable, 2000);
+        Handler handler=new Handler();
+        Runnable runnable=new Runnable() {
+            @Override
+            public void run() {
+                GetUserInfo getUserInfo =  new GetUserInfo();
+                getUserInfo.execute();
+                handler.postDelayed(this, 5000);
+            }
+        };
+        handler.postDelayed(runnable, 5000);
     }
 
     void reWriteInfo(JSONObject json){
+        if(!getActivity().hasWindowFocus()) return;
         try {
             GlobalVariable.mInstance.uid = json.getString("uid");
         } catch (JSONException e) {
