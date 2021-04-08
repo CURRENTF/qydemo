@@ -117,6 +117,18 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        player.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        player.stop();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_browse_file:

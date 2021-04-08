@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.qydemo0.DetailPostActivity;
 import com.example.qydemo0.PlayerActivity;
+import com.example.qydemo0.PostDetailActivity;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
@@ -244,6 +245,14 @@ public class PostItem extends LinearLayout {
             }
         }
         setIntentToDetail();
+        setIntentToPostDetail();
+    }
+
+    public void init(JSONObject json, boolean a, boolean b, boolean is_detail){
+        init(json);
+        if(a) setIntentToDetail();
+        if(b) setIntentToPostDetail();
+
     }
 
     public int getQYHeight(){
@@ -269,6 +278,19 @@ public class PostItem extends LinearLayout {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    }
+    public void setIntentToPostDetail(){
+        if(json == null) return;
+        mView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass((Activity)mContext, PostDetailActivity.class);
+                intent.putExtra("json", json.toString());
+                ((Activity)mContext).startActivity(intent);
             }
         });
     }

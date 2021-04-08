@@ -192,7 +192,7 @@
             <TextView
                 android:layout_width="40dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="50dp"
                 android:gravity="center"
                 android:text="转发"/>
             <ImageView
@@ -207,7 +207,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="0"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="50dp"
                 />
             <ImageView
                 android:layout_width="20dp"
