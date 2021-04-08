@@ -312,8 +312,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
     private void initLearnVideo(ArrayList<String> source) {
 //        String[] source = {"https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd"};
-        for(int i=1;i<source.size();i++){
-            SwitchVideoModel switchVideoModel = new SwitchVideoModel("1080P", source.get(i));
+        for(int i=1;i<source.size();i+=2){
+            SwitchVideoModel switchVideoModel = new SwitchVideoModel(source.get(i), source.get(i+1));
             List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
             list.add(switchVideoModel);
             all_learn_video.add(list);

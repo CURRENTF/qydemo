@@ -328,34 +328,10 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     }
         
-    private void updatePlayer(JSONObject res_urls) {
+    private void updatePlayer(String res_urls) {
 
-        List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
-        SwitchVideoModel switchVideoModel = null;
-        try {
-            if(res_urls.has("1080P")){
-                    switchVideoModel = new SwitchVideoModel("1080P", res_urls.getString("1080P"));
-                list.add(switchVideoModel);
-            }
-            if(res_urls.has("720P")){
-                switchVideoModel = new SwitchVideoModel("720P", res_urls.getString("720P"));
-            }
-            if(res_urls.has("480P")){
-                switchVideoModel = new SwitchVideoModel("480P", res_urls.getString("480P"));
-            }
-            if(res_urls.has("360P")){
-                switchVideoModel = new SwitchVideoModel("360P", res_urls.getString("360P"));
-            }
-            if(res_urls.has("自动")){
-                switchVideoModel = new SwitchVideoModel("自动", res_urls.getString("自动"));
-            }
-            list.add(switchVideoModel);
-
-        videoPlayer.setUp(list.get(0).getUrl(),true,"渲染预览视频");
+        videoPlayer.setUp(res_urls,true,"渲染预览视频");
         videoPlayer.startPlayLogic();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
         }
 
     public void showProgressDialog(String title, String message) {
@@ -485,10 +461,10 @@ public class VideoRenderActivity extends AppCompatActivity {
         return resultBmp;
     }
 
-    public class SendRenderVideo extends AsyncTask<String , Void, JSONObject>{
+    public class SendRenderVideo extends AsyncTask<String , Void, String>{
 
         @Override
-        protected JSONObject doInBackground(String... strings) {
+        protected String doInBackground(String... strings) {
 
             String will_do_url = strings[0];
             String render_img_id = null;
@@ -533,21 +509,32 @@ public class VideoRenderActivity extends AppCompatActivity {
                         callToJson.add("is_filter");callToJson.add("bool");callToJson.add("false");
                     }
                     System.out.println(GenerateJson.universeJson2(callToJson.toArray(new String[callToJson.size()])));
-                    String res_json = cur_request.advancePost(GenerateJson.universeJson2(callToJson.toArray(new String[callToJson.size()])),"Authorization", GlobalVariable.mInstance.token);
+                    String res_json = cur_request.advancePost(GenerateJson.universeJson2(callToJson.toArray(new String[callToJson.size()])),Constant.mInstance.task_url+"rendering/", "Authorization", GlobalVariable.mInstance.token);
                     try {
                         JSONObject res_json_object = new JSONObject(res_json);
                         String tid = "";
                         if(res_json_object.getString("msg").equals("Success")){
                             tid = res_json_object.getJSONObject("data").getString("tid");
-                            if(!isYuLan) return res_json_object;
+                            if(!isYuLan) return "Success";
                         }
                         else{return null;}
-                        for(int q=0;q<10;q++){
+                        while(true){
                             Thread.sleep(1000);
                             JSONObject res_json_rendered = new JSONObject(cur_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
                                     "Authorization",GlobalVariable.mInstance.token));
-                            if(res_json_rendered.getString("schedule").equals("100%")){
-                                return res_json_rendered.getJSONObject("data");
+                            Log.i("whc123",tid+" "+res_json_rendered.getJSONObject("data").getString("schedule"));
+                            if(res_json_rendered.getJSONObject("data").getString("schedule").equals("100%")){
+                                JSONObject cur_urls = res_json_rendered.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url");
+                                if(cur_urls.has("1080P"))
+                                    return cur_urls.getString("1080P");
+                                if(cur_urls.has("720P"))
+                                    return cur_urls.getString("720P");
+                                if(cur_urls.has("480P"))
+                                    return cur_urls.getString("480P");
+                                if(cur_urls.has("360P"))
+                                    return cur_urls.getString("360P");
+                                if(cur_urls.has("1080P"))
+                                    return cur_urls.getString("1080P");
                             }
                         }
                     } catch (JSONException | InterruptedException e) {
@@ -559,11 +546,12 @@ public class VideoRenderActivity extends AppCompatActivity {
         }
 
         @Override
-            protected void onPostExecute(JSONObject s) {
+            protected void onPostExecute(String s) {
                 super.onPostExecute(s);
             hideProgressDialog();
                 if(isYuLan){
                     if(s!=null){
+                        Log.i("whc_url",s);
                         updatePlayer(s);
                     }
                     else{

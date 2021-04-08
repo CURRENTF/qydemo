@@ -123,15 +123,15 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private WorkBean work_bean = new WorkBean();
 
-    private FragmentDataForMain  user_info_json =  new FragmentDataForMain();
-
     private LinearLayout render_content;
     private List<WorkItem> render_items = new ArrayList<>();
     private QYrequest cur_request = new QYrequest();
     private QYScrollView post_detail_nested_scroll = null;
     TimeTool timeTool = new TimeTool();
     private int start_next = 0;
-    private int cur_comment_length = 7;
+    private JSONObject player_urls;
+    private int breakdown_id = -1;
+    private int work_id = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +142,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 //        QYScrollView qyscrollview_comment = (QYScrollView) findViewById(R.id.qyscrollview_comment);
         int wid = bundle.getInt("id");
         Log.d("hjt.wid", String.valueOf(wid));
-        new GetCommentJson().execute(wid,0,6);
+        new GetCommentJson().execute(wid,0,20);
         new GetWorkJson().execute(wid);
+        work_id = wid;
         render_content = (LinearLayout) findViewById(R.id.Render_content);
         post_detail_nested_scroll = (QYScrollView) findViewById(R.id.post_detail_nested_scroll);
         post_detail_nested_scroll.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
@@ -183,8 +184,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
-                startActivity(intent);
+
             }
         });
 
@@ -194,7 +194,32 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
                 ArrayList<String> data1 = new ArrayList<String>();
                 data1.add("0");
-                data1.add(work_bean.getData().getVideo_url().getUrl().getOrg());
+                try {
+                    JSONObject cur_urls = player_urls;
+                    if(cur_urls.has("1080P")) {
+                        data1.add("1080P");
+                        data1.add(cur_urls.getString("1080P"));
+                    }
+                    if(cur_urls.has("720P")) {
+                        data1.add("720P");
+                        data1.add(cur_urls.getString("720P"));
+                    }
+                    if(cur_urls.has("480P")) {
+                        data1.add("480P");
+                        data1.add(cur_urls.getString("480P"));
+                    }
+                    if(cur_urls.has("360P")) {
+                        data1.add("360P");
+                        data1.add(cur_urls.getString("360P"));
+                    }
+                    if(cur_urls.has("自动")) {
+                        data1.add("自动");
+                        data1.add(cur_urls.getString("自动"));
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 intent.putStringArrayListExtra("params", data1);
                 startActivity(intent);
 
@@ -244,9 +269,76 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
             if(isLikeWork){
-                new WorkChange().execute(-1);
+                //new WorkChange().execute(-1);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try { String[] j = new String[0];
+                        JSONObject res = new JSONObject(work_request.advancePut(GenerateJson.universeJson2(j),
+                                Constant.mInstance.work+"func/"+work_id+"/-1/",
+                                "Authorization", GlobalVariable.mInstance.token));
+
+                            if(res.getString("msg").equals("Success")) {
+                            isLikeWork = false;
+                            work_bean.getData().setLike_num(work_bean.getData().getLike_num() - 1);
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if(res.getString("msg").equals("Success"))
+                                {
+                                    if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
+                                    else video_like_num.setText(""+work_bean.getData().getLike_num());
+                                    like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+
             } else{
-                new WorkChange().execute(1);
+                //new WorkChange().execute(1);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try { String[] j = new String[0];
+                        JSONObject res = new JSONObject(work_request.advancePut(GenerateJson.universeJson2(j),
+                                Constant.mInstance.work+"func/"+work_id+"/1/",
+                                "Authorization", GlobalVariable.mInstance.token));
+
+                            if(res.getString("msg").equals("Success")) {
+                                isLikeWork = true;
+                                work_bean.getData().setLike_num(work_bean.getData().getLike_num() + 1);
+                            }
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        if(res.getString("msg").equals("Success"))
+                                        {
+                                            video_like_num.setText(""+work_bean.getData().getLike_num());
+                                            like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
             }
             }
         });
@@ -260,9 +352,77 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 if(isDislikeWork){
-                    new WorkChange().execute(-2);
+                    //new WorkChange().execute(-2);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try { String[] j = new String[0];
+                                JSONObject res = new JSONObject(work_request.advancePut(GenerateJson.universeJson2(j),
+                                        Constant.mInstance.work+"func/"+work_id+"/-2/",
+                                        "Authorization", GlobalVariable.mInstance.token));
+
+                                if(res.getString("msg").equals("Success")) {
+                                    isDislikeWork = false;
+                                    work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() - 1);
+                                }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if(res.getString("msg").equals("Success"))
+                                            {
+                                                if(work_bean.getData().getDislike_num() == 0)  video_dislike_num.setText("");
+                                                else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
                 } else{
-                    new WorkChange().execute(2);
+                    //new WorkChange().execute(2);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try { String[] j = new String[0];
+                                JSONObject res = new JSONObject(work_request.advancePut(GenerateJson.universeJson2(j),
+                                        Constant.mInstance.work+"func/"+work_id+"/2/",
+                                        "Authorization", GlobalVariable.mInstance.token));
+
+                                if(res.getString("msg").equals("Success")) {
+                                    isDislikeWork = true;
+                                    work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() + 1);
+                                }
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if(res.getString("msg").equals("Success"))
+                                            {
+                                                video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
+
                 }
             }
         });
@@ -332,14 +492,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         user_name.setText(work_bean.getData().getBelong().getUsername());
     }
 
-    private void init_player(List<String> sources, String coverUrl){
-        String[] names = {"1080P", "720P", "480P", "360P"};
+    private void init_player(List<String> sources, List<String> list_name, String coverUrl){
 
         List<SwitchVideoModel> list = new ArrayList<>();
         for(int i=0;i<sources.size();i++){
-            list.add(new SwitchVideoModel(names[i],sources.get(i)));
+            list.add(new SwitchVideoModel(list_name.get(i),sources.get(i)));
         }
-
         detailPlayer.setUp(list, true, "韩国小姐姐的舞蹈视频");
 
         //增加封面
@@ -427,8 +585,35 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         work_bean = gson.fromJson(cur_Json, WorkBean.class);
         Log.i("whc123",""+work_bean.getMsg());
         List<String> lists = new ArrayList<>();
-        lists.add(work_bean.getData().getVideo_url().getUrl().getOrg());
-        init_player(lists,work_bean.getData().getCover_url().getUrl());
+        List<String> list_name = new ArrayList<>();
+        try {if(player_urls.has("1080P")) {
+            lists.add(player_urls.getString("1080P"));
+            list_name.add("1080P");
+        }
+
+        if(player_urls.has("720P")){
+            lists.add(player_urls.getString("720P"));
+            list_name.add("720P");
+        }
+        if(player_urls.has("480P")){
+            lists.add(player_urls.getString("480P"));
+            list_name.add("480P");
+        }
+        if(player_urls.has("3600P")){
+            lists.add(player_urls.getString("360P"));
+            list_name.add("360P");
+        }
+        if(player_urls.has("自动")){
+            lists.add(player_urls.getString("自动"));
+            list_name.add("自动");
+        }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.e("list_size", ""+player_urls);
+
+        init_player(lists,list_name,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
                 work_bean.getData().getDislike_num(), work_bean.getData().getPlay_num(), work_bean.getData().getComment_num());
@@ -811,7 +996,15 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String cur_work_json) {
             super.onPreExecute();
-            init_work(cur_work_json);
+            try {
+                player_urls = new JSONObject(cur_work_json);
+                Log.e("whc_player_urls", String.valueOf(player_urls));
+                breakdown_id = player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
+                Log.e("breakdown_id", ""+breakdown_id);
+            player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }init_work(cur_work_json);
             new WorkChange().execute(0);
         }
     }
@@ -841,14 +1034,19 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected Integer doInBackground(Integer... ope) {
 
             String[] j = new String[0];
-            String res = work_request.advancePut(GenerateJson.universeJson2(j), Constant.mInstance.work+"func/"+work_bean.getData().getId()+"/"+ope[0]+"/","Authorization", GlobalVariable.mInstance.token);
-            Log.e("json_hjt",res);
-            Gson gson = new Gson();
-            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-            if(call_back_bean.getMsg().equals("Success"))
+            JSONObject res = null;
+            try {
+                res = new JSONObject(work_request.advancePut(GenerateJson.universeJson2(j),
+                        Constant.mInstance.work+"func/"+work_bean.getData().getId()+"/"+ope[0]+"/",
+                        "Authorization", GlobalVariable.mInstance.token));
+            if(res.getString("msg").equals("Success"))
                 return ope[0];
             else
                 return 404;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return 404;
         }
 
         @Override
@@ -882,7 +1080,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected String[] doInBackground(String... strings) {
             String[] callToJson = {"text", "string",strings[0]};
             String res = work_request.advancePost(GenerateJson.universeJson2(callToJson),
-                    Constant.mInstance.comment+"0/"+work_bean.getData().getId()+"/", "Authorization", GlobalVariable.mInstance.token);
+                    Constant.mInstance.comment+"0/"+work_id+"/", "Authorization", GlobalVariable.mInstance.token);
             try {
                 JSONObject res_jsonobj = new JSONObject(res);
                 Log.i("comment_callback",res);
@@ -1026,6 +1224,40 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             try {
                 res_json = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/recommendation/work/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2],"Authorization", GlobalVariable.mInstance.token));
                 return(res_json.getJSONArray("data"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public class readyToJumpToLearn extends AsyncTask<Void, Void, Integer>{
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if(integer != null){
+                if(integer == -1) Toast.makeText(PlayerActivity.this, "该舞蹈目前不可学习，请稍后再试", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
+                ArrayList<String> data1 = new ArrayList<String>();
+                data1.add(""+integer);
+                data1.add(""+work_id);
+                data1.add("0");
+                intent.putStringArrayListExtra("params", data1);
+                startActivity(intent);
+            }
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            String[] callTo = {"work", "int", ""+ work_id, "breakdown", "int", ""+breakdown_id};
+            try {
+                JSONObject rjs = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callTo), Constant.mInstance.learn_url,"Authorization", GlobalVariable.mInstance.token));
+                if(rjs.getString("msg").equals("Success")){
+                    return rjs.getJSONObject("data").getInt("lid");
+                } else {
+                    return -1;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }

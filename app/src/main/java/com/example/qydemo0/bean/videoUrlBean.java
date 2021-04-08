@@ -1,18 +1,20 @@
 package com.example.qydemo0.bean;
 
+import org.json.JSONObject;
+
 public class videoUrlBean {
     private String id;
-    private UrlBean url;
+    private JSONObject url;
 
     public String getId() {
         return id;
     }
 
-    public UrlBean getUrl() {
+    public JSONObject getUrl() {
         return url;
     }
 
-    public void setUrl(UrlBean url) {
+    public void setUrl(JSONObject url) {
         this.url = url;
     }
 
