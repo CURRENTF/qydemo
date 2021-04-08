@@ -77,20 +77,19 @@ public class Dashboard extends RelativeLayout {
         GetLastPost getLastPost = new GetLastPost();
         getLastPost.execute();
 
-        Handler handler=new Handler();
-        Runnable runnable=new Runnable() {
-            @Override
-            public void run() {
-                GetUserInfo getUserInfo =  new GetUserInfo();
-                getUserInfo.execute();
-                handler.postDelayed(this, 2000);
-            }
-        };
-        handler.postDelayed(runnable, 2000);
+//        Handler handler=new Handler();
+//        Runnable runnable=new Runnable() {
+//            @Override
+//            public void run() {
+//                GetUserInfo getUserInfo =  new GetUserInfo();
+//                getUserInfo.execute();
+//                handler.postDelayed(this, 2000);
+//            }
+//        };
+//        handler.postDelayed(runnable, 2000);
     }
 
     void reWriteInfo(JSONObject json){
-        ShowProgressDialog.show(getActivity(), "加载用户信息");
         try {
             GlobalVariable.mInstance.uid = json.getString("uid");
         } catch (JSONException e) {
@@ -152,7 +151,6 @@ public class Dashboard extends RelativeLayout {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        ShowProgressDialog.wait.dismiss();
     }
 
 

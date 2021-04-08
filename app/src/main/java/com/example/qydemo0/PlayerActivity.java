@@ -842,7 +842,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
             String[] j = new String[0];
             String res = work_request.advancePut(GenerateJson.universeJson2(j), Constant.mInstance.work+"func/"+work_bean.getData().getId()+"/"+ope[0]+"/","Authorization", GlobalVariable.mInstance.token);
-            Log.i("json",res);
+            Log.e("json_hjt",res);
             Gson gson = new Gson();
             CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
             if(call_back_bean.getMsg().equals("Success"))

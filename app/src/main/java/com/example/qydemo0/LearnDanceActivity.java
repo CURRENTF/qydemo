@@ -357,26 +357,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     void shrink_menu_now(){
         arrow.setImageResource(R.drawable.ic_down_arrow2);
-        Animation animation = new TranslateAnimation(0.0f, 0.0f, 0.0f, -DeviceInfo.dip2px(this, 250));
-        animation.setDuration(300);
-        menu_op.startAnimation(animation);
-//        animation.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                //防止跳动
-//                TranslateAnimation animation2 = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
-//                animation2.setDuration(1);
-//                menu_op.startAnimation(animation2);
-//            }
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
+        menu_op.setTranslationY(-DeviceInfo.dip2px(LearnDanceActivity.this, 253));
+
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

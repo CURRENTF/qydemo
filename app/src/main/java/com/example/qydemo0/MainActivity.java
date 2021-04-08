@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
-        // TODO: need delete maybe not
 
         Button btn1 = (Button) findViewById(R.id.btn1);
         btn1.setOnClickListener(new View.OnClickListener() {
