@@ -209,7 +209,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         recall_pager.setVisibility(View.GONE);
         TextView intro = (TextView) findViewById(R.id.introduction);
         TextView comme = (TextView) findViewById(R.id.comment);
-        intro.setTextColor(context.getResources().getColor(R.color.qy_pink));
+        intro.setTextColor(getColor(R.color.red));
 
         intro.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,8 +217,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 comment_pager.setVisibility(View.GONE);
                 recall_pager.setVisibility(View.GONE);
                 post_detail_nested_scroll.setVisibility(View.VISIBLE);
-                intro.setTextColor(context.getResources().getColor(R.color.qy_pink));
-                comme.setTextColor(context.getResources().getColor(R.color.gray));
+                intro.setTextColor(getColor(R.color.red));
+                comme.setTextColor(getColor(R.color.black));
             }
         });
 
@@ -228,8 +228,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 post_detail_nested_scroll.setVisibility(View.GONE);
                 comment_pager.setVisibility(View.VISIBLE);
                 recall_pager.setVisibility(View.VISIBLE);
-                comme.setTextColor(context.getResources().getColor(R.color.qy_pink));
-                intro.setTextColor(context.getResources().getColor(R.color.gray));
+                comme.setTextColor(context.getResources().getColor(R.color.red));
+                intro.setTextColor(context.getResources().getColor(R.color.black));
             }
         });
     }
@@ -997,7 +997,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     WorkItem render_item = new WorkItem(PlayerActivity.this);
                     render_item.init(cur_json_object.getJSONObject("cover").getString("url"),cur_json_object.getString("name"),
                             cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
-                            cur_json_object.getString("introduction"));
+                            cur_json_object.getString("introduction"), cur_json_object.getInt("id"));
                     render_items.add(render_item);
                     render_content.addView(render_item);
                     JSONObject finalCur_json_object = cur_json_object;

@@ -166,10 +166,11 @@ public class SearchActivity extends AppCompatActivity {
                     JSONObject json = (JSONObject)ja.get(i);
                     Log.d("hjt.search.json", json.toString());
                     WorkItem workItem = new WorkItem(SearchActivity.this);
+                    workItem.setOnClick();
                     JSONObject coverInfo = json.getJSONObject("cover");
                     workItem.init(coverInfo.getString("url"), json.getString("name"),
                             json.getInt("like_num"), json.getInt("play_num"),
-                            json.getString("introduction"));
+                            json.getString("introduction"), json.getJSONObject("belong").getString("username"), json.getInt("id"));
                     qyScrollView.addView(workItem);
                     qyScrollView.addView(Img.linearLayoutDivideLine(SearchActivity.this));
                 } catch (JSONException e) {

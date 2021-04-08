@@ -35,8 +35,6 @@ import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
 import com.example.qydemo0.UserSettingActivity;
 import com.example.qydemo0.bean.DataBean;
-import com.example.qydemo0.ui.dashboard.DashboardFragment;
-import com.example.qydemo0.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.youth.banner.Banner;
@@ -173,8 +171,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                         JSONObject j = (JSONObject) jsonArray.get(i);
                         JSONObject coverInfo = j.getJSONObject("cover");
                         w.init(coverInfo.getString("url"), j.getString("name"), j.getInt("like_num"),
-                                j.getInt("play_num"), j.getString("introduction"));
-                        w.id = j.getInt("id");
+                                j.getInt("play_num"), j.getString("introduction"), j.getJSONObject("belong").getString("username"), j.getInt("id"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                         return;
