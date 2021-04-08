@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/template_img"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginBottom="200dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"

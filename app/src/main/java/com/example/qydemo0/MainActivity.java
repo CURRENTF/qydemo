@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, RenderQueueActivity.class);
+                Intent intent = new Intent(MainActivity.this, FreeDanceActivity.class);
                 startActivity(intent);
             }
         });

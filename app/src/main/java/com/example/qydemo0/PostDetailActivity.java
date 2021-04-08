@@ -36,6 +36,14 @@ public class PostDetailActivity extends AppCompatActivity {
             JSONObject json = new JSONObject(s);
             postItem = new PostItem(this);
             postItem.init(json, true, false, true);
+            if(json.getBoolean("like")) {
+                postItem.like_img.setImageResource(R.drawable.like_gray);
+                like_op = 1;
+            }
+            else {
+                postItem.like_img.setImageResource(R.drawable.ic_like);
+                like_op = -1;
+            }
             main.addView(postItem);
         } catch (JSONException e) {
             Log.e("hjt.json.post.detail.wrong", "onCreate");
@@ -45,8 +53,10 @@ public class PostDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 like_op *= -1;
-                OPPost opPost = new OPPost();
-                opPost.execute(like_op);
+                if(status == 0){
+                    OPPost opPost = new OPPost();
+                    opPost.execute(like_op);
+                }
             }
         });
     }
@@ -69,14 +79,15 @@ public class PostDetailActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            status = 0;
             if(aBoolean){
                  if(like_op == 1) postItem.like_img.setImageResource(R.drawable.like_gray);
                  else postItem.like_img.setImageResource(R.drawable.ic_like);
             }
             else {
+                like_op *= -1;
                 Toast.makeText(PostDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
             }
+            status = 0;
         }
     }
 

@@ -5,13 +5,11 @@
     android:id="@+id/activity_detail_player"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_200"
     >
 
     <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/btnss"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         >
 
         <com.example.qydemo0.QYpack.SampleVideo
@@ -27,43 +25,81 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/btnss"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_height="match_parent"
-        android:layout_width="100dp">
-
-        <Button
+        android:layout_height="wrap_content"
+        android:id="@+id/expand_menu"
+        android:background="@drawable/bottom_round"
+        android:gravity="center_horizontal"
+        android:layout_marginEnd="20dp"
+        android:layout_width="80dp">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:layout_centerHorizontal="true"
             android:id="@+id/next_video"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:layout_alignParentRight="true"
-            android:layout_above="@+id/learn_now"
-            android:background="@drawable/button_circle_shape"
-            android:text="渲染" />
+            android:src="@drawable/ic_render"
+            android:translationZ="10dp"
+            android:layout_marginVertical="10dp"/>
+        <!--            <Button-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_above="@+id/learn_now"-->
+        <!--                android:text="下一段" />-->
 
-        <Button
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="fitCenter"
+            android:layout_below="@id/next_video"
+            android:layout_centerHorizontal="true"
+            android:translationZ="20dp"
             android:id="@+id/learn_now"
-            android:layout_width="wrap_content"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:text="开始"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:background="@color/purple_500"
-            android:layout_margin="10dp"
-            />
+            android:src="@drawable/ic_start_round"
+            android:layout_marginVertical="10dp"/>
 
-        <Button
+        <!--            <Button-->
+        <!--                android:id="@+id/learn_now"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="100dp"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:text="学习"-->
+        <!--                android:layout_centerVertical="true"-->
+        <!--                android:layout_alignParentRight="true"-->
+        <!--                android:background="@color/purple_500"-->
+        <!--                android:layout_margin="10dp"-->
+        <!--            />-->
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_below="@id/learn_now"
             android:id="@+id/mirror_btn"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/learn_now"
-            android:layout_alignParentRight="true"
-            android:layout_weight="1"
-            android:background="@drawable/button_circle_shape"
-            android:text="镜子" />
+            android:src="@drawable/ic_mirror_round"
+            android:layout_centerHorizontal="true"
+            android:layout_marginVertical="10dp"/>
+
+        <!--            <Button-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="match_parent"-->
+        <!--                android:layout_below="@+id/learn_now"-->
+        <!--                android:layout_alignParentRight="true"-->
+        <!--                android:layout_weight="1"-->
+        <!--                android:background="@drawable/button_circle_shape"-->
+        <!--                android:text="镜子" />-->
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/mirror_btn"
+            android:src="@drawable/ic_up_arrow2"
+            android:scaleType="fitCenter"
+            android:id="@+id/menu_btn"
+            android:layout_marginVertical="10dp"/>
+
     </RelativeLayout>
 
 </RelativeLayout>
