@@ -34,8 +34,8 @@ public class LittleWorkItem extends LinearLayout {
     }
 
     public void init(String cover_url, String video_name, int like_num, int play_num){
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = inflater.inflate(R.layout.work_item, this, true);
+//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        mView = inflater.inflate(R.layout.work_item, this, true);
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.video_name);
         like = mView.findViewById(R.id.text_like_num);

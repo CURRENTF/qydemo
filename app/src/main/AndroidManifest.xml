@@ -28,6 +28,9 @@
         <activity android:name=".SimplePlayerActivity"></activity>
         <activity android:name=".AiUnit.FaceFerActivity" />
         <activity android:name=".RenderQueueActivity" />
+        <activity android:name=".UserDetailActivity"></activity>
+        <activity android:name=".FollowerAndFanActivity" />
+        <activity android:name=".Test123" />
         <activity android:name=".RenderQueueActivity" />
         <activity
             android:name=".GameActivity"
@@ -48,11 +51,14 @@
             android:screenOrientation="landscape" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".UserSettingActivity" />
+
         <activity android:name=".UploadActivity" />
+
         <activity
             android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
+
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

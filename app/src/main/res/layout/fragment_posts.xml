@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.posts.PostsFragment"
     android:layout_marginBottom="50dp">
 
     <LinearLayout
@@ -60,7 +59,7 @@
         <com.example.qydemo0.Widget.QYScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"
+            android:visibility="gone"
             android:id="@+id/view_posts_follow">
 
             <RelativeLayout

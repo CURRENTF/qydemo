@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="5dp"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#6a6da9"
+        android:orientation="horizontal">
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/avatar"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_default_avatar"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:text="豪哥"
+                android:padding="5dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:id="@+id/username"
+                android:layout_weight="0.5"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:padding="5dp"
+                android:text="我可能有点太帅了"
+                android:textColor="#d3d7d4"
+                android:textSize="12sp"
+                android:maxLines="1"
+                android:id="@+id/sign"/>
+        </LinearLayout>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="0.4"
+            android:layout_height="25dp"
+            android:textSize="14sp"
+            android:id="@+id/cancel_follow"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="5dp"
+            android:textColor="#fdb933"
+            android:background="@drawable/gradient_color_orange_no_padding"
+            android:text="取消关注"/>
+
+    </LinearLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/white"/>
+
+</RelativeLayout>

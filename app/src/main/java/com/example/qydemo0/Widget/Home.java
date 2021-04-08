@@ -1,21 +1,24 @@
-package com.example.qydemo0.ui.home;
+package com.example.qydemo0.Widget;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.loader.content.AsyncTaskLoader;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.qydemo0.FollowerAndFanActivity;
 import com.example.qydemo0.LearningListActivity;
 import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.QYAdapter.ImageNetAdapter;
@@ -25,13 +28,15 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
-import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.WorkItem;
+import com.example.qydemo0.UserSettingActivity;
 import com.example.qydemo0.bean.DataBean;
+import com.example.qydemo0.ui.dashboard.DashboardFragment;
+import com.example.qydemo0.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.youth.banner.Banner;
@@ -41,13 +46,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class HomeFragment extends Fragment implements View.OnClickListener {
+public class Home extends RelativeLayout implements View.OnClickListener {
+
+    private Activity context;
+    private View mView;
 
     public LinearLayout scrollViewForVideos = null;
     public QYScrollView scrollView = null;
@@ -58,36 +64,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.banner_ad)
     Banner banner_ad;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+    private Activity getActivity(){
+        return context;
+    }
 
+    public Home(@NonNull Context context) {
+        super(context);
+        this.context = (Activity) context;
+        init();
+    }
 
-        bind = ButterKnife.bind(this, root);
+    public Home(Context context, AttributeSet attrs){
+        super(context, attrs);
+        this.context = (Activity) context;
+        init();
+    }
+
+    void init(){
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mView = inflater.inflate(R.layout.fragment_home, this, true);
+
+        bind = ButterKnife.bind(this, mView);
         //自定义的图片适配器，也可以使用默认的BannerImageAdapter
         ImageNetAdapter adapter = new ImageNetAdapter(DataBean.getTestData3());
 
         banner_ad.setAdapter(adapter)
-                .addBannerLifecycleObserver(this)//添加生命周期观察者
+                .addBannerLifecycleObserver((AppCompatActivity)getActivity())//添加生命周期观察者
                 .setIndicator(new CircleIndicator(getActivity()))//设置指示器
                 .setOnBannerListener((data, position) -> {
                     Snackbar.make(banner_ad, ((DataBean) data).title, Snackbar.LENGTH_SHORT).show();
                 });
-        Log.d("hjt.home_f", "create");
-
-        return root;
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d("hjt.home_f", "restore");
-        scrollViewForVideos = getActivity().findViewById(R.id.home_scroll_for_video_cover);
-        scrollView = getActivity().findViewById(R.id.scroll_home);
-    }
-
-    @Override
-    public void onStart() {
+        scrollViewForVideos = mView.findViewById(R.id.home_scroll_for_video_cover);
+        scrollView = mView.findViewById(R.id.scroll_home);
         GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
         getUserRecommendation.execute();
 
@@ -107,26 +115,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        FloatingActionButton fbtn = getActivity().findViewById(R.id.button_add_my_video);
+        FloatingActionButton fbtn = mView.findViewById(R.id.button_add_my_video);
         fbtn.setOnClickListener(this);
-        LinearLayout txt = getActivity().findViewById(R.id.button_search);
+        LinearLayout txt = mView.findViewById(R.id.button_search);
         txt.setOnClickListener(this);
-        Button btn = getActivity().findViewById(R.id.button_image_learn_list);
+        Button btn = mView.findViewById(R.id.button_image_learn_list);
         btn.setOnClickListener(this);
-
-        super.onStart();
-        Log.d("hjt.home_f", "start");
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    void unbind(){
         bind.unbind();
     }
 
@@ -136,18 +133,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.button_add_my_video:
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), UploadActivity.class);
-                startActivity(intent);
+                getActivity().startActivity(intent);
                 break;
 
             case R.id.button_search:
                 Intent intent2 = new Intent();
                 intent2.setClass(getActivity(), SearchActivity.class);
-                startActivity(intent2);
+                getActivity().startActivity(intent2);
                 break;
             case R.id.button_image_learn_list:
                 Intent intent3 = new Intent();
                 intent3.setClass(getActivity(), LearningListActivity.class);
-                startActivity(intent3);
+                getActivity().startActivity(intent3);
                 break;
         }
     }
@@ -196,7 +193,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent();
             intent.setClass(getActivity(), PlayerActivity.class);
             intent.putExtra("id", ((WorkItem)v).id);
-            startActivity(intent);
+            getActivity().startActivity(intent);
         }
     }
+
 }

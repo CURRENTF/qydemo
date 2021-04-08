@@ -1,91 +1,74 @@
-package com.example.qydemo0.ui.dashboard;
+package com.example.qydemo0.Widget;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.FollowerAndFanActivity;
 import com.example.qydemo0.QYpack.Constant;
-import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
-import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserSettingActivity;
+import com.example.qydemo0.ui.dashboard.DashboardFragment;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DashboardFragment extends Fragment {
+public class Dashboard extends RelativeLayout {
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        View t = root.findViewById(R.id.goto_fan_follow);
+    private Activity context;
+    private View mView;
+
+    private Activity getActivity(){
+        return context;
+    }
+
+    public Dashboard(@NonNull Context context) {
+        super(context);
+        this.context = (Activity) context;
+        init();
+    }
+
+    public Dashboard(Context context, AttributeSet attrs){
+        super(context, attrs);
+        this.context = (Activity) context;
+        init();
+    }
+
+    void init(){
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mView = inflater.inflate(R.layout.fragment_dashboard, this, true);
+        View t = mView.findViewById(R.id.goto_fan_follow);
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), FollowerAndFanActivity.class);
-                startActivity(intent);
+                getActivity().startActivity(intent);
             }
         });
-        Log.d("hjt.ff", "1");
-        return root;
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.d("hjt.ff", "2");
-        super.onViewCreated(view, savedInstanceState);
-    }
-    @Override
-    public void onStart() {
-        Log.d("hjt.ff", "3");
-        super.onStart();
-    }
-    @Override
-    public void onResume() {
-        Log.d("hjt.ff", "4");
-        super.onResume();
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
         }
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
-        ImageView img = getActivity().findViewById(R.id.button_user_setting);
+        ImageView img = mView.findViewById(R.id.button_user_setting);
         img.setOnClickListener(new ModifyUserInfo());
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d("hjt.ff", "6");
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDestroyView() {
-        Log.d("hjt.ff", "5");
-        super.onDestroyView();
     }
 
     void reWriteInfo(JSONObject json){
@@ -101,8 +84,8 @@ public class DashboardFragment extends Fragment {
         // 防止由于父亲销毁 RE
         if(getActivity() == null) return;
 
-        ImageView userAvatar = getActivity().findViewById(R.id.user_avatar);
-        TextView txt = getActivity().findViewById(R.id.text_username);
+        ImageView userAvatar = mView.findViewById(R.id.user_avatar);
+        TextView txt = mView.findViewById(R.id.text_username);
 
         if(getActivity() == null) return;
         String avatar_url, sign;
@@ -125,7 +108,7 @@ public class DashboardFragment extends Fragment {
 
         try {
             sign = json.getString("sign");
-            txt = getActivity().findViewById(R.id.text_user_sign);
+            txt = mView.findViewById(R.id.text_user_sign);
             txt.setText(sign);
             b = true;
         } catch (JSONException e) {
@@ -144,9 +127,9 @@ public class DashboardFragment extends Fragment {
         }
 
         try {
-            TextView txt2 = getActivity().findViewById(R.id.text_fans);
+            TextView txt2 = mView.findViewById(R.id.text_fans);
             txt2.setText(String.valueOf(json.getInt("subscribe_num")));
-            txt2 = getActivity().findViewById(R.id.text_followers);
+            txt2 = mView.findViewById(R.id.text_followers);
             txt2.setText(String.valueOf(json.getInt("followers")));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -154,7 +137,7 @@ public class DashboardFragment extends Fragment {
         ShowProgressDialog.wait.dismiss();
     }
 
-    class GetUserInfo extends AsyncTask<String, Integer, String>{
+    class GetUserInfo extends AsyncTask<String, Integer, String> {
 
         @Override
         protected String doInBackground(String... strings) {
@@ -180,7 +163,7 @@ public class DashboardFragment extends Fragment {
         public void onClick(View v) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), UserSettingActivity.class);
-            startActivity(intent);
+            getActivity().startActivity(intent);
         }
     }
 }

@@ -14,7 +14,6 @@ import com.example.qydemo0.R;
 
 public class WorkItem extends LinearLayout {
 
-    public static int height = 120;
 
     private Context mContext = null;
     private View mView = null;
@@ -34,8 +33,8 @@ public class WorkItem extends LinearLayout {
     }
 
     public void init(String cover_url, String video_name, int like_num, int play_num, String intro){
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = inflater.inflate(R.layout.work_item, this, true);
+//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        mView = inflater.inflate(R.layout.work_item, this, true);
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.video_name);
         this.intro = mView.findViewById(R.id.text_intro);

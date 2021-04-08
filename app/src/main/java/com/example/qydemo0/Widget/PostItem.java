@@ -20,6 +20,7 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.R;
+import com.example.qydemo0.UserDetailActivity;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.koushikdutta.async.http.body.JSONArrayBody;
 
@@ -50,7 +51,8 @@ public class PostItem extends LinearLayout {
     }
 
 
-    String work_json = null, post_json = null, img_json;
+    String post_json = null, img_json;
+    int work_id = 0;
     TextView btn_follow;
 
     class GotoWork implements View.OnClickListener{
@@ -59,7 +61,7 @@ public class PostItem extends LinearLayout {
         public void onClick(View v) {
             Intent intent = new Intent();
             intent.setClass((Activity)mContext, PlayerActivity.class);
-            intent.putExtra("work", work_json);
+            intent.putExtra("id", work_id);
             ((Activity)mContext).startActivity(intent);
         }
     }
@@ -93,8 +95,10 @@ public class PostItem extends LinearLayout {
     // 2 文字+动态
     // 3 文字+图片
     int mode = 0;
+    JSONObject json;
 
     public void init(JSONObject json){
+        this.json = json;
         mode = 0;
         try {
             if(!json.getString("post").equals("null")) mode = 2;
@@ -103,8 +107,8 @@ public class PostItem extends LinearLayout {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mView = inflater.inflate(R.layout.post_item, this, true);
+//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        mView = inflater.inflate(R.layout.post_item, this, true);
         img_set = mView.findViewById(R.id.post_img_layout);
         work = mView.findViewById(R.id.post_work);
         post_post = mView.findViewById(R.id.post_post);
@@ -123,7 +127,12 @@ public class PostItem extends LinearLayout {
 
                     @Override
                     public void onClick(View v) {
-
+                        Follow follow = new Follow();
+                        try {
+                            follow.execute(json.getJSONObject("belong").getInt("uid"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
             }
@@ -156,7 +165,7 @@ public class PostItem extends LinearLayout {
             work.setVisibility(VISIBLE);
             try {
                 JSONObject work = json.getJSONObject("work");
-                work_json = work.toString();
+                work_id = work.getInt("id");
                 JSONObject coverInfo = work.getJSONObject("cover");
                 Img.url2imgViewRoundRectangle(coverInfo.getString("url"), cover, mContext, 40);
                 work_name.setText(work.getString("name"));
@@ -228,6 +237,7 @@ public class PostItem extends LinearLayout {
                 e.printStackTrace();
             }
         }
+        setIntentToDetail();
     }
 
     public int getQYHeight(){
@@ -235,5 +245,22 @@ public class PostItem extends LinearLayout {
         else if(mode == 1) return 70 + 230 + 40;
         else if(mode == 2) return 70 + 40 + 14 + 200 + 30 + 10 + 40;
         else return 70 + 300;
+    }
+
+    public void setIntentToDetail(){
+        if(json == null) return;
+        avatar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass((Activity)mContext, UserDetailActivity.class);
+                try {
+                    intent.putExtra("uid", json.getJSONObject("belong").getInt("uid"));
+                    ((Activity)mContext).startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

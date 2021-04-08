@@ -1,10 +1,10 @@
-package com.example.qydemo0.ui.posts;
+package com.example.qydemo0.Widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.Layout;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,79 +12,92 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.compose.ui.node.ViewAdapter;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.qydemo0.FollowerAndFanActivity;
+import com.example.qydemo0.LearningListActivity;
+import com.example.qydemo0.PlayerActivity;
+import com.example.qydemo0.QYAdapter.ImageNetAdapter;
 import com.example.qydemo0.QYpack.Constant;
-import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
-import com.example.qydemo0.TestStyleActivity;
+import com.example.qydemo0.SearchActivity;
+import com.example.qydemo0.UploadActivity;
 import com.example.qydemo0.UploadPostActivity;
-import com.example.qydemo0.Widget.PostItem;
-import com.example.qydemo0.Widget.QYScrollView;
+import com.example.qydemo0.UserSettingActivity;
+import com.example.qydemo0.bean.DataBean;
+import com.example.qydemo0.ui.dashboard.DashboardFragment;
 import com.example.qydemo0.ui.home.HomeFragment;
+import com.example.qydemo0.ui.posts.PostsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.snackbar.Snackbar;
+import com.youth.banner.Banner;
+import com.youth.banner.indicator.CircleIndicator;
 
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-public class PostsFragment extends Fragment implements View.OnClickListener {
+public class Post extends RelativeLayout implements View.OnClickListener {
 
-    private View root = null;
+    private Activity context;
+    private View mView;
+
     int[] buttons = {R.id.add_post, R.id.button_post_recommendation, R.id.button_post_follow};
     RelativeLayout rc_layout, f_layout;
     QYScrollView rc_view, f_view;
     int rc_startPos = 0, rc_len = 20;
-    int switcher = 0;// 0 rc 1 f
+    int switcher = 0;
+    // 0 rc 1 f
     TimeTool timeTool = new TimeTool();
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        root = inflater.inflate(R.layout.fragment_posts, container, false);
-        return root;
+
+    private Activity getActivity(){
+        return context;
     }
 
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
+    public Post(@NonNull Context context) {
+        super(context);
+        this.context = (Activity) context;
+        init();
+    }
+
+    public Post(Context context, AttributeSet attrs){
+        super(context, attrs);
+        this.context = (Activity) context;
+        init();
+    }
+
+    void init() {
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mView = inflater.inflate(R.layout.fragment_posts, this, true);
+
         for(int i = 0; i < buttons.length; i++){
-            View btn = root.findViewById(buttons[i]);
+            View btn = mView.findViewById(buttons[i]);
             btn.setOnClickListener(this);
         }
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        rc_layout = root.findViewById(R.id.rela_layout_posts_recommendation);
-        f_layout = root.findViewById(R.id.rela_layout_posts_follow);
-        rc_view = root.findViewById(R.id.view_posts_recommendation);
-        f_view = root.findViewById(R.id.view_posts_follow);
+        rc_layout = mView.findViewById(R.id.rela_layout_posts_recommendation);
+        f_layout = mView.findViewById(R.id.rela_layout_posts_follow);
+        rc_view = mView.findViewById(R.id.view_posts_recommendation);
+        f_view = mView.findViewById(R.id.view_posts_follow);
         rc_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
@@ -115,8 +128,6 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         getFollowedPost.execute();
     }
 
-
-
     @Override
     public void onClick(View v) {
         TextView t;
@@ -124,7 +135,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
             case R.id.add_post:
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), UploadPostActivity.class);
-                startActivity(intent);
+                getActivity().startActivity(intent);
                 break;
             case R.id.button_post_recommendation:
                 if(switcher == 0) break;
@@ -252,4 +263,5 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
 }

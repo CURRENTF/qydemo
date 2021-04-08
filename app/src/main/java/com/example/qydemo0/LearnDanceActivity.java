@@ -39,7 +39,6 @@ import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -47,7 +46,6 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -151,7 +149,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         initLearnVideo();
         //Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
-                opt.add(R.drawable.l0);
+        opt.add(R.drawable.l0);
         opt.add(R.drawable.l1);
 
         is_learn = false;

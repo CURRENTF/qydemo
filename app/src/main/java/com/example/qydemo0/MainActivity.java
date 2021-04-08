@@ -3,13 +3,8 @@ package com.example.qydemo0;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +13,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import android.content.pm.PackageManager;
@@ -31,15 +29,15 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.google.android.exoplayer2.Player;
+import com.example.qydemo0.Widget.Dashboard;
+import com.example.qydemo0.Widget.Home;
+import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.ui.dashboard.DashboardFragment;
+import com.example.qydemo0.Widget.QYNavigation;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,14 +59,11 @@ public class MainActivity extends AppCompatActivity {
                 //请求被拒绝，提示用户
                 Toast.makeText(this, "没有该权限将无法上传视频", Toast.LENGTH_LONG).show();
             }
-
-
         }
     }
 
     ImageView img;
 
-    int startCode = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,13 +109,17 @@ public class MainActivity extends AppCompatActivity {
             it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(it);
             finish();
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            return;
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
         // TODO: need delete maybe not
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         Button btn1 = (Button) findViewById(R.id.btn1);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,14 +133,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_category)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupWithNavController(navView, navController);
 
         GlobalVariable.mInstance.appContext = this;
 
@@ -150,9 +141,27 @@ public class MainActivity extends AppCompatActivity {
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
             g.execute();
-
         }
+
+        LinearLayout mainLayout = findViewById(R.id.main_layout);
+        Dashboard dashboard = new Dashboard(this);
+        mainLayout.addView(dashboard);
+        dashboard.setVisibility(View.GONE);
+        Home home = new Home(this);
+        mainLayout.addView(home);
+        Post post = new Post(this);
+        mainLayout.addView(post);
+        post.setVisibility(View.GONE);
+        QYNavigation navigation = new QYNavigation(this);
+        View[] views = {post, home, dashboard};
+        navigation.initView(views);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(this, 50));
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        navigation.setLayoutParams(layoutParams);
+        RelativeLayout main = findViewById(R.id.main_main);
+        main.addView(navigation);
     }
+
 
     @Override
     protected void onStart() {

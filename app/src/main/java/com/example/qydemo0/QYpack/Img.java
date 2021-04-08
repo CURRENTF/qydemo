@@ -99,11 +99,6 @@ public class Img {
                 .load(img_url)
                 .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
                 .into(img);
-//        Glide.with(context)
-//                .load(img_url)
-//                .apply(RequestOptions.bitmapTransform(new RoundedCorners(radius)))
-//                .apply(RequestOptions.bitmapTransform(new CenterCrop()))
-//                .into(img);
     }
 
     public static void url2imgViewRoundRectangle(Drawable img_b, ImageView img, Context context, int radius){
@@ -111,11 +106,6 @@ public class Img {
                 .load(img_b)
                 .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
                 .into(img);
-//        Glide.with(context)
-//                .load(img_url)
-//                .apply(RequestOptions.bitmapTransform(new RoundedCorners(radius)))
-//                .apply(RequestOptions.bitmapTransform(new CenterCrop()))
-//                .into(img);
     }
 
     public static ImageView linearLayoutDivideLine(Activity context){

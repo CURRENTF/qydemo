@@ -5,26 +5,37 @@
     android:id="@+id/item_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="10dp"
-    android:paddingVertical="10dp"
     android:background="@color/white"
+    android:layout_marginVertical="5dp"
     android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic__gold_medal"
+        android:id="@+id/medal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:id="@+id/learn_info_r"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
         android:layout_alignParentTop="true">
         <ImageView
             android:layout_width="0dp"
-            android:layout_weight="0.3"
+            android:layout_weight="0.2"
             android:layout_height="match_parent"
             android:src="@drawable/ic_vegetable"
+            android:id="@+id/cover"
+            android:layout_marginEnd="5dp"
             android:scaleType="fitCenter"/>
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="0.7"
+            android:layout_weight="0.8"
             android:layout_height="match_parent"
             android:orientation="vertical">
             <LinearLayout
@@ -32,53 +43,36 @@
                 android:layout_height="40dp"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.7"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="豪哥睡觉之舞"
                     android:textSize="20sp"
-                    android:id="@+id/work_learning_name"
+                    android:id="@+id/work_name"
                     android:gravity="center|start"
                     android:layout_margin="5dp"/>
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.3"
-                    android:layout_height="match_parent"
-                    android:textSize="20sp"
-                    android:text="99"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:id="@+id/work_learning_score"
-                    android:visibility="invisible"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
+                <ProgressBar
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
                     android:layout_height="match_parent"
-                    android:text="当前进度:"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_margin="5dp"/>
+                    android:layout_margin="5dp"
+                    android:id="@+id/learn_progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:progress="70"/>
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_gravity="center"
                     android:gravity="center_vertical"
                     android:text="7/10"
-                    android:id="@+id/work_learning_progress" />
+                    android:id="@+id/txt_learn_progress" />
             </LinearLayout>
-            <ProgressBar
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:progress="70"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -93,10 +87,7 @@
         android:layout_marginBottom="15dp"
         android:background="@drawable/bottom_round"
         android:layout_marginHorizontal="10dp"
-        android:paddingVertical="5dp"
         android:orientation="vertical">
-
-        
 
     </LinearLayout>
 
