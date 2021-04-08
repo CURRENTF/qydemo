@@ -36,6 +36,7 @@ import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYNavigation;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, FreeDanceActivity.class);
+                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
                 startActivity(intent);
             }
         });

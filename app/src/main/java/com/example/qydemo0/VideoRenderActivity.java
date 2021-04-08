@@ -98,7 +98,7 @@ public class VideoRenderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_render);
 //        final Intent intent = getIntent();
 //        free_dance_url = intent.getStringExtra("free_dance_url");
-        free_dance_url = "/sdcard/DCIM/Camera/VID_20200407_144139.mp4";
+        free_dance_url = "/sdcard/DCIM/Camera/VID_20210409_035321.mp4";
         inti_clip_video();
         init_player();
 
@@ -479,16 +479,17 @@ public class VideoRenderActivity extends AppCompatActivity {
                     render_img_id=cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,render_img, 0, cur_file.hashFileUrl(render_img));
                 }
 
-            for(int o = 0;o<5;o++){
-                if(startCode==0){
-                    render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)),"",VideoRenderActivity.this);
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+//            for(int o = 0;o<5;o++){
+//                if(startCode==0){
+//                    render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)),"",VideoRenderActivity.this);
+//                    break;
+//                }
+//                try {
+//                    Thread.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
                 if(render_img_id!=null) {
                     List<String> callToJson = new ArrayList<>();
