@@ -25,6 +25,7 @@ import android.widget.Toast;
 import android.content.pm.PackageManager;
 import android.view.GestureDetector;
 
+import com.example.qydemo0.AiUnit.FaceFerActivity;
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, PlayerActivity.class);
+                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
                 startActivity(intent);
             }
         });

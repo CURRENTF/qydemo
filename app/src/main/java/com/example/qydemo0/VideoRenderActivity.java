@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -24,12 +25,23 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.aiunit.core.FrameData;
+import com.aiunit.vision.common.ConnectionCallback;
+import com.aiunit.vision.common.FrameInputSlot;
+import com.aiunit.vision.common.FrameOutputSlot;
 import com.bumptech.glide.Glide;
+import com.coloros.ocs.ai.cv.CVUnit;
+import com.coloros.ocs.ai.cv.CVUnitClient;
+import com.coloros.ocs.base.common.ConnectionResult;
+import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
+import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.bean.CallBackBean;
 import com.google.gson.Gson;
@@ -38,6 +50,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,6 +86,9 @@ public class VideoRenderActivity extends AppCompatActivity {
     private QYrequest cur_request = new QYrequest();
     private QYFile cur_file = new QYFile();
 
+    private CVUnitClient mCVClient;
+    private int startCode;
+
 //    OrientationUtils orientationUtils;
 
     @Override
@@ -80,8 +96,9 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-        final Intent intent = getIntent();
-        free_dance_url = intent.getStringExtra("free_dance_url");
+//        final Intent intent = getIntent();
+//        free_dance_url = intent.getStringExtra("free_dance_url");
+        free_dance_url = "/sdcard/DCIM/Camera/VID_20200407_144139.mp4";
         inti_clip_video();
         init_player();
 
@@ -130,6 +147,34 @@ public class VideoRenderActivity extends AppCompatActivity {
                 new SendRenderVideo().execute(free_dance_url);
             }
         });
+
+        mCVClient = CVUnit.getVideoStyleTransferDetectorClient
+                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
+            @Override
+            public void onConnectionSucceed() {
+                Log.i("TAG", " authorize connect: onConnectionSucceed");
+            }
+        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
+            @Override
+            public void onConnectionFailed(ConnectionResult connectionResult) {
+                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
+            }
+        });
+
+        //AI Unit
+        mCVClient.initService(this, new ConnectionCallback() {
+            @Override
+            public void onServiceConnect() {
+                Log.i("TAG", "initService: onServiceConnect");
+                startCode = mCVClient.start();
+            }
+
+            @Override
+            public void onServiceDisconnect() {
+                Log.e("TAG", "initService: onServiceDisconnect: ");
+            }
+        });
+
     }
 
 //    public class tan extends AsyncTask<Void, Void, Void>{
@@ -283,9 +328,34 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     }
         
-    private void updatePlayer(String YuLanUrl){
-        videoPlayer.setUp(YuLanUrl, true, "渲染视频预览");
+    private void updatePlayer(JSONObject res_urls) {
+
+        List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
+        SwitchVideoModel switchVideoModel = null;
+        try {
+            if(res_urls.has("1080P")){
+                    switchVideoModel = new SwitchVideoModel("1080P", res_urls.getString("1080P"));
+                list.add(switchVideoModel);
+            }
+            if(res_urls.has("720P")){
+                switchVideoModel = new SwitchVideoModel("720P", res_urls.getString("720P"));
+            }
+            if(res_urls.has("480P")){
+                switchVideoModel = new SwitchVideoModel("480P", res_urls.getString("480P"));
+            }
+            if(res_urls.has("360P")){
+                switchVideoModel = new SwitchVideoModel("360P", res_urls.getString("360P"));
+            }
+            if(res_urls.has("自动")){
+                switchVideoModel = new SwitchVideoModel("自动", res_urls.getString("自动"));
+            }
+            list.add(switchVideoModel);
+
+        videoPlayer.setUp(list.get(0).getUrl(),true,"渲染预览视频");
         videoPlayer.startPlayLogic();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     public void showProgressDialog(String title, String message) {
@@ -383,98 +453,113 @@ public class VideoRenderActivity extends AppCompatActivity {
 //        }
 //    }
 
-    public class SendRenderVideo extends AsyncTask<String , Void, String>{
+    public Bitmap getStyleBitmap(Bitmap cur_bitmap){
+
+        FrameInputSlot inputSlot = (FrameInputSlot) mCVClient.createInputSlot();
+        inputSlot.setTargetBitmap(cur_bitmap);
+        FrameOutputSlot outputSlot = (FrameOutputSlot) mCVClient.createOutputSlot();
+        mCVClient.process(inputSlot, outputSlot);
+        FrameData frameData = outputSlot.getOutFrameData();
+        byte[] outImageBuffer = frameData.getData();
+
+// RGB buffer.
+        int[] colors = new int[outImageBuffer.length / 3];
+        for (int j = 0; j < frameData.height; ++j) {
+
+            for (int i = 0; i < frameData.width; ++i) {
+
+                int red = outImageBuffer[3 * (j * frameData.width + i)];
+
+                int green = outImageBuffer[3 * (j * frameData.width + i) + 1];
+
+                int blue = outImageBuffer[3 * (j * frameData.width  + i) + 2];
+
+                int alpha = 0xFF;
+
+                colors[j * frameData.width + i] = (alpha << 24) | (red << 16) | (green << 8) | (blue);
+            }
+        }
+
+        Bitmap resultBmp = Bitmap.createBitmap(colors, frameData.width, frameData.height, Bitmap.Config.ARGB_8888);
+        System.out.println(String.valueOf(resultBmp==null));
+        return resultBmp;
+    }
+
+    public class SendRenderVideo extends AsyncTask<String , Void, JSONObject>{
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected JSONObject doInBackground(String... strings) {
 
             String will_do_url = strings[0];
-
-            JSONObject res_json = cur_file.verifyFileUpload(Constant.mInstance.file_upload_verify_url,2,cur_file.hashFileUrl(will_do_url));
-            int render_video_id = -1;
-            try {
-                if(!res_json.getBoolean("rapid_upload")){
-                    try {
-                        if(!cur_file.uploadFile(Constant.mInstance.file_upload_callback_url, will_do_url, res_json.getString("token"))){
-                            return null;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            String render_img_id = null;
+            VideoClip vp = new VideoClip();
+            String cover_path = Img.saveImg(vp.getCoverFromVideo(will_do_url),"123",VideoRenderActivity.this);
+            String cover_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,
+                    cover_path, 0,cur_file.hashFileUrl(cover_path));
+            if(cover_id==null) return null;
+            String render_video_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,will_do_url, 2, cur_file.hashFileUrl(will_do_url));
+            if(render_video_id!=null){
+                if(render_paras[0]==-2){
+                    render_img_id=cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,render_img, 0, cur_file.hashFileUrl(render_img));
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+            for(int o = 0;o<5;o++){
+                if(startCode==0){
+                    render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)),"",VideoRenderActivity.this);
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
-            try {
-                render_video_id = res_json.getInt("file_id");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            String img_id,img_mode,lj_id;
-            int render_img_id = -1;
-                if(render_paras[0] == -2){
-
-                        JSONObject res_json1 = cur_file.verifyFileUpload(Constant.mInstance.file_upload_verify_url,0,cur_file.hashFileUrl(render_img));
-
+                if(render_img_id!=null) {
+                    List<String> callToJson = new ArrayList<>();
+                    callToJson.add("video");callToJson.add("string");callToJson.add(render_video_id);
+                    callToJson.add("cover");callToJson.add("string");callToJson.add(cover_id);
+;                    if(render_paras[0]!=0){
+                        callToJson.add("is_background");callToJson.add("bool");callToJson.add("true");
+                        callToJson.add("img_id");callToJson.add("string");callToJson.add(render_img_id);
+                    }else{
+                        callToJson.add("is_background");callToJson.add("bool");callToJson.add("false");
+                    }
+                    callToJson.add("mode");callToJson.add("bool");callToJson.add("true");
+                    if(render_paras[1]!=0){
+                        callToJson.add("is_filter");callToJson.add("bool");callToJson.add("true");
+                        callToJson.add("filter_id");callToJson.add("string");callToJson.add(""+(render_paras[1]-1));
+                    }
+                    else{
+                        callToJson.add("is_filter");callToJson.add("bool");callToJson.add("false");
+                    }
+                    System.out.println(GenerateJson.universeJson2(callToJson.toArray(new String[callToJson.size()])));
+                    String res_json = cur_request.advancePost(GenerateJson.universeJson2(callToJson.toArray(new String[callToJson.size()])),"Authorization", GlobalVariable.mInstance.token);
                     try {
-                        if(!res_json1.getBoolean("rapid_upload")){
-                            if(!cur_file.uploadFile(Constant.mInstance.file_upload_callback_url, render_img, res_json1.getString("token"))){
-                                return null;
+                        JSONObject res_json_object = new JSONObject(res_json);
+                        String tid = "";
+                        if(res_json_object.getString("msg").equals("Success")){
+                            tid = res_json_object.getJSONObject("data").getString("tid");
+                            if(!isYuLan) return res_json_object;
+                        }
+                        else{return null;}
+                        for(int q=0;q<10;q++){
+                            Thread.sleep(1000);
+                            JSONObject res_json_rendered = new JSONObject(cur_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
+                                    "Authorization",GlobalVariable.mInstance.token));
+                            if(res_json_rendered.getString("schedule").equals("100%")){
+                                return res_json_rendered.getJSONObject("data");
                             }
                         }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        render_img_id = res_json1.getInt("file_id");
-                    } catch (JSONException e) {
+                    } catch (JSONException | InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-            Boolean choice1 = render_paras[0]==0?false:true,
-                    choice2 = render_paras[1]==0?false:true;
-            String[] callToJson = {"video", "int", ""+render_video_id,
-                    "is_background", "bool", choice1?"true":"false",
-            "img_id", choice1?"string":"int", choice1?(""+render_img_id):"null",
-            "mode", choice1?"bool":"int", choice1?(""+"false"):"null", /*这里加渲染模型！！！！！！！！！！！*/
-            "is_filter","bool",choice2?"true":"false",
-            "filter_id", choice1?"string":"int", choice1?(""+(render_paras[1]-1)):"null"
-            };
-            String resJson = cur_request.advancePost(GenerateJson.universeJson2(callToJson), Constant.mInstance.task_url+"rendering/", "Authorization", GlobalVariable.mInstance.token);
-
-            try {
-                String tid;
-                JSONObject ress_json = new JSONObject(resJson);
-                if(ress_json.getString("msg").equals("Success")){
-                    tid = ress_json.getJSONObject("data").getString("tid");
                 }
-                else return null;
-                while(true){
-                    Thread.sleep(500);
-                    String render_res = cur_request.advancePost(GenerateJson.universeJson("tid",tid),Constant.mInstance.task_url+"task/",
-                            "Authorization", GlobalVariable.mInstance.token);
-                    JSONObject render_res_json = new JSONObject(render_res);
-                    if(!isYuLan){
-                        if(render_res_json.getInt("schedule")!=-1){
-                            return "success";
-                        }
-                    }
-                    if(render_res_json.getInt("schedule") == 100){
-                        return render_res_json.getJSONObject("data").getJSONObject("video_url").getString("1080P");
-                    }
-                }
-            } catch (JSONException | InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
             return null;
         }
 
         @Override
-            protected void onPostExecute(String s) {
+            protected void onPostExecute(JSONObject s) {
                 super.onPostExecute(s);
             hideProgressDialog();
                 if(isYuLan){
@@ -486,9 +571,11 @@ public class VideoRenderActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(VideoRenderActivity.this,"开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    if(s!=null) {
+                        Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
 

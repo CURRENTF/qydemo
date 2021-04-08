@@ -37,6 +37,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,7 +126,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             groupHolder.like_num.setText("");
         }
         groupHolder.tv_name.setText(commentBeanList.get(groupPosition).getBelong().getUsername());
-        groupHolder.tv_time.setText(commentBeanList.get(groupPosition).getCreated_time());
+//        SimpleDateFormat sdFormatter = new SimpleDateFormat("yyyy年-MM月dd日-HH时mm分ss秒");
+//        Log.i("format_time",sdFormatter.format(commentBeanList.get(groupPosition).getCreated_time()));
+        String this_time = commentBeanList.get(groupPosition).getCreated_time();
+        Log.i("this time", ""+this_time.length());
+        groupHolder.tv_time.setText(this_time.substring(0,4)+"年"+this_time.substring(5,7)+"月"+this_time.substring(8,10)+"日"+" "+this_time.substring(11,19));
         if(!commentBeanList.get(groupPosition).getIs_delete()) {
             groupHolder.tv_content.setText(commentBeanList.get(groupPosition).getText());
         } else {

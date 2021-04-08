@@ -3,6 +3,7 @@ package com.example.qydemo0;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
@@ -38,6 +39,7 @@ import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -45,6 +47,7 @@ import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -88,8 +91,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     String path_cur;
     private Boolean is_record;
     private Boolean is_compare;
-    private int[] wrong_time = {2700, 6900, 12000};
-    private int[] wrong_id = {0, 1, 2};
+    private List<List<Long>> wrong_time = new ArrayList<>();
+    private List<List<Boolean>> wrong_id = new ArrayList<>();
     private int cur_compare_id = 0;
     private ProgressDialog progressDialog;
     ImageView people_img;
@@ -147,7 +150,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         ButterKnife.bind(this);
 
         initLearnVideo();
-        Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
+        //Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
                 opt.add(R.drawable.l0);
         opt.add(R.drawable.l1);
 
@@ -261,8 +264,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
                 if(is_compare){
                     people_img.setLayoutParams(people_all);
-                    for(int i=0;i<wrong_time.length;i++) {
-                        if (currentPosition > wrong_time[i]-500 && currentPosition < wrong_time[i]+500 ){
+                    for(int i=0;i<wrong_time.size();i++) {
+                        if (currentPosition > wrong_time.get(i).get(0)-500 && currentPosition < wrong_time.get(i).get(0) + wrong_time.get(i).get(1)){
                             if(detailPlayer.getSpeed()!=0.25f){
                                 detailPlayer.getMspeed().setText("0.25倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(0.25f, true);
@@ -720,35 +723,63 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         super.onBackPressed();
     }
 
-    public class SendUserDanceVideo extends AsyncTask<String, Void, String> {
+    public class SendUserDanceVideo extends AsyncTask<String, Void, JSONObject> {
 
         @Override
-        protected String doInBackground(String... video_path) {
-            JSONObject res = (JSONObject) learn_file.verifyFileUpload(Constant.mInstance.file_upload_verify_url,2,learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617626033964.mp4"));
-            String learn_video_id = "";
+        protected JSONObject doInBackground(String... video_path) {
+            String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
+                    2,learn_file.hashFileUrl(path_cur));
+            if(learn_dance_id == null) return null;
+            String[] callToJson = {"record_id","string","132132","videoA","string","DanceID","videoB","string",learn_dance_id};
             try {
-                if(!res.getBoolean("rapid_upload")){
-                    if(!learn_file.uploadFile(Constant.mInstance.file_upload_callback_url, path_cur, res.getString("token"))){
-                        return null;
+                JSONObject res_json = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(callToJson),
+                        Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
+                String tid = res_json.getJSONObject("data").getString("tid");
+                if(tid==null) return null;
+                while(true){
+                    Thread.sleep(500);
+                    JSONObject task_res = new JSONObject(learn_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
+                            "Authorization",GlobalVariable.mInstance.token));
+                    if(task_res.getJSONObject("data").getInt("schedule")==100){
+                        return task_res.getJSONObject("data");
                     }
                 }
-
-                learn_video_id = res.getString("file_id");
-
-
-            } catch (JSONException e) {
+            } catch (JSONException | InterruptedException e) {
                 e.printStackTrace();
             }
-            return "";
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String resJson) {
-            if(resJson != ""){
-                detailPlayer.setUp(all_learn_video.get(0), true, "对比视频");
-                init_compare_video();
-                detailPlayer.startPlayLogic();
-                hideProgressDialog();
+        protected void onPostExecute(JSONObject resJson) {
+            hideProgressDialog();
+            if(resJson != null){
+                try {
+                    detailPlayer.setUp(resJson.getJSONObject("video_url").getString("1080P"), true, "对比视频");
+                    wrong_time.clear();
+                    JSONArray wrong_time_json = resJson.getJSONObject("evaluation").getJSONArray("error");
+                    for(int i=0;i<wrong_time_json.length();i++){
+                        JSONObject wrong_time_json_item = wrong_time_json.getJSONObject(i);
+                        List<Long> wrong_time_item = new ArrayList<>();
+                        wrong_time_item.add((long) (wrong_time_json_item.getDouble("begin_time")*1000.0));
+                        wrong_time_item.add((long) ((wrong_time_json_item.getDouble("end_time") - wrong_time_json_item.getDouble("begin_time"))*1000.0));
+                        List<Boolean> wrong_id_item = new ArrayList<>();
+                        String cur_wrong_id = wrong_time_json_item.getString("error_type");
+                        for(int j=0;j<cur_wrong_id.length();j++){
+                            wrong_id_item.add((Integer.valueOf(cur_wrong_id.charAt(i))) == 1);
+                        }
+                    }
+                    init_compare_video();
+                    detailPlayer.startPlayLogic();
+                    hideProgressDialog();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                Toast.makeText(LearnDanceActivity.this,"出错啦！",Toast.LENGTH_LONG);
+                Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         }
 
