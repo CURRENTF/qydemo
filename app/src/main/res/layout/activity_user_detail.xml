@@ -110,16 +110,18 @@
                         android:background="@color/black"/>
 
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="1000dp"
-                        android:id="@+id/wwww"/>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/posts"
                         android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1000dp"
+                            android:id="@+id/wwww1"/>
+
 
                     </LinearLayout>
 
@@ -128,6 +130,11 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/works"
                         android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1000dp"
+                            android:id="@+id/wwww2"/>
 
                     </LinearLayout>
 

@@ -28,8 +28,8 @@ public class DataBean {
 
     public static List<DataBean> getTestData3() {
         List<DataBean> list = new ArrayList<>();
-        list.add(new DataBean("/storage/emulated/0/Pictures/000.png", "QingYing", 1));
-        list.add(new DataBean("/storage/emulated/0/Pictures/001.png", "QingYing", 1));
+        list.add(new DataBean("https://file.yhf2000.cn/img/000.png", "QingYing", 1));
+        list.add(new DataBean("https://file.yhf2000.cn/img/001.png", "QingYing", 1));
         return list;
     }
 

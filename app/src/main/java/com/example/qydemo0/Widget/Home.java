@@ -3,6 +3,7 @@ package com.example.qydemo0.Widget;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -14,11 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.example.qydemo0.FollowerAndFanActivity;
+import com.example.qydemo0.FreeDanceActivity;
 import com.example.qydemo0.LearningListActivity;
 import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.QYAdapter.ImageNetAdapter;
@@ -27,9 +32,11 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.TimeTool;
+import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.R;
 import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
@@ -43,6 +50,8 @@ import com.youth.banner.indicator.CircleIndicator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,9 +67,13 @@ public class Home extends RelativeLayout implements View.OnClickListener {
     Unbinder bind;
     public int startPos = 0, len = 20;
     TimeTool timeTool = new TimeTool();
+    QYFile.ResultContract qyr = new QYFile.ResultContract();
+    ActivityResultLauncher launcher;
 
     @BindView(R.id.banner_ad)
     Banner banner_ad;
+
+    Button ezDance;
 
     private Activity getActivity(){
         return context;
@@ -119,6 +132,21 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         txt.setOnClickListener(this);
         Button btn = mView.findViewById(R.id.button_image_learn_list);
         btn.setOnClickListener(this);
+
+        launcher = ((AppCompatActivity)context).registerForActivityResult(qyr, new ActivityResultCallback<Uri>() {
+            @Override
+            public void onActivityResult(Uri result) {
+                if(result == null) return;
+                Intent intent1 = new Intent();
+                intent1.setClass(getActivity(), FreeDanceActivity.class);
+                ArrayList<String> list = new ArrayList<>();
+                list.add("1"); list.add(Uri2RealPath.getRealPathFromUri_AboveApi19(getActivity(), result));
+                intent1.putExtra("list", list);
+                getActivity().startActivity(intent1);
+            }
+        });
+        ezDance = mView.findViewById(R.id.button_image_free_dance);
+        ezDance.setOnClickListener(this);
     }
 
     void unbind(){
@@ -144,6 +172,11 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 intent3.setClass(getActivity(), LearningListActivity.class);
                 getActivity().startActivity(intent3);
                 break;
+            default:
+                if(v == ezDance){
+                    qyr.params = "audio";
+                    launcher.launch(true);
+                }
         }
     }
 

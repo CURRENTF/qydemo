@@ -54,6 +54,7 @@ public class LoginUsernameFragment extends Fragment {
 
             GenerateJson g = new GenerateJson();
             PostLoginMsg po = new PostLoginMsg();
+            Log.d("hjt.password.encrypt", MD5encrypt.encrypt(password.toString()));
             po.execute(g.loginJson(username.toString(), MD5encrypt.encrypt(password.toString()), 0), C.login_url);
         }
     }

@@ -130,6 +130,7 @@ public class Register2UsernameFragment extends Fragment {
         @Override
         protected String doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
+            Log.d("hjt.password.encrypt", MD5encrypt.encrypt(((LoginActivity)getActivity()).password));
             return htp.post(GenerateJson.universeJson("username", ((LoginActivity)getActivity()).username,
                     "password", MD5encrypt.encrypt(((LoginActivity)getActivity()).password)), Constant.mInstance.login_url);
         }

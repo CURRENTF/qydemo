@@ -25,25 +25,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
+        <activity android:name=".ViewImageActivity"></activity>
         <activity
-            android:screenOrientation="portrait"
+            android:name=".PostDetailActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".PostDetailActivity"/>
+            android:screenOrientation="portrait" />
         <activity android:name=".SimplePlayerActivity" />
+        <activity android:name=".AiUnit.FaceFerActivity" />
         <activity
-            android:name=".AiUnit.FaceFerActivity" />
-        <activity
-            android:screenOrientation="portrait"
+            android:name=".RenderQueueActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".RenderQueueActivity" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".UserDetailActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".UserDetailActivity" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".FollowerAndFanActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".FollowerAndFanActivity" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".GameActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -62,25 +62,25 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".SearchActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".SearchActivity" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".UserSettingActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".UserSettingActivity" />
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".UploadActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".UploadActivity" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".PlayerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
+            android:name=".LoginActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".LoginActivity">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -88,9 +88,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
+            android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:name=".MainActivity">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

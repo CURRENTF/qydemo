@@ -16,7 +16,7 @@ public class GenerateJson {
         if(mark == 0) map.put(C.username, username);
         else if(mark == 1) map.put(C.email, username);
         else map.put(C.phone, username);
-        map.put(C.password, MD5encrypt.encrypt(password));
+        map.put(C.password, password);
         JSONObject json = new JSONObject(map);
         return json.toString();
     }
@@ -24,7 +24,7 @@ public class GenerateJson {
     public String registerPostJson(String username, String password, String phone){
         Map<String, String> map = new HashMap<String, String>();
         map.put(C.username, username);
-        map.put(C.password, MD5encrypt.encrypt(password));
+        map.put(C.password, password);
         map.put(C.phone, phone);
         JSONObject json = new JSONObject(map);
         return json.toString();

@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.qydemo0.DetailPostActivity;
 import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.PostDetailActivity;
@@ -24,6 +26,7 @@ import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserDetailActivity;
+import com.example.qydemo0.ViewImageActivity;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.koushikdutta.async.http.body.JSONArrayBody;
 
@@ -226,6 +229,7 @@ public class PostItem extends LinearLayout {
                     Img.url2imgViewRoundRectangle(jsonObj.getString("url"), img, mContext, 20);
                     LinearLayout l = mView.findViewById(R.id.post_main);
                     l.addView(img);
+                    Img.setOnClickForView(img, (AppCompatActivity) mContext, ViewImageActivity.class, jsonObj.getString("url"));
                 }
                 else {
                     img_set.setVisibility(VISIBLE);
@@ -238,6 +242,7 @@ public class PostItem extends LinearLayout {
                         layoutParams.setMargins(DeviceInfo.dip2px(mContext, 5),DeviceInfo.dip2px(mContext, 5),
                                 DeviceInfo.dip2px(mContext, 5),DeviceInfo.dip2px(mContext, 5));
                         img.setLayoutParams(layoutParams);
+                        Img.setOnClickForView(img, (AppCompatActivity)mContext, ViewImageActivity.class, json.getString("url"));
                         img_set.addView(img);
                     }
                 }
@@ -245,8 +250,6 @@ public class PostItem extends LinearLayout {
                 e.printStackTrace();
             }
         }
-//        setIntentToDetail();
-//        setIntentToPostDetail();
     }
 
     public void init(JSONObject json, boolean a, boolean b, boolean is_detail){
