@@ -130,7 +130,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private QYScrollView post_detail_nested_scroll = null;
     TimeTool timeTool = new TimeTool();
     private int start_next = 0;
-    private JSONObject player_urls;
+    private JSONObject player_urls = new JSONObject();
     private int breakdown_id = -1;
     private int work_id = 0;
 
@@ -587,7 +587,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Log.i("whc123",""+work_bean.getMsg());
         List<String> lists = new ArrayList<>();
         List<String> list_name = new ArrayList<>();
-        try {if(player_urls.has("1080P")) {
+        try {
+            if(player_urls.has("1080P")) {
             lists.add(player_urls.getString("1080P"));
             list_name.add("1080P");
         }
@@ -600,7 +601,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             lists.add(player_urls.getString("480P"));
             list_name.add("480P");
         }
-        if(player_urls.has("3600P")){
+        if(player_urls.has("360P")){
             lists.add(player_urls.getString("360P"));
             list_name.add("360P");
         }
@@ -998,11 +999,16 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(String cur_work_json) {
             super.onPreExecute();
             try {
-                player_urls = new JSONObject(cur_work_json);
-                Log.e("whc_player_urls", String.valueOf(player_urls));
+                JSONObject player_urls1 = new JSONObject(cur_work_json);
+                Log.e("whc_player_urls1", String.valueOf(player_urls1));
+                player_urls = player_urls1.getJSONObject("data").getJSONObject("video").getJSONObject("url");
+                Log.e("player_urls", String.valueOf(player_urls));
+                try{
                 breakdown_id = player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
-                Log.e("breakdown_id", ""+breakdown_id);
-            player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
+                Log.e("breakdown_id", ""+breakdown_id);}
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }init_work(cur_work_json);
