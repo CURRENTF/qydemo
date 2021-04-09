@@ -103,6 +103,13 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         });
     }
 
+    private void initView() {
+        expandableListView = (CommentExpandableListView) findViewById(R.id.detail_page_lv_comment);
+        bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
+        bt_comment.setOnClickListener(this);
+        initExpandableListView(commentsList);
+    }
+
 
     class OPPost extends AsyncTask<Integer, Integer, Boolean>{
 
@@ -119,12 +126,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             return false;
         }
 
-    private void initView() {
-        expandableListView = (CommentExpandableListView) findViewById(R.id.detail_page_lv_comment);
-        bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
-        bt_comment.setOnClickListener(this);
-        initExpandableListView(commentsList);
-    }
+
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){

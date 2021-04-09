@@ -1196,7 +1196,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     WorkItem render_item = new WorkItem(PlayerActivity.this);
                     render_item.init(cur_json_object.getJSONObject("cover").getString("url"),cur_json_object.getString("name"),
                             cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
-                            cur_json_object.getString("introduction"), cur_json_object.getInt("id"));
+                            cur_json_object.getString("introduction"), cur_json_object.getJSONObject("belong").getString("username"), cur_json_object.getInt("id"));
                     render_items.add(render_item);
                     render_content.addView(render_item);
                     JSONObject finalCur_json_object = cur_json_object;
