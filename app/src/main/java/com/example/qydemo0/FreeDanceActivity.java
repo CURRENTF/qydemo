@@ -241,7 +241,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         surf = findViewById(R.id.sf_view);
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int heightPixels = dm.heightPixels;
-        fill_all = new RelativeLayout.LayoutParams((int) heightPixels*1280/720, heightPixels);
+        Log.e("hjt.aaa", heightPixels+".");
+        fill_all = new RelativeLayout.LayoutParams((int) heightPixels*DeviceInfo.width(this)/DeviceInfo.height(this), heightPixels);
         fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
         fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         fill_tiny = new RelativeLayout.LayoutParams(1,1);
@@ -452,7 +453,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                     break;
                 }
             }
-            //for(int ii = 0; ii<vSizeList.size();ii++) Log.e("fill_width", ""+vSizeList.get(ii).width+"+"+vSizeList.get(ii).height);
+//            for(int ii = 0; ii<vSizeList.size();ii++) Log.e("fill_width", ""+vSizeList.get(ii).width+"+"+vSizeList.get(ii).height);
             mSize.width = 1280;
             mSize.height = 720;
 

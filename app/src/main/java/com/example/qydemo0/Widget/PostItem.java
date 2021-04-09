@@ -242,7 +242,7 @@ public class PostItem extends LinearLayout {
                         layoutParams.setMargins(DeviceInfo.dip2px(mContext, 5),DeviceInfo.dip2px(mContext, 5),
                                 DeviceInfo.dip2px(mContext, 5),DeviceInfo.dip2px(mContext, 5));
                         img.setLayoutParams(layoutParams);
-                        Img.setOnClickForView(img, (AppCompatActivity)mContext, ViewImageActivity.class, json.getString("url"));
+                        Img.setOnClickForView(img, (AppCompatActivity)mContext, ViewImageActivity.class, j.getString("url"));
                         img_set.addView(img);
                     }
                 }

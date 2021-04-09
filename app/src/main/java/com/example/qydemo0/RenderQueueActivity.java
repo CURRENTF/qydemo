@@ -72,12 +72,16 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         if(view == btn_left){
             left.setVisibility(View.VISIBLE);
             right.setVisibility(View.GONE);
+            btn_left.setTextColor(getColor(R.color.red));
+            btn_right.setTextColor(getColor(R.color.black));
             left.startAnimation(l_in);
             right.startAnimation(l_out);
         }
         else {
             left.setVisibility(View.GONE);
             right.setVisibility(View.VISIBLE);
+            btn_left.setTextColor(getColor(R.color.black));
+            btn_right.setTextColor(getColor(R.color.red));
             left.startAnimation(r_out);
             right.startAnimation(r_in);
         }

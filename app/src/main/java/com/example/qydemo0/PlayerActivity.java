@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -36,6 +37,7 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
+import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
@@ -133,6 +135,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private JSONObject player_urls = new JSONObject();
     private int breakdown_id = -1;
     private int work_id = 0;
+    QYScrollView qyscrollview_comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +143,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_player);
         Bundle bundle = this.getIntent().getExtras();
         ButterKnife.bind(this);
-//        QYScrollView qyscrollview_comment = (QYScrollView) findViewById(R.id.qyscrollview_comment);
+        qyscrollview_comment = (QYScrollView) findViewById(R.id.qyscrollview_comment);
         int wid = bundle.getInt("id");
         Log.d("hjt.wid", String.valueOf(wid));
         new GetCommentJson().execute(wid,0,20);
@@ -151,9 +154,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         post_detail_nested_scroll.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
-                if(!timeTool.checkFreq()) return;
-                new getRec().execute(wid,start_next,10);
-                Log.d("hjt.scroll.bottom", "true");
+//                if(!timeTool.checkFreq()) return;
+//                new getRec().execute(wid,start_next,10);
+//                Log.d("hjt.scroll.bottom", "true");
             }
 
             @Override
@@ -176,9 +179,15 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 //            }
 //        });
 
+        r_out = AnimationUtils.loadAnimation(this, R.anim.ani_right_translate_alpha_500ms);
+        r_in = AnimationUtils.loadAnimation(this, R.anim.ani_right_translate_in_alpha_500ms);
+        l_out = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_alpha_500ms);
+        l_in = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_in_alpha_500ms);
         new getRec().execute(wid,start_next,10);
     }
 
+    Animation l_out, l_in, r_out, r_in;
+    View last;
     private void init_button_and_pager(){
         ImageView btn_learn = (ImageView) findViewById(R.id.learn_dance);
         ImageView btn_free_dance = (ImageView) findViewById(R.id.free_dance);
@@ -240,22 +249,32 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         intro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(last == v) return;
+                last = v;
                 comment_pager.setVisibility(View.GONE);
                 recall_pager.setVisibility(View.GONE);
                 post_detail_nested_scroll.setVisibility(View.VISIBLE);
                 intro.setTextColor(getColor(R.color.red));
                 comme.setTextColor(getColor(R.color.black));
+                postDetailNestedScroll.startAnimation(l_in);
+                qyscrollview_comment.startAnimation(l_out);
+                recall_pager.startAnimation(l_out);
             }
         });
 
         comme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(last == v) return;
+                last = v;
                 post_detail_nested_scroll.setVisibility(View.GONE);
                 comment_pager.setVisibility(View.VISIBLE);
                 recall_pager.setVisibility(View.VISIBLE);
                 comme.setTextColor(context.getResources().getColor(R.color.red));
                 intro.setTextColor(context.getResources().getColor(R.color.black));
+                postDetailNestedScroll.startAnimation(r_out);
+                qyscrollview_comment.startAnimation(r_in);
+                recall_pager.startAnimation(r_in);
             }
         });
     }
@@ -499,6 +518,17 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         else
             video_comment_num.setText("");
         CircleImageView  head_img = (CircleImageView) findViewById(R.id.detail_page_userLogo);
+        head_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(PlayerActivity.this, UserDetailActivity.class);
+                intent.putExtra("uid", work_bean.getData().getBelong().getUid());
+                intent.putExtra("username", work_bean.getData().getBelong().getUsername());
+                intent.putExtra("avatar", work_bean.getData().getBelong().getImg_url());
+                startActivity(intent);
+            }
+        });
         Glide.with(context)
                 .load(work_bean.getData().getBelong().getImg_url())
                 .transform(/*new CenterInside(), */new RoundedCorners(50)).into(head_img);
@@ -512,7 +542,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         for(int i=0;i<sources.size();i++){
             list.add(new SwitchVideoModel(list_name.get(i),sources.get(i)));
         }
-        detailPlayer.setUp(list, true, "韩国小姐姐的舞蹈视频");
+        detailPlayer.setUp(list, true, work_bean.getData().getName());
 
         //增加封面
         coverImageView = new ImageView(this);
@@ -1205,6 +1235,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(JSONArray aVoid) {
             super.onPostExecute(aVoid);
             start_next += 10;
+            if(aVoid.isNull(0)){
+                Log.d("hjt.null", "avoid");
+            }
+            else Log.d("hjt.avoid", String.valueOf(aVoid));
             for(int i=0;i<aVoid.length();i++)
             {
                 JSONObject cur_json_object = null;
@@ -1238,14 +1272,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected JSONArray doInBackground(Integer... ints) {
-            JSONObject res_json = null;
-            try {
-                res_json = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/recommendation/work/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2],"Authorization", GlobalVariable.mInstance.token));
-                return(res_json.getJSONArray("data"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
+            return MsgProcess.msgProcessArr(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/recommendation/work/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2],"Authorization", GlobalVariable.mInstance.token), false);
         }
     }
 

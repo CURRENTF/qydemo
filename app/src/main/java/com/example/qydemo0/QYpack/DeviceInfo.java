@@ -22,6 +22,31 @@ public class DeviceInfo {
         Log.e("高度=======>",screenHeight+"");
     }
 
+    public static int height(Context context){
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        float density = dm.density;
+        int screenHeight = (int) (height / density);
+        return screenHeight;
+    }
+
+    public static int width(Context context){
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+        float density = dm.density;
+        int densityDpi = dm.densityDpi;
+        int screenWidth = (int) (width / density);
+        return screenWidth;
+    }
+
+
+
     public static int dip2px(Context context, float dpValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale + 0.5f);

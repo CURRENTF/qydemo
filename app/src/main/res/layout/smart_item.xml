@@ -43,10 +43,11 @@
                 android:layout_height="40dp"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="250dp"
                     android:layout_height="match_parent"
+                    android:maxLines="1"
                     android:text="豪哥睡觉之舞"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:id="@+id/work_name"
                     android:gravity="center|start"
                     android:layout_margin="5dp"/>
@@ -76,6 +77,7 @@
         </LinearLayout>
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,11 +86,17 @@
         android:visibility="visible"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="15dp"
         android:background="@drawable/bottom_round"
         android:layout_marginHorizontal="10dp"
         android:orientation="vertical">
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/learn_info_d"
+        android:src="@drawable/ic_down_arrow2"
+        android:id="@+id/btn_expand"/>
 
 </RelativeLayout>

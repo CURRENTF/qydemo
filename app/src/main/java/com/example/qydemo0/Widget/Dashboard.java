@@ -23,9 +23,11 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.R;
+import com.example.qydemo0.RenderQueueActivity;
 import com.example.qydemo0.UserDetailActivity;
 import com.example.qydemo0.UserSettingActivity;
 
@@ -37,7 +39,7 @@ public class Dashboard extends RelativeLayout {
 
     private Activity context;
     private View mView;
-    View work, post;
+    View work, post, render;
 
     private Activity getActivity(){
         return context;
@@ -74,6 +76,7 @@ public class Dashboard extends RelativeLayout {
         View t = mView.findViewById(R.id.goto_fan_follow);
         work = mView.findViewById(R.id.work);
         post = mView.findViewById(R.id.post_linear);
+        render = mView.findViewById(R.id.render);
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,6 +96,15 @@ public class Dashboard extends RelativeLayout {
             @Override
             public void onClick(View view) {
                 gotoUserDetail();
+            }
+        });
+        render.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), RenderQueueActivity.class);
+                getActivity().startActivity(intent);
             }
         });
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
@@ -259,6 +271,14 @@ public class Dashboard extends RelativeLayout {
             }
         }
     }
+//    class GetLastRender extends AsyncTask<String, Integer, JSONArray>{
+//
+//        @Override
+//        protected JSONArray doInBackground(String... strings) {
+//            QYrequest htp = new QYrequest();
+//            return MsgProcess.msgProcessArr(htp.advanceGet())
+//        }
+//    }
 
 
     class GetUserInfo extends AsyncTask<String, Integer, String> {

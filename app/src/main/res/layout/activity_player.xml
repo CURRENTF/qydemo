@@ -344,6 +344,7 @@
             android:id="@+id/detail_page_comment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="invisible"
             android:layout_marginTop="10dp"
             android:orientation="vertical">
             <com.example.qydemo0.view.CommentExpandableListView
@@ -358,10 +359,7 @@
         </LinearLayout>
     </com.example.qydemo0.Widget.QYScrollView>
 
-    <com.example.qydemo0.QYpack.SampleVideo
-        android:id="@+id/detail_player"
-        android:layout_width="match_parent"
-        android:layout_height="250dp" />
+
 
 
     <LinearLayout
@@ -414,5 +412,8 @@
             android:text="66"/>
 
     </LinearLayout>
-
+    <com.example.qydemo0.QYpack.SampleVideo
+        android:id="@+id/detail_player"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
 </RelativeLayout>

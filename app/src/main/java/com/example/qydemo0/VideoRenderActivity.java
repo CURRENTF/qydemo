@@ -1,12 +1,15 @@
 package com.example.qydemo0;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,6 +45,7 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.bean.CallBackBean;
 import com.google.gson.Gson;
@@ -99,9 +103,12 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-//        final Intent intent = getIntent();
-//        free_dance_url = intent.getStringExtra("free_dance_url");
-        free_dance_url = "/sdcard/DCIM/Camera/VID_20210409_035321.mp4";
+        final Intent intent = getIntent();
+        free_dance_url = intent.getStringExtra("free_dance_url");
+        //free_dance_url = "/sdcard/DCIM/Camera/VID_20210409_035321.mp4";
+
+        Log.e("free_dance_url",free_dance_url);
+
         inti_clip_video();
         init_player();
 
@@ -488,7 +495,6 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-
     public class SendRenderVideo extends AsyncTask<String , Void, String>{
 
         @Override
@@ -507,8 +513,36 @@ public class VideoRenderActivity extends AppCompatActivity {
                     if (render_paras[2] == 1) {
                         for (int o = 0; o < 5; o++) {
                             if (startCode == 0) {
-                                render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)), "", VideoRenderActivity.this);
-                                break;
+                                if(render_paras[0]==-2)
+                                    render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)), "", VideoRenderActivity.this);
+                                else {
+
+                                    if(render_paras[0]==1)
+                                    render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_1)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==2)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_2)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==3)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_3)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==4)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_4)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==5)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_5)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==6)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_6)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==7)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_7)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==8)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_8)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==9)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_9)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==10)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_10)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==11)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_11)), "", VideoRenderActivity.this);
+                                    if(render_paras[0]==12)
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_12)), "", VideoRenderActivity.this);
+                                }
+                                    break;
                             }
                             try {
                                 Thread.sleep(500);
@@ -516,9 +550,16 @@ public class VideoRenderActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
-                        if (render_paras[0] == -2)
+                        render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, render_img, 0, cur_file.hashFileUrl(render_img));
+                    }
+
+                    else {
+                        if(render_paras[0]==-2){
                             render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, render_img, 0, cur_file.hashFileUrl(render_img));
-                        else render_img_id = gf[render_paras[0] - 1];
+                        }
+                        else{
+                            //render_img_id = cur_file.uploadFileAllIn()
+                        }
                     }
                 }
 

@@ -56,7 +56,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
     public void setPhoto(Uri result){
         ((TextView)qydIalog.findViewById(R.id.setting_avatar_info)).setText("已选择图片"); // 针对组件进行findViewById
         ImageView img = qydIalog.findViewById(R.id.dialog_setting_avatar);
-        img.setImageURI(result);
+        Img.roundImgUri(this, img, result);
         avatar_uri = result;
     }
 

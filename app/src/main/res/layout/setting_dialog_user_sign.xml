@@ -31,6 +31,8 @@
                 android:layout_width="match_parent"
                 android:layout_weight="0.6"
                 android:layout_height="120dp"
+                android:padding="5dp"
+                android:gravity="top"
                 android:id="@+id/edit_text_setting_sign"
                 android:background="@drawable/big_empty_edittext"/>
             <Button

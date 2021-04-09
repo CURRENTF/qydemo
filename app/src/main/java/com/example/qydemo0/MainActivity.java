@@ -122,26 +122,26 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
 
-        Button btn1 = (Button) findViewById(R.id.btn1);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, FaceFerActivity.class);
-                startActivity(intent);
-
-//                if(ContextCompat.checkSelfPermission(MainActivity.this,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-//                    ActivityCompat.requestPermissions(MainActivity.this,
-//                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-//                } else {
-//                    Intent intent = new Intent("android.intent.action.GET_CONTENT");
-//                    intent.setType("image/*");
+//        Button btn1 = (Button) findViewById(R.id.btn1);
+//        btn1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //Log.i("StartCode",""+startCode);
+//                Intent intent = new Intent(MainActivity.this, FaceFerActivity.class);
+//                startActivity(intent);
 //
-//                }
-
-            }
-        });
+////                if(ContextCompat.checkSelfPermission(MainActivity.this,
+////                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+////                    ActivityCompat.requestPermissions(MainActivity.this,
+////                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+////                } else {
+////                    Intent intent = new Intent("android.intent.action.GET_CONTENT");
+////                    intent.setType("image/*");
+////
+////                }
+//
+//            }
+//        });
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }

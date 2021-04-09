@@ -2,8 +2,10 @@ package com.example.qydemo0.QYpack;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -46,7 +49,7 @@ public class Img {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(s, t);
-                intent.putExtra("img", "url");
+                intent.putExtra("img", url);
                 s.startActivity(intent);
             }
         });
@@ -186,55 +189,7 @@ public class Img {
         return compressImage(bitmap);//再进行质量压缩
     }
 
-    public static Bitmap centerSquareScaleBitmap(Bitmap bitmap, int edgeLength)
-    {
-        if(null == bitmap || edgeLength <= 0)
-        {
-            return  null;
-        }
 
-        Bitmap result = bitmap;
-        int widthOrg = bitmap.getWidth();
-        int heightOrg = bitmap.getHeight();
-
-        if(widthOrg > edgeLength && heightOrg > edgeLength)
-        {
-            //压缩到一个最小长度是edgeLength的bitmap
-            int longerEdge = (int)(edgeLength * Math.max(widthOrg, heightOrg) / Math.min(widthOrg, heightOrg));
-            int scaledWidth = widthOrg > heightOrg ? longerEdge : edgeLength;
-            int scaledHeight = widthOrg > heightOrg ? edgeLength : longerEdge;
-            Bitmap scaledBitmap;
-
-            try{
-                scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaledWidth, scaledHeight, true);
-            }
-            catch(Exception e){
-                return null;
-            }
-
-            //从图中截取正中间的正方形部分。
-            int xTopLeft = (scaledWidth - edgeLength) / 2;
-            int yTopLeft = (scaledHeight - edgeLength) / 2;
-
-            try{
-                result = Bitmap.createBitmap(scaledBitmap, xTopLeft, yTopLeft, edgeLength, edgeLength);
-                scaledBitmap.recycle();
-            }
-            catch(Exception e){
-                return null;
-            }
-        }
-
-        return result;
-    }
-
-    public static Bitmap ezGetPhoto(Uri uri, Activity ac) throws IOException {
-        Bitmap photoBmp = null;
-        if (uri != null) {
-            photoBmp = MediaStore.Images.Media.getBitmap(ac.getContentResolver(), uri);
-        }
-        return photoBmp;
-    }
 
     public static void roundImgUri(Activity ac, ImageView img, Uri uri){
         Glide.with(ac)

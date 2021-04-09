@@ -250,7 +250,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
         mCVClient.process(inputSlot, outputSlot);
         FaceResultList faceList = outputSlot.getFaceList();
-        List<FaceResult> faceResultList = faceList.getFaceResultList();
+        List<FaceResult> faceResultList = new ArrayList<>();
+        faceResultList = faceList.getFaceResultList();
         for (FaceResult faceResult: faceResultList) {
             res = faceResult.getExpression();
         }
@@ -388,7 +389,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             @Override
             public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
                 if(is_compare){
-
+                    Log.d("hjt.in.play", "ok");
                     for(int k=0; k<expressions_sad.size(); k++){
                         if(currentPosition >= expressions_sad.get(k)*1000-500 && currentPosition <= expressions_sad.get(k)*1000+500){
                             smile_word.setText("请保持微笑呀！");
@@ -404,6 +405,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                             if(detailPlayer.getSpeed()!=0.25f){
                                 detailPlayer.getMspeed().setText("0.25倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(0.25f, true);
+                                Log.d("hjt.in.play", "change.it");
                                 for(int k = 0; k < wrong_id.get(i).size(); k++){
                                     if(wrong_id.get(i).get(k)){
                                         wrong_kuang[k].setBackgroundResource(R.drawable.learn_wrong_item);
@@ -452,7 +454,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!is_compare) {
+                //if(!is_compare) {
                     if (!mirror_status) {
 //                        btn1.setText("恢复");
                         mirror_status = true;
@@ -464,7 +466,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                         mSurfaceView.setLayoutParams(fill_tiny);
                         black_back.setLayoutParams(fill_tiny);
                     }
-                }
+                //}
             }
         });
 
@@ -802,7 +804,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             //设置video的编码格式
             mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             //设置录制的视频编码比特率
-            mRecorder.setVideoEncodingBitRate(3200 * 1440);
+            mRecorder.setVideoEncodingBitRate(1000 * 1500);
             //设置录制的视频帧率,注意文档的说明:
             mRecorder.setVideoFrameRate(30);
             //设置要捕获的视频的宽度和高度
@@ -997,17 +999,27 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         protected JSONObject doInBackground(String... video_path) {
 
 
-            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
-
-            for(int i=0;i<bitmaps.size();i++){
-                if(getFer(bitmaps.get(i)).equals("Sad")){
-                    expressions_sad.add(i);
-                }
-            }
+//            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
+//            for(int k=0;k<10;k++) {
+//                try {
+//                    Thread.sleep(500);
+//                    if(startCode==0) {
+//                        for (int i = 0; i < bitmaps.size(); i++) {
+//                            if (getFer(bitmaps.get(i)).equals("Sad")) {
+//                                expressions_sad.add(i);
+//                            }
+//                        }
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            Log.i("expression_res", String.valueOf(expressions_sad));
 
             try {String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
                     2,learn_file.hashFileUrl(path_cur));
-            Log.i("用户视频id", learn_dance_id);
+            //Log.i("用户视频id", learn_dance_id);
             if(learn_dance_id == null) {
                 Log.e("用户视频", "上传失败");
                 return null;}
@@ -1020,12 +1032,13 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                         Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
                 String tid = res_json.getJSONObject("data").getString("tid");
                 if(tid==null) return null;
-                for(int i=0;i<100;i++){
-                    Thread.sleep(500);
+                while(true){
+                    Thread.sleep(1000);
                     JSONObject task_res = new JSONObject(learn_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
                             "Authorization",GlobalVariable.mInstance.token));
-                    if(task_res.getJSONObject("data").getString("schedule").equals("100%")){
-                        return task_res.getJSONObject("data");
+                    Log.i("whc_233", String.valueOf(task_res));
+                    if(task_res.getJSONObject("data").getString("schedule").equals("100%") && task_res.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url").has("自动")){
+                        return task_res.getJSONObject("data").getJSONObject("data");
                     }
                 }
             } catch (JSONException | InterruptedException e) {
@@ -1039,25 +1052,39 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             hideProgressDialog();
             if(resJson != null){
                 try {
-                    detailPlayer.setUp(resJson.getJSONObject
-                            ("video_url").getString("1080P"), true, "对比视频");
+                    Log.d("hjt.return.msg.player", resJson.toString());
+                    detailPlayer.setUp(resJson.getJSONObject("video_url").getJSONObject("url").getString("自动"), true, "对比视频");
                     wrong_time.clear();
                     JSONArray wrong_time_json = resJson.getJSONObject("evaluation").getJSONArray("error");
+                    wrong_id.clear();
                     for(int i=0;i<wrong_time_json.length();i++){
                         JSONObject wrong_time_json_item = wrong_time_json.getJSONObject(i);
                         List<Long> wrong_time_item = new ArrayList<>();
-                        wrong_time_item.add((long) (wrong_time_json_item.getDouble("begin_time")*1000.0));
-                        wrong_time_item.add((long) ((wrong_time_json_item.getDouble("end_time") - wrong_time_json_item.getDouble("begin_time"))*1000.0));
+                        String str = wrong_time_json_item.getString("begin_time");
+                        Log.d("hjt.learn.dance.begin_t", str);
+                        wrong_time_item.add((long) (Double.parseDouble(str) * 1000.0));
+                        String str2 = wrong_time_json_item.getString("end_time");
+                        wrong_time_item.add((long) ((Double.parseDouble(str2) - Double.parseDouble(str))*1000.0));
+                        int cur_wrong_id_2 = wrong_time_json_item.getInt("error_type");
                         List<Boolean> wrong_id_item = new ArrayList<>();
-                        String cur_wrong_id = wrong_time_json_item.getString("error_type");
-                        for(int j=0;j<cur_wrong_id.length();j++){
-                            wrong_id_item.add((Integer.valueOf(cur_wrong_id.charAt(i))) == 1);
+                        int[] s = new int[6];
+                        for(int j = 0; j < 6; j++){
+                            s[j] = ((1 << j) & cur_wrong_id_2);
                         }
+                        for(int j=0;j<6;j++){
+                            wrong_id_item.add(s[j] == 1);
+                        }
+                        wrong_time.add(wrong_time_item);
+                        wrong_id.add(wrong_id_item);
+                        Log.d("hjt.in.it", "?" + i);
                     }
+                    Log.d("hjt.out.it", "1");
                     init_compare_video();
                     detailPlayer.startPlayLogic();
                     hideProgressDialog();
+                    Log.d("hjt.out.it", "2");
                 } catch (JSONException e) {
+                    Log.d("hjt.json.wwww", "wwww");
                     e.printStackTrace();
                 }
             }
