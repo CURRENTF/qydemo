@@ -1,6 +1,8 @@
 package com.example.qydemo0.Widget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.qydemo0.LearnDanceActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
@@ -23,17 +26,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class SmartItem extends RelativeLayout implements View.OnClickListener{
 
     private Context mContext = null;
     private View mView = null;
-    ImageView cover, medal;
+    ImageView cover, medal, btn_expand;
     TextView video_name, learn_progress;
     ProgressBar progressBar;
     RelativeLayout layout;
     LinearLayout records;
     int lid;
-
+    String wid;
 
     public SmartItem(Context context) {
         super(context);
@@ -45,14 +50,15 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.smart_item, this, true);
     }
+    private Activity getActivity(){
+        return (Activity) mContext;
+    }
 
     JSONObject info;
 
     public void init(JSONObject json, int record_num, int segment_num, int score, int lid){
         info = json;
         this.lid = lid;
-//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        mView = inflater.inflate(R.layout.smart_item, this, true);
         layout = mView.findViewById(R.id.item_layout);
         cover = mView.findViewById(R.id.cover);
         medal = mView.findViewById(R.id.medal);
@@ -60,8 +66,10 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
         learn_progress = mView.findViewById(R.id.txt_learn_progress);
         progressBar = mView.findViewById(R.id.learn_progress_bar);
         records = mView.findViewById(R.id.learn_info_d);
+        btn_expand = mView.findViewById(R.id.btn_expand);
 
         try {
+            wid = json.getString("id");
             video_name.setText(json.getString("name"));
             JSONObject cover_json = json.getJSONObject("cover");
             Img.url2imgViewRoundRectangle(cover_json.getString("url"), cover, mContext, 20);
@@ -70,19 +78,25 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
             if(score < 60) medal.setImageDrawable(mContext.getDrawable(R.drawable.ic__bronze_medal));
             else if(score < 85) medal.setImageDrawable(mContext.getDrawable(R.drawable.ic__silver_medal));
             else medal.setImageDrawable(mContext.getDrawable(R.drawable.ic__gold_medal));
+            btn_expand.setOnClickListener(this);
             layout.setOnClickListener(this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    int record_len = 0;
+    int start = 0, len = 20;
+    int flag = 0;
+
     @Override
     public void onClick(View v) {
+        if(v == btn_expand) flag = 1;
+        else flag = 2;
         GetRecords getRecords = new GetRecords();
         getRecords.execute();
     }
 
-    int start = 0, len = 20;
 
     class GetRecords extends AsyncTask<String, Integer, JSONArray>{
 
@@ -99,10 +113,31 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
                 Log.e("hjt.get.learn.record", "json_null");
             }
             else {
+                record_len = jsonArray.length();
+                if(flag == 2){
+                    try {
+                        JSONObject json = jsonArray.getJSONObject(record_len - 1);
+                        if(json.getInt("status") == 2) record_len ++;
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), LearnDanceActivity.class);
+                        ArrayList<String> list = new ArrayList<>();
+                        list.add(String.valueOf(lid));
+                        list.add(String.valueOf(wid));
+                        list.add(String.valueOf(record_len));
+                        intent.putExtra("params", list);
+                        getActivity().startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return;
+                }
                 for(int i = 0; i < jsonArray.length(); i++){
                     LittleLearnItem item = new LittleLearnItem(mContext);
-//                    item.init()
-                    // todo
+                    try {
+                        item.init(jsonArray.getJSONObject(i));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     records.addView(item);
                 }
             }
