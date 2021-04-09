@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.hardware.Camera;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -17,7 +18,9 @@ import android.os.Handler;
 import android.telephony.mbms.MbmsErrors;
 import android.text.BoringLayout;
 import android.util.Log;
+import android.util.Size;
 import android.util.SparseIntArray;
+import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -51,6 +54,7 @@ import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.entry.Image;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.http.body.JSONObjectBody;
+import com.koushikdutta.ion.ImageViewBitmapInfo;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -156,6 +160,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     boolean mirror_status = false;
 
+    private ImageView[] wrong_kuang = new ImageView[6];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -178,6 +184,15 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         new InitAllLearn().execute(wid);
     }
 
+    private void init_wrong_kuang(){
+        wrong_kuang[0] = (ImageView) findViewById(R.id.left_top);
+        wrong_kuang[1] = (ImageView) findViewById(R.id.middle_top);
+        wrong_kuang[2] = (ImageView) findViewById(R.id.right_top);
+        wrong_kuang[3] = (ImageView) findViewById(R.id.left_bottom);
+        wrong_kuang[4] = (ImageView) findViewById(R.id.middle_bottom);
+        wrong_kuang[5] = (ImageView) findViewById(R.id.right_bottom);
+    }
+
     private void init_learn_pager(){
         try {
             new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
@@ -186,8 +201,6 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         }
         initLearnVideo();
         //Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
-        opt.add(R.drawable.l0);
-        opt.add(R.drawable.l1);
 
         is_learn = false;
 
@@ -306,10 +319,20 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                             if(detailPlayer.getSpeed()!=0.25f){
                                 detailPlayer.getMspeed().setText("0.25倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(0.25f, true);
+                                for(int k = 0; k < wrong_id.get(i).size(); k++){
+                                    if(wrong_id.get(i).get(k)){
+                                        wrong_kuang[k].setBackgroundResource(R.drawable.learn_wrong_item);
+                                    }
+                                    else{
+                                        wrong_kuang[k].setBackgroundResource(R.drawable.learn_right_item);
+                                    }
+                                }
                             }
                             break;
                         }
                         else{
+                            for(int k=0;k<6;k++)
+                                wrong_kuang[k].setBackgroundResource(R.drawable.learn_right_item);
                             if(detailPlayer.getSpeed()==0.25f){
                                 detailPlayer.getMspeed().setText("1倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(1f, true);
@@ -322,9 +345,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
-        SurfaceView surf = findViewById(R.id.sf_view);
+        Camera.Parameters parameters = mCamera.getParameters();
+        Point bestPreviewSizeValue1 = findBestPreviewSizeValue(parameters.getSupportedPreviewSizes());
+        parameters.setPreviewSize(bestPreviewSizeValue1.x, bestPreviewSizeValue1.y);
 
-        RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams(mSurfaceView.getLayoutParams());
+        fill_all.height = fill_all.width * bestPreviewSizeValue1.y / bestPreviewSizeValue1.x;
 
         RelativeLayout.LayoutParams fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
@@ -339,11 +365,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                     if (!mirror_status) {
 //                        btn1.setText("恢复");
                         mirror_status = true;
-                        surf.setLayoutParams(fill_all);
+                        mSurfaceView.setLayoutParams(fill_all);
                     } else {
 //                        btn1.setText("镜子");
                         mirror_status = false;
-                        surf.setLayoutParams(fill_tiny);
+                        mSurfaceView.setLayoutParams(fill_tiny);
                     }
                 }
             }
@@ -383,6 +409,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         arrow = findViewById(R.id.menu_btn);
         shrink_menu_now();
     }
+
 
     void shrink_menu_now(){
         arrow.setImageResource(R.drawable.ic_down_arrow2);
@@ -434,10 +461,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private void go_to_next_segment(){
         try {
-            new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
+        new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
         current_video_number++;
         if (current_video_number >= all_learn_depose_video_num) {
-            current_video_number = 0;
+            Toast.makeText(LearnDanceActivity.this, "恭喜您！您已学会整支舞蹈", Toast.LENGTH_LONG);
+            Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+            startActivity(intent);
         }
             detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
             loadFirstFrameCover(all_learn_video.get(current_video_number).get(0).getUrl());
@@ -499,10 +528,39 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private void initViews() {
         mSurfaceView = (SurfaceView) findViewById(R.id.sf_view);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+//        Display display = getWindowManager().getDefaultDisplay();
+//        screenWidth = display.getWidth();
+//        screenHeight = display.getHeight();
+
         SurfaceHolder holder = mSurfaceView.getHolder();// 取得holder
         holder.setFormat(PixelFormat.TRANSPARENT);
         holder.setKeepScreenOn(true);
         holder.addCallback(this); // holder加入回调接口
+    }
+
+    private static Point findBestPreviewSizeValue(List<Camera.Size> sizeList){
+        int bestX = 0;
+        int bestY = 0;
+        int size = 0;
+        for (Camera.Size nowSize : sizeList){
+            int newX = nowSize.width;
+            int newY = nowSize.height;
+            int newSize = Math.abs(newX * newX) + Math.abs(newY * newY);
+            float ratio = (float) (newY * 1.0 / newX);
+            if(newSize >= size && ratio != 0.75){//确保图片是16:9
+                bestX  = newX;
+                bestY = newY;
+                size = newSize;
+            }else if(newSize < size){
+                continue;
+            }
+        }
+        if(bestX > 0 && bestY > 0){
+            return new Point(bestX,bestY);
+        }
+        return null;
+
     }
 
     /**
@@ -933,36 +991,41 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     }
 
-    public class PostRecord extends AsyncTask<Integer, Void, Boolean>{
+    public class PostRecord extends AsyncTask<Integer, Void, Integer[]>{
         @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-            if(!aBoolean){
+        protected void onPostExecute(Integer[] ints) {
+            super.onPostExecute(ints);
+            if(ints[0]==0){
                 Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
                 startActivity(intent);
             }
+            else{
+                if(ints[1]==2){
+                    go_to_next_segment();
+                }
+            }
         }
 
         @Override
-        protected Boolean doInBackground(Integer... integers) {
+        protected Integer[] doInBackground(Integer... integers) {
             try {
             String[] rjs = {"learning", "int", ""+integers[0], "segment", "int", ""+integers[1], "status", "int", ""+integers[2]};
                 JSONObject rjsr = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(rjs), Constant.mInstance.learn_url + "record/", "Authorization",
                         GlobalVariable.mInstance.token));
                 Log.e("LearnDancePost", String.valueOf(rjsr));
                 if(rjsr.getString("msg").equals("Success")){
-                    if(integers[2]==2) {
-                        go_to_next_segment();
-                    }else{
+                    if(integers[2]==1){
                         cur_rid = rjsr.getJSONObject("data").getString("rid");
                     }
-                    return true;
+                    Integer[] cur_input = {1,integers[1]};
+                    return cur_input;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return false;
+            Integer[] cur_input1 = {0};
+            return cur_input1;
         }
     }
 

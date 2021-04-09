@@ -307,7 +307,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
             } else{
                 //new WorkChange().execute(1);
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -328,6 +327,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                         {
                                             video_like_num.setText(""+work_bean.getData().getLike_num());
                                             like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                            if(isDislikeWork){
+                                                isDislikeWork = false;
+                                                work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() - 1);
+                                                if(work_bean.getData().getDislike_num() == 0)  video_dislike_num.setText("");
+                                                else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                            }
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -339,7 +345,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }).start();
-
             }
             }
         });
@@ -411,6 +416,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                             {
                                                 video_dislike_num.setText(""+work_bean.getData().getDislike_num());
                                                 dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                                if(isLikeWork) {
+                                                    isLikeWork = false;
+                                                    work_bean.getData().setLike_num(work_bean.getData().getLike_num() - 1);
+                                                    if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
+                                                    else video_like_num.setText(""+work_bean.getData().getLike_num());
+                                                    like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                                }
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -423,6 +435,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }).start();
 
+                    if(isDislikeWork){/* 这里取消赞 */}
 
                 }
             }
@@ -1003,9 +1016,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             try {
                 player_urls = new JSONObject(cur_work_json);
                 Log.e("whc_player_urls", String.valueOf(player_urls));
+                player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
                 breakdown_id = player_urls.getJSONObject("data").getString("breakdown").equals("[]")?null:player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
                 Log.e("breakdown_id", String.valueOf(breakdown_id));
-            player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
             } catch (JSONException e) {
                 e.printStackTrace();
             }init_work(cur_work_json);

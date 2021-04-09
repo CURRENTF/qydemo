@@ -7,7 +7,7 @@
         android:id="@+id/introduction_or_comment"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="200dp"
+        android:layout_below="@id/detail_player"
         android:orientation="horizontal"
         >
 
@@ -338,7 +338,6 @@
         android:id="@+id/qyscrollview_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
         android:layout_below="@+id/introduction_or_comment"
         >
         <LinearLayout
@@ -362,7 +361,7 @@
     <com.example.qydemo0.QYpack.SampleVideo
         android:id="@+id/detail_player"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/post_media_height" />
+        android:layout_height="250dp" />
 
 
     <LinearLayout
