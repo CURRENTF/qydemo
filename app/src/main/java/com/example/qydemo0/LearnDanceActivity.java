@@ -57,10 +57,12 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.example.qydemo0.QYpack.VideoClip;
 import com.google.gson.JsonArray;
 import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.entry.Image;
@@ -76,6 +78,7 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -91,6 +94,7 @@ import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
 
 import static android.view.View.GONE;
+import static com.example.qydemo0.QYpack.VideoClip.getFromTime;
 
 import com.example.qydemo0.AiUnit.FaceFer;
 
@@ -131,6 +135,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     RelativeLayout menu_op;
     ImageView arrow;
     private String cur_rid = "";
+    private List<Integer> expressions_sad = new ArrayList<>();
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
 
@@ -179,6 +184,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private CVUnitClient mCVClient;
     private int startCode = -1;
 
+    private TextView smile_word;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,6 +193,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         setWindow();
         setContentView(R.layout.activity_learn_dance);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        smile_word = (TextView) findViewById(R.id.smile_word);
 
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
 
@@ -356,6 +365,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             @Override
             public void onAutoComplete(String url, Object... objects) {
                 super.onAutoComplete(url, objects);
+                smile_word.setText("");
                 if(is_learn && !is_compare){
                     stopRecord();
                     if((new File(path_cur)).isFile()) {
@@ -378,6 +388,17 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             @Override
             public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
                 if(is_compare){
+
+                    for(int k=0; k<expressions_sad.size(); k++){
+                        if(currentPosition >= expressions_sad.get(k)*1000-500 && currentPosition <= expressions_sad.get(k)*1000+500){
+                            smile_word.setText("请保持微笑呀！");
+                            break;
+                        }
+                        else{
+                            smile_word.setText("");
+                        }
+                    }
+
                     for(int i=0;i<wrong_time.size();i++) {
                         if (currentPosition > wrong_time.get(i).get(0)-500 && currentPosition < wrong_time.get(i).get(0) + wrong_time.get(i).get(1)){
                             if(detailPlayer.getSpeed()!=0.25f){
@@ -974,6 +995,16 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         @Override
         protected JSONObject doInBackground(String... video_path) {
+
+
+            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
+
+            for(int i=0;i<bitmaps.size();i++){
+                if(getFer(bitmaps.get(i)).equals("Sad")){
+                    expressions_sad.add(i);
+                }
+            }
+
             try {String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
                     2,learn_file.hashFileUrl(path_cur));
             Log.i("用户视频id", learn_dance_id);
