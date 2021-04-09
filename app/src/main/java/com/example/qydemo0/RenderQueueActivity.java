@@ -4,18 +4,22 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.view.CustomLinearLayout;
 import com.example.qydemo0.utils.DPIUtil;
+import com.example.qydemo0.view.CustomTextView;
 import com.example.qydemo0.view.LeftSlideView;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
@@ -27,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 public class RenderQueueActivity extends AppCompatActivity {
 
@@ -59,6 +64,9 @@ public class RenderQueueActivity extends AppCompatActivity {
                 }
             });
         }
+
+        new getAllTask().execute();
+
     }
 
     public static class MyAdapter extends RecyclerView.Adapter {
@@ -74,6 +82,12 @@ public class RenderQueueActivity extends AppCompatActivity {
         private int ss=0;
 
         private QYrequest cur_request = new QYrequest();
+
+        String[] lj = {"锐化滤镜","边缘滤镜","高斯模糊滤镜","轮廓滤镜","浮雕滤镜"
+                ,"复古滤镜","铅笔彩","卡通滤镜","赛博朋克滤镜","美白磨皮滤镜"};
+
+        TextView head;
+        TextView params;
 
         public MyAdapter(Context context, RecyclerView recyclerView, JSONArray in_res_json_array) {
             this.mContext = context;
@@ -107,8 +121,7 @@ public class RenderQueueActivity extends AppCompatActivity {
             contentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LinearProgressIndicator params = (LinearProgressIndicator) view.findViewById(R.id.progress_render);
-                    params.setProgress(50);
+                    Log.e("whc_view", ""+view.getId());
                     //Toast.makeText(mContext, "点击内容区域", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -132,17 +145,28 @@ public class RenderQueueActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            TextView head = (TextView) holder.itemView.findViewById(R.id.render_params);
-            head.setText(""+ss);
-            ss++;
-            TextView deletee = (TextView) holder.itemView.findViewById(R.id.btn_delete);
-            deletee.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    notifyItemRemoved(position);
-                    notifyAll();
+            try {
+                JSONObject cur_json = res_json_array.getJSONObject(position);
+                //holder. head.setText(cur_json.getString("created_time"));
+                TextView params = (TextView) holder.itemView.findViewById(R.id.render_params);
+                String txt_params = "";
+                if(cur_json.getJSONObject("args").getBoolean("is_background")){
+                    txt_params += "背景替换 ";
                 }
-            });
+                if(cur_json.getJSONObject("args").getBoolean("is_filter")){
+                    txt_params += lj[cur_json.getJSONObject("args").getInt("filter_id")];
+                }
+                params.setText(txt_params);
+                ImageView render_cover = (ImageView) holder.itemView.findViewById(R.id.cover);
+                Log.i("url",cur_json.getJSONObject("cover").getString("url"));
+                Glide.with(mContext)
+                        .load(cur_json.getJSONObject("cover").getString("url"))
+                        .transform(/*new CenterInside(), */new RoundedCorners(50)).into(render_cover);
+            TextView deletee = (TextView) holder.itemView.findViewById(R.id.btn_delete);
+
+            } catch (JSONException e) {
+            e.printStackTrace();
+        }
         }
 
         @Override
@@ -193,8 +217,16 @@ public class RenderQueueActivity extends AppCompatActivity {
 
     public static class MyVH extends RecyclerView.ViewHolder {
 
+        CustomTextView head_title;
+        TextView timee;
+        ImageView img_cover;
+        LinearProgressIndicator progress_here;
         public MyVH(@NonNull View itemView) {
             super(itemView);
+            head_title = (CustomTextView) itemView.findViewById(R.id.content);
+            timee = (TextView) itemView.findViewById(R.id.render_params);
+            img_cover = (ImageView) itemView.findViewById(R.id.cover);
+            progress_here = (LinearProgressIndicator) itemView.findViewById(R.id.process_render);
         }
     }
 

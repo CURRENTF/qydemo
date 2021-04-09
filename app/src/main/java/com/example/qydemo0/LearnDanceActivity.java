@@ -112,6 +112,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private int segment_id = -1;
     RelativeLayout menu_op;
     ImageView arrow;
+    private String cur_rid = "";
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
 
@@ -178,6 +179,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     }
 
     private void init_learn_pager(){
+        try {
+            new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         initLearnVideo();
         //Log.i("hash",learn_file.hashFileUrl("/storage/emulated/0/Android/data/com.example.qydemo0/cache/videos/1617625252036.mp4"));
         opt.add(R.drawable.l0);
@@ -276,10 +282,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 if(is_learn && !is_compare){
                     stopRecord();
                     if((new File(path_cur)).isFile()) {
-                        System.out.println("Oh yeah yes");
+                        Log.i("whc233","用户视频已保存");}
+                        else{
+                                Log.i("whc233","用户视频保存失败");
+                        }
                     }
                 }
-            }
 
             @Override
             public void onClickStartError(String url, Object... objects) {
@@ -426,6 +434,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private void go_to_next_segment(){
         try {
+            new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
         current_video_number++;
         if (current_video_number >= all_learn_depose_video_num) {
             current_video_number = 0;
@@ -830,11 +839,16 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         @Override
         protected JSONObject doInBackground(String... video_path) {
-            String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
+            try {String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
                     2,learn_file.hashFileUrl(path_cur));
-            if(learn_dance_id == null) return null;
-            String[] callToJson = {"record_id","string","132132","videoA","string","DanceID","videoB","string",learn_dance_id};
-            try {
+            Log.i("用户视频id", learn_dance_id);
+            if(learn_dance_id == null) {
+                Log.e("用户视频", "上传失败");
+                return null;}
+            String[] callToJson = {"record_id","string", cur_rid,
+                    "videoA","string", urls_jsonarry.getJSONObject(current_video_number).getJSONObject("video").getString("id"),
+                    "videoB","string",learn_dance_id};
+            Log.e("learn_json", GenerateJson.universeJson2(callToJson));
                 JSONObject res_json = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(callToJson),
                         Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
                 String tid = res_json.getJSONObject("data").getString("tid");
@@ -935,10 +949,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             String[] rjs = {"learning", "int", ""+integers[0], "segment", "int", ""+integers[1], "status", "int", ""+integers[2]};
                 JSONObject rjsr = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(rjs), Constant.mInstance.learn_url + "record/", "Authorization",
                         GlobalVariable.mInstance.token));
+                Log.e("LearnDancePost", String.valueOf(rjsr));
                 if(rjsr.getString("msg").equals("Success")){
                     if(integers[2]==2) {
                         go_to_next_segment();
-                        new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
+                    }else{
+                        cur_rid = rjsr.getJSONObject("data").getString("rid");
                     }
                     return true;
                 }

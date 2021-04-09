@@ -184,7 +184,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new readyToJumpToLearn().execute();
             }
         });
 
@@ -612,7 +612,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         Log.e("list_size", ""+player_urls);
-
+        if(lists.size()==0){
+            lists.add("https://file.yhf2000.cn/dash/9c/87/9c87909cad37ae11ce881795f2e0d135e81e68fc0202d74d40ab90abd2a00482-oOBHVm.mp4/manifest.mpd");
+            list_name.add("1080P");
+        }
         init_player(lists,list_name,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
@@ -999,8 +1002,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             try {
                 player_urls = new JSONObject(cur_work_json);
                 Log.e("whc_player_urls", String.valueOf(player_urls));
-                breakdown_id = player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
-                Log.e("breakdown_id", ""+breakdown_id);
+                breakdown_id = player_urls.getJSONObject("data").getString("breakdown").equals("[]")?null:player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
+                Log.e("breakdown_id", String.valueOf(breakdown_id));
             player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
             } catch (JSONException e) {
                 e.printStackTrace();
