@@ -28,11 +28,8 @@ public class DataBean {
 
     public static List<DataBean> getTestData3() {
         List<DataBean> list = new ArrayList<>();
-        list.add(new DataBean("https://img.zcool.cn/community/013de756fb63036ac7257948747896.jpg", "taige", 1));
-        list.add(new DataBean("https://img.zcool.cn/community/01639a56fb62ff6ac725794891960d.jpg", null, 1));
-        list.add(new DataBean("https://img.zcool.cn/community/01270156fb62fd6ac72579485aa893.jpg", null, 1));
-        list.add(new DataBean("https://img.zcool.cn/community/01233056fb62fe32f875a9447400e1.jpg", null, 1));
-        list.add(new DataBean("https://img.zcool.cn/community/016a2256fb63006ac7257948f83349.jpg", null, 1));
+        list.add(new DataBean("/storage/emulated/0/Pictures/000.png", "QingYing", 1));
+        list.add(new DataBean("/storage/emulated/0/Pictures/001.png", "QingYing", 1));
         return list;
     }
 

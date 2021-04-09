@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout main = findViewById(R.id.main_main);
         main.addView(navigation);
 
-//        Log.d("hjt.out", Constant.mInstance.default_download_path);
+        Log.d("hjt.out", Constant.mInstance.default_download_path);
     }
 
 

@@ -104,8 +104,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         placeholder2 = new TextView(getActivity());
         placeholder1.setText("空空如也");
         placeholder2.setText("空空如也");
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        layoutParams.setMargins(0, 20, 0, 20);
         rc_layout.addView(placeholder1, layoutParams);
         f_layout.addView(placeholder2, layoutParams);
         rc_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
