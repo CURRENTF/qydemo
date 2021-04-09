@@ -53,6 +53,8 @@ public class RegisterUsernameFragment extends Fragment {
         }
     }
 
+    CharSequence username, password, phone;
+
     public class Register implements View.OnClickListener {
 
         @Override
@@ -61,9 +63,9 @@ public class RegisterUsernameFragment extends Fragment {
             EditText et_password = getActivity().findViewById(R.id.edit_text_register_password);
             EditText et_phone = getActivity().findViewById(R.id.edit_text_register_phone);
 
-            CharSequence username = et_username.getText();
-            CharSequence password = et_password.getText();
-            CharSequence phone = et_phone.getText();
+            username = et_username.getText();
+            password = et_password.getText();
+            phone = et_phone.getText();
 
             Log.d("hjt", username.toString());
             Log.d("hjt", password.toString());
@@ -99,6 +101,8 @@ public class RegisterUsernameFragment extends Fragment {
             JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
                 getRegisterTokenAndUid(json);
+                ((LoginActivity) getActivity()).username = username.toString();
+                ((LoginActivity) getActivity()).password = password.toString();
                 toRegister2();
             }
             else Log.e("hjt", "register1wrong");

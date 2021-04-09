@@ -132,6 +132,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button_browse_file:
+                qyr.params = "video";
                 launcher.launch(true);
                 break;
             case R.id.button_upload_selected_video:
@@ -213,8 +214,8 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
         return s;
     }
-
-    ActivityResultLauncher launcher = registerForActivityResult(new QYFile.ResultContract(), new ActivityResultCallback<Uri>() {
+    QYFile.ResultContract qyr = new QYFile.ResultContract();
+    ActivityResultLauncher launcher = registerForActivityResult(qyr, new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri result) {
             if(result == null) return;

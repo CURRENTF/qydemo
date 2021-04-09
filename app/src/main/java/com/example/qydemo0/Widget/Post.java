@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.example.qydemo0.UploadActivity;
 import com.example.qydemo0.UploadPostActivity;
 import com.example.qydemo0.UserSettingActivity;
 import com.example.qydemo0.bean.DataBean;
+import com.google.android.exoplayer2.text.tx3g.Tx3gDecoder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.youth.banner.Banner;
@@ -58,13 +60,15 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     private View mView;
 
     int[] buttons = {R.id.add_post, R.id.button_post_recommendation, R.id.button_post_follow};
-    RelativeLayout rc_layout, f_layout;
+    LinearLayout rc_layout, f_layout;
     QYScrollView rc_view, f_view;
     int rc_startPos = 0, rc_len = 20;
     int switcher = 0;
     // 0 rc 1 f
     TimeTool timeTool = new TimeTool();
 
+    int cnt_rc = 0, cnt_f = 0;
+    TextView placeholder1, placeholder2;
 
     private Activity getActivity(){
         return context;
@@ -82,6 +86,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         init();
     }
 
+
     void init() {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.fragment_posts, this, true);
@@ -95,6 +100,14 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         f_layout = mView.findViewById(R.id.rela_layout_posts_follow);
         rc_view = mView.findViewById(R.id.view_posts_recommendation);
         f_view = mView.findViewById(R.id.view_posts_follow);
+        placeholder1 = new TextView(getActivity());
+        placeholder2 = new TextView(getActivity());
+        placeholder1.setText("空空如也");
+        placeholder2.setText("空空如也");
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        rc_layout.addView(placeholder1, layoutParams);
+        f_layout.addView(placeholder2, layoutParams);
         rc_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
@@ -179,17 +192,21 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.follow.post", "null_json");
                 return;
             }
+            if(jsonArray.length() > 0 && cnt_f == 0){
+                f_layout.removeView(placeholder2);
+            }
+            cnt_f += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
                     postItem.init(jsonObject, true, true, false);
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-                    if(lastF_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastF_id);
-                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+//                    if(lastF_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastF_id);
+//                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                     lastF_id = View.generateViewId();
                     postItem.setId(lastF_id);
-                    postItem.setLayoutParams(layoutParams);
+//                    postItem.setLayoutParams(layoutParams);
                     f_layout.addView(postItem);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -216,17 +233,21 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.recommendation.post", "null_json");
                 return;
             }
+            if(jsonArray.length() > 0 && cnt_rc == 0){
+                rc_layout.removeView(placeholder1);
+            }
+            cnt_rc += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
                     postItem.init(jsonObject, true, true, false);
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastRc_id);
-                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                    lastRc_id = View.generateViewId();
+//                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+//                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastRc_id);
+//                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                    lastRc_id = View.generateViewId();
                     postItem.setId(lastRc_id);
-                    postItem.setLayoutParams(layoutParams);
+//                    postItem.setLayoutParams(layoutParams);
                     rc_layout.addView(postItem);
                 } catch (JSONException e) {
                     e.printStackTrace();

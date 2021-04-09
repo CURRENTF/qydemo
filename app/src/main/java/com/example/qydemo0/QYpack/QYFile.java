@@ -106,12 +106,14 @@ public class QYFile {
 
     public static class ResultContract extends ActivityResultContract<Boolean, Uri> {
 
+        public String params = "image";
+
         @NonNull
         @Override
         public Intent createIntent(@NonNull Context context, Boolean input) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");
+            intent.setType(params + "/*");
             return intent;
         }
 

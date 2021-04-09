@@ -14,10 +14,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.qydemo0.LoginActivity;
 import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.Json2X;
+import com.example.qydemo0.QYpack.MD5encrypt;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
@@ -90,10 +92,9 @@ public class Register2UsernameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("hjtregister2", s);
+            Log.d("hjt.register.2", s);
             JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
-                Toast toast = null;
                 Toast.makeText(getContext(), "验证码已发送", Toast.LENGTH_LONG).show();
             }
             super.onPostExecute(s);
@@ -115,14 +116,39 @@ public class Register2UsernameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("hjtregister2verify", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            Log.d("hjt.register.2.verify", s);
             if(MsgProcess.checkMsg(s, true)){
-                Toast.makeText(getContext(), "验证码正确", Toast.LENGTH_LONG).show();
+                PostLoginMsg postLoginMsg = new PostLoginMsg();
+                postLoginMsg.execute();
+            }
+            super.onPostExecute(s);
+        }
+    }
+
+    class PostLoginMsg extends AsyncTask<String, Integer, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return htp.post(GenerateJson.universeJson("username", ((LoginActivity)getActivity()).username,
+                    "password", MD5encrypt.encrypt(((LoginActivity)getActivity()).password)), Constant.mInstance.login_url);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            JSONObject json = MsgProcess.msgProcess(s, true);
+            Log.d("hjtLoginReturnMsg", s);
+            if(json != null){
+                ((LoginActivity) getActivity()).savMsg(json);
+                Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
+
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+            else {
+                Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_SHORT).show();
             }
             super.onPostExecute(s);
         }

@@ -28,6 +28,18 @@ public class MsgProcess {
         }
     }
 
+    public static String getWrongMsg(String msg){
+        JSONObject json = null;
+        try {
+            json = new JSONObject(msg);
+            if(json.getInt("status") != Constant.mInstance.HTTP_OK){
+                return json.getString("msg");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static JSONObject msgProcess(String msg, Boolean status){
         Constant C = Constant.mInstance;
@@ -44,7 +56,6 @@ public class MsgProcess {
                 }
             }
             else {
-
                 Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {

@@ -154,6 +154,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
             }
+            if(work_cnt == 0) placeholder.setVisibility(View.VISIBLE);
         }
     }
 
@@ -189,6 +190,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
             }
+            if(post_cnt == 0) placeholder.setVisibility(View.VISIBLE);
         }
     }
 

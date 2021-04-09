@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qydemo0.LoginActivity;
 import com.example.qydemo0.MainActivity;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
@@ -48,8 +49,8 @@ public class LoginUsernameFragment extends Fragment {
             TextView tv_password = getActivity().findViewById(R.id.edit_text_login_password);
             CharSequence password = tv_password.getText();
 
-            Log.d("hjt", username.toString());
-            Log.d("hjt", password.toString());
+            Log.d("hjt.username", username.toString());
+            Log.d("hjt.password", password.toString());
 
             GenerateJson g = new GenerateJson();
             PostLoginMsg po = new PostLoginMsg();
@@ -72,22 +73,16 @@ public class LoginUsernameFragment extends Fragment {
             JSONObject json = MsgProcess.msgProcess(s, true);
             Log.d("hjtLoginReturnMsg", s);
             if(json != null){
-                GlobalVariable.mInstance.tokenExisted = true;
-                try {
-                    GlobalVariable.mInstance.token = json.getString("token");
-//                    GlobalVariable.mInstance.uid = json.getString("uid");
-                } catch (JSONException e) {
-                    Log.d("hjt doesnt exist token", "ww");
-                }
-                SharedPreferences sp = getActivity().getSharedPreferences(C.database, Context.MODE_PRIVATE);
-                GlobalVariable.mInstance.saveAllVar(sp);
-                Toast toast = null;
+                ((LoginActivity) getActivity()).savMsg(json);
                 Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
-                // 该跳转了
+
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
+            else {
+                Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_SHORT).show();
             }
             super.onPostExecute(s);
         }

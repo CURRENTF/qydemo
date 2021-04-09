@@ -44,7 +44,8 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
     int[] username_view= {R.id.button_upload_username};
     int[] sign_view = {R.id.button_upload_sign};
     private QYDIalog qydIalog;
-    ActivityResultLauncher launcher = registerForActivityResult(new QYFile.ResultContract(), new ActivityResultCallback<Uri>() {
+    QYFile.ResultContract qyr = new QYFile.ResultContract();
+    ActivityResultLauncher launcher = registerForActivityResult(qyr, new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri result) {
             if(result == null) return;
@@ -120,6 +121,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         public void OnCenterItemClick(QYDIalog dialog, View view) {
             switch (view.getId()){
                 case R.id.button_set_pic:
+                    qyr.params = "image";
                     launcher.launch(true);
                     break;
                 case R.id.button_upload_avatar:
