@@ -847,7 +847,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 return null;}
             String[] callToJson = {"record_id","string", cur_rid,
                     "videoA","string", urls_jsonarry.getJSONObject(current_video_number).getJSONObject("video").getString("id"),
-                    "videoB","string",learn_dance_id};
+                    "videoB","string",learn_dance_id
+            };
             Log.e("learn_json", GenerateJson.universeJson2(callToJson));
                 JSONObject res_json = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(callToJson),
                         Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
