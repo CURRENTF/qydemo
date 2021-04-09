@@ -130,7 +130,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private QYScrollView post_detail_nested_scroll = null;
     TimeTool timeTool = new TimeTool();
     private int start_next = 0;
-    private JSONObject player_urls;
+    private JSONObject player_urls = new JSONObject();
     private int breakdown_id = -1;
     private int work_id = 0;
 
@@ -307,6 +307,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
             } else{
                 //new WorkChange().execute(1);
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -435,7 +436,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }).start();
 
-                    if(isDislikeWork){/* 这里取消赞 */}
 
                 }
             }
@@ -600,7 +600,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Log.i("whc123",""+work_bean.getMsg());
         List<String> lists = new ArrayList<>();
         List<String> list_name = new ArrayList<>();
-        try {if(player_urls.has("1080P")) {
+        try {
+            if(player_urls.has("1080P")) {
             lists.add(player_urls.getString("1080P"));
             list_name.add("1080P");
         }
@@ -613,7 +614,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             lists.add(player_urls.getString("480P"));
             list_name.add("480P");
         }
-        if(player_urls.has("3600P")){
+        if(player_urls.has("360P")){
             lists.add(player_urls.getString("360P"));
             list_name.add("360P");
         }

@@ -1,6 +1,7 @@
 package com.example.qydemo0.QYpack;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.example.qydemo0.R;
 
@@ -34,9 +35,13 @@ public class Constant {
         post_url = "https://api.yhf2000.cn/api/qingying/v1/post/",
         learn_url = "https://api.yhf2000.cn/api/qingying/v1/learning/",
         learn_list_url = "https://api.yhf2000.cn/api/qingying/v1/learning/learn/",
-        record_url = "https://api.yhf2000.cn/api/qingying/v1/learning/record/";
+        record_url = "https://api.yhf2000.cn/api/qingying/v1/learning/record/",
+        render_progress_url = "https://api.yhf2000.cn/api/qingying/v1/task/schedule/";
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
+
+    public String default_download_path = Environment.getExternalStorageDirectory() + "/" + "Download/";
+    public String[] video_quality = {"1080p", "720p", "480p", "360p", "自动"};
 
     public int default_login_way = R.id.fragment_username_login,
         default_register_way = R.id.fragment_username_register,
