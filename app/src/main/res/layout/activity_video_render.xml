@@ -43,4 +43,16 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"/>
 
+    <Button
+        android:id="@+id/render_mode"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:text="快速"
+        android:textColor="@color/white"
+        android:background="@color/qy_pink"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/start_render"
+        android:layout_margin="10dp"
+        />
+
 </RelativeLayout>

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -161,7 +162,24 @@ public class VideoClip {
         }
     }
 
-    public long getDurationLong(String url,int type){
+    public static List<Bitmap> getFromTime(String url){
+        List<Bitmap> bitmaps = new ArrayList<>();
+        MediaMetadataRetriever mmr=new MediaMetadataRetriever();//实例化MediaMetadataRetriever对象
+        File file=new File(url);//实例化File对象，文件路径为/storage/sdcard/Movies/music1.mp4
+        if(file.exists()){
+            long total_time = getDurationLong(url,LOCAL);
+            mmr.setDataSource(file.getAbsolutePath());//设置数据源为该文件对象指定的绝对路径
+            for(long i=0; i < total_time; i+=1000) {
+                bitmaps.add(mmr.getFrameAtTime(i * 1000));//获得视频第一帧的Bitmap对象
+            }
+            return bitmaps;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public static long getDurationLong(String url, int type){
         String duration = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {

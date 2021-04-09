@@ -1,6 +1,7 @@
 package com.example.qydemo0.AiUnit;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.aiunit.common.protocol.face.FaceResult;
@@ -15,10 +16,15 @@ import com.coloros.ocs.base.common.ConnectionResult;
 import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
 import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
 
+import org.json.JSONObject;
+
+import java.util.List;
+
 public class FaceFer {
     private CVUnitClient mCVClient;
+    private int startCode = -1;
 
-    void init(Context app_context, Context cur_context) {
+    public void init(Context app_context, Context cur_context) {
         mCVClient = CVUnit.getFaceFerClient
                 (app_context).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
             @Override
@@ -52,5 +58,34 @@ public class FaceFer {
         });
 
     }
+
+    public void stop(){
+        if (mCVClient != null) {
+            mCVClient.stop();
+        }
+        mCVClient.releaseService();
+        mCVClient = null;
+    }
+
+    public String getFerFromBitmap(Bitmap bitmap){
+
+        String res = "";
+
+        FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
+        inputSlot.setTargetBitmap(bitmap);
+        FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
+        mCVClient.process(inputSlot, outputSlot);
+        FaceResultList faceList = outputSlot.getFaceList();
+        List<FaceResult> faceResultList = faceList.getFaceResultList();
+        for (FaceResult faceResult: faceResultList) {
+            res = faceResult.getExpression();
+        }
+        return res;
+    }
+
+    public int getStartCode(){
+        return this.startCode;
+    }
+
 
 }

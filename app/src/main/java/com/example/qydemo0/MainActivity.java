@@ -3,6 +3,7 @@ package com.example.qydemo0;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -125,9 +126,20 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
+                //Log.i("StartCode",""+startCode);
+                Intent intent = new Intent(MainActivity.this, FaceFerActivity.class);
                 startActivity(intent);
+
+//                if(ContextCompat.checkSelfPermission(MainActivity.this,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(MainActivity.this,
+//                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//                } else {
+//                    Intent intent = new Intent("android.intent.action.GET_CONTENT");
+//                    intent.setType("image/*");
+//
+//                }
+
             }
         });
         if (getSupportActionBar() != null) {

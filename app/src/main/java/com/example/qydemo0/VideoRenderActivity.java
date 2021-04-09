@@ -77,7 +77,7 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private int[] render_paras = {0,0,0};
+    private int[] render_paras = {0,0,0,1};
 
     private Boolean isYuLan = false;
 
@@ -88,6 +88,9 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     private CVUnitClient mCVClient;
     private int startCode;
+
+    //官方背景ID
+    private String[] gf = {"123","123","123","123","123","123","123","123","123"};
 
 //    OrientationUtils orientationUtils;
 
@@ -145,6 +148,20 @@ public class VideoRenderActivity extends AppCompatActivity {
                 showProgressDialog("提示","加载中...");
                 isYuLan = false;
                 new SendRenderVideo().execute(free_dance_url);
+            }
+        });
+
+        Button btn_mode = (Button) findViewById(R.id.render_mode);
+        btn_mode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(btn_mode.getText().equals("快速")){
+                    render_paras[3] = 0;
+                    btn_mode.setText("精准");
+                } else {
+                    render_paras[3] = 1;
+                    btn_mode.setText("快速");
+                }
             }
         });
 
@@ -461,6 +478,17 @@ public class VideoRenderActivity extends AppCompatActivity {
         return resultBmp;
     }
 
+    @Override
+    protected void onDestroy() {
+        if (mCVClient != null) {
+            mCVClient.stop();
+        }
+        mCVClient.releaseService();
+        mCVClient = null;
+        super.onDestroy();
+    }
+
+
     public class SendRenderVideo extends AsyncTask<String , Void, String>{
 
         @Override
@@ -475,21 +503,24 @@ public class VideoRenderActivity extends AppCompatActivity {
             if(cover_id==null) return null;
             String render_video_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,will_do_url, 2, cur_file.hashFileUrl(will_do_url));
             if(render_video_id!=null){
-                if(render_paras[0]==-2){
-                    render_img_id=cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,render_img, 0, cur_file.hashFileUrl(render_img));
+                if(render_paras[0]!=0) {
+                    if (render_paras[2] == 1) {
+                        for (int o = 0; o < 5; o++) {
+                            if (startCode == 0) {
+                                render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)), "", VideoRenderActivity.this);
+                                break;
+                            }
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if (render_paras[0] == -2)
+                            render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, render_img, 0, cur_file.hashFileUrl(render_img));
+                        else render_img_id = gf[render_paras[0] - 1];
+                    }
                 }
-
-//            for(int o = 0;o<5;o++){
-//                if(startCode==0){
-//                    render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)),"",VideoRenderActivity.this);
-//                    break;
-//                }
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
 
                 if(render_img_id!=null) {
                     List<String> callToJson = new ArrayList<>();
@@ -498,10 +529,10 @@ public class VideoRenderActivity extends AppCompatActivity {
 ;                    if(render_paras[0]!=0){
                         callToJson.add("is_background");callToJson.add("bool");callToJson.add("true");
                         callToJson.add("img_id");callToJson.add("string");callToJson.add(render_img_id);
-                    }else{
+                    } else {
                         callToJson.add("is_background");callToJson.add("bool");callToJson.add("false");
                     }
-                    callToJson.add("mode");callToJson.add("bool");callToJson.add("true");
+                    callToJson.add("mode");callToJson.add("bool");callToJson.add(render_paras[3]==1?"true":"false");
                     if(render_paras[1]!=0){
                         callToJson.add("is_filter");callToJson.add("bool");callToJson.add("true");
                         callToJson.add("filter_id");callToJson.add("string");callToJson.add(""+(render_paras[1]-1));
@@ -518,7 +549,9 @@ public class VideoRenderActivity extends AppCompatActivity {
                             tid = res_json_object.getJSONObject("data").getString("tid");
                             if(!isYuLan) return "Success";
                         }
-                        else{return null;}
+                        else {
+                            return null;
+                        }
                         while(true){
                             Thread.sleep(1000);
                             JSONObject res_json_rendered = new JSONObject(cur_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",

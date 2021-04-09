@@ -185,7 +185,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                new readyToJumpToLearn().execute();
             }
         });
 
@@ -328,6 +328,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                         {
                                             video_like_num.setText(""+work_bean.getData().getLike_num());
                                             like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                            if(isDislikeWork){
+                                                isDislikeWork = false;
+                                                work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() - 1);
+                                                if(work_bean.getData().getDislike_num() == 0)  video_dislike_num.setText("");
+                                                else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                            }
                                         }
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -339,7 +346,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }).start();
-
             }
             }
         });
@@ -411,6 +417,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                             {
                                                 video_dislike_num.setText(""+work_bean.getData().getDislike_num());
                                                 dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                                if(isLikeWork) {
+                                                    isLikeWork = false;
+                                                    work_bean.getData().setLike_num(work_bean.getData().getLike_num() - 1);
+                                                    if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
+                                                    else video_like_num.setText(""+work_bean.getData().getLike_num());
+                                                    like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                                }
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -614,7 +627,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         Log.e("list_size", ""+player_urls);
-
+        if(lists.size()==0){
+            lists.add("https://file.yhf2000.cn/dash/9c/87/9c87909cad37ae11ce881795f2e0d135e81e68fc0202d74d40ab90abd2a00482-oOBHVm.mp4/manifest.mpd");
+            list_name.add("1080P");
+        }
         init_player(lists,list_name,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
@@ -999,16 +1015,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(String cur_work_json) {
             super.onPreExecute();
             try {
-                JSONObject player_urls1 = new JSONObject(cur_work_json);
-                Log.e("whc_player_urls1", String.valueOf(player_urls1));
-                player_urls = player_urls1.getJSONObject("data").getJSONObject("video").getJSONObject("url");
-                Log.e("player_urls", String.valueOf(player_urls));
-                try{
-                breakdown_id = player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
-                Log.e("breakdown_id", ""+breakdown_id);}
-                catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                player_urls = new JSONObject(cur_work_json);
+                Log.e("whc_player_urls", String.valueOf(player_urls));
+                player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
+                breakdown_id = (new JSONObject(cur_work_json)).getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
+                Log.e("breakdown_id", String.valueOf(breakdown_id));
             } catch (JSONException e) {
                 e.printStackTrace();
             }init_work(cur_work_json);
@@ -1201,8 +1212,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     cur_json_object = aVoid.getJSONObject(i);
                     WorkItem render_item = new WorkItem(PlayerActivity.this);
                     render_item.init(cur_json_object.getJSONObject("cover").getString("url"),cur_json_object.getString("name"),
-                            cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
-                            cur_json_object.getString("introduction"), cur_json_object.getJSONObject("belong").getString("username"), cur_json_object.getInt("id"));
+                    cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
+                    cur_json_object.getString("introduction"), cur_json_object.getJSONObject("belong").getString("username"), cur_json_object.getInt("id"));
                     render_items.add(render_item);
                     render_content.addView(render_item);
                     JSONObject finalCur_json_object = cur_json_object;
@@ -1259,7 +1270,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected Integer doInBackground(Void... voids) {
             String[] callTo = {"work", "int", ""+ work_id, "breakdown", "int", ""+breakdown_id};
             try {
+                Log.e("callTo", GenerateJson.universeJson2(callTo));
                 JSONObject rjs = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callTo), Constant.mInstance.learn_url,"Authorization", GlobalVariable.mInstance.token));
+                Log.e("rjs", String.valueOf(rjs));
                 if(rjs.getString("msg").equals("Success")){
                     return rjs.getJSONObject("data").getInt("lid");
                 } else {
