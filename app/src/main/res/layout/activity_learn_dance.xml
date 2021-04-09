@@ -79,8 +79,8 @@
                 android:layout_marginVertical="10dp"/>
 
 <!--            <Button-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="fill_parent"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
 <!--                android:layout_below="@+id/learn_now"-->
 <!--                android:layout_alignParentRight="true"-->
 <!--                android:layout_weight="1"-->

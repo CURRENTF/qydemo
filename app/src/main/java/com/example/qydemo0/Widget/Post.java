@@ -183,7 +183,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
-                    postItem.init(jsonObject);
+                    postItem.init(jsonObject, true, true, false);
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
                     if(lastF_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastF_id);
                     else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -220,7 +220,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
-                    postItem.init(jsonObject);
+                    postItem.init(jsonObject, true, true, false);
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
                     if(lastRc_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastRc_id);
                     else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);

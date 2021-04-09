@@ -35,7 +35,7 @@ public class PostItem extends LinearLayout {
 
     private Context mContext = null;
     private View mView = null;
-    ImageView avatar = null, post_avatar = null, fun_img = null, cover = null;
+    public ImageView avatar = null, post_avatar = null, fun_img = null, cover = null, like_img;
     GridLayout img_set = null;
     LinearLayout work = null, post_post = null;
     TextView username = null, post_username = null, post_time = null, post_content = null, work_name = null;
@@ -54,7 +54,7 @@ public class PostItem extends LinearLayout {
     }
 
 
-    String post_json = null, img_json;
+    public String post_json = null, img_json;
     int work_id = 0;
     TextView btn_follow;
 
@@ -101,7 +101,7 @@ public class PostItem extends LinearLayout {
     // 2 文字+动态
     // 3 文字+图片
     int mode = 0;
-    JSONObject json;
+    public JSONObject json;
 
     public void init(JSONObject json){
         this.json = json;
@@ -124,6 +124,7 @@ public class PostItem extends LinearLayout {
         post_time = mView.findViewById(R.id.post_time);
         post_content = mView.findViewById(R.id.post_content);
         btn_follow = findViewById(R.id.btn_follow);
+        like_img = findViewById(R.id.like_img);
         try {
             if(json.getString("follow").equals("true")){
                 btn_follow.setText("已关注");
@@ -244,15 +245,14 @@ public class PostItem extends LinearLayout {
                 e.printStackTrace();
             }
         }
-        setIntentToDetail();
-        setIntentToPostDetail();
+//        setIntentToDetail();
+//        setIntentToPostDetail();
     }
 
     public void init(JSONObject json, boolean a, boolean b, boolean is_detail){
         init(json);
         if(a) setIntentToDetail();
         if(b) setIntentToPostDetail();
-
     }
 
     public int getQYHeight(){

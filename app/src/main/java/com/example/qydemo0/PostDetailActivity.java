@@ -2,6 +2,7 @@ package com.example.qydemo0;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.AsyncTask;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,15 +18,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.PostItem;
+import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.bean.Belong;
 import com.example.qydemo0.bean.CommentBean;
 import com.example.qydemo0.bean.CommentDetailBean;
@@ -45,6 +53,8 @@ import java.util.List;
 public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout main;
+    PostItem postItem;
+    int like_op = -1, status = 0;
     private TextView bt_comment;
     private CommentExpandableListView expandableListView;
     private CommentExpandAdapter adapter;
@@ -63,8 +73,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         main = findViewById(R.id.main);
         try {
             JSONObject json = new JSONObject(s);
-            PostItem postItem = new PostItem(this);
+            postItem = new PostItem(this);
             postItem.init(json, true, false, true);
+            if(json.getBoolean("like")) {
+                postItem.like_img.setImageResource(R.drawable.like_gray);
+                like_op = 1;
+            }
+            else {
+                postItem.like_img.setImageResource(R.drawable.ic_like);
+                like_op = -1;
+            }
             main.addView(postItem);
             Log.e("whc_post", String.valueOf(json));
             post_id = json.getInt("pid");
@@ -73,6 +91,16 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             Log.e("hjt.json.post.detail.wrong", "onCreate");
             e.printStackTrace();
         }
+        postItem.like_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                like_op *= -1;
+                if(status == 0){
+                    OPPost opPost = new OPPost();
+                    opPost.execute(like_op);
+                }
+            }
+        });
     }
 
     private void initView() {
@@ -80,6 +108,37 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
         initExpandableListView(commentsList);
+    }
+
+
+    class OPPost extends AsyncTask<Integer, Integer, Boolean>{
+
+        @Override
+        protected Boolean doInBackground(Integer... strings) {
+            status = 1;
+            QYrequest htp = new QYrequest();
+            try {
+                Log.d("hjt.post.pid", postItem.json.getString("pid"));
+                return MsgProcess.checkMsg(htp.advancePut("{}", Constant.mInstance.post_url + "func/" + postItem.json.getString("pid") + "/" + strings[0] + "/",  "Authorization", GlobalVariable.mInstance.token), false);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                 if(like_op == 1) postItem.like_img.setImageResource(R.drawable.like_gray);
+                 else postItem.like_img.setImageResource(R.drawable.ic_like);
+            }
+            else {
+                like_op *= -1;
+                Toast.makeText(PostDetailActivity.this, "操作失败", Toast.LENGTH_SHORT).show();
+            }
+            status = 0;
+        }
     }
 
     /**
@@ -377,5 +436,5 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             return null;
         }
     }
-    
+
 }

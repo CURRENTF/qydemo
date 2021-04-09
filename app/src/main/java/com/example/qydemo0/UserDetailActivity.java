@@ -54,6 +54,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         placeholder = findViewById(R.id.wwww);
         Bundle bundle = getIntent().getExtras();
         uid = bundle.getInt("uid");
+        if(uid == 0) uid = Integer.parseInt(bundle.getString("uid"));
         username.setText(bundle.getString("username"));
         Img.roundImgUrl(this, avatar, bundle.getString("avatar"));
         Log.d("hjt.get.uid", String.valueOf(uid));
@@ -182,7 +183,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                 PostItem postItem = new PostItem(UserDetailActivity.this);
                 try {
                     JSONObject json = jsonArray.getJSONObject(i);
-                    postItem.init(json);
+                    postItem.init(json, false, true, false);
                     posts.addView(postItem);
                 } catch (JSONException e) {
                     e.printStackTrace();
