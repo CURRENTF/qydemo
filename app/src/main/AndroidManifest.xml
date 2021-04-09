@@ -41,7 +41,10 @@
         <activity android:name=".LearningListActivity" />
         <activity android:name=".testStyle" />
         <activity android:name=".DetailPostActivity" />
-        <activity android:name=".VideoRenderActivity" />
+        <activity android:name=".VideoRenderActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape"
+            />
         <activity
             android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"

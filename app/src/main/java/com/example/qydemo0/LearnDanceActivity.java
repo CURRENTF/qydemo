@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.mbms.MbmsErrors;
 import android.text.BoringLayout;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -38,8 +40,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aiunit.common.protocol.face.FaceResult;
+import com.aiunit.common.protocol.face.FaceResultList;
+import com.aiunit.vision.common.ConnectionCallback;
+import com.aiunit.vision.face.FaceInputSlot;
+import com.aiunit.vision.face.FaceOutputSlot;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.coloros.ocs.ai.cv.CVUnit;
+import com.coloros.ocs.ai.cv.CVUnitClient;
+import com.coloros.ocs.base.common.ConnectionResult;
+import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
+import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
 import com.example.qydemo0.QYpack.AudioPlayer;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
@@ -79,6 +91,8 @@ import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
 
 import static android.view.View.GONE;
+
+import com.example.qydemo0.AiUnit.FaceFer;
 
 /**
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
@@ -162,6 +176,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private ImageView[] wrong_kuang = new ImageView[6];
 
+    private CVUnitClient mCVClient;
+    private int startCode = -1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,9 +196,56 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         //开始位置
         current_video_number = Integer.valueOf(list.get(2));
 
+        mCVClient = CVUnit.getFaceFerClient
+                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
+            @Override
+            public void onConnectionSucceed() {
+                Log.i("TAG", " authorize connect: onConnectionSucceed");
+            }
+        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
+            @Override
+            public void onConnectionFailed(ConnectionResult connectionResult) {
+                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
+            }
+        });
+
+        mCVClient.initService(this, new ConnectionCallback() {
+            @Override
+            public void onServiceConnect() {
+                Log.i("TAG", "initService: onServiceConnect");
+                int startCode = mCVClient.start();
+                if(startCode==0){
+
+                }
+                else{
+                    Log.i("whc123","init wrong!");
+                }
+            }
+
+            @Override
+            public void onServiceDisconnect() {
+                Log.e("TAG", "initService: onServiceDisconnect: ");
+            }
+        });
+
         initViews();
         ButterKnife.bind(this);
         new InitAllLearn().execute(wid);
+
+    }
+
+    private String getFer(Bitmap bitmap){
+        String res = "";
+        FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
+        inputSlot.setTargetBitmap(bitmap);
+        FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
+        mCVClient.process(inputSlot, outputSlot);
+        FaceResultList faceList = outputSlot.getFaceList();
+        List<FaceResult> faceResultList = faceList.getFaceResultList();
+        for (FaceResult faceResult: faceResultList) {
+            res = faceResult.getExpression();
+        }
+        return res;
     }
 
     private void init_wrong_kuang(){
@@ -349,9 +413,15 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         Point bestPreviewSizeValue1 = findBestPreviewSizeValue(parameters.getSupportedPreviewSizes());
         parameters.setPreviewSize(bestPreviewSizeValue1.x, bestPreviewSizeValue1.y);
 
-        RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams(mSurfaceView.getLayoutParams());
-        fill_all.height = fill_all.width * bestPreviewSizeValue1.y / bestPreviewSizeValue1.x;
+        RelativeLayout.LayoutParams fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT);
 
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int heightPixels = dm.heightPixels;
+        RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams((int) heightPixels*1280/720, heightPixels);
+        fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+        ImageView black_back = (ImageView) findViewById(R.id.black_back);
         RelativeLayout.LayoutParams fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
         btn1 = (ImageView) findViewById(R.id.mirror_btn);
@@ -366,10 +436,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 //                        btn1.setText("恢复");
                         mirror_status = true;
                         mSurfaceView.setLayoutParams(fill_all);
+                        black_back.setLayoutParams(fill_all_r);
                     } else {
 //                        btn1.setText("镜子");
                         mirror_status = false;
                         mSurfaceView.setLayoutParams(fill_tiny);
+                        black_back.setLayoutParams(fill_tiny);
                     }
                 }
             }
@@ -633,6 +705,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             mCoverMedia.release();
             mCoverMedia = null;
         }
+        if (mCVClient != null) {
+            mCVClient.stop();
+        }
+        mCVClient.releaseService();
+        mCVClient = null;
     }
 
     private GSYVideoPlayer getCurPlay() {
@@ -912,11 +989,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                         Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
                 String tid = res_json.getJSONObject("data").getString("tid");
                 if(tid==null) return null;
-                while(true){
+                for(int i=0;i<100;i++){
                     Thread.sleep(500);
                     JSONObject task_res = new JSONObject(learn_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
                             "Authorization",GlobalVariable.mInstance.token));
-                    if(task_res.getJSONObject("data").getInt("schedule")==100){
+                    if(task_res.getJSONObject("data").getString("schedule").equals("100%")){
                         return task_res.getJSONObject("data");
                     }
                 }

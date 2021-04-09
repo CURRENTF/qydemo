@@ -1017,7 +1017,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 player_urls = new JSONObject(cur_work_json);
                 Log.e("whc_player_urls", String.valueOf(player_urls));
                 player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
-                breakdown_id = player_urls.getJSONObject("data").getString("breakdown").equals("[]")?null:player_urls.getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
+                breakdown_id = (new JSONObject(cur_work_json)).getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
                 Log.e("breakdown_id", String.valueOf(breakdown_id));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1211,8 +1211,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                     cur_json_object = aVoid.getJSONObject(i);
                     WorkItem render_item = new WorkItem(PlayerActivity.this);
                     render_item.init(cur_json_object.getJSONObject("cover").getString("url"),cur_json_object.getString("name"),
-                            cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
-                            cur_json_object.getString("introduction"), cur_json_object.getJSONObject("belong").getString("username"), cur_json_object.getInt("id"));
+                    cur_json_object.getInt("like_num"),cur_json_object.getInt("play_num"),
+                    cur_json_object.getString("introduction"), cur_json_object.getJSONObject("belong").getString("username"), cur_json_object.getInt("id"));
                     render_items.add(render_item);
                     render_content.addView(render_item);
                     JSONObject finalCur_json_object = cur_json_object;
@@ -1269,7 +1269,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         protected Integer doInBackground(Void... voids) {
             String[] callTo = {"work", "int", ""+ work_id, "breakdown", "int", ""+breakdown_id};
             try {
+                Log.e("callTo", GenerateJson.universeJson2(callTo));
                 JSONObject rjs = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callTo), Constant.mInstance.learn_url,"Authorization", GlobalVariable.mInstance.token));
+                Log.e("rjs", String.valueOf(rjs));
                 if(rjs.getString("msg").equals("Success")){
                     return rjs.getJSONObject("data").getInt("lid");
                 } else {

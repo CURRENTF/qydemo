@@ -13,6 +13,8 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -36,6 +38,7 @@ import com.example.qydemo0.QYpack.AudioPlayer;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.example.qydemo0.entry.Image;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -110,7 +113,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
     private ImageView btn1,btn2,btn3;
 
-    private ImageView coverImageView, fullScreenView;
+    private ImageView coverImageView, fullScreenView, black_back;
 
     private TextView changeSpeed;
 
@@ -118,8 +121,9 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
     private SurfaceView surf;
 
-    private RelativeLayout.LayoutParams fill_all, fill_tiny;
+    private RelativeLayout.LayoutParams fill_all, fill_tiny, fill_all_r;
 
+    boolean mirror_status = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +137,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
         //ArrayList<String> list = getIntent().getStringArrayListExtra("params");
         ArrayList<String> list = new ArrayList<>();
-        list.add("0");
+        list.add("1");
         list.add("1080P");
         list.add("https://file.yhf2000.cn/dash/a4/78/a478389682cb55a7d2cee717da2c1c025d1a1c993f943fb042979ff6dcc22cf2-IbAjmG.use/manifest.mpd");
         initLearnVideo(list);
@@ -148,6 +152,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
         fullScreenView = (ImageView) findViewById(R.id.fullscreen);
         fullScreenView.setVisibility(GONE);
+
+        black_back = (ImageView) findViewById(R.id.black_back);
 
         changeSpeed = (TextView) findViewById(R.id.change_speed);
 
@@ -233,9 +239,11 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
         surf = findViewById(R.id.sf_view);
-
-        fill_all = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int heightPixels = dm.heightPixels;
+        fill_all = new RelativeLayout.LayoutParams((int) heightPixels*1280/720, heightPixels);
+        fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
         btn1 =  findViewById(R.id.mirror_btn);
@@ -245,6 +253,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             is_video_input = false;
 //            btn1.setText("恢复");
             surf.setLayoutParams(fill_all);
+            black_back.setLayoutParams(fill_all_r);
         }
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,10 +263,12 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 //                        btn1.setText("恢复");
                         mirror_status = true;
                         surf.setLayoutParams(fill_all);
+                        black_back.setLayoutParams(fill_all_r);
                     } else {
 //                        btn1.setText("镜子");
                         mirror_status = false;
                         surf.setLayoutParams(fill_tiny);
+                        black_back.setLayoutParams(fill_tiny);
                     }
                 }
             }
@@ -287,7 +298,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                 }
                 else{
 //                    btn3.setText("开始");
-                    if(!is_video_input) surf.setLayoutParams(fill_all);
+                    if(!is_video_input) {surf.setLayoutParams(fill_all);black_back.setLayoutParams(fill_all_r);}
                     stop_compare_video();
                     detailPlayer.setUp(all_learn_video.get(0),true,"韩舞小姐姐");
                     detailPlayer.startPlayLogic();
@@ -300,8 +311,6 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         shrink_menu_now();
 
     }
-
-    boolean mirror_status = false;
 
     void shrink_menu_now(){
         arrow.setImageResource(R.drawable.ic_down_arrow2);
@@ -332,7 +341,6 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         });
     }
 
-
     private void stop_compare_video(){
         is_compare = false;
         is_learn = false;
@@ -353,7 +361,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     private void show_record_result(){
         init_compare_video();
 //        btn3.setText("重录");
-        if(!is_video_input) surf.setLayoutParams(fill_tiny);
+        if(!is_video_input) {surf.setLayoutParams(fill_tiny);black_back.setLayoutParams(fill_tiny);}
         detailPlayer.setUp(path_cur,true,"");
         detailPlayer.startPlayLogic();
     }
@@ -386,6 +394,39 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         holder.addCallback(this); // holder加入回调接口
     }
 
+
+    private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
+        final double ASPECT_TOLERANCE = 0.1;
+        double targetRatio = (double) w / h;
+        if (sizes == null) return null;
+
+        Camera.Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+
+        int targetHeight = h;
+
+        // Try to find an size match aspect ratio and size
+        for (Camera.Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+
+        // Cannot find the one match the aspect ratio, ignore the requirement
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Camera.Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+        return optimalSize;}
+
     /**
      * 初始化相机
      */
@@ -400,18 +441,20 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         Camera.Parameters parameters = mCamera.getParameters();
 
         if (mSize == null) {
+            Log.e("herher","herherhreher");
             List<Camera.Size> vSizeList = parameters.getSupportedPreviewSizes();
             Collections.sort(vSizeList, sizeComparator);
 
             for (int num = 0; num < vSizeList.size(); num++) {
                 Camera.Size size = vSizeList.get(num);
-
                 if (size.width >= 800 && size.height >= 480) {
                     this.mSize = size;
                     break;
                 }
             }
-            mSize = vSizeList.get(0);
+            //for(int ii = 0; ii<vSizeList.size();ii++) Log.e("fill_width", ""+vSizeList.get(ii).width+"+"+vSizeList.get(ii).height);
+            mSize.width = 1280;
+            mSize.height = 720;
 
             List<String> focusModesList = parameters.getSupportedFocusModes();
 
@@ -423,6 +466,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             }
             mCamera.setParameters(parameters);
         }
+
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
         int orientation = orientations.get(rotation);
         mCamera.setDisplayOrientation(orientation);

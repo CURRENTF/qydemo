@@ -26,8 +26,8 @@ import java.util.List;
 
 public class FaceFerActivity extends AppCompatActivity {
 
-    private CVUnitClient mCVClient;
     private Bitmap bitmap;
+    private FaceFer ff;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,64 +41,19 @@ public class FaceFerActivity extends AppCompatActivity {
         }
         bitmap  = BitmapFactory.decodeStream(fis);
         if(bitmap!=null) Log.i("bitmap","pass");
-        mCVClient = CVUnit.getFaceFerClient
-                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
-            @Override
-            public void onConnectionSucceed() {
-                Log.i("TAG", " authorize connect: onConnectionSucceed");
-            }
-        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(ConnectionResult connectionResult) {
-                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
-            }
-        });
-
-        mCVClient.initService(this, new ConnectionCallback() {
-            @Override
-            public void onServiceConnect() {
-                Log.i("TAG", "initService: onServiceConnect");
-                int startCode = mCVClient.start();
-                if(startCode==0){
-                    new test_face_fer().execute(bitmap);
-                }
-                else{
-                    Log.i("whc123","init wrong!");
-                }
-            }
-
-            @Override
-            public void onServiceDisconnect() {
-                Log.e("TAG", "initService: onServiceDisconnect: ");
-            }
-        });
+        ff.init(getApplicationContext(), this);
     }
 
-    public class test_face_fer extends AsyncTask<Bitmap, Void, Void>{
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-
-        @Override
-        protected Void doInBackground(Bitmap... bitmaps) {
-            FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
-            inputSlot.setTargetBitmap(bitmaps[0]);
-            FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
-            mCVClient.process(inputSlot, outputSlot);
-            FaceResultList faceList = outputSlot.getFaceList();
-            List<FaceResult> faceResultList = faceList.getFaceResultList();
-            for (FaceResult faceResult: faceResultList) {
-                String expression = faceResult.getExpression();
-                Log.i("cur_expression",expression);
-            }
-            if (mCVClient != null) {
-                mCVClient.stop();
-            }
-            mCVClient.releaseService();
-            mCVClient = null;
-            return null;
-        }
-    }
+//    public class test_face_fer extends AsyncTask<Bitmap, Void, Void>{
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Bitmap... bitmaps) {
+//
+//        }
+//    }
 
 }
