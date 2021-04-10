@@ -194,14 +194,15 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new readyToJumpToLearn().execute();
+                    new readyToJumpToLearn().execute();
             }
         });
 
         btn_free_dance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
+                Intent intent = new Intent(PlayerActivity.this, VideoRenderActivity.class);
+                startActivity(intent);
                 ArrayList<String> data1 = new ArrayList<String>();
                 data1.add("0");
                 try {
@@ -232,7 +233,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 intent.putStringArrayListExtra("params", data1);
                 startActivity(intent);
-
             }
         });
 
@@ -1276,34 +1276,52 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class readyToJumpToLearn extends AsyncTask<Void, Void, Integer>{
+    public class readyToJumpToLearn extends AsyncTask<Void, Void, Integer[]>{
 
         @Override
-        protected void onPostExecute(Integer integer) {
+        protected void onPostExecute(Integer[] integer) {
             super.onPostExecute(integer);
             if(integer != null){
-                if(integer == -1) Toast.makeText(PlayerActivity.this, "该舞蹈目前不可学习，请稍后再试", Toast.LENGTH_LONG).show();
+                if(integer[0]== -1) Toast.makeText(PlayerActivity.this, "该舞蹈目前不可学习，请稍后再试", Toast.LENGTH_LONG).show();
+                if(integer[2]!=3){
                 Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
                 ArrayList<String> data1 = new ArrayList<String>();
-                data1.add(""+integer);
+                data1.add(""+integer[1]);
                 data1.add(""+work_id);
                 data1.add("0");
                 intent.putStringArrayListExtra("params", data1);
                 startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(PlayerActivity.this, LearningListActivity.class);
+                    startActivity(intent);
+                }
             }
         }
 
         @Override
-        protected Integer doInBackground(Void... voids) {
+        protected Integer[] doInBackground(Void... voids) {
             String[] callTo = {"work", "int", ""+ work_id, "breakdown", "int", ""+breakdown_id};
             try {
                 Log.e("callTo", GenerateJson.universeJson2(callTo));
                 JSONObject rjs = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callTo), Constant.mInstance.learn_url,"Authorization", GlobalVariable.mInstance.token));
+
                 Log.e("rjs", String.valueOf(rjs));
+
                 if(rjs.getString("msg").equals("Success")){
-                    return rjs.getJSONObject("data").getInt("lid");
+                    int cur_lid = rjs.getJSONObject("data").getInt("lid");
+//                    if(!work_bean.getData().getIs_learning()){
+                        Integer[] res_to_call = {0, cur_lid, 0};
+                        return res_to_call;
+//                    }
+//                    else{
+//                        Integer[] res_to_call = {0, 1, 3};
+//                        return res_to_call;
+//
+//                    }
                 } else {
-                    return -1;
+                    Integer[] res_to_call = {-1, 0, 0};
+                    return res_to_call;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

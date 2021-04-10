@@ -10,8 +10,17 @@ public class WorkDataBean {
     private videoUrlBean video;
     private int play_num, comment_num, like_num, dislike_num, favorites_num, learning_num;
 
-    private Boolean is_like, is_dislike, is_follow;
+    private Boolean is_like, is_dislike, is_follow, is_learning;
+
     Belong belong = new Belong(-1,"","");
+
+    public Boolean getIs_learning() {
+        return is_learning;
+    }
+
+    public void setIs_learning(Boolean is_learning) {
+        this.is_learning = is_learning;
+    }
 
     public int getLearning_num() {
         return learning_num;
