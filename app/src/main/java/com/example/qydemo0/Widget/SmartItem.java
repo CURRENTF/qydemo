@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.qydemo0.LearnDanceActivity;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
@@ -103,8 +104,9 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
+            Log.d("hjt.get.record", lid + ".");
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.record_url + lid + "/" +
-                    Json2X.Json2StringGet("start", String.valueOf(start), "lens", String.valueOf(len))), false);
+                    Json2X.Json2StringGet("start", String.valueOf(start), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token), false);
         }
 
         @Override
@@ -114,10 +116,16 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
             }
             else {
                 record_len = jsonArray.length();
+                Log.d("hjt.learn_item.len", record_len + ".");
                 if(flag == 2){
                     try {
-                        JSONObject json = jsonArray.getJSONObject(record_len - 1);
-                        if(json.getInt("status") == 2) record_len ++;
+                        if(record_len == 0){
+                            record_len = 1;
+                        }
+                        else {
+                            JSONObject json = jsonArray.getJSONObject(record_len - 1);
+                            if(json.getInt("status") == 2) record_len ++;
+                        }
                         Intent intent = new Intent();
                         intent.setClass(getActivity(), LearnDanceActivity.class);
                         ArrayList<String> list = new ArrayList<>();
@@ -134,7 +142,7 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
                 for(int i = 0; i < jsonArray.length(); i++){
                     LittleLearnItem item = new LittleLearnItem(mContext);
                     try {
-                        item.init(jsonArray.getJSONObject(i));
+                        item.init(jsonArray.getJSONObject(i), i);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

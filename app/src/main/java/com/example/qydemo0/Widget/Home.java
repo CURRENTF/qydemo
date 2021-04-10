@@ -141,7 +141,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 intent1.setClass(getActivity(), FreeDanceActivity.class);
                 ArrayList<String> list = new ArrayList<>();
                 list.add("1"); list.add(Uri2RealPath.getRealPathFromUri_AboveApi19(getActivity(), result));
-                intent1.putExtra("list", list);
+                intent1.putExtra("params", list);
                 getActivity().startActivity(intent1);
             }
         });

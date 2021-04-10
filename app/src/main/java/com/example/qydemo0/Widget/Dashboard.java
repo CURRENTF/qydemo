@@ -292,8 +292,14 @@ public class Dashboard extends RelativeLayout {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjtGetUserInfo", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, false);
             if(json != null){
+                try {
+                    if(json.getString("img_url").equals("null"))
+                        json.put("img_url", Constant.mInstance.default_avatar);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
                 reWriteInfo(json);
             }

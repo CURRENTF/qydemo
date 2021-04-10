@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.qydemo0.Widget.QYScrollView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class QYUser {
@@ -26,6 +27,12 @@ public class QYUser {
         JSONObject json =  MsgProcess.msgProcess(msg, false);
         if(json != null){
             Log.d("hjt.qy.user.refresh.info", "ok");
+            try {
+                if(json.getString("img_url").equals("null"))
+                    json.put("img_url", Constant.mInstance.default_avatar);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
             return true;
         }

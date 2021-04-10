@@ -56,6 +56,7 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
         try {
             uid = json.getInt("uid");
             name.setText(json.getString("username"));
+            if(json.getString("img_url").equals("null")) json.put("img_url", Constant.mInstance.default_avatar);
             Img.roundImgUrl((Activity) mContext, avatar, json.getString("img_url"));
         } catch (JSONException e) {
             e.printStackTrace();
