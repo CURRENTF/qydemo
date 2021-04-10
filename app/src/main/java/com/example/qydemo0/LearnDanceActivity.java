@@ -134,7 +134,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private int segment_id = -1;
     RelativeLayout menu_op;
     ImageView arrow;
-    private String cur_rid = "";
+    private int cur_rid = -1;
     private List<Integer> expressions_sad = new ArrayList<>();
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
@@ -237,6 +237,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             }
         });
 
+        init_wrong_kuang();
         initViews();
         ButterKnife.bind(this);
         new InitAllLearn().execute(wid);
@@ -432,9 +433,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
-        Camera.Parameters parameters = mCamera.getParameters();
-        Point bestPreviewSizeValue1 = findBestPreviewSizeValue(parameters.getSupportedPreviewSizes());
-        parameters.setPreviewSize(bestPreviewSizeValue1.x, bestPreviewSizeValue1.y);
+//]
 
         RelativeLayout.LayoutParams fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
@@ -1023,13 +1022,14 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             if(learn_dance_id == null) {
                 Log.e("用户视频", "上传失败");
                 return null;}
-            String[] callToJson = {"record_id","string", cur_rid,
+            String[] callToJson = {"record_id","int", ""+cur_rid,
                     "videoA","string", urls_jsonarry.getJSONObject(current_video_number).getJSONObject("video").getString("id"),
                     "videoB","string",learn_dance_id
             };
             Log.e("learn_json", GenerateJson.universeJson2(callToJson));
                 JSONObject res_json = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(callToJson),
                         Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
+
                 String tid = res_json.getJSONObject("data").getString("tid");
                 if(tid==null) return null;
                 while(true){
@@ -1112,10 +1112,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             try {
                 JSONObject res_json = new JSONObject(learn_request.advanceGet(Constant.mInstance.work_url+"breakdown/"+integers[0]+"/","Authorization",
                         GlobalVariable.mInstance.token));
+                Log.e("res_json",String.valueOf(res_json));
                 if(!res_json.has("msg") || !res_json.getString("msg").equals("Success")) return null;
                 JSONObject res_data_json = res_json.getJSONObject("data");
                 all_learn_depose_video_num = res_data_json.getInt("segment_num");
                 urls_jsonarry = res_data_json.getJSONArray("segment_info");
+                Log.i("urls", String.valueOf(urls_jsonarry));
                 return true;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1150,8 +1152,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                         GlobalVariable.mInstance.token));
                 Log.e("LearnDancePost", String.valueOf(rjsr));
                 if(rjsr.getString("msg").equals("Success")){
+                    Log.e("rjsr", String.valueOf(rjsr));
                     if(integers[2]==1){
-                        cur_rid = rjsr.getJSONObject("data").getString("rid");
+                        cur_rid = rjsr.getJSONObject("data").getInt("rid");
                     }
                     Integer[] cur_input = {1,integers[1]};
                     return cur_input;
