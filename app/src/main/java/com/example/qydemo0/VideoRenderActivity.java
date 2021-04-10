@@ -459,7 +459,6 @@ public class VideoRenderActivity extends AppCompatActivity {
                                 if (render_paras[0] == -2)
                                     render_img = Img.saveImg(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img)), "", VideoRenderActivity.this);
                                 else {
-
                                     if (render_paras[0] == 1)
                                         render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.airam_dato_on_unsplash)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 2)
