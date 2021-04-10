@@ -38,7 +38,7 @@
 
 ## LandLayoutVideo.java
 
-whc
+视频播放器
 
 ## MD5encrypt.java
 
@@ -74,7 +74,7 @@ whc
 
 ## SwitchVideoModel.java
 
-whc
+视频播放器
 
 ## TimeTool.java
 
@@ -86,5 +86,5 @@ whc
 
 ## VideoClip.java
 
-whc
+视频裁剪
 
