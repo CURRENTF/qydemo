@@ -43,14 +43,15 @@ public class LittleLearnItem extends LinearLayout {
         score = mView.findViewById(R.id.score);
         remark = mView.findViewById(R.id.remark);
         ser = mView.findViewById(R.id.record_serial);
-
         int scores = 0;
         try {
             Log.e("hjt.log.little.learn.item", jsonObject.toString());
             scores = jsonObject.getInt("avg_score");
+            score.setText(String.valueOf(jsonObject.getInt("avg_score")));
             if(scores < 60){
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic__bronze_medal));
-                remark.setText("你做的很棒");
+                remark.setText("继续努力啊");
+
             }
             else if(scores < 85){
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic__silver_medal));
@@ -58,10 +59,10 @@ public class LittleLearnItem extends LinearLayout {
             }
             else {
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic__gold_medal));
-                remark.setText("继续努力啊");
+                remark.setText("你做的很棒");
             }
             remark.setMaxHeight(1);
-            ser.setText(String.valueOf(i));
+            ser.setText(String.valueOf(i + 1));
         } catch (JSONException e) {
             e.printStackTrace();
         }
