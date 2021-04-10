@@ -101,10 +101,10 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-//        final Intent intent = getIntent();
-//        free_dance_url = intent.getStringExtra("free_dance_url");
+        final Intent intent = getIntent();
+        free_dance_url = intent.getStringExtra("free_dance_url");
 
-        free_dance_url = "/sdcard/DCIM/Camera/VID_20200407_140206.mp4";
+//        free_dance_url = "/sdcard/DCIM/Camera/VID_20200407_140206.mp4";
         Log.e("free_dance_url",free_dance_url);
 
         inti_clip_video();
