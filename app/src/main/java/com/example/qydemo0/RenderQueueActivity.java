@@ -64,16 +64,16 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         l_in = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_in_alpha_500ms);
         GetList getList = new GetList();
         getList.execute();
-        Handler handler=new Handler();
-        Runnable runnable=new Runnable() {
-            @Override
-            public void run() {
-                GetList getList = new GetList();
-                getList.execute();
-                handler.postDelayed(this, 2000);
-            }
-        };
-        handler.postDelayed(runnable, 5000);
+//        Handler handler=new Handler();
+//        Runnable runnable=new Runnable() {
+//            @Override
+//            public void run() {
+//                GetList getList = new GetList();
+//                getList.execute();
+//                handler.postDelayed(this, 2000);
+//            }
+//        };
+//        handler.postDelayed(runnable, 5000);
     }
 
 
@@ -88,16 +88,16 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
             right.setVisibility(View.GONE);
             btn_left.setTextColor(getColor(R.color.red));
             btn_right.setTextColor(getColor(R.color.black));
-            left.startAnimation(l_in);
-            right.startAnimation(l_out);
+            left.startAnimation(r_in);
+            right.startAnimation(r_out);
         }
         else {
             left.setVisibility(View.GONE);
             right.setVisibility(View.VISIBLE);
             btn_left.setTextColor(getColor(R.color.black));
             btn_right.setTextColor(getColor(R.color.red));
-            left.startAnimation(r_out);
-            right.startAnimation(r_in);
+            left.startAnimation(l_out);
+            right.startAnimation(l_in);
         }
         last = view;
     }

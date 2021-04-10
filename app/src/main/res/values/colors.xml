@@ -33,5 +33,6 @@
     <color name="real_pink">#F08080</color>
     <color name="smoke">#F5F5F5</color>
     <color name="qy_purple">#694d9f</color>
-
+    <color name="light_color">#faa755</color>
+    <color name="dark_color">#102b6a</color>
 </resources>
