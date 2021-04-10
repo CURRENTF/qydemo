@@ -2,6 +2,7 @@ package com.example.qydemo0.Widget;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -42,6 +43,7 @@ public class LittleLearnItem extends LinearLayout {
         remark = mView.findViewById(R.id.remark);
         ser = mView.findViewById(R.id.record_serial);
 
+        Log.e("hjt.log.little.learn.item", jsonObject.toString());
     }
 
 }

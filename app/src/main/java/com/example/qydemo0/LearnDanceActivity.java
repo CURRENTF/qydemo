@@ -1023,13 +1023,14 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             if(learn_dance_id == null) {
                 Log.e("用户视频", "上传失败");
                 return null;}
-            String[] callToJson = {"record_id","string", cur_rid,
+            String[] callToJson = {"record_id","int", cur_rid,
                     "videoA","string", urls_jsonarry.getJSONObject(current_video_number).getJSONObject("video").getString("id"),
                     "videoB","string",learn_dance_id
             };
             Log.e("learn_json", GenerateJson.universeJson2(callToJson));
                 JSONObject res_json = new JSONObject(learn_request.advancePost(GenerateJson.universeJson2(callToJson),
                         Constant.mInstance.task_url+"compare/","Authorization",GlobalVariable.mInstance.token));
+                Log.d("hjt.nmdwsm", res_json.toString());
                 String tid = res_json.getJSONObject("data").getString("tid");
                 if(tid==null) return null;
                 while(true){
