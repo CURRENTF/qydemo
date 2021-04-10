@@ -94,9 +94,6 @@ public class VideoRenderActivity extends AppCompatActivity {
     private CVUnitClient mCVClient;
     private int startCode;
 
-    //官方背景ID
-    private String[] gf = {"123","123","123","123","123","123","123","123","123"};
-
 //    OrientationUtils orientationUtils;
 
     @Override
@@ -104,10 +101,10 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-        final Intent intent = getIntent();
-        free_dance_url = intent.getStringExtra("free_dance_url");
-        //free_dance_url = "/sdcard/DCIM/Camera/VID_20210409_035321.mp4";
+//        final Intent intent = getIntent();
+//        free_dance_url = intent.getStringExtra("free_dance_url");
 
+        free_dance_url = "/sdcard/DCIM/Camera/VID_20200407_140206.mp4";
         Log.e("free_dance_url",free_dance_url);
 
         inti_clip_video();
@@ -247,7 +244,7 @@ public class VideoRenderActivity extends AppCompatActivity {
             }
             clip_video_url = dir + "/" + System.currentTimeMillis() + ".mp4";
             long startTime = mid_time-2500 < 0 ? 0 : mid_time-2500;
-            long endTime = mid_time+1500 > total_time ? total_time : mid_time+1500;
+            long endTime = mid_time+2500 > total_time ? total_time : mid_time+2500;
 
             try {
                 video_clip.clip(free_dance_url, clip_video_url, startTime, endTime);
@@ -449,6 +446,7 @@ public class VideoRenderActivity extends AppCompatActivity {
             String render_img_id = null;
             VideoClip vp = new VideoClip();
             String cover_path = Img.saveImg(vp.getCoverFromVideo(will_do_url),"123",VideoRenderActivity.this);
+            Log.e("cover_path", cover_path);
             String cover_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,
                     cover_path, 0,cur_file.hashFileUrl(cover_path));
             if(cover_id==null) return null;
@@ -463,29 +461,29 @@ public class VideoRenderActivity extends AppCompatActivity {
                                 else {
 
                                     if (render_paras[0] == 1)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_1)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.airam_dato_on_unsplash)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 2)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_2)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.christmas_3009949_1920)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 3)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_3)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.damiano_ferrante_unsplash)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 4)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_4)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.design_3289964)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 5)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_5)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.efe_kurnaz_unsplash)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 6)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_6)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.halloween_72939_1280)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 7)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_7)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.jonathan_hanna_unsplash)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 8)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_8)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.lennon_cheng_unsplash)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 9)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_9)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.painting_3135875_1920)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 10)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_10)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.space_4152623_1920)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 11)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_11)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.summer_4181783)), "", VideoRenderActivity.this);
                                     if (render_paras[0] == 12)
-                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.render_12)), "", VideoRenderActivity.this);
+                                        render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.abstract_2468874_1920)), "", VideoRenderActivity.this);
                                 }
                                 break;
                             }
@@ -503,62 +501,62 @@ public class VideoRenderActivity extends AppCompatActivity {
                                 try {
                                     if (render_paras[0] == 1) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_1)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.airam_dato_on_unsplash)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 2) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_2)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.christmas_3009949_1920)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 3) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_3)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.damiano_ferrante_unsplash)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 4) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_4)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.design_3289964)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 5) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_5)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.efe_kurnaz_unsplash)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 6) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_6)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.halloween_72939_1280)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 7) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_7)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.jonathan_hanna_unsplash)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 8) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_8)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.lennon_cheng_unsplash)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 9) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_9)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.painting_3135875_1920)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 10) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_10)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.space_4152623_1920)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 11) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_11)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.summer_4181783)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
                                     if (render_paras[0] == 12) {
                                         String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                                + getApplicationContext().getPackageName() + "/" + R.drawable.render_12)), "", VideoRenderActivity.this);
+                                                + getApplicationContext().getPackageName() + "/" + R.drawable.abstract_2468874_1920)), "", VideoRenderActivity.this);
                                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
                                     }
 
@@ -613,8 +611,8 @@ public class VideoRenderActivity extends AppCompatActivity {
                                     return cur_urls.getString("480P");
                                 if(cur_urls.has("360P"))
                                     return cur_urls.getString("360P");
-                                if(cur_urls.has("1080P"))
-                                    return cur_urls.getString("1080P");
+                                if(cur_urls.has("自动"))
+                                    return cur_urls.getString("自动");
                             }
                         }
                     } catch (JSONException | InterruptedException e) {

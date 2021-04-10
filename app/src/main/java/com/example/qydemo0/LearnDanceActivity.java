@@ -260,11 +260,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     }
 
     private void init_wrong_kuang(){
-        wrong_kuang[0] = (ImageView) findViewById(R.id.left_top);
-        wrong_kuang[1] = (ImageView) findViewById(R.id.middle_top);
-        wrong_kuang[2] = (ImageView) findViewById(R.id.right_top);
-        wrong_kuang[3] = (ImageView) findViewById(R.id.left_bottom);
-        wrong_kuang[4] = (ImageView) findViewById(R.id.middle_bottom);
+        wrong_kuang[0] = (ImageView) findViewById(R.id.middle_top);
+        wrong_kuang[1] = (ImageView) findViewById(R.id.middle_bottom);
+        wrong_kuang[2] = (ImageView) findViewById(R.id.left_top);
+        wrong_kuang[3] = (ImageView) findViewById(R.id.right_top);
+        wrong_kuang[4] = (ImageView) findViewById(R.id.left_bottom);
         wrong_kuang[5] = (ImageView) findViewById(R.id.right_bottom);
     }
 
@@ -1069,17 +1069,20 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                         wrong_time_item.add((long) ((Double.parseDouble(str2) - Double.parseDouble(str))*1000.0));
                         int cur_wrong_id_2 = wrong_time_json_item.getInt("error_type");
                         List<Boolean> wrong_id_item = new ArrayList<>();
-                        int[] s = new int[6];
-                        for(int j = 0; j < 6; j++){
-                            s[j] = ((1 << j) & cur_wrong_id_2);
-                        }
-                        for(int j=0;j<6;j++){
-                            wrong_id_item.add(s[j] == 1);
+                        String s = Integer.toBinaryString(cur_wrong_id_2);
+                        Integer s_int = Integer.valueOf(s);
+                        for(int j = 6; j >0 ; j--){
+                            wrong_id_item.add(s_int%10==1);
+                            s_int /= 10;
                         }
                         wrong_time.add(wrong_time_item);
                         wrong_id.add(wrong_id_item);
                         Log.d("hjt.in.it", "?" + i);
                     }
+
+                    Log.e("wrong_time", String.valueOf(wrong_time));
+                    Log.e("wrong_id",String.valueOf(wrong_id));
+
                     Log.d("hjt.out.it", "1");
                     init_compare_video();
                     detailPlayer.startPlayLogic();
@@ -1132,6 +1135,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         @Override
         protected void onPostExecute(Integer[] ints) {
             super.onPostExecute(ints);
+            Log.i("ints[1]",""+ints[1]);
+            Log.i("ints[0]", ""+ints[0]);
             if(ints[0]==0){
                 Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
@@ -1139,6 +1144,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             }
             else{
                 if(ints[1]==2){
+                    Log.i("goto","gotogoto");
                     go_to_next_segment();
                 }
             }
@@ -1156,7 +1162,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                     if(integers[2]==1){
                         cur_rid = rjsr.getJSONObject("data").getInt("rid");
                     }
-                    Integer[] cur_input = {1,integers[1]};
+                    Integer[] cur_input = {1,integers[2]};
                     return cur_input;
                 }
             } catch (JSONException e) {

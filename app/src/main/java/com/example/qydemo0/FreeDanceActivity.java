@@ -135,11 +135,11 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         initViews();
         ButterKnife.bind(this);
 
-        //ArrayList<String> list = getIntent().getStringArrayListExtra("params");
-        ArrayList<String> list = new ArrayList<>();
-        list.add("1");
-        list.add("1080P");
-        list.add("https://file.yhf2000.cn/dash/a4/78/a478389682cb55a7d2cee717da2c1c025d1a1c993f943fb042979ff6dcc22cf2-IbAjmG.use/manifest.mpd");
+        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+//        ArrayList<String> list = new ArrayList<>();
+//        list.add("1");
+//        list.add("1080P");
+//        list.add("https://file.yhf2000.cn/dash/a4/78/a478389682cb55a7d2cee717da2c1c025d1a1c993f943fb042979ff6dcc22cf2-IbAjmG.use/manifest.mpd");
         initLearnVideo(list);
 
         is_learn = false;
@@ -369,8 +369,16 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
     private void initLearnVideo(ArrayList<String> source) {
 //        String[] source = {"https://file.yhf2000.cn/dash/hw.mp4/manifest.mpd"};
+        if(source.get(0).equals("0")){
         for(int i=1;i<source.size();i+=2){
             SwitchVideoModel switchVideoModel = new SwitchVideoModel(source.get(i), source.get(i+1));
+            List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
+            list.add(switchVideoModel);
+            all_learn_video.add(list);
+        }
+        }
+        else{
+            SwitchVideoModel switchVideoModel = new SwitchVideoModel("音频", source.get(1));
             List<SwitchVideoModel> list = new ArrayList<SwitchVideoModel>();
             list.add(switchVideoModel);
             all_learn_video.add(list);
