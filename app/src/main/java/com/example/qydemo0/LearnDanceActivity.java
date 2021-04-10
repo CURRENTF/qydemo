@@ -433,7 +433,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
-//]
+        Camera.Parameters parameters = mCamera.getParameters();
+        Point bestPreviewSizeValue1 = findBestPreviewSizeValue(parameters.getSupportedPreviewSizes());
+        parameters.setPreviewSize(bestPreviewSizeValue1.x, bestPreviewSizeValue1.y);
 
         RelativeLayout.LayoutParams fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
@@ -1112,12 +1114,10 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             try {
                 JSONObject res_json = new JSONObject(learn_request.advanceGet(Constant.mInstance.work_url+"breakdown/"+integers[0]+"/","Authorization",
                         GlobalVariable.mInstance.token));
-                Log.e("res_json",String.valueOf(res_json));
                 if(!res_json.has("msg") || !res_json.getString("msg").equals("Success")) return null;
                 JSONObject res_data_json = res_json.getJSONObject("data");
                 all_learn_depose_video_num = res_data_json.getInt("segment_num");
                 urls_jsonarry = res_data_json.getJSONArray("segment_info");
-                Log.i("urls", String.valueOf(urls_jsonarry));
                 return true;
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -2,6 +2,7 @@ package com.example.qydemo0.Widget;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 import com.example.qydemo0.entry.Image;
+
+import org.json.JSONObject;
 
 public class LittleLearnItem extends LinearLayout {
 
@@ -34,16 +37,13 @@ public class LittleLearnItem extends LinearLayout {
         mView = inflater.inflate(R.layout.little_learn_item, this, true);
     }
 
-    public void init(String json){
-//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        mView = inflater.inflate(R.layout.little_learn_item, this, true);
+    public void init(JSONObject jsonObject){
         icon = mView.findViewById(R.id.medal);
         score = mView.findViewById(R.id.score);
         remark = mView.findViewById(R.id.remark);
         ser = mView.findViewById(R.id.record_serial);
 
-
-
+        Log.e("hjt.log.little.learn.item", jsonObject.toString());
     }
 
 }
