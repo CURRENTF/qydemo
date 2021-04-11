@@ -18,10 +18,18 @@
             android:text="背景替换"
             android:textColor="@color/qy_pink"
             android:textAlignment="center"
-            android:layout_toLeftOf="@+id/lj"
+            android:layout_toLeftOf="@+id/centerTextView"
             android:layout_centerHorizontal="true"
             android:layout_marginRight="10dp"
             android:background="@drawable/btn_render_choice_on"
+            />
+
+        <TextView
+
+            android:id="@+id/centerTextView"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            android:layout_centerHorizontal="true"
             />
         
         <Button
@@ -31,22 +39,22 @@
             android:textColor="@color/white"
             android:text="滤镜"
             android:textAlignment="center"
-            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@id/centerTextView"
             android:background="@drawable/btn_render_choice"
             />
         
-        <Button
-            android:id="@+id/change_style"
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
-            android:textColor="@color/white"
-            android:text="视频风格化"
-            android:textAlignment="center"
-            android:layout_toRightOf="@+id/lj"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/btn_render_choice"
-            />
+<!--        <Button-->
+<!--            android:id="@+id/change_style"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:text="视频风格化"-->
+<!--            android:textAlignment="center"-->
+<!--            android:layout_toRightOf="@+id/lj"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:background="@drawable/btn_render_choice"-->
+<!--            />-->
         
     </RelativeLayout>
 

@@ -1,5 +1,6 @@
 package com.example.qydemo0;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -201,8 +202,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_free_dance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PlayerActivity.this, VideoRenderActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(PlayerActivity.this, FreeDanceActivity.class);
                 ArrayList<String> data1 = new ArrayList<String>();
                 data1.add("0");
                 try {

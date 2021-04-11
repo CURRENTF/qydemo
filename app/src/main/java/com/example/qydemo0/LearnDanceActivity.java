@@ -538,7 +538,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
 
     private void stop_compare_video(){
-//        btn2.setText("下一段");
+        btn2.setScaleX(1);
         is_compare = false;
         is_learn = false;
     }
@@ -862,7 +862,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private void init_compare_video(){
         is_compare = true;
         reset_learn_view();
-//        btn2.setText("返回");
+        btn2.setScaleX(-1);
     }
 
     /**
@@ -1000,23 +1000,23 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         protected JSONObject doInBackground(String... video_path) {
 
 
-//            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
-//            for(int k=0;k<10;k++) {
-//                try {
-//                    Thread.sleep(500);
-//                    if(startCode==0) {
-//                        for (int i = 0; i < bitmaps.size(); i++) {
-//                            if (getFer(bitmaps.get(i)).equals("Sad")) {
-//                                expressions_sad.add(i);
-//                            }
-//                        }
-//                    }
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            Log.i("expression_res", String.valueOf(expressions_sad));
+            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
+            for(int k=0;k<10;k++) {
+                try {
+                    Thread.sleep(500);
+                    if(startCode==0) {
+                        for (int i = 0; i < bitmaps.size(); i++) {
+                            if (getFer(bitmaps.get(i)).equals("Sad")) {
+                                expressions_sad.add(i);
+                            }
+                        }
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Log.i("expression_res", String.valueOf(expressions_sad));
 
             try {String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
                     2,learn_file.hashFileUrl(path_cur));
@@ -1055,6 +1055,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             if(resJson != null){
                 try {
                     Log.d("hjt.return.msg.player", resJson.toString());
+                    File file1 = new File(path_cur);
+                    file1.delete();
                     detailPlayer.setUp(resJson.getJSONObject("video_url").getJSONObject("url").getString("自动"), true, "对比视频");
                     wrong_time.clear();
                     JSONArray wrong_time_json = resJson.getJSONObject("evaluation").getJSONArray("error");
