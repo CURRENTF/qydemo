@@ -83,6 +83,7 @@ public class MsgProcess {
             }
         } catch (JSONException e) {
             Log.e("hjt.MsgProcess", "jsonMsgProcessWrong");
+            if(status) Log.e("hjt.MsgProgress", msg);
             e.printStackTrace();
         }
         return null;

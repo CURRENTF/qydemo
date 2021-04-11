@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.RenderItem;
 import com.example.qydemo0.view.CustomLinearLayout;
@@ -60,6 +62,18 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         r_in = AnimationUtils.loadAnimation(this, R.anim.ani_right_translate_in_alpha_500ms);
         l_out = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_alpha_500ms);
         l_in = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_in_alpha_500ms);
+        GetList getList = new GetList();
+        getList.execute();
+//        Handler handler=new Handler();
+//        Runnable runnable=new Runnable() {
+//            @Override
+//            public void run() {
+//                GetList getList = new GetList();
+//                getList.execute();
+//                handler.postDelayed(this, 2000);
+//            }
+//        };
+//        handler.postDelayed(runnable, 5000);
     }
 
 
@@ -74,16 +88,16 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
             right.setVisibility(View.GONE);
             btn_left.setTextColor(getColor(R.color.red));
             btn_right.setTextColor(getColor(R.color.black));
-            left.startAnimation(l_in);
-            right.startAnimation(l_out);
+            left.startAnimation(r_in);
+            right.startAnimation(r_out);
         }
         else {
             left.setVisibility(View.GONE);
             right.setVisibility(View.VISIBLE);
             btn_left.setTextColor(getColor(R.color.black));
             btn_right.setTextColor(getColor(R.color.red));
-            left.startAnimation(r_out);
-            right.startAnimation(r_in);
+            left.startAnimation(l_out);
+            right.startAnimation(l_in);
         }
         last = view;
     }
@@ -93,7 +107,7 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token), true);
         }
 
         @Override

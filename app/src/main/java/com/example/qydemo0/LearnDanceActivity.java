@@ -179,7 +179,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     boolean mirror_status = false;
 
-    private ImageView[] wrong_kuang = new ImageView[6];
+    private ImageView[] wrong_kuang = new ImageView[10];
 
     private CVUnitClient mCVClient;
     private int startCode = -1;
@@ -260,12 +260,16 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     }
 
     private void init_wrong_kuang(){
-        wrong_kuang[0] = (ImageView) findViewById(R.id.middle_top);
-        wrong_kuang[1] = (ImageView) findViewById(R.id.middle_bottom);
-        wrong_kuang[2] = (ImageView) findViewById(R.id.left_top);
-        wrong_kuang[3] = (ImageView) findViewById(R.id.right_top);
-        wrong_kuang[4] = (ImageView) findViewById(R.id.left_bottom);
-        wrong_kuang[5] = (ImageView) findViewById(R.id.right_bottom);
+        wrong_kuang[0] = (ImageView) findViewById(R.id.head);
+        wrong_kuang[1] = (ImageView) findViewById(R.id.body);
+        wrong_kuang[2] = (ImageView) findViewById(R.id.left_hand);
+        wrong_kuang[3] = (ImageView) findViewById(R.id.left_hand_2);
+        wrong_kuang[4] = (ImageView) findViewById(R.id.right_hand);
+        wrong_kuang[5] = (ImageView) findViewById(R.id.right_hand_2);
+        wrong_kuang[6] = (ImageView) findViewById(R.id.left_leg);
+        wrong_kuang[7] = (ImageView) findViewById(R.id.left_leg_2);
+        wrong_kuang[8] = (ImageView) findViewById(R.id.right_leg);
+        wrong_kuang[9] = (ImageView) findViewById(R.id.right_leg_2);
     }
 
     private void init_learn_pager(){
@@ -368,6 +372,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             public void onAutoComplete(String url, Object... objects) {
                 super.onAutoComplete(url, objects);
                 smile_word.setText("");
+                for(int k=0;k<10;k++)
+                    wrong_kuang[k].setBackgroundResource(R.color.dark_color);
                 if(is_learn && !is_compare){
                     stopRecord();
                     if((new File(path_cur)).isFile()) {
@@ -407,20 +413,31 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                                 detailPlayer.getMspeed().setText("0.25倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(0.25f, true);
                                 Log.d("hjt.in.play", "change.it");
-                                for(int k = 0; k < wrong_id.get(i).size(); k++){
+
+                                for(int k = 0; k < 2; k++){
                                     if(wrong_id.get(i).get(k)){
-                                        wrong_kuang[k].setBackgroundResource(R.drawable.learn_wrong_item);
+                                        wrong_kuang[k].setBackgroundResource(R.color.light_color);
                                     }
                                     else{
-                                        wrong_kuang[k].setBackgroundResource(R.drawable.learn_right_item);
+                                        wrong_kuang[k].setBackgroundResource(R.color.dark_color);
+                                    }
+                                }
+                                for(int k = 2; k < 6; k++){
+                                    if(wrong_id.get(i).get(k)){
+                                        wrong_kuang[(k-2)*2+2].setBackgroundResource(R.color.light_color);
+                                        wrong_kuang[(k-2)*2+1+2].setBackgroundResource(R.color.light_color);
+                                    }
+                                    else{
+                                        wrong_kuang[(k-2)*2+2].setBackgroundResource(R.color.dark_color);
+                                        wrong_kuang[(k-2)*2+1+2].setBackgroundResource(R.color.dark_color);
                                     }
                                 }
                             }
                             break;
                         }
                         else{
-                            for(int k=0;k<6;k++)
-                                wrong_kuang[k].setBackgroundResource(R.drawable.learn_right_item);
+                            for(int k=0;k<10;k++)
+                                wrong_kuang[k].setBackgroundResource(R.color.dark_color);
                             if(detailPlayer.getSpeed()==0.25f){
                                 detailPlayer.getMspeed().setText("1倍速");
                                 detailPlayer.getCurrentPlayer().setSpeedPlaying(1f, true);

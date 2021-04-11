@@ -256,9 +256,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 post_detail_nested_scroll.setVisibility(View.VISIBLE);
                 intro.setTextColor(getColor(R.color.red));
                 comme.setTextColor(getColor(R.color.black));
-                postDetailNestedScroll.startAnimation(l_in);
-                qyscrollview_comment.startAnimation(l_out);
-                recall_pager.startAnimation(l_out);
+                postDetailNestedScroll.startAnimation(r_in);
+                qyscrollview_comment.startAnimation(r_out);
+                recall_pager.startAnimation(r_out);
             }
         });
 
@@ -272,9 +272,9 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 recall_pager.setVisibility(View.VISIBLE);
                 comme.setTextColor(context.getResources().getColor(R.color.red));
                 intro.setTextColor(context.getResources().getColor(R.color.black));
-                postDetailNestedScroll.startAnimation(r_out);
-                qyscrollview_comment.startAnimation(r_in);
-                recall_pager.startAnimation(r_in);
+                postDetailNestedScroll.startAnimation(l_out);
+                qyscrollview_comment.startAnimation(l_in);
+                recall_pager.startAnimation(l_in);
             }
         });
     }

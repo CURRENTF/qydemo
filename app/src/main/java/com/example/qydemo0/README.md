@@ -26,7 +26,7 @@
 
 ## ImageScroll.java
 
-whc
+实现图片滑动
 
 ## ImageSelectorActivity.java
 
@@ -54,7 +54,7 @@ APP的入口，在该界面实现了所有主要功能的入口，同时提供�
 
 ## PopupWindowRight.java
 
-whc
+渲染界面弹出的选择框
 
 ## PostDetailActivity.java
 
@@ -74,7 +74,7 @@ whc
 
 ## SimplePlayerActivity.java
 
-whc
+播放器
 
 ## UploadActivity.java
 
@@ -94,7 +94,7 @@ whc
 
 ## VideoRenderActivity.java
 
-whc
+视频渲染界面
 
 ## ViewImageActivity.java
 

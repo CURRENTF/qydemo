@@ -71,14 +71,14 @@ public class RenderItem extends RelativeLayout {
             progress.setText(json.getString("schedule"));
             String p = json.getString("schedule");
             progressBar.setProgress(Integer.parseInt(p.substring(0, p.length() - 1)));
+            prog = Integer.parseInt(p.substring(0, p.length() - 1));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public Boolean is_finished(){
-        if(prog == 100) return true;
-        else return false;
+        return prog == 100;
     }
 
     private void setDownload(String http_url, String file_path){
@@ -162,6 +162,8 @@ public class RenderItem extends RelativeLayout {
                 try {
                     int up = prog;
                     prog = json.getInt("schedule");
+                    String t = json.getString("schedule");
+                    if(prog == 0) prog = Integer.parseInt(t.substring(0, t.length() - 1));
                     progressBar.setProgress(prog);
                     progress.setText(prog+"%");
                     tid = json.getString("tid");

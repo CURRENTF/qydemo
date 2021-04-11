@@ -105,63 +105,91 @@
 
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            >
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal">
             <ImageView
-                android:id="@+id/left_top"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                />
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:id="@+id/left_hand"
+                android:layout_height="match_parent"/>
             <ImageView
-                android:id="@+id/middle_top"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                />
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:id="@+id/head"
+                android:layout_height="match_parent"/>
             <ImageView
-                android:id="@+id/right_top"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                />
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:id="@+id/right_hand"
+                android:layout_height="match_parent"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            >
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical">
             <ImageView
-                android:id="@+id/left_bottom"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:id="@+id/left_hand_2"/>
             <ImageView
-                android:id="@+id/middle_bottom"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                />
-            <ImageView
-                android:id="@+id/right_bottom"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/left_leg_2"
+                android:layout_weight="0.5"/>
         </LinearLayout>
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:id="@+id/right_hand_2"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:id="@+id/right_leg_2"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="match_parent"
+                android:id="@+id/left_leg"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="match_parent"
+                android:id="@+id/body"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="0.25"
+                android:layout_height="match_parent"
+                android:id="@+id/right_leg"/>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/smile_word"

@@ -211,6 +211,12 @@ public class MainActivity extends AppCompatActivity {
             Log.d("hjtGetUserInfo", s);
             JSONObject json = MsgProcess.msgProcess(s, true);
             if(json != null){
+                try {
+                    if(json.getString("img_url").equals("null"))
+                        json.put("img_url", Constant.mInstance.default_avatar);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
                 try {
                     GlobalVariable.mInstance.uid = json.getString("uid");
