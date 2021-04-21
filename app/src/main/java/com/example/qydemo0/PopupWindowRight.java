@@ -87,7 +87,7 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
     private void init_btn(Context context) {
         btn_change_bg = view.findViewById(R.id.change_background);
         btn_lj = view.findViewById(R.id.lj);
-        //btn_sty = view.findViewById(R.id.change_style);
+        btn_sty = view.findViewById(R.id.change_style);
 
         HorizontalScrollView bg = (HorizontalScrollView) view.findViewById(R.id.bg_scrollview),
         lj = (HorizontalScrollView) view.findViewById(R.id.lj_scrollview), sty = (HorizontalScrollView) view.findViewById(R.id.sty_scrollview);
@@ -103,8 +103,8 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
                 btn_lj.setBackgroundResource(R.drawable.btn_render_choice);
                 btn_lj.setTextColor(Color.WHITE);
                 lj.setVisibility(View.GONE);
-                //btn_sty.setBackgroundResource(R.drawable.btn_render_choice);
-                //btn_sty.setTextColor(Color.WHITE);
+                btn_sty.setBackgroundResource(R.drawable.btn_render_choice);
+                btn_sty.setTextColor(Color.WHITE);
                 sty.setVisibility(View.GONE);
             }
         });
@@ -118,13 +118,12 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
                 btn_change_bg.setBackgroundResource(R.drawable.btn_render_choice);
                 btn_change_bg.setTextColor(Color.WHITE);
                 bg.setVisibility(View.GONE);
-                //btn_sty.setBackgroundResource(R.drawable.btn_render_choice);
-                //btn_sty.setTextColor(Color.WHITE);
+                btn_sty.setBackgroundResource(R.drawable.btn_render_choice);
+                btn_sty.setTextColor(Color.WHITE);
                 sty.setVisibility(View.GONE);
             }
         });
 
-        /*
         btn_sty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +138,6 @@ public class PopupWindowRight extends PopupWindow implements View.OnClickListene
                 lj.setVisibility(View.GONE);
             }
         });
-         */
     }
 
     private void init_img(Context context) {

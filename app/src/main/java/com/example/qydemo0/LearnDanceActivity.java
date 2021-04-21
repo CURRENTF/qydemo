@@ -186,6 +186,10 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private TextView smile_word;
 
+    RelativeLayout.LayoutParams fill_tiny;
+
+    ImageView black_back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -351,7 +355,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                     Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
                     AudioPlayer audioPlayer = null;
                     try {
-                        audioPlayer = new AudioPlayer("https://downsc.chinaz.net/Files/DownLoad/sound1/202007/13182.mp3");
+                        audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_10);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
@@ -450,10 +454,6 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
-        Camera.Parameters parameters = mCamera.getParameters();
-        Point bestPreviewSizeValue1 = findBestPreviewSizeValue(parameters.getSupportedPreviewSizes());
-        parameters.setPreviewSize(bestPreviewSizeValue1.x, bestPreviewSizeValue1.y);
-
         RelativeLayout.LayoutParams fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -462,8 +462,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams((int) heightPixels*1280/720, heightPixels);
         fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
-        ImageView black_back = (ImageView) findViewById(R.id.black_back);
-        RelativeLayout.LayoutParams fill_tiny = new RelativeLayout.LayoutParams(1,1);
+        black_back = (ImageView) findViewById(R.id.black_back);
+        fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
         btn1 = (ImageView) findViewById(R.id.mirror_btn);
         btn2 = (ImageView) findViewById(R.id.next_video);
@@ -472,7 +472,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if(!is_compare) {
+                if(!is_compare) {
                     if (!mirror_status) {
 //                        btn1.setText("恢复");
                         mirror_status = true;
@@ -484,7 +484,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                         mSurfaceView.setLayoutParams(fill_tiny);
                         black_back.setLayoutParams(fill_tiny);
                     }
-                //}
+                }
             }
         });
 
@@ -880,6 +880,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         is_compare = true;
         reset_learn_view();
         btn2.setScaleX(-1);
+        if(mirror_status){
+            mirror_status = false;
+            mSurfaceView.setLayoutParams(fill_tiny);
+            black_back.setLayoutParams(fill_tiny);
+        }
     }
 
     /**

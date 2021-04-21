@@ -105,8 +105,8 @@ public class VideoRenderActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         free_dance_url = intent.getStringExtra("free_dance_url");
 
-//        free_dance_url = "/sdcard/DCIM/Camera/VID_20200407_140206.mp4";
-//        Log.e("free_dance_url",free_dance_url);
+//        free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
+        Log.e("free_dance_url",free_dance_url);
 
         inti_clip_video();
         init_player();
@@ -450,9 +450,13 @@ public class VideoRenderActivity extends AppCompatActivity {
             Log.e("cover_path", cover_path);
             String cover_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,
                     cover_path, 0,cur_file.hashFileUrl(cover_path));
+            Log.e("cover_id", cover_id);
             if(cover_id==null) return null;
             String render_video_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url,will_do_url, 2, cur_file.hashFileUrl(will_do_url));
             if(render_video_id!=null){
+
+
+
                 if(render_paras[0]!=0) {
                     if (render_paras[2] == 1) {
                         for (int o = 0; o < 5; o++) {
@@ -495,6 +499,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                             }
                         }
                         render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, Img.compressWithUrl(render_img,VideoRenderActivity.this), 0, cur_file.hashFileUrl(render_img));
+                        Log.e("render_img_id_after_style",String.valueOf(render_img_id==null));
                     } else {
                         if (render_paras[0] == -2) {
                             render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, Img.compressWithUrl(render_img, VideoRenderActivity.this), 0, cur_file.hashFileUrl(render_img));
@@ -570,6 +575,10 @@ public class VideoRenderActivity extends AppCompatActivity {
                             }
                         }
                     }
+
+
+
+                Log.i("here",String.valueOf(render_img_id==null));
                     List<String> callToJson = new ArrayList<>();
                     callToJson.add("video");callToJson.add("string");callToJson.add(render_video_id);
                     callToJson.add("cover");callToJson.add("string");callToJson.add(cover_id);
@@ -592,6 +601,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                     try {
                         JSONObject res_json_object = new JSONObject(res_json);
                         String tid = "";
+                        Log.e("res_json_object", String.valueOf(res_json_object));
                         if(res_json_object.getString("msg").equals("Success")){
                             tid = res_json_object.getJSONObject("data").getString("tid");
                             if(!isYuLan) return "Success";

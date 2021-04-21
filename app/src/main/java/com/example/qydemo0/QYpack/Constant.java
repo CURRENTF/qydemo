@@ -48,7 +48,7 @@ public class Constant {
         default_register2_way = R.id.fragment_username_register2,
         HTTP_OK = 200,
         pre_items = 10,
-        MAX_FILE_SIZE = 1024 * 1024 * 50,
+        MAX_FILE_SIZE = 1024 * 1024 * 80,
         MAX_POST_TEXT_NUM = 250,
         lazy_load_num = 10,
         ani_time = 50,

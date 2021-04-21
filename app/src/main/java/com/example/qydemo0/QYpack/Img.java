@@ -63,7 +63,7 @@ public class Img {
             if(path != null){
                 File dir = new File(path + "/pics");
                 if(!dir.exists()) dir.mkdirs();
-                path = dir + "/" + System.currentTimeMillis();
+                path = dir + "/" + System.currentTimeMillis() + ".jpg";
                 File pic = new File(path);
                 Log.d("hjt.IMG.path", path);
                 FileOutputStream outputStream = new FileOutputStream(pic);

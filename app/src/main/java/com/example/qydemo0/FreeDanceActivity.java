@@ -157,86 +157,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
         changeSpeed = (TextView) findViewById(R.id.change_speed);
 
-        detailPlayer.setUp(all_learn_video.get(0), true, "韩国小姐姐的舞蹈视频");
-
-        //增加封面
-        coverImageView = new ImageView(this);
-        coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        //coverImageView.setImageResource(R.mipmap.xxx1);
-        detailPlayer.setThumbImageView(coverImageView);
-
-        resolveNormalVideoUI();
-
-        //外部辅助的旋转，帮助全屏
-        orientationUtils = new OrientationUtils(this, detailPlayer);
-        //初始化不打开外部的旋转
-        orientationUtils.setEnable(false);
-
-        detailPlayer.setIsTouchWiget(true);
-        //detailPlayer.setIsTouchWigetFull(false);
-        //关闭自动旋转
-        detailPlayer.setRotateViewAuto(false);
-        //打开  实现竖屏全屏动画
-        detailPlayer.setShowFullAnimation(true);
-        detailPlayer.setNeedLockFull(true);
-        detailPlayer.setSeekRatio(1);
-        //detailPlayer.setOpenPreView(false);
-        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                detailPlayer.startWindowFullscreen(FreeDanceActivity.this, true, true);
-            }
-        });
-
-
-
-        detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
-            @Override
-            public void onPrepared(String url, Object... objects) {
-                super.onPrepared(url, objects);
-                isPlay = true;
-                detailPlayer.onVideoPause();
-                detailPlayer.getCurrentPlayer().getCurrentPlayer().setIsTouchWiget(true);
-                detailPlayer.getCurrentPlayer().setIsTouchWigetFull(true);
-
-                if(is_learn && !is_compare){
-                    detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
-                    detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
-                    Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
-                    AudioPlayer audioPlayer = null;
-                    try {
-                        audioPlayer = new AudioPlayer("https://downsc.chinaz.net/Files/DownLoad/sound1/202007/13182.mp3");
-                        audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                startRecord();
-                                detailPlayer.onVideoResume();
-                            }
-                        });
-                        audioPlayer.start();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    //new SleepNowThenPlay().execute();
-                }
-            }
-
-            @Override
-            public void onAutoComplete(String url, Object... objects) {
-                super.onAutoComplete(url, objects);
-                if(is_learn && !is_compare){
-                    stopRecord();
-                }
-            }
-
-            @Override
-            public void onClickStartError(String url, Object... objects) {
-                super.onClickStartError(url, objects);
-            }
-        });
-
-        detailPlayer.getCurrentPlayer().startPlayLogic();
+        init_detail_player();
 
         surf = findViewById(R.id.sf_view);
         DisplayMetrics dm = getResources().getDisplayMetrics();
@@ -311,6 +232,93 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         arrow = findViewById(R.id.menu_btn);
         shrink_menu_now();
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        detailPlayer.setUp(all_learn_video.get(0), true, "自由舞");
+    }
+
+    void init_detail_player(){
+        detailPlayer.setUp(all_learn_video.get(0), true, "自由舞");
+
+        //增加封面
+        coverImageView = new ImageView(this);
+        coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //coverImageView.setImageResource(R.mipmap.xxx1);
+        detailPlayer.setThumbImageView(coverImageView);
+
+        resolveNormalVideoUI();
+
+        //外部辅助的旋转，帮助全屏
+        orientationUtils = new OrientationUtils(this, detailPlayer);
+        //初始化不打开外部的旋转
+        orientationUtils.setEnable(false);
+
+        detailPlayer.setIsTouchWiget(true);
+        //detailPlayer.setIsTouchWigetFull(false);
+        //关闭自动旋转
+        detailPlayer.setRotateViewAuto(false);
+        //打开  实现竖屏全屏动画
+        detailPlayer.setShowFullAnimation(true);
+        detailPlayer.setNeedLockFull(true);
+        detailPlayer.setSeekRatio(1);
+        //detailPlayer.setOpenPreView(false);
+        detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
+                detailPlayer.startWindowFullscreen(FreeDanceActivity.this, true, true);
+            }
+        });
+
+        detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+            @Override
+            public void onPrepared(String url, Object... objects) {
+                super.onPrepared(url, objects);
+                isPlay = true;
+                detailPlayer.onVideoPause();
+                detailPlayer.getCurrentPlayer().getCurrentPlayer().setIsTouchWiget(true);
+                detailPlayer.getCurrentPlayer().setIsTouchWigetFull(true);
+
+                if(is_learn && !is_compare){
+                    detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
+                    detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
+                    Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
+                    AudioPlayer audioPlayer = null;
+                    try {
+                        audioPlayer = new AudioPlayer(FreeDanceActivity.this, R.raw.count_number_10);
+                        audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mp) {
+                                startRecord();
+                                detailPlayer.onVideoResume();
+                            }
+                        });
+                        audioPlayer.start();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //new SleepNowThenPlay().execute();
+                }
+            }
+
+            @Override
+            public void onAutoComplete(String url, Object... objects) {
+                super.onAutoComplete(url, objects);
+                if(is_learn && !is_compare){
+                    stopRecord();
+                }
+            }
+
+            @Override
+            public void onClickStartError(String url, Object... objects) {
+                super.onClickStartError(url, objects);
+            }
+        });
+
+        detailPlayer.getCurrentPlayer().startPlayLogic();
     }
 
     void shrink_menu_now(){
@@ -633,6 +641,12 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     private void init_compare_video(){
         is_compare = true;
         reset_learn_view();
+        if(mirror_status)
+        {
+            mirror_status = false;
+            surf.setLayoutParams(fill_tiny);
+            black_back.setLayoutParams(fill_tiny);
+        }
     }
 
     /**

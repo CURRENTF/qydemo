@@ -147,8 +147,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         qyscrollview_comment = (QYScrollView) findViewById(R.id.qyscrollview_comment);
         int wid = bundle.getInt("id");
         Log.d("hjt.wid", String.valueOf(wid));
-        new GetCommentJson().execute(wid,0,20);
-        new GetWorkJson().execute(wid);
         work_id = wid;
         render_content = (LinearLayout) findViewById(R.id.Render_content);
         post_detail_nested_scroll = (QYScrollView) findViewById(R.id.post_detail_nested_scroll);
@@ -179,12 +177,20 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 //                Log.d("hjt.scroll.top", "true");
 //            }
 //        });
-
         r_out = AnimationUtils.loadAnimation(this, R.anim.ani_right_translate_alpha_500ms);
         r_in = AnimationUtils.loadAnimation(this, R.anim.ani_right_translate_in_alpha_500ms);
         l_out = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_alpha_500ms);
         l_in = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_in_alpha_500ms);
-        new getRec().execute(wid,start_next,10);
+    }
+
+    @Override
+    protected void onStart() {
+        Log.i("whc","重新开始了！");
+        Log.i("work_id",""+work_id);
+        new GetCommentJson().execute(work_id,0,20);
+        new GetWorkJson().execute(work_id);
+        super.onStart();
+        new getRec().execute(work_id,start_next,10);
     }
 
     Animation l_out, l_in, r_out, r_in;

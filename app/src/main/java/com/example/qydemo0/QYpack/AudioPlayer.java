@@ -1,6 +1,9 @@
 package com.example.qydemo0.QYpack;
 
+import android.content.Context;
 import android.media.MediaPlayer;
+
+import com.example.qydemo0.R;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -10,17 +13,12 @@ public class AudioPlayer {
     private int duration;
     private boolean isPlaying = false;
 
-    private String targetFile;
-    private MediaPlayer mMediaPlayer = new MediaPlayer();
+    private MediaPlayer mMediaPlayer;
     private Consumer<AudioPlayer> mOnCompletionListener;
 
-    public AudioPlayer(String file) throws IOException {
-        this.targetFile = file;
-        mMediaPlayer.setDataSource(targetFile);
-    }
-
-    public void setTarget(String file) {
-        this.targetFile = file;
+    public AudioPlayer(Context context, int audio_source) throws IOException {
+        //mMediaPlayer.setDataSource(targetFile);
+        mMediaPlayer = (MediaPlayer) MediaPlayer.create(context, audio_source);
     }
 
     public void setOnCompletionListener(Consumer<AudioPlayer> consumer) {
@@ -28,9 +26,6 @@ public class AudioPlayer {
     }
 
     public boolean start() {
-        if (targetFile == null) {
-            return false;
-        }
 
         try {
             mMediaPlayer.prepare();
