@@ -12,6 +12,11 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="transparent">#00000000</color>
+    <color name="btn_rect_alpha">#56b3b3b3</color>
     <color name="nav_bar">#EEF3F9</color>
     <color name="qy_background">#51658A</color>
     <color name="text_background">#EEF3F9</color>
@@ -25,4 +30,9 @@
     <color name="qy_button2">#8B7991</color>
     <drawable name="trans">#00000000 </drawable>
     <color name="red">#B22222</color>
+    <color name="real_pink">#F08080</color>
+    <color name="smoke">#F5F5F5</color>
+    <color name="qy_purple">#694d9f</color>
+    <color name="light_color">#faa755</color>
+    <color name="dark_color">#102b6a</color>
 </resources>

@@ -28,9 +28,22 @@ public class MsgProcess {
         }
     }
 
+    public static String getWrongMsg(String msg){
+        JSONObject json = null;
+        try {
+            json = new JSONObject(msg);
+            if(json.getInt("status") != Constant.mInstance.HTTP_OK){
+                return json.getString("msg");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static JSONObject msgProcess(String msg, Boolean status){
         Constant C = Constant.mInstance;
+        if(status) Log.d("hjt.msgProcess", msg);
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
@@ -43,17 +56,6 @@ public class MsgProcess {
                 }
             }
             else {
-
-//                if(GlobalVariable.mInstance.appContext != null){
-//                    if(!status){
-//                        Looper.prepare();
-//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-//                        Looper.loop();
-//                    }
-//                    else {
-//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
                 Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {
@@ -64,6 +66,7 @@ public class MsgProcess {
     }
     public static JSONArray msgProcessArr(String msg, Boolean status){
         Constant C = Constant.mInstance;
+        if(status) Log.d("hjt.msgProcess.arr", msg);
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
@@ -76,21 +79,11 @@ public class MsgProcess {
                 }
             }
             else {
-
-//                if(GlobalVariable.mInstance.appContext != null){
-//                    if(!status){
-//                        Looper.prepare();
-//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-//                        Looper.loop();
-//                    }
-//                    else {
-//                        Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
                 Log.e("hjtMsgProcess", json.getString("msg"));
             }
         } catch (JSONException e) {
             Log.e("hjt.MsgProcess", "jsonMsgProcessWrong");
+            if(status) Log.e("hjt.MsgProgress", msg);
             e.printStackTrace();
         }
         return null;
@@ -99,23 +92,12 @@ public class MsgProcess {
 
     public static boolean checkMsg(String msg, Boolean status){
         try {
+            if(status) Log.d("hjt.check.msg", msg);
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == Constant.mInstance.HTTP_OK) return true;
-//            if(GlobalVariable.mInstance.appContext != null){
-//                if(!status){
-//                    Looper.prepare();
-//                    Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-//                    Looper.loop();
-//                }
-//                else {
-//                    Toast.makeText(GlobalVariable.mInstance.appContext, json.getString("msg"), Toast.LENGTH_SHORT).show();
-//                }
-//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return false;
     }
-
-
 }

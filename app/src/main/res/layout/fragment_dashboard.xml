@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment"
+    android:layout_marginBottom="50dp"
     android:background="@drawable/gradient_color_orange_no_radius">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:id="@+id/image_user_background"
         android:src="@drawable/ic_dance_background"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical"
         android:translationZ="10dp"
         android:background="@drawable/top_radius_user_info"
-        android:paddingBottom="70dp"
         android:paddingTop="15dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/text_user_sign"
                     android:textSize="14sp"
-                    android:textColor="@color/exo_black_opacity_60"/>
+                    android:textColor="@color/exo_black_opacity_70"/>
             </LinearLayout>
 
             <ImageView
@@ -75,6 +73,7 @@
             android:paddingHorizontal="20dp"
             android:paddingVertical="20dp"
             android:gravity="center"
+            android:id="@+id/goto_fan_follow"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
@@ -115,9 +114,171 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="270dp">
+            android:layout_height="270dp"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:background="#afb4db"
+                android:gravity="center"
+                android:id="@+id/work">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/img1"
+                    android:src="@drawable/torch"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:id="@+id/work_name"
+                        android:textSize="18sp"
+                        android:padding="5dp"
+                        android:text="你还没有作品哦"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_best_choice"
+                            android:scaleType="fitCenter"/>
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:id="@+id/like_num_work"
+                            android:gravity="center"/>
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_play_button"
+                            android:scaleType="fitCenter"/>
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:id="@+id/play_num_work"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="#bb505d"
+                android:id="@+id/post_linear">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:id="@+id/img2"
+                    android:src="@drawable/torch"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:id="@+id/post_text"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="你还没有动态哦"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp">
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_best_choice"
+                            android:scaleType="fitCenter"/>
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:id="@+id/like_num_post"
+                            android:gravity="center"/>
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_chat"
+                            android:scaleType="fitCenter"/>
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:text="0"
+                            android:id="@+id/post_comment_num"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:id="@+id/render"
+                android:background="#feeeed"
+                android:layout_marginBottom="10dp">
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/torch"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:id="@+id/render_name"
+                        android:textSize="18sp"
+                        android:maxLines="1"
+                        android:padding="5dp"
+                        android:text="你还没有渲染哦"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="100%"/>
+                        <ProgressBar
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:id="@+id/render_progress"
+                            android:progress="100"
+                            android:layout_marginEnd="20dp"
+                            android:padding="5dp">
+                        </ProgressBar>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -128,4 +289,4 @@
 
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

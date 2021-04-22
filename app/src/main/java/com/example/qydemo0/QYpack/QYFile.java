@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,6 +24,18 @@ public class QYFile {
     public String hashFile(Uri uri, Activity ac){
         try {
             InputStream inputStream = ac.getContentResolver().openInputStream(uri);
+            String h = hash(inputStream, Constant.mInstance.MAX_FILE_SIZE);
+            return h;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String hashFileUrl(String file_url){
+        File file = new File(file_url);
+        try {
+            InputStream inputStream = (InputStream) (new FileInputStream(file));
             String h = hash(inputStream, Constant.mInstance.MAX_FILE_SIZE);
             return h;
         } catch (FileNotFoundException e) {
@@ -92,12 +106,14 @@ public class QYFile {
 
     public static class ResultContract extends ActivityResultContract<Boolean, Uri> {
 
+        public String params = "image";
+
         @NonNull
         @Override
         public Intent createIntent(@NonNull Context context, Boolean input) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");
+            intent.setType(params + "/*");
             return intent;
         }
 

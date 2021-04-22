@@ -3,4 +3,8 @@
         <attr name="fullscreenBackgroundColor" format="color" />
         <attr name="fullscreenTextColor" format="color" />
     </declare-styleable>
+    <string-array name="spingarr">
+        <item>北京</item>
+        <item>上海</item>
+    </string-array>
 </resources>

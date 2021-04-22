@@ -28,7 +28,7 @@ public class ShowProgressDialog {
         //设置提示信息
         wait.setMessage(msg);
         //设置是否可以通过返回键取消
-        wait.setCancelable(true);
+        wait.setCancelable(false);
         wait.setIndeterminate(false);
         //设置取消监听
         wait.setOnCancelListener(new DialogInterface.OnCancelListener() {

@@ -5,65 +5,100 @@
     android:id="@+id/work_item_layout"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:layout_marginVertical="2dp"
     android:paddingHorizontal="10dp"
     android:paddingVertical="10dp"
     android:background="@color/white"
     android:orientation="horizontal">
 
-    <ImageView
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_weight="0.5"
-        android:layout_height="match_parent"
-        android:scaleType="fitStart"
-        android:src="@drawable/ic_vegetable"
-        android:id="@+id/cover"/>
+        android:layout_weight="0.4"
+        android:layout_marginEnd="20dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_vegetable"
+            android:layout_gravity="center"
+            android:id="@+id/cover"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:id="@+id/fun"/>
+    </RelativeLayout>
+
+
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.6"
         android:paddingLeft="5dp"
         android:orientation="vertical"
         android:layout_height="match_parent">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:text="舞舞舞！"
-            android:textSize="22sp"
+            android:textSize="14sp"
+            android:maxLines="2"
+            android:textColor="@color/black"
             android:id="@+id/video_name"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.25"
+            android:layout_weight="0.2"
             android:id="@+id/text_intro"
-            android:textSize="16sp"
-            android:text="只能说是不错了"/>
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:text="只能说是不错了哈哈哈哈哈哈哈哈哈哈哈哈"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:src="@drawable/author_sign"
+                android:layout_marginEnd="10dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="CoolBoy"
+                android:textSize="12sp"
+                android:textColor="@color/real_pink"
+                android:id="@+id/uploader"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:paddingTop="2dp"
             android:layout_height="0dp"
-            android:layout_weight="0.25">
+            android:gravity="bottom"
+            android:layout_weight="0.3">
             <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:src="@drawable/ic_like"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_best_choice"
                 android:scaleType="fitXY"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="23dp"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
                 android:text="233"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/text_like_num"/>
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="23dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_youtube"/>
+                android:src="@drawable/ic_play_button"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="bottom"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/text_play_num"
                 android:text="899"/>

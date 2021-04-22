@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYScrollView;
@@ -35,6 +36,7 @@ public class SearchActivity extends AppCompatActivity {
     private int startPos = 0, len = 20;
     public EditText search_txt = null;
     private LinearLayout qyScrollView = null;
+    private QYScrollView qysv = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class SearchActivity extends AppCompatActivity {
         ConstraintLayout c = findViewById(R.id.container_search);
         c.setOnClickListener(new RemoveFocus());
         qyScrollView = findViewById(R.id.list_for_search);
+        qysv = findViewById(R.id.search_scroll);
+        qysv.setScanScrollChangedListener(new LazyLoad());
     }
 
     /**
@@ -85,23 +89,34 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    class LazyLoad implements QYScrollView.ISmartScrollChangedListener{
+
+        @Override
+        public void onScrolledToBottom() {
+            Search s = new Search();
+            s.execute(search_txt.getText().toString());
+        }
+
+        @Override
+        public void onScrolledToTop() {
+
+        }
+    }
+
+
     class SearchKey implements View.OnKeyListener {
 
         @Override
         public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_ENTER){
-                if(event.getAction() == KeyEvent.ACTION_DOWN){
-                    Search s = new Search();
-                    s.execute(((EditText)findViewById(R.id.edit_text_search)).getText().toString());
-                    search_txt.clearFocus();
-                    hideInput();
-                }
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+                qyScrollView.removeAllViews();
+                Search s = new Search();
+                s.execute(((EditText)findViewById(R.id.edit_text_search)).getText().toString());
+                search_txt.clearFocus();
+                hideInput();
+                return true;
             }
-            else if(keyCode == KeyEvent.KEYCODE_BACK){
-                if(search_txt.hasFocus()) search_txt.clearFocus();
-                search_txt.setText("");
-            }
-            return true;
+            return false;
         }
     }
 
@@ -132,6 +147,7 @@ public class SearchActivity extends AppCompatActivity {
             QYrequest htp = new QYrequest();
             String[] data = {"text", "string", txt,
                     "start", "int", String.valueOf(startPos), "lens", "int", String.valueOf(len)};
+            startPos += len;
             return htp.advancePost(
                     GenerateJson.universeJson2(data),
                     Constant.mInstance.search_url,
@@ -150,10 +166,13 @@ public class SearchActivity extends AppCompatActivity {
                     JSONObject json = (JSONObject)ja.get(i);
                     Log.d("hjt.search.json", json.toString());
                     WorkItem workItem = new WorkItem(SearchActivity.this);
-                    workItem.init(json.getString("cover_url"), json.getString("name"),
+                    workItem.setOnClick();
+                    JSONObject coverInfo = json.getJSONObject("cover");
+                    workItem.init(coverInfo.getString("url"), json.getString("name"),
                             json.getInt("like_num"), json.getInt("play_num"),
-                            json.getString("introduction"));
+                            json.getString("introduction"), json.getJSONObject("belong").getString("username"), json.getInt("id"));
                     qyScrollView.addView(workItem);
+                    qyScrollView.addView(Img.linearLayoutDivideLine(SearchActivity.this));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

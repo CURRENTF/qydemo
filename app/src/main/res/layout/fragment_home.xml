@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="50dp"
-    android:background="@color/qy_real_background"
-    tools:context=".ui.home.HomeFragment">
-
-    <Button
-        android:id="@+id/button_add_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="add image"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+    android:background="@color/qy_real_background">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -25,15 +14,18 @@
         android:id="@+id/button_add_my_video"
         android:layout_margin="15dp"
         android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:src="@drawable/ic_add"/>
 
-    
+
     <com.example.qydemo0.Widget.QYScrollView
-        android:layout_width="match_parent"
         android:id="@+id/scroll_home"
-        android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:id="@+id/home_scroll_for_video_cover"
@@ -42,68 +34,70 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/button_search"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/input_box_border"
-                android:id="@+id/button_search"
                 android:orientation="horizontal">
+
                 <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_marginHorizontal="4dp"
                     android:layout_marginVertical="8dp"
-                    android:layout_width="0dp"
                     android:layout_weight="0.15"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_search"
-                    android:scaleType="fitCenter"/>
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_search" />
+
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="0.85"
                     android:layout_height="match_parent"
-                    android:hint="支持舞蹈类别/风格/BGM/创作者搜索"
                     android:layout_gravity="center"
-                    android:gravity="center|start" />
+                    android:layout_weight="0.85"
+                    android:gravity="center|start"
+                    android:hint="支持舞蹈类别/风格/BGM/创作者搜索" />
             </LinearLayout>
 
 
             <com.youth.banner.Banner
+                android:id="@+id/banner_ad"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="5dp"
-                android:id="@+id/banner_ad"/>
+                android:layout_marginVertical="5dp" />
 
             <LinearLayout
+                android:id="@+id/quick_operation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/quick_operation"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <Button
+                    android:id="@+id/button_image_learn_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button_image_learn"
                     android:layout_marginHorizontal="3dp"
                     android:layout_marginVertical="3dp"
+                    android:layout_marginEnd="20dp"
                     android:background="@drawable/gradient_color_orange"
                     android:drawableLeft="@drawable/ic_note"
                     android:drawablePadding="8dp"
-                    android:textSize="18dp"
-                    android:layout_marginEnd="20dp"
-                    android:text="@string/learning_list">
-                </Button>
+                    android:text="@string/learning_list"
+                    android:textSize="18dp"></Button>
+
                 <Button
+                    android:id="@+id/button_image_free_dance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/button_image_free_dance"
                     android:layout_marginHorizontal="3dp"
                     android:layout_marginVertical="3dp"
+                    android:background="@drawable/gradient_color_blue"
                     android:drawableLeft="@drawable/ic_freedom"
                     android:drawablePadding="8dp"
-                    android:background="@drawable/gradient_color_blue"
-                    android:textSize="18dp"
-                    android:text="@string/dance_free">
-                </Button>
+                    android:text="@string/dance_free"
+                    android:textSize="18dp"></Button>
 
             </LinearLayout>
 
@@ -112,14 +106,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginVertical="15dp"
-                android:textSize="26sp"
-                android:textStyle="bold"
+                android:text="@string/recommendation"
                 android:textColor="@color/black"
-                android:text="@string/recommendation"/>
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
 
     </com.example.qydemo0.Widget.QYScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

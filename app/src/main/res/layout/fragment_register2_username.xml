@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".RegisterWays.Register2UsernameFragment">
+    tools:context=".ui.RegisterWays.Register2UsernameFragment">
 
     <LinearLayout
         android:id="@+id/CL3"
