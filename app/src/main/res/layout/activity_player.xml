@@ -359,9 +359,6 @@
         </LinearLayout>
     </com.example.qydemo0.Widget.QYScrollView>
 
-
-
-
     <LinearLayout
         android:id="@+id/recall_kuang"
         android:layout_width="match_parent"
@@ -385,35 +382,12 @@
             android:layout_marginRight="22dp"
             android:gravity="center_vertical"
             android:paddingLeft="18dp"/>
-        <ImageView
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/icon_collect"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#9A9A9A"
-            android:textSize="14sp"
-            android:layout_marginLeft="10dp"
-            android:text="32"/>
-
-        <ImageView
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:src="@drawable/icon_work_like"
-            android:layout_marginLeft="20dp" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#9A9A9A"
-            android:textSize="14sp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="14dp"
-            android:text="66"/>
 
     </LinearLayout>
+
     <com.example.qydemo0.QYpack.SampleVideo
         android:id="@+id/detail_player"
         android:layout_width="match_parent"
         android:layout_height="250dp" />
+
 </RelativeLayout>
