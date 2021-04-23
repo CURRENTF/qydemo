@@ -1,41 +1,25 @@
 package com.example.qydemo0;
 
-import android.content.Context;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.RenderItem;
-import com.example.qydemo0.view.CustomLinearLayout;
-import com.example.qydemo0.utils.DPIUtil;
-import com.example.qydemo0.view.LeftSlideView;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.example.qydemo0.Widget.ListItem.RenderItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class RenderQueueActivity extends AppCompatActivity implements View.OnClickListener{
 

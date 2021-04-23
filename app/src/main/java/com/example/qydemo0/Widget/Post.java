@@ -12,47 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.qydemo0.FollowerAndFanActivity;
-import com.example.qydemo0.LearningListActivity;
-import com.example.qydemo0.PlayerActivity;
-import com.example.qydemo0.QYAdapter.ImageNetAdapter;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
-import com.example.qydemo0.SearchActivity;
-import com.example.qydemo0.UploadActivity;
 import com.example.qydemo0.UploadPostActivity;
-import com.example.qydemo0.UserSettingActivity;
-import com.example.qydemo0.bean.DataBean;
-import com.google.android.exoplayer2.text.tx3g.Tx3gDecoder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.youth.banner.Banner;
-import com.youth.banner.indicator.CircleIndicator;
+import com.example.qydemo0.Widget.ListItem.PostItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 public class Post extends RelativeLayout implements View.OnClickListener {
 
@@ -62,7 +40,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     int[] buttons = {R.id.add_post, R.id.button_post_recommendation, R.id.button_post_follow};
     LinearLayout rc_layout, f_layout;
     QYScrollView rc_view, f_view;
-    int rc_startPos = 0, rc_len = 20;
+    int rc_startPos = 0, rc_len = Constant.mInstance.MAX_UPDATE_LEN;
     int switcher = 0;
     // 0 rc 1 f
     TimeTool timeTool = new TimeTool();

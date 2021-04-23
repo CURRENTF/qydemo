@@ -2,14 +2,12 @@ package com.example.qydemo0;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,11 +18,9 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.Widget.Post;
-import com.example.qydemo0.Widget.PostItem;
+import com.example.qydemo0.Widget.ListItem.PostItem;
 import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.WorkItem;
-import com.example.qydemo0.entry.Image;
+import com.example.qydemo0.Widget.ListItem.WorkItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -159,7 +155,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    int p_startPos = 0, len = 20;
+    int p_startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
 
     class GetPosts extends AsyncTask<Integer, Integer, JSONArray>{
 

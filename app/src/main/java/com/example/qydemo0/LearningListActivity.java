@@ -17,7 +17,7 @@ import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.SmartItem;
+import com.example.qydemo0.Widget.ListItem.SmartItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,7 +80,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    int pr_startPos = 0, pr_len = 20;
+    int pr_startPos = 0, pr_len = Constant.mInstance.MAX_UPDATE_LEN;
     class GetLearningListProgress extends AsyncTask<String, Integer, JSONArray>{
 
         @Override

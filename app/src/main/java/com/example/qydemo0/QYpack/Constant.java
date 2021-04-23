@@ -52,6 +52,7 @@ public class Constant {
         MAX_POST_TEXT_NUM = 250,
         lazy_load_num = 10,
         ani_time = 50,
+        MAX_UPDATE_LEN = 5,
         least_time = 3000; // 50MB
 
     public String database = "QYdata";

@@ -1,15 +1,13 @@
 package com.example.qydemo0;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.media.Image;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.widget.NestedScrollView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
@@ -31,13 +29,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.stream.BaseGlideUrlLoader;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
@@ -45,14 +41,13 @@ import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.WorkItem;
+import com.example.qydemo0.Widget.ListItem.WorkItem;
 import com.example.qydemo0.bean.Belong;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentBean;
 import com.example.qydemo0.bean.CommentDetailBean;
 import com.example.qydemo0.bean.ReplyDetailBean;
 import com.example.qydemo0.bean.WorkBean;
-import com.example.qydemo0.bean.WorkDataBean;
 import com.example.qydemo0.view.CommentExpandableListView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -66,21 +61,16 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import com.example.qydemo0.DataTrans.FragmentDataForMain;
-
-import javax.microedition.khronos.opengles.GL;
 
 /**
  * Created by guoshuyu on 2017/6/18.

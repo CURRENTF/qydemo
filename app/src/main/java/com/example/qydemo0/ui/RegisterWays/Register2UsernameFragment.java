@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.example.qydemo0.QYpack.MD5encrypt;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.Dashboard;
 
 import org.json.JSONObject;
 
@@ -80,6 +82,9 @@ public class Register2UsernameFragment extends Fragment {
         }
     }
 
+
+    Handler handler = new Handler();
+
     class SendMsgToPhone extends AsyncTask<String, Integer, String> {
 
         @Override
@@ -92,10 +97,23 @@ public class Register2UsernameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("hjt.register.2", s);
-            JSONObject json = MsgProcess.msgProcess(s, true, "re2");
-            if(json != null){
-                Toast.makeText(getContext(), "验证码已发送", Toast.LENGTH_LONG).show();
+            if(MsgProcess.checkMsg(s, true, "regis2")){
+                Toast.makeText(getActivity(), "验证码已发送", Toast.LENGTH_LONG).show();
+                Button btn = getActivity().findViewById(R.id.button_send_register_code);
+                final int[] cnt = {0};
+                int p = 120;
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        btn.setText("已发送(" + (p - cnt[0]) + "s)");
+                        cnt[0]++;
+                        if(p - cnt[0] > 1) handler.postDelayed(this, 1000);
+                    }
+                };
+                handler.post(runnable);
+            }
+            else {
+                Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_SHORT).show();
             }
             super.onPostExecute(s);
         }
