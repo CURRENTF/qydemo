@@ -135,11 +135,11 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         initViews();
         ButterKnife.bind(this);
 
-        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
-//        ArrayList<String> list = new ArrayList<>();
-//        list.add("1");
-//        list.add("1080P");
-//        list.add("https://file.yhf2000.cn/dash/a4/78/a478389682cb55a7d2cee717da2c1c025d1a1c993f943fb042979ff6dcc22cf2-IbAjmG.use/manifest.mpd");
+        //ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+        ArrayList<String> list = new ArrayList<>();
+        list.add("0");
+        list.add("1080P");
+        list.add("/sdcard/DCIM/Camera/B612Kaji_20200707_201816_832.mp4");
         initLearnVideo(list);
 
         is_learn = false;
@@ -296,7 +296,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                                 detailPlayer.onVideoResume();
                             }
                         });
-                        audioPlayer.start();
+                        audioPlayer.getMediaPlayer().start();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -592,8 +592,9 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             //设置录制的视频帧率,注意文档的说明:
             mRecorder.setVideoFrameRate(30);
             //设置要捕获的视频的宽度和高度
-            mSurfaceHolder.setFixedSize(640, 480);//最高只能设置640x480
-            mRecorder.setVideoSize(640, 480);//最高只能设置640x480
+            float cha = 1080.0f/480.0f;
+            mSurfaceHolder.setFixedSize((int)(640f*cha), 1080);//最高只能设置640x480
+            mRecorder.setVideoSize((int)(640f*cha), 1080);//最高只能设置640x480
             //设置记录会话的最大持续时间（毫秒）
             mRecorder.setMaxDuration(60 * 1000);
             mRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());

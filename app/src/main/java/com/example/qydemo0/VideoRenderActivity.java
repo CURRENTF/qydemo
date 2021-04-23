@@ -81,7 +81,8 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     StandardGSYVideoPlayer videoPlayer;
 
-    private ProgressDialog progressDialog;
+   // private ProgressDialog progressDialog;
+    private ProgressDialog dialog;
 
     private int[] render_paras = {0,0,0,1};
 
@@ -102,6 +103,8 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
+        dialog = new ProgressDialog(VideoRenderActivity.this);
+        dialog.setCancelable(false);// 让dialog不能失去焦点，一直在最上层显示
         final Intent intent = getIntent();
         free_dance_url = intent.getStringExtra("free_dance_url");
 
@@ -142,7 +145,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                         popupWindowRight.dismiss();
                         render_choice.setVisibility(View.VISIBLE);
                         isYuLan = true;
-                        showProgressDialog("提示","正在努力加载渲染预览视频...");
+                        //showProgressDialog("提示","正在努力加载渲染预览视频...");
                         new SendRenderVideo().execute(clip_video_url);
                     }
                 });
@@ -155,7 +158,7 @@ public class VideoRenderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i("paras",""+render_paras[0]+" "+render_paras[1]+" "+render_paras[2]);
-                showProgressDialog("提示","加载中...");
+                //showProgressDialog("提示","加载中...");
                 isYuLan = false;
                 new SendRenderVideo().execute(free_dance_url);
             }
@@ -310,7 +313,7 @@ public class VideoRenderActivity extends AppCompatActivity {
         videoPlayer.setUp(res_urls,true,"渲染预览视频");
         videoPlayer.startPlayLogic();
         }
-
+/*
     public void showProgressDialog(String title, String message) {
         if (progressDialog == null) {
 
@@ -332,7 +335,7 @@ public class VideoRenderActivity extends AppCompatActivity {
         }
 
     }
-
+*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -438,7 +441,20 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public class SendRenderVideo extends AsyncTask<String , Void, String>{
+    public class SendRenderVideo extends AsyncTask<String , Integer, String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setTitle("提示");
+            if(isYuLan){
+            dialog.setMessage("正在努力生成预览渲染视频。。。");
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);}
+            else{
+                dialog.setMessage("正在初始化渲染。。。");
+            }
+            dialog.show();
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -609,12 +625,14 @@ public class VideoRenderActivity extends AppCompatActivity {
                         else {
                             return null;
                         }
-                        while(true){
+                        for(int i=0;i<20;i++){
                             Thread.sleep(1000);
                             JSONObject res_json_rendered = new JSONObject(cur_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
                                     "Authorization",GlobalVariable.mInstance.token));
                             Log.i("whc123",tid+" "+res_json_rendered.getJSONObject("data").getString("schedule"));
-                            if(res_json_rendered.getJSONObject("data").getString("schedule").equals("100%")){
+                            String cur_schedule = res_json_rendered.getJSONObject("data").getString("schedule");
+                            if(isYuLan) publishProgress(Integer.valueOf(cur_schedule.substring(0, cur_schedule.length()-1)));
+                            if(cur_schedule.equals("100%")){
                                 JSONObject cur_urls = res_json_rendered.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url");
                                 if(cur_urls.has("1080P"))
                                     return cur_urls.getString("1080P");
@@ -628,6 +646,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                                     return cur_urls.getString("自动");
                             }
                         }
+                        return null;
                     } catch (JSONException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -638,23 +657,25 @@ public class VideoRenderActivity extends AppCompatActivity {
         @Override
             protected void onPostExecute(String s) {
                 super.onPostExecute(s);
-            hideProgressDialog();
-                if(isYuLan){
-                    if(s!=null){
-                        Log.i("whc_url",s);
-                        updatePlayer(s);
-                    }
-                    else{
-                        Toast.makeText(VideoRenderActivity.this,"预览失败",Toast.LENGTH_LONG).show();
-                    }
-                }
-                else{
-                    if(s!=null) {
-                        Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                }
+            //hideProgressDialog();
+            if(s==null){
+                Toast.makeText(VideoRenderActivity.this,"渲染出错，请重新尝试",Toast.LENGTH_LONG).show();
+            }
+            if(isYuLan){
+                 Log.i("whc_url",s);
+                 updatePlayer(s);
+            }
+            else{
+                Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+
+            }
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                super.onProgressUpdate(values);
+                dialog.setProgress(values[0]);
             }
 
         }

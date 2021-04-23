@@ -206,6 +206,10 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         return mSpeed;
     }
 
+    public void setmSwitchSize(String switch_size){
+        mSwitchSize.setText(switch_size);
+    }
+
     /**
      * 处理镜像旋转
      * 注意，暂停时

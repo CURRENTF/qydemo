@@ -296,6 +296,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             public void onClick(View v) {
             if(isLikeWork){
                 //new WorkChange().execute(-1);
+                Log.i("whc_like_it", "under if");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -333,6 +334,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             } else{
                 //new WorkChange().execute(1);
 
+                Log.i("whc_like_it", "under else");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -340,7 +342,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                         JSONObject res = new JSONObject(work_request.advancePut(GenerateJson.universeJson2(j),
                                 Constant.mInstance.work+"func/"+work_id+"/1/",
                                 "Authorization", GlobalVariable.mInstance.token));
-
+                            Log.i("whc_like_it", "under else1");
+                            Log.i("whc_like_it_log", String.valueOf(res));
                             if(res.getString("msg").equals("Success")) {
                                 isLikeWork = true;
                                 work_bean.getData().setLike_num(work_bean.getData().getLike_num() + 1);
@@ -637,26 +640,32 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         List<String> lists = new ArrayList<>();
         List<String> list_name = new ArrayList<>();
         try {
+            Boolean is_first = true;
             if(player_urls.has("1080P")) {
             lists.add(player_urls.getString("1080P"));
             list_name.add("1080P");
+            if(is_first) {detailPlayer.setmSwitchSize("1080P");is_first=false;}
         }
 
         if(player_urls.has("720P")){
             lists.add(player_urls.getString("720P"));
             list_name.add("720P");
+            if(is_first) {detailPlayer.setmSwitchSize("720P");is_first=false;}
         }
         if(player_urls.has("480P")){
             lists.add(player_urls.getString("480P"));
             list_name.add("480P");
+            if(is_first) {detailPlayer.setmSwitchSize("480P");is_first=false;}
         }
         if(player_urls.has("360P")){
             lists.add(player_urls.getString("360P"));
             list_name.add("360P");
+            if(is_first) {detailPlayer.setmSwitchSize("360P");is_first=false;}
         }
         if(player_urls.has("自动")){
             lists.add(player_urls.getString("自动"));
             list_name.add("自动");
+            if(is_first) {detailPlayer.setmSwitchSize("自动");is_first=false;}
         }
         } catch (JSONException e) {
             e.printStackTrace();

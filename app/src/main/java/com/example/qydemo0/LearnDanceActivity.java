@@ -127,7 +127,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private List<List<Boolean>> wrong_id = new ArrayList<>();
     private int all_learn_depose_video_num = 0;
     private int cur_compare_id = 0;
-    private ProgressDialog progressDialog;
+    //private ProgressDialog progressDialog;
+    private ProgressDialog dialog;
     SeekBar cur_process;
     List<Integer> opt = new ArrayList();
     private int learning_id = -1;
@@ -186,9 +187,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private TextView smile_word;
 
-    RelativeLayout.LayoutParams fill_tiny;
+    private int cur_h = 480;
 
-    ImageView black_back;
+    private RelativeLayout.LayoutParams fill_tiny;
+
+    private ImageView black_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,6 +202,10 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         smile_word = (TextView) findViewById(R.id.smile_word);
+
+        dialog = new ProgressDialog(LearnDanceActivity.this);
+        dialog.setCancelable(false);// 让dialog不能失去焦点，一直在最上层显示
+
 
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
 
@@ -364,7 +371,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                                 detailPlayer.onVideoResume();
                             }
                         });
-                        audioPlayer.start();
+                        audioPlayer.getMediaPlayer().start();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -826,8 +833,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             //设置录制的视频帧率,注意文档的说明:
             mRecorder.setVideoFrameRate(30);
             //设置要捕获的视频的宽度和高度
-            mSurfaceHolder.setFixedSize(640, 480);//最高只能设置640x480
-            mRecorder.setVideoSize(640, 480);//最高只能设置640x480
+            int cur_w = (int) (((float)(cur_h))/480.0f*640.0f);
+            mSurfaceHolder.setFixedSize(cur_w, cur_h);//最高只能设置640x480
+            mRecorder.setVideoSize(cur_w, cur_h);//最高只能设置640x480
             //设置记录会话的最大持续时间（毫秒）
             mRecorder.setMaxDuration(60 * 1000);
             mRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
@@ -868,7 +876,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             is_record = false;
             //重置
             mRecorder.reset();
-            showProgressDialog("提示","正在努力解析中，请稍等...");
+            //showProgressDialog("提示","正在努力解析中，请稍等...");
             new SendUserDanceVideo().execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -978,7 +986,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         super.onPause();
         isPause = true;
     }
-
+/*
     public void showProgressDialog(String title, String message) {
         if (progressDialog == null) {
 
@@ -992,17 +1000,18 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         progressDialog.show();
 
     }
-
+*/
     /*
      * 隐藏提示加载
      */
-    public void hideProgressDialog() {
+ /*   public void hideProgressDialog() {
 
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
 
     }
+  */
 
     @Override
     public void onBackPressed() {
@@ -1016,7 +1025,16 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         super.onBackPressed();
     }
 
-    public class SendUserDanceVideo extends AsyncTask<String, Void, JSONObject> {
+    public class SendUserDanceVideo extends AsyncTask<String, Integer, JSONObject> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setTitle("提示");
+            dialog.setMessage("正在努力生成对比视频。。。");
+            dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            dialog.show();
+        }
 
         @Override
         protected JSONObject doInBackground(String... video_path) {
@@ -1056,15 +1074,18 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
                 String tid = res_json.getJSONObject("data").getString("tid");
                 if(tid==null) return null;
-                while(true){
+                for(int i=0;i<20;i++){
                     Thread.sleep(1000);
                     JSONObject task_res = new JSONObject(learn_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
                             "Authorization",GlobalVariable.mInstance.token));
                     Log.i("whc_233", String.valueOf(task_res));
-                    if(task_res.getJSONObject("data").getString("schedule").equals("100%") && task_res.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url").has("自动")){
+                    String cur_schedule = task_res.getJSONObject("data").getString("schedule");
+                    publishProgress(Integer.valueOf(cur_schedule.substring(0, cur_schedule.length()-1)));
+                    if(cur_schedule.equals("100%") && task_res.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url").has("自动")){
                         return task_res.getJSONObject("data").getJSONObject("data");
                     }
                 }
+                return null;
             } catch (JSONException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -1073,7 +1094,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
         @Override
         protected void onPostExecute(JSONObject resJson) {
-            hideProgressDialog();
+            //hideProgressDialog();
+            dialog.dismiss();
             if(resJson != null){
                 try {
                     Log.d("hjt.return.msg.player", resJson.toString());
@@ -1110,7 +1132,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                     Log.d("hjt.out.it", "1");
                     init_compare_video();
                     detailPlayer.startPlayLogic();
-                    hideProgressDialog();
+                    //hideProgressDialog();
                     Log.d("hjt.out.it", "2");
                 } catch (JSONException e) {
                     Log.d("hjt.json.wwww", "wwww");
@@ -1123,6 +1145,13 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 startActivity(intent);
             }
         }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            dialog.setProgress(values[0]);
+        }
+
 
     }
 
