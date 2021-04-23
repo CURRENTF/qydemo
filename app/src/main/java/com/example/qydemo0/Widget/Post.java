@@ -184,7 +184,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             Log.d("hjt.get.followed.post", "1");
-            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.post_url + "0/", "Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.post_url + "0/", "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -224,7 +224,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(
                     htp.advanceGet(Constant.mInstance.post_recommendation_url + Json2X.Json2StringGet("start", String.valueOf(rc_startPos), "lens", String.valueOf(rc_len)),
-                            "Authorization", GlobalVariable.mInstance.token), false
+                            "Authorization", GlobalVariable.mInstance.token), false, null
             );
         }
 

@@ -119,7 +119,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             QYrequest htp = new QYrequest();
             try {
                 Log.d("hjt.post.pid", postItem.json.getString("pid"));
-                return MsgProcess.checkMsg(htp.advancePut("{}", Constant.mInstance.post_url + "func/" + postItem.json.getString("pid") + "/" + strings[0] + "/",  "Authorization", GlobalVariable.mInstance.token), false);
+                return MsgProcess.checkMsg(htp.advancePut("{}", Constant.mInstance.post_url + "func/" + postItem.json.getString("pid") + "/" + strings[0] + "/",  "Authorization", GlobalVariable.mInstance.token), false, null);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -160,7 +160,7 @@ public class SearchActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if(s == null) return;
             Log.d("hjt.search", s);
-            JSONArray ja = MsgProcess.msgProcessArr(s, true);
+            JSONArray ja = MsgProcess.msgProcessArr(s, false, null);
             for(int i = 0; i < ja.length(); i++){
                 try {
                     JSONObject json = (JSONObject)ja.get(i);

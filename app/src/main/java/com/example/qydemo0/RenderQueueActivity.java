@@ -107,7 +107,7 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token), true);
+            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override

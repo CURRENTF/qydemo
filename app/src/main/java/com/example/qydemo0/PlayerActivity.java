@@ -1278,7 +1278,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected JSONArray doInBackground(Integer... ints) {
-            return MsgProcess.msgProcessArr(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/recommendation/work/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2],"Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.msgProcessArr(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/recommendation/work/"+ints[0]+"/?start="+ints[1]+"&lens="+ints[2],"Authorization", GlobalVariable.mInstance.token), false, null);
         }
     }
 

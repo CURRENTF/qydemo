@@ -93,7 +93,7 @@ public class Register2UsernameFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt.register.2", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, true, "re2");
             if(json != null){
                 Toast.makeText(getContext(), "验证码已发送", Toast.LENGTH_LONG).show();
             }
@@ -117,7 +117,7 @@ public class Register2UsernameFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt.register.2.verify", s);
-            if(MsgProcess.checkMsg(s, true)){
+            if(MsgProcess.checkMsg(s, true, "re2")){
                 PostLoginMsg postLoginMsg = new PostLoginMsg();
                 postLoginMsg.execute();
             }
@@ -137,7 +137,7 @@ public class Register2UsernameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, true, "re2user");
             Log.d("hjtLoginReturnMsg", s);
             if(json != null){
                 ((LoginActivity) getActivity()).savMsg(json);

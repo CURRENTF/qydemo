@@ -128,7 +128,7 @@ public class Dashboard extends RelativeLayout {
                 handler.postDelayed(this, 5000);
             }
         };
-        handler.postDelayed(runnable, 5000);
+//        handler.postDelayed(runnable, 5000);
     }
 
     void reWriteInfo(JSONObject json){
@@ -213,7 +213,7 @@ public class Dashboard extends RelativeLayout {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(
                     htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", "0", "lens", "1"),
-                            "Authorization", GlobalVariable.mInstance.token),false
+                            "Authorization", GlobalVariable.mInstance.token),false, null
             );
         }
 
@@ -251,7 +251,7 @@ public class Dashboard extends RelativeLayout {
             return MsgProcess.msgProcessArr(
                     htp.advanceGet(Constant.mInstance.post_url + "1/" + Json2X.Json2StringGet("user_id", GlobalVariable.mInstance.uid, "start",
                             "0", "lens", "1"),
-                            "Authorization", GlobalVariable.mInstance.token),false
+                            "Authorization", GlobalVariable.mInstance.token),false, null
             );
         }
 
@@ -292,7 +292,7 @@ public class Dashboard extends RelativeLayout {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjtGetUserInfo", s);
-            JSONObject json = MsgProcess.msgProcess(s, false);
+            JSONObject json = MsgProcess.msgProcess(s, false, null);
             if(json != null){
                 try {
                     if(json.getString("img_url").equals("null"))

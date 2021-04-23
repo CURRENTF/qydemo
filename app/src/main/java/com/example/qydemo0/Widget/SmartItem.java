@@ -106,7 +106,7 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
             QYrequest htp = new QYrequest();
             Log.d("hjt.get.record", lid + ".");
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.record_url + lid + "/" +
-                    Json2X.Json2StringGet("start", String.valueOf(start), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token), false);
+                    Json2X.Json2StringGet("start", String.valueOf(start), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override

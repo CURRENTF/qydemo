@@ -63,7 +63,7 @@ public class QYFile {
         QYrequest htp = new QYrequest();
         String msg = htp.advancePost(GenerateJson.universeJson("file_type", String.valueOf(file_type), "hash", hash),
                 http_url, "Authorization", GlobalVariable.mInstance.token);
-        JSONObject jsonObject = MsgProcess.msgProcess(msg, false);
+        JSONObject jsonObject = MsgProcess.msgProcess(msg, false, null);
         Log.d("hjtQYFile.verify", msg);
         return jsonObject;
     }
@@ -72,7 +72,7 @@ public class QYFile {
         String fileUrl = Uri2RealPath.getRealPathFromUri_AboveApi19(context, file_uri);
         QYrequest htp = new QYrequest();
         String msg = htp.postWithFile(fileUrl, "no.use", http_url, token);
-        JSONObject jsonObject = MsgProcess.msgProcess(msg, false);
+        JSONObject jsonObject = MsgProcess.msgProcess(msg, false, null);
         if(jsonObject == null) return false;
         else {
             try {
@@ -88,7 +88,7 @@ public class QYFile {
         QYrequest htp = new QYrequest();
         String msg = htp.postWithFile(file_url, "no.use", http_url, token);
         Log.d("hjt.QYfile.upload", msg);
-        return MsgProcess.checkMsg(msg, false);
+        return MsgProcess.checkMsg(msg, false, null);
     }
 
     // 返回 file_id

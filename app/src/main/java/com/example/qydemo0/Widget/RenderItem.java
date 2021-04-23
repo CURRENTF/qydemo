@@ -150,7 +150,7 @@ public class RenderItem extends RelativeLayout {
         protected JSONObject doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcess(htp.advanceGet(Constant.mInstance.render_progress_url + tid + "/",
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override

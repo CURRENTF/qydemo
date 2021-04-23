@@ -129,7 +129,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
             return MsgProcess.msgProcessArr(htp.advanceGet(
                     Constant.mInstance.userWork_url + uid + "/" + Json2X.Json2StringGet("start", String.valueOf(w_startPos)
                             , "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token
-            ), false);
+            ), false, null);
         }
 
         @Override
@@ -169,7 +169,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
             return MsgProcess.msgProcessArr(htp.advanceGet(
                     Constant.mInstance.post_url + "1/" + Json2X.Json2StringGet("user_id", String.valueOf(uid),
                             "start", String.valueOf(p_startPos), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token
-            ), false);
+            ), false, null);
         }
 
         @Override

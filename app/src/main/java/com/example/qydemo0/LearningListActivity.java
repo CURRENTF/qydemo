@@ -90,7 +90,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
                     + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -122,7 +122,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "2/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false,  null);
         }
 
         @Override

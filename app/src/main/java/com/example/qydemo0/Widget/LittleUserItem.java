@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
@@ -34,6 +35,7 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
     TextView name, sign;
     Button btn;
     int uid;
+    boolean in_cancel = false;
 
     public LittleUserItem(Context context) {
         super(context);
@@ -58,6 +60,7 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
             name.setText(json.getString("username"));
             if(json.getString("img_url").equals("null")) json.put("img_url", Constant.mInstance.default_avatar);
             Img.roundImgUrl((Activity) mContext, avatar, json.getString("img_url"));
+            sign.setText(json.getString("intro"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -65,6 +68,7 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
+
         CancelFollow cancelFollow = new CancelFollow();
         cancelFollow.execute();
     }
@@ -81,12 +85,17 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
             String[] data = {"target", "int", String.valueOf(uid)};
             return MsgProcess.checkMsg(htp.advanceMethod("DELETE",
                     GenerateJson.universeJson2(data), Constant.mInstance.follow_url,
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
-            if(aBoolean) btn.setText("已取消");
+            if(aBoolean){
+                btn.setText("关注");
+            }
+            else {
+                Toast.makeText((Activity)mContext, "取消失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

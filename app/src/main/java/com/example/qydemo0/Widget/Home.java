@@ -189,7 +189,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             Log.d("hjt.recommendation.info", String.valueOf(startPos) + "," + String.valueOf(len));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.user_recommendation_url +
                             Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override

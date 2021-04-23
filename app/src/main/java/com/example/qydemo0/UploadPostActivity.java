@@ -244,7 +244,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         @Override
         protected Boolean doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            return MsgProcess.checkMsg(htp.advancePost(strings[0], Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.checkMsg(htp.advancePost(strings[0], Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -266,7 +266,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", String.valueOf(workStart), "lens", String.valueOf(len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -309,7 +309,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
             QYrequest htp = new QYrequest();
             String[] data = {"text", "string", p.getText().toString(),
                     "ap_work", "int", strings[0], "is_public", "bool", "true"};
-            return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override

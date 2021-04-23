@@ -114,8 +114,8 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
         @Override
         protected void onPostExecute(String s) {
             Log.e("hjt.fans", s);
-            if(!MsgProcess.checkMsg(s, true)) return;
-            write(MsgProcess.msgProcessArr(s, true), list_right);
+            if(!MsgProcess.checkMsg(s, true, "followersAndFans")) return;
+            write(MsgProcess.msgProcessArr(s, false, null), list_right);
             super.onPostExecute(s);
         }
     }
@@ -130,7 +130,7 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
         @Override
         protected void onPostExecute(String s) {
             Log.e("hjt.followers", s);
-            write(MsgProcess.msgProcessArr(s, true), list_left);
+            write(MsgProcess.msgProcessArr(s, false, null), list_left);
             super.onPostExecute(s);
         }
     }

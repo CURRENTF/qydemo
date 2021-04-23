@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        GlobalVariable.mInstance.tokenExisted = false;
+//        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         Log.d("hjtMain", "MainDestroyed");
@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjtGetUserInfo", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, false, null);
             if(json != null){
                 try {
                     if(json.getString("img_url").equals("null"))

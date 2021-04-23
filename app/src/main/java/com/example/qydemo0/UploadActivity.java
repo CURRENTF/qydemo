@@ -239,7 +239,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt.upload.get.class", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, false, null);
             if(json != null){
                 try {
                     JSONArray ja = json.getJSONArray("classification");
@@ -280,7 +280,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(String s) {
             ShowProgressDialog.wait.dismiss();
             Log.d("hjt.upload.video.info", s);
-            if(MsgProcess.checkMsg(s, true)) Toast.makeText(UploadActivity.this, "成功上传", Toast.LENGTH_SHORT).show();
+            if(MsgProcess.checkMsg(s, false, null)) Toast.makeText(UploadActivity.this, "成功上传", Toast.LENGTH_SHORT).show();
             else Toast.makeText(UploadActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
         }
     }
