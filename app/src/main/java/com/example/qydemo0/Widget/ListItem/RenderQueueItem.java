@@ -26,7 +26,9 @@ import com.example.qydemo0.R;
 import com.example.qydemo0.utils.DPIUtil;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
-public class RenderQueueItem extends LinearLayout {
+import org.json.JSONObject;
+
+public class RenderQueueItem extends LinearLayoutItem {
 
     public static int height = 120;
 
@@ -44,6 +46,11 @@ public class RenderQueueItem extends LinearLayout {
         super(context, attrs, defStyleAttr);
         this.mContext = context;
         initDf();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+
     }
 
     public RenderQueueItem(Context context) {

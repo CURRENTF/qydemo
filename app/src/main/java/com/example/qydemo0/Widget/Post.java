@@ -180,9 +180,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
                     postItem.init(jsonObject, true, true, false);
-//                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-//                    if(lastF_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastF_id);
-//                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                    RelativeLayoutItem.LayoutParams layoutParams = new RelativeLayoutItem.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+//                    if(lastF_id != -1) layoutParams.addRule(RelativeLayoutItem.BELOW, lastF_id);
+//                    else layoutParams.addRule(RelativeLayoutItem.ALIGN_PARENT_TOP);
                     lastF_id = View.generateViewId();
                     postItem.setId(lastF_id);
 //                    postItem.setLayoutParams(layoutParams);
@@ -221,9 +221,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     PostItem postItem = new PostItem(getActivity());
                     postItem.init(jsonObject, true, true, false);
-//                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-//                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayout.BELOW, lastRc_id);
-//                    else layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                    RelativeLayoutItem.LayoutParams layoutParams = new RelativeLayoutItem.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+//                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayoutItem.BELOW, lastRc_id);
+//                    else layoutParams.addRule(RelativeLayoutItem.ALIGN_PARENT_TOP);
 //                    lastRc_id = View.generateViewId();
                     postItem.setId(lastRc_id);
 //                    postItem.setLayoutParams(layoutParams);

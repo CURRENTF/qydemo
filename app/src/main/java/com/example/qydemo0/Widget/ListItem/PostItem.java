@@ -34,7 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PostItem extends LinearLayout {
+public class PostItem extends LinearLayoutItem {
 
     private Context mContext = null;
     private View mView = null;
@@ -49,6 +49,11 @@ public class PostItem extends LinearLayout {
         super(context);
         mContext = context;
         initDf();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+        init(json);
     }
 
     private void initDf(){

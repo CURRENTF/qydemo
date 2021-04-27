@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import java.sql.Time;
 
-public class RenderItem extends RelativeLayout {
+public class RenderItem extends RelativeLayoutItem {
 
     Context context;
     View mView;
@@ -41,6 +41,11 @@ public class RenderItem extends RelativeLayout {
         super(context);
         this.context = context;
         initINFLATE();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+        init(json);
     }
 
     private Activity getActivity(){

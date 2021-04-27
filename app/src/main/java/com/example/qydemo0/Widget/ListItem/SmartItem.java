@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class SmartItem extends RelativeLayout implements View.OnClickListener{
+public class SmartItem extends RelativeLayoutItem implements View.OnClickListener{
 
     private Context mContext = null;
     private View mView = null;
@@ -45,6 +45,16 @@ public class SmartItem extends RelativeLayout implements View.OnClickListener{
         super(context);
         mContext = context;
         initDf();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+        try {
+            init(json.getJSONObject("work_info"), json.getInt("record_num"),
+                    json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initDf(){

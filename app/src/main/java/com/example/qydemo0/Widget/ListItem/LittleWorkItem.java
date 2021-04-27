@@ -12,7 +12,10 @@ import android.widget.TextView;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 
-public class LittleWorkItem extends LinearLayout {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class LittleWorkItem extends LinearLayoutItem {
 
     public static int height = 120;
 
@@ -26,6 +29,18 @@ public class LittleWorkItem extends LinearLayout {
         super(context);
         mContext = context;
         initDf();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+        JSONObject cover = null;
+        try {
+            cover = json.getJSONObject("cover");
+            init(cover.getString("url"), json.getString("name"), json.getInt("like_num"), json.getInt("play_num"));
+            id = json.getInt("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initDf(){
@@ -46,7 +61,4 @@ public class LittleWorkItem extends LinearLayout {
         like.setText(String.valueOf(like_num));
         play.setText(String.valueOf(play_num));
     }
-
-
-
 }

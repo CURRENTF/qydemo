@@ -26,7 +26,7 @@ import com.example.qydemo0.entry.Image;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LittleUserItem extends LinearLayout implements View.OnClickListener{
+public class LittleUserItem extends LinearLayoutItem implements View.OnClickListener{
 
 
     private Context mContext = null;
@@ -41,6 +41,11 @@ public class LittleUserItem extends LinearLayout implements View.OnClickListener
         super(context);
         mContext = context;
         initDf();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+        init(json);
     }
 
     private void initDf(){

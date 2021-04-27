@@ -18,7 +18,7 @@ import com.example.qydemo0.entry.Image;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LittleLearnItem extends LinearLayout {
+public class LittleLearnItem extends LinearLayoutItem {
 
     public static int height = 120;
 
@@ -31,6 +31,16 @@ public class LittleLearnItem extends LinearLayout {
         super(context);
         mContext = context;
         initDf();
+    }
+
+    @Override
+    public void fill(JSONObject json) {
+        try {
+            int i = json.getInt("i");
+            init(json, i);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initDf(){
@@ -51,7 +61,6 @@ public class LittleLearnItem extends LinearLayout {
             if(scores < 60){
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic__bronze_medal));
                 remark.setText("继续努力啊");
-
             }
             else if(scores < 85){
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic__silver_medal));
