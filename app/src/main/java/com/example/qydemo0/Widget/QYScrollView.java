@@ -5,7 +5,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ScrollView;
 
-public class QYScrollView  extends ScrollView {
+import androidx.core.widget.NestedScrollView;
+
+public class QYScrollView  extends NestedScrollView {
 
 
     public interface ScrollViewListener {

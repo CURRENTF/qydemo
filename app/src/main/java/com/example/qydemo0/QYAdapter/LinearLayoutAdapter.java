@@ -1,5 +1,7 @@
 package com.example.qydemo0.QYAdapter;
 
+import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qydemo0.QYpack.Video.Work;
 import com.example.qydemo0.R;
 import com.example.qydemo0.Widget.ListItem.LinearLayoutItem;
 import com.example.qydemo0.Widget.ListItem.WorkItem;
@@ -21,6 +24,9 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
         LinearLayoutItem item;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            if(itemView instanceof WorkItem){
+                Log.d("hjt.workItem", "yes");
+            }
             item = (LinearLayoutItem) itemView;
         }
         void fill(JSONObject json){
@@ -28,13 +34,17 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
         }
     }
 
-    public LinearLayoutAdapter(List<JSONObject> list, int resId){
+
+
+    public LinearLayoutAdapter(List<JSONObject> list, int resId, Activity ac){
         dataList = list;
         this.resId = resId;
+        this.ac = ac;
     }
 
     List<JSONObject> dataList;
     int resId;
+    Activity ac;
 
     @Override
     public int getItemViewType(int position) {
@@ -44,8 +54,8 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(resId, parent,false);
-        return new ViewHolder(view);
+        WorkItem item = new WorkItem(parent, ac);
+        return new ViewHolder(item);
     }
 
     @Override
@@ -56,5 +66,11 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
     @Override
     public int getItemCount() {
         return dataList.size(); // 提供上拉加载item
+    }
+
+    public void addData(JSONObject item){
+        dataList.add(item);
+        notifyDataSetChanged();
+        Log.d("hjt.add.data", "ok");
     }
 }
