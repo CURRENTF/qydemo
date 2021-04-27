@@ -9,14 +9,22 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.Video.Work;
 import com.example.qydemo0.R;
 import com.example.qydemo0.Widget.ListItem.LinearLayoutItem;
+import com.example.qydemo0.Widget.ListItem.LittleLearnItem;
+import com.example.qydemo0.Widget.ListItem.LittleUserItem;
+import com.example.qydemo0.Widget.ListItem.LittleWorkItem;
+import com.example.qydemo0.Widget.ListItem.PostItem;
+import com.example.qydemo0.Widget.ListItem.RenderItem;
+import com.example.qydemo0.Widget.ListItem.SmartItem;
 import com.example.qydemo0.Widget.ListItem.WorkItem;
 
 import org.json.JSONObject;
 
 import java.util.List;
+
 
 public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapter.ViewHolder> {
 
@@ -36,14 +44,14 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
 
 
 
-    public LinearLayoutAdapter(List<JSONObject> list, int resId, Activity ac){
+    public LinearLayoutAdapter(List<JSONObject> list, int item_type, Activity ac){
         dataList = list;
-        this.resId = resId;
+        this.item_type = item_type;
         this.ac = ac;
     }
 
     List<JSONObject> dataList;
-    int resId;
+    int item_type;
     Activity ac;
 
     @Override
@@ -54,7 +62,28 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        WorkItem item = new WorkItem(parent, ac);
+        View item;
+        if(item_type == Constant.mInstance.WORK){
+            item = new WorkItem(parent, ac);
+        }
+        else if(item_type == Constant.mInstance.POST){
+            item = new PostItem(parent, ac);
+        }
+        else if(item_type == Constant.mInstance.LITTLE_LEARN){
+            item = new LittleLearnItem(parent, ac);
+        }
+        else if(item_type == Constant.mInstance.LITTLE_USER){
+            item = new LittleUserItem(parent, ac);
+        }
+        else if(item_type == Constant.mInstance.LITTLE_WORK){
+            item = new LittleWorkItem(parent, ac);
+        }
+        else if(item_type == Constant.mInstance.SMART){
+            item = new SmartItem(parent, ac);
+        }
+        else {
+            item = new RenderItem(parent, ac);
+        }
         return new ViewHolder(item);
     }
 

@@ -17,7 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qydemo0.QYAdapter.EndlessRecyclerOnScrollListener;
+import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
+import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
@@ -32,6 +38,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Post extends RelativeLayout implements View.OnClickListener {
 
     private Activity context;
@@ -39,14 +47,15 @@ public class Post extends RelativeLayout implements View.OnClickListener {
 
     int[] buttons = {R.id.add_post, R.id.button_post_recommendation, R.id.button_post_follow};
     LinearLayout rc_layout, f_layout;
-    QYScrollView rc_view, f_view;
     int rc_startPos = 0, rc_len = Constant.mInstance.MAX_UPDATE_LEN;
     int switcher = 0;
     // 0 rc 1 f
     TimeTool timeTool = new TimeTool();
 
     int cnt_rc = 0, cnt_f = 0;
-    TextView placeholder1, placeholder2;
+
+    LinearLayoutAdapter adapter_rec, adapter_follow;
+    LoadMoreAndRefreshWrapper wrapper_rec, wrapper_follow;
 
     private Activity getActivity(){
         return context;
@@ -64,7 +73,6 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         init();
     }
 
-
     void init() {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.fragment_posts, this, true);
@@ -76,41 +84,42 @@ public class Post extends RelativeLayout implements View.OnClickListener {
 
         rc_layout = mView.findViewById(R.id.rela_layout_posts_recommendation);
         f_layout = mView.findViewById(R.id.rela_layout_posts_follow);
-        rc_view = mView.findViewById(R.id.view_posts_recommendation);
-        f_view = mView.findViewById(R.id.view_posts_follow);
-        placeholder1 = new TextView(getActivity());
-        placeholder2 = new TextView(getActivity());
-        placeholder1.setText("空空如也");
-        placeholder2.setText("空空如也");
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         layoutParams.setMargins(0, 20, 0, 20);
-        rc_layout.addView(placeholder1, layoutParams);
-        f_layout.addView(placeholder2, layoutParams);
-        rc_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
+
+        // 进行 RecyclerView 的设置
+        RecyclerView rec = mView.findViewById(R.id.recy_rec);
+        adapter_rec = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
+        wrapper_rec = new LoadMoreAndRefreshWrapper(adapter_rec);
+        rec.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rec.setItemAnimator(new DefaultItemAnimator());
+        rec.setAdapter(wrapper_rec);
+        rec.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
-            public void onScrolledToBottom() {
-                if(!timeTool.checkFreq()) return;
+            public void onLoadMore() {
+                wrapper_rec.setLoadState(wrapper_rec.LOADING);
                 GetRecommendationPost getRecommendationPost = new GetRecommendationPost();
                 getRecommendationPost.execute();
             }
-            @Override
-            public void onScrolledToTop() {
-                Log.d("hjt.scroll.top", "true");
-            }
         });
-        f_view.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
+
+        RecyclerView follow = mView.findViewById(R.id.recy_like);
+        adapter_follow = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
+        wrapper_follow = new LoadMoreAndRefreshWrapper(adapter_follow);
+        follow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        follow.setItemAnimator(new DefaultItemAnimator());
+        follow.setAdapter(wrapper_follow);
+        follow.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+
             @Override
-            public void onScrolledToBottom() {
-                if(!timeTool.checkFreq()) return;
+            public void onLoadMore() {
+                wrapper_follow.setLoadState(wrapper_follow.LOADING);
                 GetFollowedPost getFollowedPost = new GetFollowedPost();
                 getFollowedPost.execute();
             }
-            @Override
-            public void onScrolledToTop() {
-                Log.d("hjt.scroll.top", "true");
-            }
         });
+
         GetRecommendationPost getRecommendationPost = new GetRecommendationPost();
         getRecommendationPost.execute();
         GetFollowedPost getFollowedPost = new GetFollowedPost();
@@ -133,9 +142,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 t = getActivity().findViewById(R.id.button_post_follow);
                 t.setTextColor(getActivity().getColor(R.color.black));
                 Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_right_translate_alpha_500ms);
-                f_view.startAnimation(animation);
+                f_layout.startAnimation(animation);
                 Animation a2 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_right_translate_in_alpha_500ms);
-                rc_view.startAnimation(a2);
+                rc_layout.startAnimation(a2);
                 ChangeVisibility changeVisibility = new ChangeVisibility();
                 changeVisibility.execute(true);
                 break;
@@ -146,9 +155,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 t = getActivity().findViewById(R.id.button_post_recommendation);
                 t.setTextColor(getResources().getColor(R.color.black));
                 Animation animation2 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_alpha_500ms);
-                rc_view.startAnimation(animation2);
+                rc_layout.startAnimation(animation2);
                 Animation a3 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_in_alpha_500ms);
-                f_view.startAnimation(a3);
+                f_layout.startAnimation(a3);
                 ChangeVisibility changeVisibility2 = new ChangeVisibility();
                 changeVisibility2.execute(false);
                 break;
@@ -171,25 +180,40 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.follow.post", "null_json");
                 return;
             }
-            if(jsonArray.length() > 0 && cnt_f == 0){
-                f_layout.removeView(placeholder2);
+            if(jsonArray.length() == 0){
+                wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
+            }
+            else {
+                wrapper_follow.setLoadState(wrapper_rec.LOADING_COMPLETE);
             }
             cnt_f += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
+                // 原方法
+//                try {
+//                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                    PostItem postItem = new PostItem(getActivity());
+//                    postItem.init(jsonObject, true, true, false);
+////                    RelativeLayoutItem.LayoutParams layoutParams = new RelativeLayoutItem.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+////                    if(lastF_id != -1) layoutParams.addRule(RelativeLayoutItem.BELOW, lastF_id);
+////                    else layoutParams.addRule(RelativeLayoutItem.ALIGN_PARENT_TOP);
+//                    lastF_id = View.generateViewId();
+//                    postItem.setId(lastF_id);
+////                    postItem.setLayoutParams(layoutParams);
+//                    f_layout.addView(postItem);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    return;
+//                }
+
+                // now
                 try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    PostItem postItem = new PostItem(getActivity());
-                    postItem.init(jsonObject, true, true, false);
-//                    RelativeLayoutItem.LayoutParams layoutParams = new RelativeLayoutItem.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-//                    if(lastF_id != -1) layoutParams.addRule(RelativeLayoutItem.BELOW, lastF_id);
-//                    else layoutParams.addRule(RelativeLayoutItem.ALIGN_PARENT_TOP);
-                    lastF_id = View.generateViewId();
-                    postItem.setId(lastF_id);
-//                    postItem.setLayoutParams(layoutParams);
-                    f_layout.addView(postItem);
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    json.put("a", "true");
+                    json.put("b", "true");
+                    adapter_follow.addData(json);
+                    wrapper_follow.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    return;
                 }
             }
         }
@@ -212,22 +236,34 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.recommendation.post", "null_json");
                 return;
             }
-            if(jsonArray.length() > 0 && cnt_rc == 0){
-                rc_layout.removeView(placeholder1);
+            rc_startPos += rc_len;
+            if(jsonArray.length() == 0){
+                wrapper_rec.setLoadState(wrapper_rec.LOADING_END);
+            }
+            else {
+                wrapper_rec.setLoadState(wrapper_rec.LOADING_COMPLETE);
             }
             cnt_rc += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 try {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    PostItem postItem = new PostItem(getActivity());
-                    postItem.init(jsonObject, true, true, false);
-//                    RelativeLayoutItem.LayoutParams layoutParams = new RelativeLayoutItem.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
-//                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayoutItem.BELOW, lastRc_id);
-//                    else layoutParams.addRule(RelativeLayoutItem.ALIGN_PARENT_TOP);
-//                    lastRc_id = View.generateViewId();
-                    postItem.setId(lastRc_id);
-//                    postItem.setLayoutParams(layoutParams);
-                    rc_layout.addView(postItem);
+                    // 原方法
+//                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                    PostItem postItem = new PostItem(getActivity());
+//                    postItem.init(jsonObject, true, true, false);
+////                    RelativeLayoutItem.LayoutParams layoutParams = new RelativeLayoutItem.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,  ViewGroup.LayoutParams.WRAP_CONTENT);
+////                    if(lastRc_id != -1) layoutParams.addRule(RelativeLayoutItem.BELOW, lastRc_id);
+////                    else layoutParams.addRule(RelativeLayoutItem.ALIGN_PARENT_TOP);
+////                    lastRc_id = View.generateViewId();
+//                    postItem.setId(lastRc_id);
+////                    postItem.setLayoutParams(layoutParams);
+//                    rc_layout.addView(postItem);
+
+                    // now
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    json.put("a", "true");
+                    json.put("b", "true");
+                    adapter_rec.addData(json);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return;
@@ -251,12 +287,12 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
-                rc_view.setVisibility(View.VISIBLE);
-                f_view.setVisibility(View.GONE);
+                rc_layout.setVisibility(View.VISIBLE);
+                f_layout.setVisibility(View.GONE);
             }
             else {
-                rc_view.setVisibility(View.GONE);
-                f_view.setVisibility(View.VISIBLE);
+                rc_layout.setVisibility(View.GONE);
+                f_layout.setVisibility(View.VISIBLE);
             }
         }
     }

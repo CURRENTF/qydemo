@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -41,6 +42,12 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
         super(context);
         mContext = context;
         initDf();
+    }
+    public LittleUserItem(ViewGroup p, Activity a){
+        super(a);
+        mContext = a;
+        mView = LayoutInflater.from(p.getContext())
+                .inflate(R.layout.little_user_item, this, true);
     }
 
     @Override

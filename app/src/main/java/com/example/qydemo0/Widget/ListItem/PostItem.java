@@ -37,13 +37,13 @@ import org.json.JSONObject;
 public class PostItem extends LinearLayoutItem {
 
     private Context mContext = null;
+    private Activity activity;
     private View mView = null;
-    public ImageView avatar = null, post_avatar = null, fun_img = null, cover = null, like_img;
+    public ImageView avatar = null, post_avatar = null, cover = null, like_img;
     GridLayout img_set = null;
     LinearLayout work = null, post_post = null;
     TextView username = null, post_username = null, post_time = null, post_content = null, work_name = null;
-
-
+    Boolean filled = false;
 
     public PostItem(Context context) {
         super(context);
@@ -51,9 +51,28 @@ public class PostItem extends LinearLayoutItem {
         initDf();
     }
 
+    public PostItem(ViewGroup parent, Activity activity){
+        super(activity);
+        this.mContext = activity;
+        this.activity = activity;
+        mView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.post_item, this,true);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        mView.setLayoutParams(layoutParams);
+    }
+
     @Override
     public void fill(JSONObject json) {
-        init(json);
+        if(filled) return;
+        try{
+            boolean a = json.getBoolean("a"), b = json.getBoolean("b");
+            init(json, a, b, true);
+            filled = true;
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     private void initDf(){
@@ -127,12 +146,11 @@ public class PostItem extends LinearLayoutItem {
         work = mView.findViewById(R.id.post_work);
         post_post = mView.findViewById(R.id.post_post);
         avatar = mView.findViewById(R.id.post_user_avatar);
-        fun_img = mView.findViewById(R.id.fun_img);
         username = mView.findViewById(R.id.post_user_name);
         post_time = mView.findViewById(R.id.post_time);
         post_content = mView.findViewById(R.id.post_content);
-        btn_follow = findViewById(R.id.btn_follow);
-        like_img = findViewById(R.id.like_img);
+        btn_follow = mView.findViewById(R.id.btn_follow);
+        like_img = mView.findViewById(R.id.like_img);
         try {
             if(json.getString("follow").equals("true")){
                 btn_follow.setText("已关注");
@@ -179,9 +197,10 @@ public class PostItem extends LinearLayoutItem {
         if(mode == 0){
 //            work.setVisibility(GONE);
 //            post_post.setVisibility(GONE);
-//            img_set.setVisibility(GONE);
+            img_set.setVisibility(GONE);
         }
         else if(mode == 1){
+            img_set.setVisibility(GONE);
             cover = mView.findViewById(R.id.post_work_cover);
             work_name = mView.findViewById(R.id.post_work_name);
             work.setVisibility(VISIBLE);
@@ -198,6 +217,7 @@ public class PostItem extends LinearLayoutItem {
             }
         }
         else if(mode == 2){
+            img_set.setVisibility(GONE);
             post_post.setVisibility(VISIBLE);
             post_post.setOnClickListener(new GotoPostDetail());
             cover = mView.findViewById(R.id.post_forward_video_cover);
@@ -227,8 +247,9 @@ public class PostItem extends LinearLayoutItem {
                 JSONArray ja = json.getJSONArray("img_set");
                 if(ja.length() == 1){
                     LinearLayout.LayoutParams layoutParams =
-                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,300));
+                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,200));
                     ImageView img = new ImageView(mContext);
+
                     img.setLayoutParams(layoutParams);
                     JSONObject jsonObj = (JSONObject) ja.get(0);
                     Img.url2imgViewRoundRectangle(jsonObj.getString("url"), img, mContext, 20);

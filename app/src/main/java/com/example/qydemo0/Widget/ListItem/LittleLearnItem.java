@@ -1,10 +1,12 @@
 package com.example.qydemo0.Widget.ListItem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +33,12 @@ public class LittleLearnItem extends LinearLayoutItem {
         super(context);
         mContext = context;
         initDf();
+    }
+    public LittleLearnItem(ViewGroup p, Activity a){
+        super(a);
+        mContext = a;
+        mView = LayoutInflater.from(p.getContext())
+                .inflate(R.layout.little_learn_item, this, true);
     }
 
     @Override

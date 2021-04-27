@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -41,6 +42,13 @@ public class RenderItem extends RelativeLayoutItem {
         super(context);
         this.context = context;
         initINFLATE();
+    }
+
+    public RenderItem(ViewGroup parent, Activity activity){
+        super(activity);
+        this.context = activity;
+        mView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.render_item, this, true);
     }
 
     @Override

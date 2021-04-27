@@ -1,9 +1,11 @@
 package com.example.qydemo0.Widget.ListItem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +31,12 @@ public class LittleWorkItem extends LinearLayoutItem {
         super(context);
         mContext = context;
         initDf();
+    }
+    public LittleWorkItem(ViewGroup parent, Activity activity){
+        super(activity);
+        mContext = activity;
+        mView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.little_work_item, this, true);
     }
 
     @Override

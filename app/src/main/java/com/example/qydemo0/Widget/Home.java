@@ -132,7 +132,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
 //            }
 //        });
 
-        itemAdapter = new LinearLayoutAdapter(new ArrayList<JSONObject>(), R.layout.work_item, getActivity());
+        itemAdapter = new LinearLayoutAdapter(new ArrayList<JSONObject>(), Constant.mInstance.WORK, getActivity());
         wrapper = new LoadMoreAndRefreshWrapper(itemAdapter);
         RecyclerView recyclerView = mView.findViewById(R.id.works);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -174,8 +174,6 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         });
         ezDance = mView.findViewById(R.id.button_image_free_dance);
         ezDance.setOnClickListener(this);
-
-
     }
 
     void unbind(){
@@ -247,7 +245,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                     try {
                         JSONObject json = (JSONObject) jsonArray.get(i);
                         itemAdapter.addData(json);
-                        wrapper.notifyDataSetChanged();
+//                        wrapper.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

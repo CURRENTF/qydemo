@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -45,6 +46,13 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
         super(context);
         mContext = context;
         initDf();
+    }
+    // recyclerView
+    public SmartItem(ViewGroup parent, Activity activity){
+        super(activity);
+        mContext = activity;
+        mView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.smart_item, this, true);
     }
 
     @Override

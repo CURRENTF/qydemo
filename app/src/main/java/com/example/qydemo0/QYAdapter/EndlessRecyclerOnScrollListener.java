@@ -19,7 +19,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
             int itemCount = manager.getItemCount();
 
             // 判断是否滑动到了最后一个item，并且是向上滑动
-            if (lastItemPosition == (itemCount - 1) && isSlidingUpward) {
+            if (lastItemPosition >= (itemCount - 3) && isSlidingUpward) {
                 //加载更多
                 onLoadMore();
             }
@@ -30,7 +30,7 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
-        isSlidingUpward = dy >= 0;
+        isSlidingUpward = (dy >= 0);
     }
 
     /**
