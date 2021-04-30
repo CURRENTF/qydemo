@@ -147,6 +147,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 getUserRecommendation.execute();
             }
         });
+        wrapper.setLoadState(wrapper.LOADING);
         GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
         getUserRecommendation.execute();
 
