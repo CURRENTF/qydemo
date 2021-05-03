@@ -32,7 +32,7 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
     int uid;
     TextView left, right, username, sign;
     QYScrollView all;
-    ImageView avatar, placeholder1, placeholder2;
+    ImageView avatar;
     int work_cnt = 0, post_cnt = 0;
 
     @Override
@@ -47,8 +47,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         username = findViewById(R.id.username);
         left = findViewById(R.id.button_post);
         right = findViewById(R.id.button_work);
-        placeholder1 = findViewById(R.id.wwww1);
-        placeholder2 = findViewById(R.id.wwww2);
         Bundle bundle = getIntent().getExtras();
         uid = bundle.getInt("uid");
         if(uid == 0) uid = Integer.parseInt(bundle.getString("uid"));
@@ -84,8 +82,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         if(view == left){
             if(switcher == 0) return;
             switcher = 0;
-            if(post_cnt == 0) placeholder1.setVisibility(View.VISIBLE);
-            else placeholder1.setVisibility(View.GONE);
             right.setTextColor(getColor(R.color.black));
             left.setTextColor(getColor(R.color.red));
             posts.setVisibility(View.VISIBLE);
@@ -100,8 +96,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         else if(view == right) {
             if(switcher == 1) return;
             switcher = 1;
-            if(work_cnt == 0) placeholder2.setVisibility(View.VISIBLE);
-            else placeholder2.setVisibility(View.GONE);
             left.setTextColor(getColor(R.color.black));
             right.setTextColor(getColor(R.color.red));
             posts.setVisibility(View.GONE);
@@ -136,7 +130,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
             }
             w_startPos += len;
             work_cnt += jsonArray.length();
-            placeholder2.setVisibility(View.GONE);
             for(int i = 0; i < jsonArray.length(); i++){
                 WorkItem workItem = new WorkItem(UserDetailActivity.this);
                 try {
@@ -151,7 +144,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
             }
-            if(work_cnt == 0) placeholder2.setVisibility(View.VISIBLE);
         }
     }
 
@@ -175,7 +167,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                 return;
             }
             p_startPos += len;
-            placeholder1.setVisibility(View.GONE);
             post_cnt += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 PostItem postItem = new PostItem(UserDetailActivity.this);
@@ -187,25 +178,6 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
                     e.printStackTrace();
                 }
             }
-            if(post_cnt == 0) placeholder1.setVisibility(View.VISIBLE);
-        }
-    }
-
-    class Later extends AsyncTask<Integer, Integer, Boolean>{
-
-        @Override
-        protected Boolean doInBackground(Integer... integers) {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            placeholder1.setVisibility(View.GONE);
         }
     }
 }

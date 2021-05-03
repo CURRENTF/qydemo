@@ -66,11 +66,8 @@ public class Home extends RelativeLayout implements View.OnClickListener {
     LinearLayoutAdapter itemAdapter;
     LoadMoreAndRefreshWrapper wrapper;
 
-    public LinearLayout scrollViewForVideos = null;
-    public QYScrollView scrollView = null;
     Unbinder bind;
     public int startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
-    TimeTool timeTool = new TimeTool();
     QYFile.ResultContract qyr = new QYFile.ResultContract();
     ActivityResultLauncher launcher;
 
@@ -111,26 +108,6 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 });
 
         // 获取作品相关
-
-//        scrollViewForVideos = mView.findViewById(R.id.home_scroll_for_video_cover);
-//        scrollView = mView.findViewById(R.id.scroll_home);
-//
-//
-//        scrollView.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
-//            @Override
-//            public void onScrolledToBottom() {
-//                if(!timeTool.checkFreq()) return;
-//                GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
-//                getUserRecommendation.execute();
-//                Log.d("hjt.scroll.bottom", "true");
-//                Log.d("hjt", "已添加");
-//            }
-//
-//            @Override
-//            public void onScrolledToTop() {
-//                Log.d("hjt.scroll.top", "true");
-//            }
-//        });
 
         itemAdapter = new LinearLayoutAdapter(new ArrayList<JSONObject>(), Constant.mInstance.WORK, getActivity());
         wrapper = new LoadMoreAndRefreshWrapper(itemAdapter);
@@ -229,24 +206,9 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 if(jsonArray.length() == 0) wrapper.setLoadState(wrapper.LOADING_END);
                 else wrapper.setLoadState(wrapper.LOADING_COMPLETE);
                 for(int i = 0; i < jsonArray.length(); i++){
-                    // 原来的方法
-//                    WorkItem w = new WorkItem(getActivity());
-//                    try {
-//                        JSONObject j = (JSONObject) jsonArray.get(i);
-//                        JSONObject coverInfo = j.getJSONObject("cover");
-//                        w.init(coverInfo.getString("url"), j.getString("name"), j.getInt("like_num"),
-//                                j.getInt("play_num"), j.getString("introduction"), j.getJSONObject("belong").getString("username"), j.getInt("id"));
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                        return;
-//                    }
-//                    scrollViewForVideos.addView(w);
-//                    w.setOnClickListener(new SendWorkId());
-//                    scrollViewForVideos.addView(Img.linearLayoutDivideLine(getActivity()));
                     try {
                         JSONObject json = (JSONObject) jsonArray.get(i);
                         itemAdapter.addData(json);
-//                        wrapper.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -254,15 +216,4 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             }
         }
     }
-
-    class SendWorkId implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), PlayerActivity.class);
-            intent.putExtra("id", ((WorkItem)v).id);
-            getActivity().startActivity(intent);
-        }
-    }
-
 }

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.Video.Work;
 import com.example.qydemo0.R;
 import com.example.qydemo0.Widget.ListItem.LinearLayoutItem;
@@ -29,12 +30,9 @@ import java.util.List;
 public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        LinearLayoutItem item;
+        public LinearLayoutItem item;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            if(itemView instanceof WorkItem){
-                Log.d("hjt.workItem", "yes");
-            }
             item = (LinearLayoutItem) itemView;
         }
         void fill(JSONObject json){

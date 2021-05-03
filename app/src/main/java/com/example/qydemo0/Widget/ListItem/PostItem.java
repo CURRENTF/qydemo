@@ -56,11 +56,11 @@ public class PostItem extends LinearLayoutItem {
         this.mContext = activity;
         this.activity = activity;
         mView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_item, this,true);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        );
-        mView.setLayoutParams(layoutParams);
+                .inflate(R.layout.post_item, parent,true);
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+//        );
+//        mView.setLayoutParams(layoutParams);
     }
 
     @Override

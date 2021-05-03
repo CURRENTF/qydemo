@@ -47,10 +47,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:id="@+id/rela_layout_posts_recommendation">
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recy_rec"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/recy_rec"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <LinearLayout

@@ -1,23 +1,35 @@
 package com.example.qydemo0.Widget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.qydemo0.FollowerAndFanActivity;
+import com.example.qydemo0.QYAdapter.EndlessRecyclerOnScrollListener;
+import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
+import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
+import com.example.qydemo0.QYAdapter.RelativeLayoutAdapter;
+import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
@@ -35,11 +47,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class Dashboard extends RelativeLayout {
 
     private Activity context;
     private View mView;
-    View work, post, render;
+    private Tab tab;
 
     private Activity getActivity(){
         return context;
@@ -57,55 +71,33 @@ public class Dashboard extends RelativeLayout {
         init();
     }
 
-    void gotoUserDetail(){
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), UserDetailActivity.class);
-        try {
-            intent.putExtra("uid", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("uid"));
-            intent.putExtra("username", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username"));
-            intent.putExtra("avatar", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("img_url"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        getActivity().startActivity(intent);
-    }
+//    void gotoUserDetail(){
+//        Intent intent = new Intent();
+//        intent.setClass(getActivity(), UserDetailActivity.class);
+//        try {
+//            intent.putExtra("uid", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("uid"));
+//            intent.putExtra("username", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("username"));
+//            intent.putExtra("avatar", GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.getString("img_url"));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        getActivity().startActivity(intent);
+//    }
+
+    RecyclerView[] l = new RecyclerView[3];
+    LoadMoreAndRefreshWrapper[] w = new LoadMoreAndRefreshWrapper[3];
+    LinearLayoutAdapter work;
+    LinearLayoutAdapter post;
+    RelativeLayoutAdapter render;
 
     void init(){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.fragment_dashboard, this, true);
         View t = mView.findViewById(R.id.goto_fan_follow);
-        work = mView.findViewById(R.id.work);
-        post = mView.findViewById(R.id.post_linear);
-        render = mView.findViewById(R.id.render);
-        t.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), FollowerAndFanActivity.class);
-                getActivity().startActivity(intent);
-            }
-        });
-        work.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                gotoUserDetail();
-            }
-        });
-        post.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                gotoUserDetail();
-            }
-        });
-        render.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), RenderQueueActivity.class);
-                getActivity().startActivity(intent);
-            }
+        t.setOnClickListener(view -> {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), FollowerAndFanActivity.class);
+            getActivity().startActivity(intent);
         });
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
             GetUserInfo g = new GetUserInfo();
@@ -114,21 +106,58 @@ public class Dashboard extends RelativeLayout {
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
         ImageView img = mView.findViewById(R.id.button_user_setting);
         img.setOnClickListener(new ModifyUserInfo());
-        GetLastWork getLastWork = new GetLastWork();
-        getLastWork.execute();
-        GetLastPost getLastPost = new GetLastPost();
-        getLastPost.execute();
 
-        Handler handler=new Handler();
-        Runnable runnable=new Runnable() {
-            @Override
-            public void run() {
-                GetUserInfo getUserInfo =  new GetUserInfo();
-                getUserInfo.execute();
-                handler.postDelayed(this, 5000);
-            }
-        };
-//        handler.postDelayed(runnable, 5000);
+        l[0] = mView.findViewById(R.id.l0);
+        l[1] = mView.findViewById(R.id.l1);
+        l[2] = mView.findViewById(R.id.l2);
+        tab = mView.findViewById(R.id.tab);
+        String[] s = {"作品", "动态", "渲染"};
+        tab.init(s, l);
+        work = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.WORK, getActivity());
+        post = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
+        render = new RelativeLayoutAdapter(new ArrayList<>(), Constant.mInstance.RENDER, getActivity());
+        w[0] = new LoadMoreAndRefreshWrapper(work);
+        w[1] = new LoadMoreAndRefreshWrapper(post);
+        w[2] = new LoadMoreAndRefreshWrapper(render);
+        int[] startPos = {0, 0, 0};
+        int len = Constant.mInstance.MAX_UPDATE_LEN;
+        for(int i = 0; i < 3; i++){
+            l[i].setAdapter(w[i]);
+            l[i].setHasFixedSize(false);
+            l[i].setLayoutManager(new LinearLayoutManager(getActivity()));
+            int finalI = i;
+            EndlessRecyclerOnScrollListener TT = new EndlessRecyclerOnScrollListener() {
+                @Override
+                public void onLoadMore() {
+                    w[finalI].setLoadState(w[finalI].LOADING);
+                    Handler handler = new Handler(Looper.getMainLooper()){
+                        @SuppressLint("HandlerLeak")
+                        @Override
+                        public void handleMessage(@NonNull Message msg){
+                            super.handleMessage(msg);
+                            JSONArray arr = (JSONArray) msg.obj;
+                            if(arr == null) return;
+                            if(arr.length() == 0) w[finalI].setLoadState(w[finalI].LOADING_END);
+                            else w[finalI].setLoadState(w[finalI].LOADING_COMPLETE);
+                            for(int i = 0; i < arr.length(); i++){
+                                try {
+                                    JSONObject jsonObject = arr.getJSONObject(i);
+                                    if(finalI == 0) work.addData(jsonObject);
+                                    else if(finalI == 1) post.addData(jsonObject);
+                                    else render.addData(jsonObject);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    };
+                    AdvanceHttp.getMyPosts(handler, startPos[finalI], len);
+                    startPos[finalI] += len;
+                }
+            };
+            l[i].addOnScrollListener(TT);
+            TT.onLoadMore();
+        }
     }
 
     void reWriteInfo(JSONObject json){
@@ -197,89 +226,6 @@ public class Dashboard extends RelativeLayout {
     }
 
 
-    class GetLastWork extends AsyncTask<String, Integer, JSONArray>{
-
-        TextView workName, like_num, play_num;
-        ImageView img;
-        GetLastWork(){
-            workName = mView.findViewById(R.id.work_name);
-            like_num = mView.findViewById(R.id.like_num_work);
-            play_num = mView.findViewById(R.id.play_num_work);
-            img = mView.findViewById(R.id.img1);
-        }
-
-        @Override
-        protected JSONArray doInBackground(String... strings) {
-            QYrequest htp = new QYrequest();
-            return MsgProcess.msgProcessArr(
-                    htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", "0", "lens", "1"),
-                            "Authorization", GlobalVariable.mInstance.token),false, null
-            );
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            if(jsonArray == null){
-                Log.e("hjt.last.work", "json_null");
-                return;
-            }
-            try {
-                JSONObject json = jsonArray.getJSONObject(0);
-                workName.setText(json.getString("name"));
-                like_num.setText(json.getString("like_num"));
-                play_num.setText(json.getString("play_num"));
-                Img.url2imgViewRoundRectangle(json.getJSONObject("cover").getString("url"), img, getActivity(), 10);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    class GetLastPost extends AsyncTask<String, Integer, JSONArray>{
-
-        TextView postText, like_num, comment_num;
-        ImageView img;
-        GetLastPost(){
-            postText = mView.findViewById(R.id.post_text);
-            like_num = mView.findViewById(R.id.like_num_post);
-            img = mView.findViewById(R.id.img2);
-            comment_num = mView.findViewById(R.id.post_comment_num);
-        }
-
-        @Override
-        protected JSONArray doInBackground(String... strings) {
-            QYrequest htp = new QYrequest();
-            return MsgProcess.msgProcessArr(
-                    htp.advanceGet(Constant.mInstance.post_url + "1/" + Json2X.Json2StringGet("user_id", GlobalVariable.mInstance.uid, "start",
-                            "0", "lens", "1"),
-                            "Authorization", GlobalVariable.mInstance.token),false, null
-            );
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-            if(jsonArray == null){
-                Log.e("hjt.last.work", "json_null");
-                return;
-            }
-            try {
-                JSONObject json = jsonArray.getJSONObject(0);
-                postText.setText(json.getString("text"));
-                like_num.setText(json.getString("like_num"));
-                comment_num.setText(json.getString("comment_num"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-//    class GetLastRender extends AsyncTask<String, Integer, JSONArray>{
-//
-//        @Override
-//        protected JSONArray doInBackground(String... strings) {
-//            QYrequest htp = new QYrequest();
-//            return MsgProcess.msgProcessArr(htp.advanceGet())
-//        }
-//    }
-
 
     class GetUserInfo extends AsyncTask<String, Integer, String> {
 
@@ -316,4 +262,6 @@ public class Dashboard extends RelativeLayout {
             getActivity().startActivity(intent);
         }
     }
+
+
 }

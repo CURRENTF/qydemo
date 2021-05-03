@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.qydemo0.Manager.MyLinearLayoutManager;
 import com.example.qydemo0.QYAdapter.EndlessRecyclerOnScrollListener;
 import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
 import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
@@ -92,7 +93,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         RecyclerView rec = mView.findViewById(R.id.recy_rec);
         adapter_rec = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
         wrapper_rec = new LoadMoreAndRefreshWrapper(adapter_rec);
+
         rec.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rec.setNestedScrollingEnabled(false);
         rec.setItemAnimator(new DefaultItemAnimator());
         rec.setAdapter(wrapper_rec);
         rec.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
@@ -107,7 +110,8 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         RecyclerView follow = mView.findViewById(R.id.recy_like);
         adapter_follow = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
         wrapper_follow = new LoadMoreAndRefreshWrapper(adapter_follow);
-        follow.setLayoutManager(new LinearLayoutManager(getActivity()));
+        follow.setLayoutManager(new MyLinearLayoutManager(getActivity()));
+        follow.setNestedScrollingEnabled(false);
         follow.setItemAnimator(new DefaultItemAnimator());
         follow.setAdapter(wrapper_follow);
         follow.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
