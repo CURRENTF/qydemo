@@ -31,6 +31,11 @@ android {
             dirs 'libs'   // aar目录
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -159,6 +164,11 @@ dependencies {
 
     // ImageViewer
 //    implementation 'com.github.iielse:imageviewer:2.1.2'
+
+    //科大讯飞接口
+    api 'com.squareup.leakcanary:leakcanary-android:1.5'
+    implementation files("libs/Msc.jar")
+
 }
 
 allprojects {

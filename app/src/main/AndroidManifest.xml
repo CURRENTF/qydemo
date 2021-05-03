@@ -16,6 +16,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
 
     <application
         android:allowBackup="true"
@@ -25,7 +36,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ViewImageActivity"></activity>
+        <activity android:name=".KqwOneShot"></activity>
+        <activity android:name=".TestCanvas" />
+        <activity android:name=".ViewImageActivity" />
         <activity
             android:name=".PostDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -50,12 +63,11 @@
             android:screenOrientation="portrait" />
         <activity android:name=".UploadPostActivity" />
         <activity android:name=".LearningListActivity" />
-        <activity android:name=".testStyle" />
         <activity android:name=".DetailPostActivity" />
-        <activity android:name=".VideoRenderActivity"
+        <activity
+            android:name=".VideoRenderActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="landscape"
-            />
+            android:screenOrientation="landscape" />
         <activity
             android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"

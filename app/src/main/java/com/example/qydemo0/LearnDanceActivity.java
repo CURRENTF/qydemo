@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
@@ -14,13 +15,10 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import android.os.Handler;
-import android.telephony.mbms.MbmsErrors;
-import android.text.BoringLayout;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.Display;
 import android.view.Surface;
@@ -32,9 +30,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -57,18 +55,17 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.VideoClip;
-import com.google.gson.JsonArray;
-import com.example.qydemo0.Widget.Dashboard;
-import com.example.qydemo0.entry.Image;
-import com.google.gson.JsonObject;
-import com.koushikdutta.async.http.body.JSONObjectBody;
-import com.koushikdutta.ion.ImageViewBitmapInfo;
+import com.example.qydemo0.utils.FucUtil;
+import com.example.qydemo0.utils.JsonParser;
+import com.example.qydemo0.utils.XmlParser;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.VoiceWakeuper;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -78,7 +75,6 @@ import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -94,9 +90,21 @@ import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
 
 import static android.view.View.GONE;
-import static com.example.qydemo0.QYpack.VideoClip.getFromTime;
 
-import com.example.qydemo0.AiUnit.FaceFer;
+import com.iflytek.cloud.ErrorCode;
+import com.iflytek.cloud.GrammarListener;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.LexiconListener;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.util.ContactManager;
+import com.iflytek.cloud.util.ContactManager.ContactListener;
+import com.iflytek.cloud.util.ResourceUtil;
+import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE;
+import com.example.qydemo0.utils.FucUtil;
 
 /**
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
@@ -234,11 +242,10 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             public void onServiceConnect() {
                 Log.i("TAG", "initService: onServiceConnect");
                 int startCode = mCVClient.start();
-                if(startCode==0){
+                if (startCode == 0) {
 
-                }
-                else{
-                    Log.i("whc123","init wrong!");
+                } else {
+                    Log.i("whc123", "init wrong!");
                 }
             }
 

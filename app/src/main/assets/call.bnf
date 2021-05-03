@@ -1,0 +1,12 @@
+#BNF+IAT 1.0 UTF-8;
+!grammar call;
+!slot <contact>;
+!slot <callPhone>;
+!slot <startl>
+!slot <lorx>
+!start <callStart>;
+<callStart>:<contact><callPhone>|[<startl>]<lorx>;
+<contact>:打开|关闭;
+<callPhone>:镜子|学习;
+<startl>:开始
+<lorx>:学习|下一段|返回

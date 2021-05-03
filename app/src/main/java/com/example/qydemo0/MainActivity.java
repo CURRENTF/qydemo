@@ -3,10 +3,8 @@ package com.example.qydemo0;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +23,6 @@ import android.widget.Toast;
 import android.content.pm.PackageManager;
 import android.view.GestureDetector;
 
-import com.example.qydemo0.AiUnit.FaceFerActivity;
 import com.example.qydemo0.DataTrans.FragmentDataForMain;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
@@ -37,7 +34,8 @@ import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYNavigation;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
@@ -73,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalVariable.mInstance.appContext = getApplicationContext();
         PlayerFactory.setPlayManager(Exo2PlayerManager.class);
-
         try {
             //检测是否有写的权限
             int permission0 = ActivityCompat.checkSelfPermission(this,
@@ -88,11 +85,17 @@ public class MainActivity extends AppCompatActivity {
             if (permission0 != PackageManager.PERMISSION_GRANTED || permission1 != PackageManager.PERMISSION_GRANTED || permission2 != PackageManager.PERMISSION_GRANTED
                 || permission3 != PackageManager.PERMISSION_GRANTED) {
                 // 去申请读的权限，申请权限
-                String[] t = new String[4];
+                String[] t = new String[10];
                 t[0] = Manifest.permission.READ_EXTERNAL_STORAGE;
                 t[1] = Manifest.permission.CAMERA;
                 t[2] = Manifest.permission.RECORD_AUDIO;
                 t[3] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+                t[4] = Manifest.permission.LOCATION_HARDWARE;
+                t[5] = Manifest.permission.READ_PHONE_STATE;
+                t[6] = Manifest.permission.WRITE_SETTINGS;
+                t[7] = Manifest.permission.READ_CONTACTS;
+                t[8] = Manifest.permission.ACCESS_COARSE_LOCATION;
+                t[9] = Manifest.permission.ACCESS_FINE_LOCATION;
                 ActivityCompat.requestPermissions(this, t, 1);
             }
 
@@ -102,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);
-
         Log.d("hjt.uid", GlobalVariable.mInstance.uid + "?");
         Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
@@ -122,26 +124,35 @@ public class MainActivity extends AppCompatActivity {
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
 
-//        Button btn1 = (Button) findViewById(R.id.btn1);
-//        btn1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //Log.i("StartCode",""+startCode);
-//                Intent intent = new Intent(MainActivity.this, FaceFerActivity.class);
-//                startActivity(intent);
+        StringBuffer param = new StringBuffer();
+
+        //IflytekAPP_id为我们申请的Appid
+        param.append("appid=4f537480");
+        param.append(",");
+        // 设置使用v5+
+        param.append(SpeechConstant.ENGINE_MODE+"="+ SpeechConstant.MODE_MSC);
+        SpeechUtility.createUtility(GlobalVariable.mInstance.appContext, param.toString());
+
+        Button btn1 = (Button) findViewById(R.id.btn1);
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Log.i("StartCode",""+startCode);
+                Intent intent = new Intent(MainActivity.this, TestCanvas.class);
+                startActivity(intent);
+
+//                if(ContextCompat.checkSelfPermission(MainActivity.this,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(MainActivity.this,
+//                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//                } else {
+//                    Intent intent = new Intent("android.intent.action.GET_CONTENT");
+//                    intent.setType("image/*");
 //
-////                if(ContextCompat.checkSelfPermission(MainActivity.this,
-////                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-////                    ActivityCompat.requestPermissions(MainActivity.this,
-////                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-////                } else {
-////                    Intent intent = new Intent("android.intent.action.GET_CONTENT");
-////                    intent.setType("image/*");
-////
-////                }
-//
-//            }
-//        });
+//                }
+
+            }
+        });
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }

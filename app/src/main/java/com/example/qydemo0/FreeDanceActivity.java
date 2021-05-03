@@ -13,6 +13,8 @@ import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseIntArray;
@@ -36,9 +38,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.AudioPlayer;
 import com.example.qydemo0.QYpack.DeviceInfo;
+import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
-import com.example.qydemo0.entry.Image;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
+
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -125,6 +130,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 
     boolean mirror_status = false;
 
+    static private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,14 +141,12 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         initViews();
         ButterKnife.bind(this);
-
         //ArrayList<String> list = getIntent().getStringArrayListExtra("params");
         ArrayList<String> list = new ArrayList<>();
         list.add("0");
         list.add("1080P");
         list.add("/sdcard/DCIM/Camera/B612Kaji_20200707_201816_832.mp4");
         initLearnVideo(list);
-
         is_learn = false;
 
         is_record = false;
@@ -162,16 +167,16 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         surf = findViewById(R.id.sf_view);
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int heightPixels = dm.heightPixels;
-        Log.e("hjt.aaa", heightPixels+".");
-        fill_all = new RelativeLayout.LayoutParams((int) heightPixels*DeviceInfo.width(this)/DeviceInfo.height(this), heightPixels);
+        Log.e("hjt.aaa", heightPixels + ".");
+        fill_all = new RelativeLayout.LayoutParams((int) heightPixels * DeviceInfo.width(this) / DeviceInfo.height(this), heightPixels);
         fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
         fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        fill_tiny = new RelativeLayout.LayoutParams(1,1);
+        fill_tiny = new RelativeLayout.LayoutParams(1, 1);
 
-        btn1 =  findViewById(R.id.mirror_btn);
-        btn2 =  findViewById(R.id.next_video);
-        btn3 =  findViewById(R.id.learn_now);
-        if(list.get(0).equals("1")) {
+        btn1 = findViewById(R.id.mirror_btn);
+        btn2 = findViewById(R.id.next_video);
+        btn3 = findViewById(R.id.learn_now);
+        if (list.get(0).equals("1")) {
             is_video_input = false;
 //            btn1.setText("恢复");
             surf.setLayoutParams(fill_all);
@@ -180,18 +185,10 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!is_compare && is_video_input) {
-                    if (!mirror_status) {
-//                        btn1.setText("恢复");
-                        mirror_status = true;
-                        surf.setLayoutParams(fill_all);
-                        black_back.setLayoutParams(fill_all_r);
-                    } else {
-//                        btn1.setText("镜子");
-                        mirror_status = false;
-                        surf.setLayoutParams(fill_tiny);
-                        black_back.setLayoutParams(fill_tiny);
-                    }
+                if (mirror_status) {
+                    do_mirror_close();
+                } else {
+                    do_mirror_open();
                 }
             }
         });
@@ -199,10 +196,10 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(is_compare){
+                if (is_compare) {
                     stop_compare_video();
                     Intent intent = new Intent(FreeDanceActivity.this, VideoRenderActivity.class);
-                    intent.putExtra("free_dance_url",path_cur);  // 传递参数，根据需要填写
+                    intent.putExtra("free_dance_url", path_cur);  // 传递参数，根据需要填写
                     startActivity(intent);
                 }
             }
@@ -217,12 +214,14 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                         init_learn_view();
                         detailPlayer.startPlayLogic();
                     }
-                }
-                else{
+                } else {
 //                    btn3.setText("开始");
-                    if(!is_video_input) {surf.setLayoutParams(fill_all);black_back.setLayoutParams(fill_all_r);}
+                    if (!is_video_input) {
+                        surf.setLayoutParams(fill_all);
+                        black_back.setLayoutParams(fill_all_r);
+                    }
                     stop_compare_video();
-                    detailPlayer.setUp(all_learn_video.get(0),true,"韩舞小姐姐");
+                    detailPlayer.setUp(all_learn_video.get(0), true, "韩舞小姐姐");
                     detailPlayer.startPlayLogic();
                 }
             }
@@ -232,6 +231,48 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         arrow = findViewById(R.id.menu_btn);
         shrink_menu_now();
 
+//        StringBuffer param = new StringBuffer();
+//        //IflytekAPP_id为我们申请的Appid
+//        param.append("appid=4f537480");
+//        param.append(",");
+//        // 设置使用v5+
+//        param.append(SpeechConstant.ENGINE_MODE+"="+ SpeechConstant.MODE_MSC);
+//        SpeechUtility.createUtility(GlobalVariable.mInstance.appContext, param.toString());
+
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                Bundle bundle = msg.getData();
+                String date = bundle.getString("msg");
+                if(date.equals("【打开】镜子")){
+                    SoundTipUtil.soundTip(getBaseContext(), "好的");
+                    do_mirror_open();
+                } else if(date.equals("【关闭】镜子")){
+                    SoundTipUtil.soundTip(getBaseContext(), "好的");
+                    do_mirror_close();
+                }
+            }
+        };
+
+        KqwOneShot kqw = new KqwOneShot(this, handler);
+        kqw.btn_grammar();
+    }
+
+    private void do_mirror_open(){
+        if(!is_compare && is_video_input) {
+                mirror_status = true;
+                surf.setLayoutParams(fill_all);
+                black_back.setLayoutParams(fill_all_r);
+        }
+    }
+
+    private void do_mirror_close(){
+        if(!is_compare && is_video_input) {
+                mirror_status = false;
+                surf.setLayoutParams(fill_tiny);
+                black_back.setLayoutParams(fill_tiny);
+        }
     }
 
     @Override
@@ -410,7 +451,6 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         holder.setKeepScreenOn(true);
         holder.addCallback(this); // holder加入回调接口
     }
-
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
         final double ASPECT_TOLERANCE = 0.1;

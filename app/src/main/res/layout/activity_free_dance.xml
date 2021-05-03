@@ -109,4 +109,25 @@
 
     </RelativeLayout>
 
+    <Button
+        android:text="开始"
+        android:id="@+id/start_a"
+        android:layout_height="50dp"
+        android:layout_width="100dp"
+        />
+    <Button
+        android:text="结束"
+        android:id="@+id/end_a"
+        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_toRightOf="@+id/start_a"
+        />
+    <Button
+        android:text="取消"
+        android:id="@+id/cancel_a"
+        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_toRightOf="@id/end_a"
+        />
+
 </RelativeLayout>

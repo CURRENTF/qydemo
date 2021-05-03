@@ -13,17 +13,15 @@
         android:layout_height="match_parent"
         android:id="@+id/main_layout"
         android:orientation="vertical">
-
-
     </LinearLayout>
 
 
 
-<!--    <Button-->
-<!--        android:id="@+id/btn1"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Test Player"-->
-<!--        tools:ignore="MissingConstraints" />-->
+    <Button
+        android:id="@+id/btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test KDXF"
+        tools:ignore="MissingConstraints" />
 
 </RelativeLayout>
