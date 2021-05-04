@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class SmartItem extends RelativeLayoutItem implements View.OnClickListener{
 
     private Context mContext = null;
-    private View mView = null;
+    public View mView = null;
     ImageView cover, medal, btn_expand;
     TextView video_name, learn_progress;
     ProgressBar progressBar;
@@ -52,7 +52,7 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
         super(activity);
         mContext = activity;
         mView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.smart_item, this, true);
+                .inflate(R.layout.smart_item, parent, false);
     }
 
     @Override

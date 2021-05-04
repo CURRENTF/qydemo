@@ -62,7 +62,7 @@ import butterknife.Unbinder;
 public class Home extends RelativeLayout implements View.OnClickListener {
 
     private Activity context;
-    private View mView;
+    public View mView;
     LinearLayoutAdapter itemAdapter;
     LoadMoreAndRefreshWrapper wrapper;
 

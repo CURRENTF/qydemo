@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.example.qydemo0.Widget.ListItem.PostItem;
 import com.example.qydemo0.Widget.ListItem.RenderItem;
 import com.example.qydemo0.Widget.ListItem.SmartItem;
 import com.example.qydemo0.Widget.ListItem.WorkItem;
+import com.example.qydemo0.Widget.Post;
 
 import org.json.JSONObject;
 
@@ -30,17 +32,16 @@ import java.util.List;
 public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        public LinearLayoutItem item;
+        public View item;
+        public LinearLayoutItem control_item;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            item = (LinearLayoutItem) itemView;
+            item = itemView;
         }
         void fill(JSONObject json){
-            item.fill(json);
+            control_item.fill(json);
         }
     }
-
-
 
     public LinearLayoutAdapter(List<JSONObject> list, int item_type, Activity ac){
         dataList = list;
@@ -61,20 +62,26 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item;
+        View view_item = null;
         if(item_type == Constant.mInstance.WORK){
             item = new WorkItem(parent, ac);
+            view_item = ((WorkItem)item).mView;
         }
         else if(item_type == Constant.mInstance.POST){
             item = new PostItem(parent, ac);
+            view_item = ((PostItem)item).mView;
         }
         else if(item_type == Constant.mInstance.LITTLE_LEARN){
             item = new LittleLearnItem(parent, ac);
+            view_item = ((LittleLearnItem)item).mView;
         }
         else if(item_type == Constant.mInstance.LITTLE_USER){
             item = new LittleUserItem(parent, ac);
+            view_item = ((LittleUserItem)item).mView;
         }
         else if(item_type == Constant.mInstance.LITTLE_WORK){
             item = new LittleWorkItem(parent, ac);
+            view_item = ((LittleWorkItem)item).mView;
         }
         else if(item_type == Constant.mInstance.SMART){
             item = new SmartItem(parent, ac);
@@ -82,7 +89,9 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
         else {
             item = new RenderItem(parent, ac);
         }
-        return new ViewHolder(item);
+        ViewHolder holder = new ViewHolder(view_item);
+        holder.control_item = (LinearLayoutItem) item;
+        return holder;
     }
 
     @Override

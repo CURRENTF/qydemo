@@ -55,7 +55,7 @@ import butterknife.Unbinder;
 public class QYNavigation extends RelativeLayout implements View.OnClickListener {
 
     private Activity context;
-    private View mView;
+    public View mView;
     LinearLayout posts, home, user;
     View a, b, c;
     JSONObject json = new JSONObject();

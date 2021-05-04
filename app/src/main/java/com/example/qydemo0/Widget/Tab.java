@@ -17,7 +17,7 @@ import com.example.qydemo0.R;
 public class Tab extends LinearLayout {
 
     private Activity ac;
-    private View mView;
+    public View mView;
     String[] texts;
     View[] views;
     TextView[] textViews;

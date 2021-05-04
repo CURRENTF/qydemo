@@ -22,7 +22,7 @@ public class LittleWorkItem extends LinearLayoutItem {
     public static int height = 120;
 
     private Context mContext = null;
-    private View mView = null;
+    public View mView = null;
     ImageView cover = null;
     TextView name = null, like = null, play = null;
     public int id = 0;
@@ -36,7 +36,7 @@ public class LittleWorkItem extends LinearLayoutItem {
         super(activity);
         mContext = activity;
         mView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.little_work_item, this, true);
+                .inflate(R.layout.little_work_item, parent, false);
     }
 
     @Override

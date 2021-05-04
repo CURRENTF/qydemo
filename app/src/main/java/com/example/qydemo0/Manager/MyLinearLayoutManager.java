@@ -1,6 +1,7 @@
 package com.example.qydemo0.Manager;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -79,7 +80,6 @@ public class MyLinearLayoutManager extends LinearLayoutManager {
 
                 int childHeightSpec = ViewGroup.getChildMeasureSpec(heightSpec,
                         getPaddingTop() + getPaddingBottom(), p.height);
-
                 view.measure(childWidthSpec, childHeightSpec);
                 measuredDimension[0] = view.getMeasuredWidth() + p.leftMargin + p.rightMargin;
                 measuredDimension[1] = view.getMeasuredHeight() + p.bottomMargin + p.topMargin;

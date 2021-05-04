@@ -33,7 +33,7 @@ public class RenderQueueItem extends LinearLayoutItem {
     public static int height = 120;
 
     private Context mContext = null;
-    private View mView = null;
+    public View mView = null;
     ImageView cover = null;
     TextView name = null, text_choice = null;
     LinearProgressIndicator progressbar = null;

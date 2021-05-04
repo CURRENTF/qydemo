@@ -38,7 +38,7 @@ public class PostItem extends LinearLayoutItem {
 
     private Context mContext = null;
     private Activity activity;
-    private View mView = null;
+    public View mView = null;
     public ImageView avatar = null, post_avatar = null, cover = null, like_img;
     GridLayout img_set = null;
     LinearLayout work = null, post_post = null;
@@ -56,11 +56,7 @@ public class PostItem extends LinearLayoutItem {
         this.mContext = activity;
         this.activity = activity;
         mView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.post_item, parent,true);
-//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-//        );
-//        mView.setLayoutParams(layoutParams);
+                .inflate(R.layout.post_item, parent,false);
     }
 
     @Override
@@ -71,7 +67,8 @@ public class PostItem extends LinearLayoutItem {
             init(json, a, b, true);
             filled = true;
         }catch (JSONException e){
-            e.printStackTrace();
+            init(json, true, true, true);
+//            e.printStackTrace();
         }
     }
 
@@ -131,6 +128,8 @@ public class PostItem extends LinearLayoutItem {
     public JSONObject json;
 
     public void init(JSONObject json){
+        if(filled) return;
+        filled = true;
         this.json = json;
         mode = 0;
         try {
@@ -140,8 +139,6 @@ public class PostItem extends LinearLayoutItem {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        mView = inflater.inflate(R.layout.post_item, this, true);
         img_set = mView.findViewById(R.id.post_img_layout);
         work = mView.findViewById(R.id.post_work);
         post_post = mView.findViewById(R.id.post_post);
@@ -247,7 +244,7 @@ public class PostItem extends LinearLayoutItem {
                 JSONArray ja = json.getJSONArray("img_set");
                 if(ja.length() == 1){
                     LinearLayout.LayoutParams layoutParams =
-                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,200));
+                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,300));
                     ImageView img = new ImageView(mContext);
 
                     img.setLayoutParams(layoutParams);

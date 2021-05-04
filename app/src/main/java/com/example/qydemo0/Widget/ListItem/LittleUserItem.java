@@ -31,7 +31,7 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
 
 
     private Context mContext = null;
-    private View mView = null;
+    public View mView = null;
     ImageView avatar;
     TextView name, sign;
     Button btn;
@@ -47,7 +47,7 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
         super(a);
         mContext = a;
         mView = LayoutInflater.from(p.getContext())
-                .inflate(R.layout.little_user_item, this, true);
+                .inflate(R.layout.little_user_item, p, false);
     }
 
     @Override

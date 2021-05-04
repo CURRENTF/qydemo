@@ -25,7 +25,7 @@ public class LittleLearnItem extends LinearLayoutItem {
     public static int height = 120;
 
     private Context mContext = null;
-    private View mView = null;
+    public View mView = null;
     ImageView icon;
     TextView score, remark, ser;
 
@@ -38,7 +38,7 @@ public class LittleLearnItem extends LinearLayoutItem {
         super(a);
         mContext = a;
         mView = LayoutInflater.from(p.getContext())
-                .inflate(R.layout.little_learn_item, this, true);
+                .inflate(R.layout.little_learn_item, p, false);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class WorkItem extends LinearLayoutItem {
 
 
     public Context mContext = null;
-    private View mView = null;
+    public View mView = null;
     ImageView cover = null;
     TextView name = null, intro = null, like = null, play = null, uploader = null;
     public int id = 0;
@@ -43,8 +43,8 @@ public class WorkItem extends LinearLayoutItem {
     public WorkItem(ViewGroup parent, Activity activity){
         super(activity);
         mContext = activity;
-        mView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.work_item, this, true);
+        mView = LayoutInflater.from(activity)
+                .inflate(R.layout.work_item, parent, false);
     }
 
     private void initDf(){

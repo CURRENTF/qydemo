@@ -44,7 +44,7 @@ import java.util.ArrayList;
 public class Post extends RelativeLayout implements View.OnClickListener {
 
     private Activity context;
-    private View mView;
+    public View mView;
 
     int[] buttons = {R.id.add_post, R.id.button_post_recommendation, R.id.button_post_follow};
     LinearLayout rc_layout, f_layout;

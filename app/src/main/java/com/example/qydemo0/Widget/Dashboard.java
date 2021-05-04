@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.qydemo0.FollowerAndFanActivity;
+import com.example.qydemo0.Manager.FullyLinearLayoutManager;
+import com.example.qydemo0.Manager.MyLinearLayoutManager;
 import com.example.qydemo0.QYAdapter.EndlessRecyclerOnScrollListener;
 import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
 import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
@@ -52,8 +54,9 @@ import java.util.ArrayList;
 public class Dashboard extends RelativeLayout {
 
     private Activity context;
-    private View mView;
+    public View mView;
     private Tab tab;
+    QYScrollView scrollView;
 
     private Activity getActivity(){
         return context;
@@ -94,8 +97,8 @@ public class Dashboard extends RelativeLayout {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.fragment_dashboard, this, true);
         View t = mView.findViewById(R.id.goto_fan_follow);
+        Intent intent = new Intent();
         t.setOnClickListener(view -> {
-            Intent intent = new Intent();
             intent.setClass(getActivity(), FollowerAndFanActivity.class);
             getActivity().startActivity(intent);
         });
@@ -130,6 +133,7 @@ public class Dashboard extends RelativeLayout {
                 @Override
                 public void onLoadMore() {
                     w[finalI].setLoadState(w[finalI].LOADING);
+                    Log.d("hjt.kk", "donw");
                     Handler handler = new Handler(Looper.getMainLooper()){
                         @SuppressLint("HandlerLeak")
                         @Override
@@ -137,22 +141,34 @@ public class Dashboard extends RelativeLayout {
                             super.handleMessage(msg);
                             JSONArray arr = (JSONArray) msg.obj;
                             if(arr == null) return;
-                            if(arr.length() == 0) w[finalI].setLoadState(w[finalI].LOADING_END);
-                            else w[finalI].setLoadState(w[finalI].LOADING_COMPLETE);
+                            if(arr.length() == 0)
+                                w[finalI].setLoadState(w[finalI].LOADING_END);
+                            else
+                                w[finalI].setLoadState(w[finalI].LOADING_COMPLETE);
                             for(int i = 0; i < arr.length(); i++){
                                 try {
                                     JSONObject jsonObject = arr.getJSONObject(i);
-                                    if(finalI == 0) work.addData(jsonObject);
-                                    else if(finalI == 1) post.addData(jsonObject);
-                                    else render.addData(jsonObject);
+                                    if(finalI == 0)
+                                        work.addData(jsonObject);
+                                    else if(finalI == 1)
+                                        post.addData(jsonObject);
+                                    else
+                                        render.addData(jsonObject);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                         }
                     };
-                    AdvanceHttp.getMyPosts(handler, startPos[finalI], len);
-                    startPos[finalI] += len;
+                    if(finalI == 0){
+                        AdvanceHttp.getMyWorks(handler, startPos[finalI], len);
+                        startPos[finalI] += len;
+                    } else if(finalI == 1){
+                        AdvanceHttp.getMyPosts(handler, startPos[finalI], len);
+                        startPos[finalI] += len;
+                    } else {
+
+                    }
                 }
             };
             l[i].addOnScrollListener(TT);

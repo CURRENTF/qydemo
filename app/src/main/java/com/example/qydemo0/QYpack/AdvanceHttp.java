@@ -28,4 +28,30 @@ public class AdvanceHttp {
             }
         }).start();
     }
+    public static void getMyWorks(Handler handler, int startPos, int len){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                QYrequest htp = new QYrequest();
+                Message msg = new Message();
+                String res = htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
+                        "Authorization", GlobalVariable.mInstance.token);
+                msg.obj = MsgProcess.msgProcessArr(res, false, null);
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
+    public static void getMyRenders(Handler handler, int startPos, int len){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                QYrequest htp = new QYrequest();
+                Message msg = new Message();
+                String res = htp.advanceGet(Constant.mInstance.render_progress_url + Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
+                        "Authorization", GlobalVariable.mInstance.token);
+                msg.obj = MsgProcess.msgProcessArr(res, false, null);
+                handler.sendMessage(msg);
+            }
+        }).start();
+    }
 }

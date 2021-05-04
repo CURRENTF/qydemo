@@ -33,7 +33,7 @@ import java.sql.Time;
 public class RenderItem extends RelativeLayoutItem {
 
     Context context;
-    View mView;
+    public View mView;
     String tid;
     int prog;
 
@@ -48,7 +48,7 @@ public class RenderItem extends RelativeLayoutItem {
         super(activity);
         this.context = activity;
         mView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.render_item, this, true);
+                .inflate(R.layout.render_item, parent, false);
     }
 
     @Override
