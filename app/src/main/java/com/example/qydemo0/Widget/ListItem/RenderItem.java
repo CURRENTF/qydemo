@@ -1,8 +1,13 @@
 package com.example.qydemo0.Widget.ListItem;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +25,7 @@ import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
+import com.example.qydemo0.RenderQueueActivity;
 import com.example.qydemo0.entry.Image;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
@@ -36,6 +42,9 @@ public class RenderItem extends RelativeLayoutItem {
     public View mView;
     String tid;
     int prog;
+    Activity ac;
+    boolean render_finished = false;
+    boolean filled = false;
 
 
     public RenderItem(Context context) {
@@ -46,6 +55,7 @@ public class RenderItem extends RelativeLayoutItem {
 
     public RenderItem(ViewGroup parent, Activity activity){
         super(activity);
+        ac = activity;
         this.context = activity;
         mView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.render_item, parent, false);
@@ -70,6 +80,8 @@ public class RenderItem extends RelativeLayoutItem {
     ProgressBar progressBar, download_progress;
 
     public void init(JSONObject json){
+        if(filled) return;
+        filled = true;
         FileDownloader.setup(context);
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.render_name);
@@ -85,9 +97,36 @@ public class RenderItem extends RelativeLayoutItem {
             String p = json.getString("schedule");
             progressBar.setProgress(Integer.parseInt(p.substring(0, p.length() - 1)));
             prog = Integer.parseInt(p.substring(0, p.length() - 1));
+            boolean dashboard = json.getBoolean("dashboard");
+            if(dashboard) onDashboard();
+            if(prog == 100){
+                JSONObject video = json.getJSONObject("video");
+                video = video.getJSONObject("url");
+                render_finished = true;
+                for(int i = 0; i < Constant.mInstance.video_quality.length; i++){
+                    if(video.has(Constant.mInstance.video_quality[i])){
+                        updateSelf(video.getString(Constant.mInstance.video_quality[i]),
+                                Constant.mInstance.default_download_path);
+                        break;
+                    }
+                }
+            }
+//            refresh();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onDashboard(){
+        mView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(ac, RenderQueueActivity.class);
+                ac.startActivity(intent);
+            }
+        });
     }
 
     public Boolean is_finished(){
@@ -151,11 +190,18 @@ public class RenderItem extends RelativeLayoutItem {
         });
     }
 
-    public void refresh(){
-        GetProgress getProgress = new GetProgress();
-        getProgress.execute();
+    private void refresh(){
+        Handler handler = new Handler(Looper.myLooper());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                GetProgress getProgress = new GetProgress();
+                getProgress.execute();
+                if(!render_finished) handler.postDelayed(this, 10000);
+            }
+        };
+        handler.post(runnable);
     }
-
 
     class GetProgress extends AsyncTask<String, Integer, JSONObject>{
 
@@ -183,10 +229,12 @@ public class RenderItem extends RelativeLayoutItem {
                     if(prog == 100 && up < prog){
                         JSONObject video = json.getJSONObject("video");
                         video = video.getJSONObject("url");
+                        render_finished = true;
                         for(int i = 0; i < Constant.mInstance.video_quality.length; i++){
                             if(video.has(Constant.mInstance.video_quality[i])){
                                 updateSelf(video.getString(Constant.mInstance.video_quality[i]),
                                         Constant.mInstance.default_download_path);
+                                break;
                             }
                         }
                     }

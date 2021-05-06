@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.Widget.ListItem.LinearLayoutItem;
 import com.example.qydemo0.Widget.ListItem.LittleLearnItem;
 import com.example.qydemo0.Widget.ListItem.LittleUserItem;
 import com.example.qydemo0.Widget.ListItem.LittleWorkItem;
@@ -25,13 +26,14 @@ import java.util.List;
 public class RelativeLayoutAdapter extends RecyclerView.Adapter<RelativeLayoutAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        RelativeLayoutItem item;
+        RelativeLayoutItem control_item;
+        public View item;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            item = (RelativeLayoutItem) itemView;
+            item = itemView;
         }
         void fill(JSONObject json){
-            item.fill(json);
+            control_item.fill(json);
         }
     }
 
@@ -54,6 +56,7 @@ public class RelativeLayoutAdapter extends RecyclerView.Adapter<RelativeLayoutAd
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View item;
+        View view_item = null;
         if(item_type == Constant.mInstance.WORK){
             item = new WorkItem(parent, ac);
         }
@@ -71,11 +74,15 @@ public class RelativeLayoutAdapter extends RecyclerView.Adapter<RelativeLayoutAd
         }
         else if(item_type == Constant.mInstance.SMART){
             item = new SmartItem(parent, ac);
+            view_item = ((SmartItem)item).mView;
         }
         else {
             item = new RenderItem(parent, ac);
+            view_item = ((RenderItem)item).mView;
         }
-        return new ViewHolder(item);
+        ViewHolder holder = new ViewHolder(view_item);
+        holder.control_item = (RelativeLayoutItem) item;
+        return holder;
     }
 
     @Override

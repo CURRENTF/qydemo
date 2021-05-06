@@ -116,6 +116,7 @@ public class Dashboard extends RelativeLayout {
         tab = mView.findViewById(R.id.tab);
         String[] s = {"作品", "动态", "渲染"};
         tab.init(s, l);
+        tab.setTextSize(15);
         work = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.WORK, getActivity());
         post = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
         render = new RelativeLayoutAdapter(new ArrayList<>(), Constant.mInstance.RENDER, getActivity());
@@ -141,7 +142,7 @@ public class Dashboard extends RelativeLayout {
                             super.handleMessage(msg);
                             JSONArray arr = (JSONArray) msg.obj;
                             if(arr == null) return;
-                            if(arr.length() == 0)
+                            if(arr.length() == 0 || startPos[finalI] > 10)
                                 w[finalI].setLoadState(w[finalI].LOADING_END);
                             else
                                 w[finalI].setLoadState(w[finalI].LOADING_COMPLETE);
@@ -152,8 +153,10 @@ public class Dashboard extends RelativeLayout {
                                         work.addData(jsonObject);
                                     else if(finalI == 1)
                                         post.addData(jsonObject);
-                                    else
+                                    else{
+                                        jsonObject.put("dashboard", true);
                                         render.addData(jsonObject);
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -167,7 +170,12 @@ public class Dashboard extends RelativeLayout {
                         AdvanceHttp.getMyPosts(handler, startPos[finalI], len);
                         startPos[finalI] += len;
                     } else {
-
+                        if(startPos[finalI] > 0){
+                            w[finalI].setLoadState(w[finalI].LOADING_END);
+                            return;
+                        }
+                        AdvanceHttp.getMyRenders(handler, startPos[finalI], len);
+                        startPos[finalI] += len;
                     }
                 }
             };

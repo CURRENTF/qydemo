@@ -47,8 +47,7 @@ public class AdvanceHttp {
             public void run() {
                 QYrequest htp = new QYrequest();
                 Message msg = new Message();
-                String res = htp.advanceGet(Constant.mInstance.render_progress_url + Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
-                        "Authorization", GlobalVariable.mInstance.token);
+                String res = htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token);
                 msg.obj = MsgProcess.msgProcessArr(res, false, null);
                 handler.sendMessage(msg);
             }

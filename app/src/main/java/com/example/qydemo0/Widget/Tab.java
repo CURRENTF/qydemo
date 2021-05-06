@@ -60,6 +60,7 @@ public class Tab extends LinearLayout {
             txt.setPadding(padding_h, padding_v, padding_h, padding_v);
             int finalI = i;
             txt.setOnClickListener(v -> {
+                if(last_idx == finalI) return;
                 ((TextView)v).setTextColor(ac.getColor(R.color.real_pink));
                 textViews[last_idx].setTextColor(ac.getColor(R.color.black));
                 if(last_idx < finalI){
@@ -83,4 +84,9 @@ public class Tab extends LinearLayout {
         for(int i = 1; i < views.length; i++) views[i].setVisibility(GONE);
     }
 
+    public void setTextSize(float size){
+        for(int i = 0; i < textViews.length; i++){
+            textViews[i].setTextSize(size);
+        }
+    }
 }

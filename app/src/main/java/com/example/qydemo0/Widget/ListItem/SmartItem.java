@@ -107,11 +107,15 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
     int record_len = 0;
     int start = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
     int flag = 0;
+    boolean expanded = false;
 
     @Override
     public void onClick(View v) {
-        if(v == btn_expand) flag = 1;
+        if(v == btn_expand){
+            flag = 1; expanded = true;
+        }
         else flag = 2;
+        if(expanded && flag == 1) return;
         GetRecords getRecords = new GetRecords();
         getRecords.execute();
     }

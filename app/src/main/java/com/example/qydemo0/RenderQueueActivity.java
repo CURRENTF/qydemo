@@ -2,6 +2,7 @@ package com.example.qydemo0;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -48,16 +49,6 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         l_in = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_in_alpha_500ms);
         GetList getList = new GetList();
         getList.execute();
-//        Handler handler=new Handler();
-//        Runnable runnable=new Runnable() {
-//            @Override
-//            public void run() {
-//                GetList getList = new GetList();
-//                getList.execute();
-//                handler.postDelayed(this, 2000);
-//            }
-//        };
-//        handler.postDelayed(runnable, 5000);
     }
 
 
@@ -104,7 +95,6 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
                     RenderItem renderItem = new RenderItem(RenderQueueActivity.this);
                     try {
                         renderItem.init(jsonArray.getJSONObject(i));
-                        renderItem.refresh();
                         if(renderItem.is_finished()){
                             l_right.addView(renderItem);
                         }
