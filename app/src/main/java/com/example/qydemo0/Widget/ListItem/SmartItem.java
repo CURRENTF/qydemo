@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.qydemo0.LearnDanceActivity;
 import com.example.qydemo0.QYpack.Constant;
@@ -112,10 +113,10 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if(v == btn_expand){
+            if(expanded) return;
             flag = 1; expanded = true;
         }
         else flag = 2;
-        if(expanded && flag == 1) return;
         GetRecords getRecords = new GetRecords();
         getRecords.execute();
     }
@@ -161,14 +162,20 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
                     }
                     return;
                 }
+                Log.e("hjt.1", jsonArray.toString());
                 for(int i = 0; i < jsonArray.length(); i++){
-                    LittleLearnItem item = new LittleLearnItem(mContext);
                     try {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        if(jsonObject.getString("avg_score").equals("null")){
+                            Toast.makeText(getActivity(), "学习记录无得分", Toast.LENGTH_SHORT).show();
+                            continue;
+                        }
+                        LittleLearnItem item = new LittleLearnItem(mContext);
                         item.init(jsonArray.getJSONObject(i), i);
+                        records.addView(item);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    records.addView(item);
                 }
             }
         }

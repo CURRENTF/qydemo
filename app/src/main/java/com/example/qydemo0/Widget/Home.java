@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -180,6 +181,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             default:
                 if(v == ezDance){
                     qyr.params = "audio";
+                    Toast.makeText(getActivity(), "选择喜欢的音乐来当BGM吧~", Toast.LENGTH_LONG).show();
                     launcher.launch(true);
                 }
         }
