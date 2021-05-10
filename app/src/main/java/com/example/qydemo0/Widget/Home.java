@@ -113,7 +113,9 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         itemAdapter = new LinearLayoutAdapter(new ArrayList<JSONObject>(), Constant.mInstance.WORK, getActivity());
         wrapper = new LoadMoreAndRefreshWrapper(itemAdapter);
         RecyclerView recyclerView = mView.findViewById(R.id.works);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setSmoothScrollbarEnabled(true);
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(wrapper);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {

@@ -110,7 +110,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         RecyclerView follow = mView.findViewById(R.id.recy_like);
         adapter_follow = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
         wrapper_follow = new LoadMoreAndRefreshWrapper(adapter_follow);
-        follow.setLayoutManager(new MyLinearLayoutManager(getActivity()));
+        follow.setLayoutManager(new LinearLayoutManager(getActivity()));
         follow.setNestedScrollingEnabled(false);
         follow.setItemAnimator(new DefaultItemAnimator());
         follow.setAdapter(wrapper_follow);
