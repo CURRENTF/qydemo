@@ -91,8 +91,8 @@ public class WorkItem extends LinearLayoutItem {
         public void onClick(View v) {
             Intent intent = new Intent();
             intent.setClass(getActivity(), PlayerActivity.class);
-            Log.e("hjt.id", String.valueOf(((WorkItem)v).id));
-            intent.putExtra("id", ((WorkItem)v).id);
+            Log.e("hjt.id", String.valueOf(id));
+            intent.putExtra("id", id);
             getActivity().startActivity(intent);
         }
     }

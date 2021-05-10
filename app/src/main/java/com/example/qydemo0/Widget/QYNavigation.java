@@ -56,8 +56,7 @@ public class QYNavigation extends RelativeLayout implements View.OnClickListener
 
     private Activity context;
     public View mView;
-    LinearLayout posts, home, user;
-    View a, b, c;
+    LinearLayout posts, home, user, category, game;
     JSONObject json = new JSONObject();
 
 
@@ -84,19 +83,27 @@ public class QYNavigation extends RelativeLayout implements View.OnClickListener
         posts = mView.findViewById(R.id.posts);
         home = mView.findViewById(R.id.home);
         user = mView.findViewById(R.id.user);
+        category = mView.findViewById(R.id.category);
+        game = mView.findViewById(R.id.game);
         posts.setId(View.generateViewId());
         home.setId(View.generateViewId());
         user.setId(View.generateViewId());
+        category.setId(View.generateViewId());
+        game.setId(View.generateViewId());
         try {
             json.put(String.valueOf(posts.getId()), 0);
-            json.put(String.valueOf(home.getId()), 1);
-            json.put(String.valueOf(user.getId()), 2);
+            json.put(String.valueOf(category.getId()), 1);
+            json.put(String.valueOf(home.getId()), 2);
+            json.put(String.valueOf(game.getId()), 3);
+            json.put(String.valueOf(user.getId()), 4);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         posts.setOnClickListener(this);
         home.setOnClickListener(this);
         user.setOnClickListener(this);
+        category.setOnClickListener(this);
+        game.setOnClickListener(this);
     }
 
     View[] views;
@@ -104,7 +111,6 @@ public class QYNavigation extends RelativeLayout implements View.OnClickListener
     public void initView(View[] views){
         this.views = views;
         last = home;
-//        a = A; b = B; c = C; last = home;
         initAnim();
         TextView txt = home.findViewWithTag("txt");
         txt.setTextColor(getActivity().getColor(R.color.qy_purple));

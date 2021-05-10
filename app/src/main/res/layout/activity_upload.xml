@@ -9,128 +9,144 @@
     android:fitsSystemWindows="true"
     tools:context=".UploadActivity">
 
-    <LinearLayout
+    <com.example.qydemo0.Widget.QYScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:text="@string/no_file_now"
-                android:id="@+id/edit_text_file_url"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.4"
-                android:id="@+id/button_browse_file"
-                android:text="@string/browse"/>
-        </LinearLayout>
-
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:translationZ="100dp"
-            android:id="@+id/player_for_upload_video">
-
-        </com.google.android.exoplayer2.ui.PlayerView>
-    </LinearLayout>
-
-
-
-    <androidx.cardview.widget.CardView
-        app:contentPadding="5dp"
-        app:cardCornerRadius="10dp"
-        android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        app:cardBackgroundColor="@color/qy_pink"
-        app:cardElevation="4dp"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/edit_text_file_name"
-                android:inputType="text"
-                android:textSize="14sp"
-                android:hint="@string/video_name"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <EditText
-
-                    android:layout_width="0dp"
-                    android:layout_weight="0.85"
-                    android:inputType="text"
-                    android:hint="@string/tag"
-                    android:textSize="14sp"
-                    android:id="@+id/edit_text_video_tag"
-                    android:layout_height="match_parent"/>
-                <ImageView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.1"
-                    android:layout_height="match_parent"
-                    android:scaleType="fitCenter"
-                    android:id="@+id/button_add_tag"
-                    android:src="@drawable/ic_verified"/>
-            </LinearLayout>
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:useDefaultMargins="true"
-                android:id="@+id/tags"/>
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:id="@+id/text_class_upload"
-                android:hint="@string/video_category"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_marginLeft="5dp"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.15"
-                    android:layout_height="match_parent"
-                    android:textSize="14sp"
-                    android:gravity="top"
-                    android:text="@string/introduction"/>
-                <EditText
-                    android:padding="4dp"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.85"
-                    android:textSize="14sp"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/edit_text_introduction"
-                    android:gravity="top"
-                    android:background="@drawable/big_empty_edittext"
-                    />
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:text="@string/no_file_now"
+                        android:id="@+id/edit_text_file_url"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:id="@+id/button_browse_file"
+                        android:text="@string/browse"/>
+                </LinearLayout>
+
+                <com.google.android.exoplayer2.ui.PlayerView
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:translationZ="100dp"
+                    android:visibility="gone"
+                    android:id="@+id/player_for_upload_video">
+
+                </com.google.android.exoplayer2.ui.PlayerView>
             </LinearLayout>
+
+
+
+            <androidx.cardview.widget.CardView
+                app:contentPadding="5dp"
+                app:cardCornerRadius="10dp"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="@color/qy_pink"
+                app:cardElevation="4dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edit_text_file_name"
+                        android:inputType="text"
+                        android:textSize="14sp"
+                        android:hint="@string/video_name"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <EditText
+
+                            android:layout_width="0dp"
+                            android:layout_weight="0.85"
+                            android:inputType="text"
+                            android:hint="@string/tag"
+                            android:textSize="14sp"
+                            android:id="@+id/edit_text_video_tag"
+                            android:layout_height="match_parent"/>
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_weight="0.1"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitCenter"
+                            android:id="@+id/button_add_tag"
+                            android:src="@drawable/ic_verified"/>
+                    </LinearLayout>
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:useDefaultMargins="true"
+                        android:id="@+id/tags"/>
+                    <AutoCompleteTextView
+                        android:layout_width="match_parent"
+                        android:textSize="14sp"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:id="@+id/text_class_upload"
+                        android:hint="@string/video_category"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_marginLeft="5dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.15"
+                            android:layout_height="80dp"
+                            android:textSize="14sp"
+                            android:gravity="top"
+                            android:text="@string/introduction"/>
+                        <EditText
+                            android:padding="4dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.85"
+                            android:textSize="14sp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/edit_text_introduction"
+                            android:gravity="top"
+                            android:background="@drawable/big_empty_edittext"
+                            />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <Button
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/upload"
+                android:id="@+id/button_upload_selected_video"/>
 
 
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+    </com.example.qydemo0.Widget.QYScrollView>
 
-
-    <Button
-        android:layout_marginHorizontal="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/upload"
-        android:id="@+id/button_upload_selected_video"/>
 
 </LinearLayout>

@@ -31,7 +31,9 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.Widget.Category;
 import com.example.qydemo0.Widget.Dashboard;
+import com.example.qydemo0.Widget.Game;
 import com.example.qydemo0.Widget.Home;
 import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.QYpack.MsgProcess;
@@ -108,8 +110,14 @@ public class MainActivity extends AppCompatActivity {
         Post post = new Post(this);
         mainLayout.addView(post);
         post.setVisibility(View.GONE);
+        Category category = new Category(this);
+        mainLayout.addView(category);
+        category.setVisibility(View.GONE);
+        Game game = new Game(this);
+        mainLayout.addView(game);
+        game.setVisibility(View.GONE);
         QYNavigation navigation = new QYNavigation(this);
-        View[] views = {post, home, dashboard};
+        View[] views = {post, category, home, game, dashboard};
         navigation.initView(views);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(this, 50));
         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -135,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-//        GlobalVariable.mInstance.tokenExisted = false;
+        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         super.onDestroy();
