@@ -77,4 +77,12 @@ public class AdvanceHttp {
             }
         }).start();
     }
+    public static void getCategoryWorks(Handler handler, int startPos, int len, String name){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }).start();
+    }
 }

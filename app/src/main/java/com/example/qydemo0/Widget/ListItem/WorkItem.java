@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 public class WorkItem extends LinearLayoutItem {
 
-
     public Context mContext = null;
     public View mView = null;
     ImageView cover = null;
@@ -52,7 +51,11 @@ public class WorkItem extends LinearLayoutItem {
         mView = inflater.inflate(R.layout.work_item, this, true);
     }
 
+    boolean filled = false;
+
     public void fill(JSONObject json){
+//        if(filled) return;
+//        filled = true;
         try {
             JSONObject coverInfo = json.getJSONObject("cover");
             init(coverInfo.getString("url"), json.getString("name"),

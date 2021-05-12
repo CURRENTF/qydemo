@@ -244,7 +244,7 @@ public class PostItem extends LinearLayoutItem {
                 JSONArray ja = json.getJSONArray("img_set");
                 if(ja.length() == 1){
                     LinearLayout.LayoutParams layoutParams =
-                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,300));
+                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,200));
                     ImageView img = new ImageView(mContext);
 
                     img.setLayoutParams(layoutParams);

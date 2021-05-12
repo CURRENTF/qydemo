@@ -44,7 +44,7 @@ public class RenderItem extends RelativeLayoutItem {
     int prog;
     Activity ac;
     boolean render_finished = false;
-    boolean filled = false;
+//    boolean filled = false;
 
 
     public RenderItem(Context context) {
@@ -80,8 +80,8 @@ public class RenderItem extends RelativeLayoutItem {
     ProgressBar progressBar, download_progress;
 
     public void init(JSONObject json){
-        if(filled) return;
-        filled = true;
+//        if(filled) return;
+//        filled = true;
         FileDownloader.setup(context);
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.render_name);

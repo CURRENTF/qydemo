@@ -2,6 +2,8 @@ package com.example.qydemo0.QYAdapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.qydemo0.DetailCategoryActivity;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 
@@ -24,7 +27,7 @@ public class GridViewAdapter extends ArrayAdapter<Map<String, Object>> {
 
     Context mContext;
     int layoutResId;
-    List<Map<String, Object>> dataList = new ArrayList<>();
+    List<Map<String, Object>> dataList;
 
 
     public GridViewAdapter(@NonNull Context context, int resource, @NonNull List<Map<String, Object>> objects) {
@@ -63,7 +66,12 @@ public class GridViewAdapter extends ArrayAdapter<Map<String, Object>> {
 
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.setClass((Activity)mContext, DetailCategoryActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("name", (String) holder.text.getText());
+                intent.putExtras(bundle);
+                ((Activity)mContext).startActivity(intent);
             }
         });
         return convertView;

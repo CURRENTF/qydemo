@@ -119,6 +119,7 @@ public class Dashboard extends RelativeLayout {
         tab.setTextSize(15);
         work = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.WORK, getActivity());
         post = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
+        post.setHasStableIds(true);
         render = new RelativeLayoutAdapter(new ArrayList<>(), Constant.mInstance.RENDER, getActivity());
         w[0] = new LoadMoreAndRefreshWrapper(work);
         w[1] = new LoadMoreAndRefreshWrapper(post);

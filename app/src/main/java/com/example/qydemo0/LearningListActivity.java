@@ -86,8 +86,8 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            Log.e("hjt.6666", Constant.mInstance.learn_list_url + "1/"
-                    + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
+//            Log.e("hjt.6666", Constant.mInstance.learn_list_url + "1/"
+//                    + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
                     "Authorization", GlobalVariable.mInstance.token), false, null);

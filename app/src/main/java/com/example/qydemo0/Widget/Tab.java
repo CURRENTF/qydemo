@@ -84,6 +84,48 @@ public class Tab extends LinearLayout {
         for(int i = 1; i < views.length; i++) views[i].setVisibility(GONE);
     }
 
+    public void init(String[] texts, View[] views, int color_dark, int color_light, float text_size){
+        left_out = AnimationUtils.loadAnimation(ac,
+                R.anim.ani_left_translate_alpha_500ms);
+        left_in = AnimationUtils.loadAnimation(ac, R.anim.ani_left_translate_in_alpha_500ms);
+        right_in = AnimationUtils.loadAnimation(ac, R.anim.ani_right_translate_in_alpha_500ms);
+        right_out = AnimationUtils.loadAnimation(ac, R.anim.ani_right_translate_alpha_500ms);
+        this.texts = texts;
+        this.views = views;
+        LinearLayout container = mView.findViewById(R.id.txt);
+        textViews = new TextView[texts.length];
+        for(int i = 0; i < texts.length; i++){
+            TextView txt = new TextView(ac);
+            txt.setText(texts[i]);
+            txt.setTextColor(ac.getColor(color_dark));
+            txt.setPadding(padding_h, padding_v, padding_h, padding_v);
+            txt.setTextSize(text_size);
+            int finalI = i;
+            txt.setOnClickListener(v -> {
+                if(last_idx == finalI) return;
+                ((TextView)v).setTextColor(ac.getColor(color_light));
+                textViews[last_idx].setTextColor(ac.getColor(color_dark));
+                if(last_idx < finalI){
+                    views[last_idx].startAnimation(left_out);
+                    views[finalI].startAnimation(left_in);
+                }
+                else {
+                    views[last_idx].startAnimation(right_out);
+                    views[finalI].startAnimation(right_in);
+                }
+                views[last_idx].setVisibility(GONE);
+                views[finalI].setVisibility(VISIBLE);
+                last_idx = finalI;
+            });
+            textViews[i] = txt;
+            container.addView(txt);
+        }
+        last_idx = 0;
+        textViews[last_idx].setTextColor(ac.getColor(color_light));
+        views[last_idx].setVisibility(VISIBLE);
+        for(int i = 1; i < views.length; i++) views[i].setVisibility(GONE);
+    }
+
     public void setTextSize(float size){
         for(int i = 0; i < textViews.length; i++){
             textViews[i].setTextSize(size);

@@ -109,4 +109,9 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
         notifyDataSetChanged();
         Log.d("hjt.add.data", "ok");
     }
+
+    @Override
+    public long getItemId(int position) {
+        return dataList.get(position).hashCode();
+    }
 }

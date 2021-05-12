@@ -15,6 +15,7 @@ import android.widget.SimpleAdapter;
 
 import androidx.annotation.NonNull;
 
+import com.example.qydemo0.QYAdapter.GridViewAdapter;
 import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
@@ -60,10 +61,8 @@ public class Category extends RelativeLayout {
     public void init(){
         gridView = mView.findViewById(R.id.grid_view);
         data_list = new ArrayList<Map<String, Object>>();
-        String[] from = {"image", "text"};
-        int[] to = {R.id.image, R.id.text};
-        SimpleAdapter simpleAdapter = new SimpleAdapter(ac, data_list, R.layout.category_item, from, to);
-        gridView.setAdapter(simpleAdapter);
+        GridViewAdapter gridViewAdapter = new GridViewAdapter(ac, R.layout.category_item, data_list);
+        gridView.setAdapter(gridViewAdapter);
         Handler handler = new Handler(Looper.myLooper()){
             @SuppressLint("HandlerLeak")
             @Override
@@ -73,9 +72,9 @@ public class Category extends RelativeLayout {
                     Map<String, Object> map = new HashMap<String, Object>();
                     try {
                         JSONObject json = ja.getJSONObject(i);
-                        map.put("image", Img.getBitmapFormUrl(json.getString("img_url"), ac));
+                        map.put("image", json.getString("img_url"));
                         map.put("text", json.get("name"));
-                        data_list.add(map);
+                        gridViewAdapter.addData(map);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

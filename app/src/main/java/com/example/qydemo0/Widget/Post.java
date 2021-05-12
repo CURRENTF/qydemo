@@ -92,6 +92,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         // 进行 RecyclerView 的设置
         RecyclerView rec = mView.findViewById(R.id.recy_rec);
         adapter_rec = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
+        adapter_rec.setHasStableIds(true);
         wrapper_rec = new LoadMoreAndRefreshWrapper(adapter_rec);
 
         rec.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -109,6 +110,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
 
         RecyclerView follow = mView.findViewById(R.id.recy_like);
         adapter_follow = new LinearLayoutAdapter(new ArrayList<>(), Constant.mInstance.POST, getActivity());
+        adapter_follow.setHasStableIds(true);
         wrapper_follow = new LoadMoreAndRefreshWrapper(adapter_follow);
         follow.setLayoutManager(new LinearLayoutManager(getActivity()));
         follow.setNestedScrollingEnabled(false);

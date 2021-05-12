@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.qydemo0.FreeDanceActivity;
 import com.example.qydemo0.LearningListActivity;
+import com.example.qydemo0.Manager.MyLinearLayoutManager;
 import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.QYAdapter.EndlessRecyclerOnScrollListener;
 import com.example.qydemo0.QYAdapter.ImageNetAdapter;
@@ -111,11 +112,10 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         // 获取作品相关
 
         itemAdapter = new LinearLayoutAdapter(new ArrayList<JSONObject>(), Constant.mInstance.WORK, getActivity());
+        itemAdapter.setHasStableIds(true);
         wrapper = new LoadMoreAndRefreshWrapper(itemAdapter);
         RecyclerView recyclerView = mView.findViewById(R.id.works);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setSmoothScrollbarEnabled(true);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(wrapper);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
