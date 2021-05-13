@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:background="@color/qy_real_background">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="auto"
+        android:id="@+id/add_image"
+        android:layout_margin="15dp"
+        android:scaleType="fitXY"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_add"/>
+
+    <com.example.qydemo0.Widget.QYScrollView
+        android:id="@+id/scroll_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:paddingHorizontal="15dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/btn_bg_orange"
+                android:text="闯关模式"
+                android:textSize="22sp"
+                android:gravity="start|center"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:drawableEnd="@drawable/ic_goal"
+                android:id="@+id/challenge_mode"
+                android:layout_marginBottom="20dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:id="@+id/free_mode"
+                android:background="@drawable/btn_bg_blue"
+                android:drawableEnd="@drawable/ic_infinite"
+                android:paddingEnd="10dp"
+                android:paddingStart="20dp"
+                android:text="自由模式"
+                android:textColor="@color/white"
+                android:gravity="start|center"
+                android:textStyle="bold"
+                android:textSize="22sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <com.example.qydemo0.Widget.Tab
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ranks"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/challenge_rank"
+                    android:orientation="vertical"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/free_rank"
+                    android:orientation="vertical"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_rank"
+                    android:orientation="vertical"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.example.qydemo0.Widget.QYScrollView>
+
+</RelativeLayout>

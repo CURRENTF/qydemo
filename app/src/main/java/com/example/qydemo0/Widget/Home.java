@@ -10,23 +10,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.qydemo0.FollowerAndFanActivity;
 import com.example.qydemo0.FreeDanceActivity;
 import com.example.qydemo0.LearningListActivity;
+import com.example.qydemo0.Manager.MyLinearLayoutManager;
 import com.example.qydemo0.PlayerActivity;
+import com.example.qydemo0.QYAdapter.EndlessRecyclerOnScrollListener;
 import com.example.qydemo0.QYAdapter.ImageNetAdapter;
+import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
+import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
@@ -34,13 +37,13 @@ import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.R;
 import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
-import com.example.qydemo0.UserSettingActivity;
+import com.example.qydemo0.Widget.ListItem.LinearLayoutItem;
+import com.example.qydemo0.Widget.ListItem.WorkItem;
 import com.example.qydemo0.bean.DataBean;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,6 +55,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,13 +64,12 @@ import butterknife.Unbinder;
 public class Home extends RelativeLayout implements View.OnClickListener {
 
     private Activity context;
-    private View mView;
+    public View mView;
+    LinearLayoutAdapter itemAdapter;
+    LoadMoreAndRefreshWrapper wrapper;
 
-    public LinearLayout scrollViewForVideos = null;
-    public QYScrollView scrollView = null;
     Unbinder bind;
-    public int startPos = 0, len = 20;
-    TimeTool timeTool = new TimeTool();
+    public int startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
     QYFile.ResultContract qyr = new QYFile.ResultContract();
     ActivityResultLauncher launcher;
 
@@ -105,26 +108,30 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 .setOnBannerListener((data, position) -> {
                     Snackbar.make(banner_ad, ((DataBean) data).title, Snackbar.LENGTH_SHORT).show();
                 });
-        scrollViewForVideos = mView.findViewById(R.id.home_scroll_for_video_cover);
-        scrollView = mView.findViewById(R.id.scroll_home);
+
+        // 获取作品相关
+
+        itemAdapter = new LinearLayoutAdapter(new ArrayList<JSONObject>(), Constant.mInstance.WORK, getActivity());
+        itemAdapter.setHasStableIds(true);
+        wrapper = new LoadMoreAndRefreshWrapper(itemAdapter);
+        RecyclerView recyclerView = mView.findViewById(R.id.works);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(wrapper);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                Log.d("hjt.o", "bottom");
+                wrapper.setLoadState(wrapper.LOADING);
+                GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
+                getUserRecommendation.execute();
+            }
+        });
+        wrapper.setLoadState(wrapper.LOADING);
         GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
         getUserRecommendation.execute();
 
-        scrollView.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
-            @Override
-            public void onScrolledToBottom() {
-                if(!timeTool.checkFreq()) return;
-                GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
-                getUserRecommendation.execute();
-                Log.d("hjt.scroll.bottom", "true");
-                Log.d("hjt", "已添加");
-            }
-
-            @Override
-            public void onScrolledToTop() {
-                Log.d("hjt.scroll.top", "true");
-            }
-        });
+        // 设置一些监听
 
         FloatingActionButton fbtn = mView.findViewById(R.id.button_add_my_video);
         fbtn.setOnClickListener(this);
@@ -176,6 +183,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             default:
                 if(v == ezDance){
                     qyr.params = "audio";
+                    Toast.makeText(getActivity(), "选择喜欢的音乐来当BGM吧~", Toast.LENGTH_LONG).show();
                     launcher.launch(true);
                 }
         }
@@ -189,7 +197,7 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             Log.d("hjt.recommendation.info", String.valueOf(startPos) + "," + String.valueOf(len));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.user_recommendation_url +
                             Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -199,33 +207,17 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.user.recommendation.fail", "null");
             }
             else {
+                if(jsonArray.length() == 0) wrapper.setLoadState(wrapper.LOADING_END);
+                else wrapper.setLoadState(wrapper.LOADING_COMPLETE);
                 for(int i = 0; i < jsonArray.length(); i++){
-                    WorkItem w = new WorkItem(getActivity());
                     try {
-                        JSONObject j = (JSONObject) jsonArray.get(i);
-                        JSONObject coverInfo = j.getJSONObject("cover");
-                        w.init(coverInfo.getString("url"), j.getString("name"), j.getInt("like_num"),
-                                j.getInt("play_num"), j.getString("introduction"), j.getJSONObject("belong").getString("username"), j.getInt("id"));
+                        JSONObject json = (JSONObject) jsonArray.get(i);
+                        itemAdapter.addData(json);
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        return;
                     }
-                    scrollViewForVideos.addView(w);
-                    w.setOnClickListener(new SendWorkId());
-                    scrollViewForVideos.addView(Img.linearLayoutDivideLine(getActivity()));
                 }
             }
         }
     }
-
-    class SendWorkId implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), PlayerActivity.class);
-            intent.putExtra("id", ((WorkItem)v).id);
-            getActivity().startActivity(intent);
-        }
-    }
-
 }

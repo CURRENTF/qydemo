@@ -5,18 +5,15 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.content.AsyncTaskLoader;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -30,24 +27,20 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYFile;
-import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.Widget.LittleWorkItem;
+import com.example.qydemo0.Widget.ListItem.LittleWorkItem;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.utils.ImageSelector;
 import com.example.qydemo0.QYpack.Img;
-import com.google.android.exoplayer2.MediaItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.Vector;
 
 
@@ -244,7 +237,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         @Override
         protected Boolean doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            return MsgProcess.checkMsg(htp.advancePost(strings[0], Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.checkMsg(htp.advancePost(strings[0], Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -258,7 +251,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-    int workStart = 0, len = 20;
+    int workStart = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
 
     class GetMyWork extends AsyncTask<String, Integer, JSONArray>{
 
@@ -266,7 +259,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", String.valueOf(workStart), "lens", String.valueOf(len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -309,7 +302,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
             QYrequest htp = new QYrequest();
             String[] data = {"text", "string", p.getText().toString(),
                     "ap_work", "int", strings[0], "is_public", "bool", "true"};
-            return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false);
+            return MsgProcess.checkMsg(htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.post_url, "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override

@@ -17,7 +17,7 @@ import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.SmartItem;
+import com.example.qydemo0.Widget.ListItem.SmartItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,17 +80,17 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    int pr_startPos = 0, pr_len = 20;
+    int pr_startPos = 0, pr_len = Constant.mInstance.MAX_UPDATE_LEN;
     class GetLearningListProgress extends AsyncTask<String, Integer, JSONArray>{
 
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            Log.e("hjt.6666", Constant.mInstance.learn_list_url + "1/"
-                    + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
+//            Log.e("hjt.6666", Constant.mInstance.learn_list_url + "1/"
+//                    + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
@@ -122,7 +122,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "2/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
-                    "Authorization", GlobalVariable.mInstance.token), false);
+                    "Authorization", GlobalVariable.mInstance.token), false,  null);
         }
 
         @Override

@@ -1,6 +1,7 @@
 package com.example.qydemo0;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -8,10 +9,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qydemo0.QYpack.Constant;
@@ -24,7 +29,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import butterknife.BindView;
 import okhttp3.*;
+
+import static android.view.animation.AnimationUtils.loadAnimation;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -37,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
     private int loginWays[] = {R.id.fragment_username_login};
     private int registerWays[] = {R.id.fragment_username_register, R.id.fragment_username_register2};
     public String username, password;
+
+    ConstraintLayout layout;
 
     public class RegisterToLogin implements View.OnClickListener{
 
@@ -88,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     public void showRegister2UsernameFragment(){
         hideRegisterFragment();
         showFragment(C.default_register2_way);
-        EditText phone = findViewById(R.id.edit_text_phone_verify);
+        TextView phone = findViewById(R.id.edit_text_phone_verify);
         EditText ph = findViewById(R.id.edit_text_register_phone);
         phone.setText(ph.getText());
     }
@@ -112,24 +122,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if(getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
-
         hideLoginFragment(); hideRegisterFragment();
         showFragment(C.default_login_way);
 
         TextView btn = findViewById(R.id.button_login_to_register);
         btn.setOnClickListener(new LoginToRegister());
 
-        if(getSupportActionBar() != null){
-            getSupportActionBar().hide();
-        }
-
-        GlobalVariable.mInstance.appContext = this;
-
         View v = findViewById(R.id.container_login);
         v.getBackground().setAlpha(95);
-    }
 
+        Animation k = AnimationUtils.loadAnimation(this, R.anim.ani_login);
+        layout = findViewById(R.id.login);
+        layout.startAnimation(k);
+
+        ImageView logo = findViewById(R.id.logo);
+        Animation p = AnimationUtils.loadAnimation(this, R.anim.ani_logo);
+        logo.startAnimation(p);
+    }
 }

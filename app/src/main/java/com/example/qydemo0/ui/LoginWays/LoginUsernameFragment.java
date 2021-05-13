@@ -71,7 +71,7 @@ public class LoginUsernameFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, false, null);
             Log.d("hjtLoginReturnMsg", s);
             if(json != null){
                 ((LoginActivity) getActivity()).savMsg(json);

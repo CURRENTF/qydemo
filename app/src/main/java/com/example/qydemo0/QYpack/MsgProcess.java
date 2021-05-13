@@ -12,22 +12,6 @@ import org.json.JSONObject;
 
 public class MsgProcess {
 
-    static class ShowMsg extends AsyncTask<String, Integer, String>{
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Looper.prepare();
-            Toast.makeText(GlobalVariable.mInstance.appContext, strings[0], Toast.LENGTH_SHORT).show();
-            Looper.loop();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-        }
-    }
-
     public static String getWrongMsg(String msg){
         JSONObject json = null;
         try {
@@ -41,9 +25,9 @@ public class MsgProcess {
         return null;
     }
 
-    public static JSONObject msgProcess(String msg, Boolean status){
+    public static JSONObject msgProcess(String msg, Boolean status, String loc){
         Constant C = Constant.mInstance;
-        if(status) Log.d("hjt.msgProcess", msg);
+        if(status) Log.d("hjt.msgProcess:" + loc, msg);
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
@@ -64,9 +48,9 @@ public class MsgProcess {
         }
         return null;
     }
-    public static JSONArray msgProcessArr(String msg, Boolean status){
+    public static JSONArray msgProcessArr(String msg, Boolean status, String loc){
         Constant C = Constant.mInstance;
-        if(status) Log.d("hjt.msgProcess.arr", msg);
+        if(status) Log.d("hjt.msgProcess.arr:" + loc, msg);
         try {
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == C.HTTP_OK){
@@ -90,9 +74,9 @@ public class MsgProcess {
     }
 
 
-    public static boolean checkMsg(String msg, Boolean status){
+    public static boolean checkMsg(String msg, Boolean status, String location){
         try {
-            if(status) Log.d("hjt.check.msg", msg);
+            if(status) Log.d("hjt.check.msg:" + location, msg);
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == Constant.mInstance.HTTP_OK) return true;
         } catch (JSONException e) {

@@ -224,7 +224,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt.changeGender", s);
-            if(MsgProcess.checkMsg(s, true)) Toast.makeText(UserSettingActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+            if(MsgProcess.checkMsg(s, true, null)) Toast.makeText(UserSettingActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
         }
     }
 

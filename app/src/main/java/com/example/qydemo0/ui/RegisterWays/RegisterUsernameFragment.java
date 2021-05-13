@@ -98,7 +98,7 @@ public class RegisterUsernameFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, false, null);
             if(json != null){
                 getRegisterTokenAndUid(json);
                 ((LoginActivity) getActivity()).username = username.toString();

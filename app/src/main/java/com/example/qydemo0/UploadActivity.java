@@ -78,6 +78,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     String[] classfi = null;
     AutoCompleteTextView clas = null;
     JSONObject cover_json = null, video_json = null;
+    PlayerView p;
 
 
     @Override
@@ -92,7 +93,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         btn.setOnClickListener(this);
 
         player = new SimpleExoPlayer.Builder(getBaseContext()).build();
-        PlayerView p = findViewById(R.id.player_for_upload_video);
+        p = findViewById(R.id.player_for_upload_video);
         p.setPlayer(player);
 
         ImageView addTag = findViewById(R.id.button_add_tag);
@@ -133,6 +134,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()){
             case R.id.button_browse_file:
                 qyr.params = "video";
+                Toast.makeText(this, "选择你的视频~", Toast.LENGTH_LONG).show();
                 launcher.launch(true);
                 break;
             case R.id.button_upload_selected_video:
@@ -222,6 +224,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             ((TextView)findViewById(R.id.edit_text_file_url)).setText(getResources().getString(R.string.get_file_now));
             MediaItem mediaItem = MediaItem.fromUri(result);
             videoUri = result;
+            p.setVisibility(View.VISIBLE);
             player.setMediaItem(mediaItem);
             player.prepare();
             player.play();
@@ -239,7 +242,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(String s) {
             Log.d("hjt.upload.get.class", s);
-            JSONObject json = MsgProcess.msgProcess(s, true);
+            JSONObject json = MsgProcess.msgProcess(s, false, null);
             if(json != null){
                 try {
                     JSONArray ja = json.getJSONArray("classification");
@@ -248,7 +251,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                         classfi[i] = ((JSONObject)ja.get(i)).getString("name");
                         class_map.put(classfi[i], ((JSONObject)ja.get(i)).getInt("id"));
                     }
-                    ArrayAdapter<String> adapter =new ArrayAdapter<String>(UploadActivity.this, R.layout.auto_complete_textview, classfi);//适配器
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(UploadActivity.this, R.layout.auto_complete_textview, classfi);//适配器
                     clas.setAdapter(adapter);//设置适配器
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -280,7 +283,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(String s) {
             ShowProgressDialog.wait.dismiss();
             Log.d("hjt.upload.video.info", s);
-            if(MsgProcess.checkMsg(s, true)) Toast.makeText(UploadActivity.this, "成功上传", Toast.LENGTH_SHORT).show();
+            if(MsgProcess.checkMsg(s, false, null)) Toast.makeText(UploadActivity.this, "成功上传", Toast.LENGTH_SHORT).show();
             else Toast.makeText(UploadActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
         }
     }

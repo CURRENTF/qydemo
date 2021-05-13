@@ -11,14 +11,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
-import com.example.qydemo0.Widget.LittleUserItem;
+import com.example.qydemo0.Widget.ListItem.LittleUserItem;
 import com.example.qydemo0.Widget.QYScrollView;
 
 import org.json.JSONArray;
@@ -113,9 +112,9 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
 
         @Override
         protected void onPostExecute(String s) {
-            Log.e("hjt.fans", s);
-            if(!MsgProcess.checkMsg(s, true)) return;
-            write(MsgProcess.msgProcessArr(s, true), list_right);
+//            Log.e("hjt.fans", s);
+            if(!MsgProcess.checkMsg(s, true, "followersAndFans")) return;
+            write(MsgProcess.msgProcessArr(s, false, null), list_right);
             super.onPostExecute(s);
         }
     }
@@ -129,8 +128,8 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
 
         @Override
         protected void onPostExecute(String s) {
-            Log.e("hjt.followers", s);
-            write(MsgProcess.msgProcessArr(s, true), list_left);
+//            Log.e("hjt.followers", s);
+            write(MsgProcess.msgProcessArr(s, false, null), list_left);
             super.onPostExecute(s);
         }
     }

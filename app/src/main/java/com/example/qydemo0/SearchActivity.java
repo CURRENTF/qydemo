@@ -3,7 +3,6 @@ package com.example.qydemo0;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,18 +21,15 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYScrollView;
-import com.example.qydemo0.Widget.WorkItem;
+import com.example.qydemo0.Widget.ListItem.WorkItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class SearchActivity extends AppCompatActivity {
 
-    private int startPos = 0, len = 20;
+    private int startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
     public EditText search_txt = null;
     private LinearLayout qyScrollView = null;
     private QYScrollView qysv = null;
@@ -160,7 +156,7 @@ public class SearchActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if(s == null) return;
             Log.d("hjt.search", s);
-            JSONArray ja = MsgProcess.msgProcessArr(s, true);
+            JSONArray ja = MsgProcess.msgProcessArr(s, false, null);
             for(int i = 0; i < ja.length(); i++){
                 try {
                     JSONObject json = (JSONObject)ja.get(i);

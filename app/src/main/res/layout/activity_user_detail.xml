@@ -17,11 +17,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="bottom"
             android:orientation="vertical">
-
-            <LinearLayout
+            
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="400dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -109,19 +110,11 @@
                         android:layout_height="0.5dp"
                         android:background="@color/black"/>
 
-
-
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/posts"
                         android:orientation="vertical">
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1000dp"
-                            android:id="@+id/wwww1"/>
-
 
                     </LinearLayout>
 
@@ -129,12 +122,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/works"
+                        android:visibility="gone"
                         android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="1000dp"
-                            android:id="@+id/wwww2"/>
 
                     </LinearLayout>
 

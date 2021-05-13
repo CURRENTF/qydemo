@@ -26,6 +26,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures{
+        dataBinding = true
+    }
     repositories {
         flatDir {
             dirs 'libs'   // aar目录
@@ -62,7 +65,7 @@ dependencies {
     // Feature module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
 
-    // Testing QYNavigation
+    // Testing Navigation
     androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
 
     // Jetpack Compose Integration
