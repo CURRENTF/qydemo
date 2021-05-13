@@ -10,8 +10,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.example.qydemo0.GameActivity;
 import com.example.qydemo0.GameChallengeModeActivity;
 import com.example.qydemo0.R;
+
+import java.util.ArrayList;
 
 public class Game extends RelativeLayout {
 
@@ -60,6 +63,11 @@ public class Game extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
+                ArrayList<String> params = new ArrayList<>();
+                params.add("1");
+                intent.putStringArrayListExtra("GameParams", params);
+                intent.setClass(ac, GameActivity.class);
+                ac.startActivity(intent);
             }
         });
         String[] texts = {"闯关", "自由", "难度"};

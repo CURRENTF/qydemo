@@ -231,8 +231,8 @@ public class HumanDeposeActivity extends AppCompatActivity{
     }
 
     private void vibrate() {
-            Vibrator vibrator = (Vibrator) this.getSystemService(this.VIBRATOR_SERVICE);
-            vibrator.vibrate(100);
+//            Vibrator vibrator = (Vibrator) this.getSystemService(this.VIBRATOR_SERVICE);
+//            vibrator.vibrate(100);
     }
     
     private void init_player (String video_url){

@@ -27,9 +27,9 @@ import java.io.IOException;
 public class QYDIalog extends Dialog implements View.OnClickListener{
 
     //在构造方法里提前加载了样式
-    private Context context;//上下文
-    private int layoutResID;//布局文件id
-    private int[] listenedItem;//监听的控件id
+    Context context;//上下文
+    int layoutResID;//布局文件id
+    int[] listenedItem;//监听的控件id
     public QYDIalog(Context context,int layoutResID,int[] listenedItem){
         super(context, R.style.MyDialog);//加载dialog的样式
         this.context = context;

@@ -31,7 +31,7 @@ public class GameChallengeModeActivity extends AppCompatActivity {
         items = new GameCheckPointItem[5];
         for(int i = 0; i < 5; i++){
             containers[i] = findViewById(cs_id[i]);
-            items[i] = new GameCheckPointItem(this, pic_id[i]);
+            items[i] = new GameCheckPointItem(this, pic_id[i], i);
             containers[i].addView(items[i]);
         }
         Handler handler = new Handler(Looper.myLooper()){
