@@ -186,7 +186,8 @@ public class Dashboard extends RelativeLayout {
     }
 
     void reWriteInfo(JSONObject json){
-        if(!getActivity().hasWindowFocus()) return;
+//        if(!getActivity().hasWindowFocus()) return;
+//        Log.d("hjt.no_focus", "true");
         try {
             GlobalVariable.mInstance.uid = json.getString("uid");
         } catch (JSONException e) {
@@ -272,6 +273,7 @@ public class Dashboard extends RelativeLayout {
                     e.printStackTrace();
                 }
                 GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
+//                Log.d("hjt.user_json", json.toString());
                 reWriteInfo(json);
             }
         }

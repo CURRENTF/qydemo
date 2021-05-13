@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.example.qydemo0.GameChallengeModeActivity;
 import com.example.qydemo0.R;
 
 public class Game extends RelativeLayout {
@@ -51,7 +52,8 @@ public class Game extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-
+                intent.setClass(ac, GameChallengeModeActivity.class);
+                ac.startActivity(intent);
             }
         });
         free.setOnClickListener(new OnClickListener() {

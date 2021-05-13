@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="80dp"
+    android:layout_height="90dp">
+
+    <ImageView
+        android:id="@+id/img"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp"/>
+
+    <ImageView
+        android:id="@+id/lock"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_padlock"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="0dp"/>
+
+    <ImageView
+        android:id="@+id/medal"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_resource_super"
+        android:translationZ="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        android:layout_alignTop="@id/img"
+        android:background="#ffc20e"
+        android:tag="star"
+        android:id="@+id/star_0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:src="@color/star_dark"
+        android:tag="star"
+        android:id="@+id/star_1_0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/img" />
+
+    <ImageView
+        android:id="@+id/star_1_1"
+        android:layout_width="3dp"
+        android:layout_height="20dp"
+        android:src="@color/star_dark"
+        android:tag="star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img" />
+
+    <ImageView
+        android:id="@+id/star_2"
+        android:layout_width="3dp"
+        android:layout_height="40dp"
+        android:src="@color/star_dark"
+        android:tag="star"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/star_1_1"
+        tools:layout_editor_absoluteY="30dp" />
+
+    <ImageView
+        android:layout_width="3dp"
+        android:layout_height="20dp"
+        android:src="@color/star_light"
+        android:tag="star"
+        android:id="@+id/star_3_0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/star_2" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:src="@color/star_light"
+        android:id="@+id/star_3_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="3dp"
+        android:src="@color/star_light"
+        android:tag="star"
+        android:id="@+id/star_4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:src="@color/star_dark"
+        android:tag="star"
+        android:id="@+id/star_5_0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/star_5_1"
+        android:layout_width="3dp"
+        android:layout_height="20dp"
+        android:src="@color/star_dark"
+        android:tag="star"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/star_6"
+        android:layout_width="3dp"
+        android:layout_height="40dp"
+        android:src="@color/star_light"
+        android:tag="star"
+        app:layout_constraintBottom_toTopOf="@id/star_5_1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/star_7_0"
+        android:layout_width="3dp"
+        android:layout_height="20dp"
+        android:src="@color/star_light"
+        app:layout_constraintBottom_toTopOf="@id/star_6"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="3dp"
+        android:src="@color/star_light"
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/star_7_1"
+        app:layout_constraintTop_toTopOf="@id/star_7_0"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

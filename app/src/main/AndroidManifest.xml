@@ -25,7 +25,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".DetailCategoryActivity"></activity>
+        <activity android:name=".GameChallengeModeActivity"></activity>
+        <activity android:name=".DetailCategoryActivity" />
         <activity android:name=".ViewImageActivity" />
         <activity
             android:name=".PostDetailActivity"

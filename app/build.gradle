@@ -164,7 +164,7 @@ dependencies {
 //    implementation 'com.github.iielse:imageviewer:2.1.2'
 
     // button
-    implementation 'info.hoang8f:fbutton:1.0.5'
+//    implementation 'info.hoang8f:fbutton:1.0.5'
 
 }
 
