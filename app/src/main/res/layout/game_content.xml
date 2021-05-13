@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/game_cover"
+        android:scaleType="centerCrop"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="墙来了"
+        android:textAlignment="center"
+        android:textSize="80dp"
+        android:textColor="@color/real_pink"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        />
+
+    <TextView
+        android:id="@+id/segmentModel"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textSize="30dp"
+        android:text="闯关模式"
+        android:textColor="@color/qy_pink"
+        android:textAlignment="center"
+        android:background="@drawable/btn_render_choice_on"
+        />
+
+    <TextView
+        android:id="@+id/freeModel"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/segmentModel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="自由模式"
+        android:textColor="@color/qy_pink"
+        android:textSize="30dp"
+        android:textAlignment="center"
+        android:background="@drawable/btn_render_choice_on"
+        />
+
+    <Button
+        android:id="@+id/upload_img"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="上传"
+        android:textColor="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:background="@color/qy_pink"
+        />
+
+    <Button
+        android:id="@+id/phb"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:background="@color/qy_pink"
+        android:text="排行榜"
+        android:textColor="@color/white"
+        android:layout_margin="10dp"
+        />
+
+</RelativeLayout>

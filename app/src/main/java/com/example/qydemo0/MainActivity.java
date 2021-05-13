@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -18,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import android.content.pm.PackageManager;
@@ -33,15 +38,22 @@ import com.example.qydemo0.Widget.Home;
 import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.Widget.QYNavigation;
+import com.googlecode.mp4parser.authoring.tracks.TextTrackImpl;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.squareup.haha.perflib.Main;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -137,20 +149,16 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Log.i("StartCode",""+startCode);
-                Intent intent = new Intent(MainActivity.this, TestCanvas.class);
+//                Log.i("StartCode",""+startCode);
+                ArrayList<String> params = new ArrayList<>();
+                params.add("2");
+                params.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20190508%2F18%2F1557312867-xFCRluDivm.jpeg&refer=http%3A%2F%2Fimage.biaobaiju.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623054775&t=eda060d1b9671a786cb1e5c41f75d61b");
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putStringArrayListExtra("GameParams", params);
                 startActivity(intent);
 
-//                if(ContextCompat.checkSelfPermission(MainActivity.this,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-//                    ActivityCompat.requestPermissions(MainActivity.this,
-//                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-//                } else {
-//                    Intent intent = new Intent("android.intent.action.GET_CONTENT");
-//                    intent.setType("image/*");
-//
-//                }
-
+//                QYLoading qyLoading = new QYLoading(MainActivity.this);
+//                qyLoading.start_dialog();
             }
         });
         if (getSupportActionBar() != null) {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_play"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.qydemo0.QYpack.SampleVideo
+        android:id="@+id/video_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <ImageView
+        android:id="@+id/back_video"
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/to_left"
+        />
+
+    <ImageView
+        android:id="@+id/forward_video"
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/to_right"
+        />
+
+    <Button
+        android:id="@+id/build_depose_point"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="创建分隔点"
+        android:textColor="@color/white"
+        android:background="@color/qy_pink"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <Button
+        android:id="@+id/send_message"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:text="完成"
+        android:textColor="@color/white"
+        android:background="@color/qy_pink"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/build_depose_point"
+        />
+
+</RelativeLayout>

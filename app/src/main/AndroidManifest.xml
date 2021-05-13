@@ -15,6 +15,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -36,15 +38,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
-        <activity android:name=".KqwOneShot"></activity>
-        <activity android:name=".TestCanvas" />
+        <activity android:name=".SegmentChoiceActivity"></activity>
+        <activity android:name=".PopupSegmentPreLookActivity" />
+        <activity
+            android:name=".SegmentGameChoiceActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HumanDeposeActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" />
         <activity android:name=".ViewImageActivity" />
         <activity
             android:name=".PostDetailActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".SimplePlayerActivity" />
-        <activity android:name=".AiUnit.FaceFerActivity" />
         <activity
             android:name=".RenderQueueActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -69,6 +78,10 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
         <activity
+            android:name=".SegmentPreLookActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" />
+        <activity
             android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
@@ -86,6 +99,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".UploadActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GameContentActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait" />
         <activity

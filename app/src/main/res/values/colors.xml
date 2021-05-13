@@ -35,4 +35,5 @@
     <color name="qy_purple">#694d9f</color>
     <color name="light_color">#faa755</color>
     <color name="dark_color">#102b6a</color>
+    <color name='no_color'>#cc000000</color>
 </resources>

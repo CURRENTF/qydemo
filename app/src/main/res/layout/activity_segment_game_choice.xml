@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SegmentGameChoiceActivity"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/segment_game_cover"
+        android:scaleType="centerCrop"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:text="闯关模式"
+        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:textAlignment="center"
+        android:textColor="@color/qy_pink"
+        android:textSize="50dp"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+        >
+    <LinearLayout
+        android:id="@+id/segments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/one"
+            android:text="第一关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/two"
+            android:text="第二关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/three"
+            android:text="第三关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/four"
+            android:text="第四关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/five"
+            android:text="第五关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/six"
+            android:text="第六关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/seven"
+            android:text="第七关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/eight"
+            android:text="第八关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+        <TextView
+            android:id="@+id/nine"
+            android:text="第九关"
+            android:textSize="30dp"
+            android:textAlignment="center"
+            android:textColor="@color/qy_pink"
+            android:background="@drawable/btn_render_choice_on"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            />
+
+    </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

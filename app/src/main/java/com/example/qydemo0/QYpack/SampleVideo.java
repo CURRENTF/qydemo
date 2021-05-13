@@ -235,6 +235,18 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         }
     }
 
+    public void MirrorRoa(){
+        if (!mHadPlay) {
+            return;
+        }
+        if (mTransformSize == 0) {
+            mTransformSize = 1;
+        }else if (mTransformSize == 1) {
+            mTransformSize = 0;
+        }
+        resolveTransform();
+    }
+
 
     /**
      * 设置播放URL
@@ -400,5 +412,47 @@ public class SampleVideo extends StandardGSYVideoPlayer {
         switchVideoTypeDialog.show();
     }
 
+    /**
+     * 弹出切换倍速
+     */
+    private void showSwitchDialogSpeed() {
+        if (!mHadPlay) {
+            return;
+        }
+        SwitchVideoTypeDialog switchVideoTypeDialog = new SwitchVideoTypeDialog(getContext());
+        switchVideoTypeDialog.initList(mUrlList, new SwitchVideoTypeDialog.OnListItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                final String name = mUrlList.get(position).getName();
+                if (mSourcePosition != position) {
+                    if ((mCurrentState == GSYVideoPlayer.CURRENT_STATE_PLAYING
+                            || mCurrentState == GSYVideoPlayer.CURRENT_STATE_PAUSE)) {
+                        final String url = mUrlList.get(position).getUrl();
+                        onVideoPause();
+                        final long currentPosition = mCurrentPosition;
+                        getGSYVideoManager().releaseMediaPlayer();
+                        cancelProgressTimer();
+                        hideAllWidget();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                setUp(url, mCache, mCachePath, mTitle);
+                                setSeekOnStart(currentPosition);
+                                startPlayLogic();
+                                cancelProgressTimer();
+                                hideAllWidget();
+                            }
+                        }, 500);
+                        mTypeText = name;
+                        mSwitchSize.setText(name);
+                        mSourcePosition = position;
+                    }
+                } else {
+                    Toast.makeText(getContext(), "已经是 " + name, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        switchVideoTypeDialog.show();
+    }
 
 }

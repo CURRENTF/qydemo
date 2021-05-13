@@ -4,13 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AiUnit.FaceFerActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="1231231"
-        android:textSize="100dp"
-        />
+    tools:context=".PopupSegmentPreLookActivity">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

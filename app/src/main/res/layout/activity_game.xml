@@ -1,66 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameActivity">
+    android:background="@color/qy_pink"
+    >
 
     <ImageView
-        android:id="@+id/template_img"
+        android:id="@+id/template_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="200dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/btn_render_choice_on"
-        android:src="@drawable/christmas_3009949_1920"
         />
 
-    <Button
-        android:id="@+id/mirror"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
-        android:text="镜子"
-        android:textSize="12sp"
-        android:background="@color/purple_500"
-        android:textColor="@color/white"
-        android:layout_marginLeft="20dp"
-        android:layout_margin="20dp"/>
-
-    <Button
-        android:id="@+id/start_it"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="开始游戏"
-        android:textSize="30sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"
-        android:textColor="@color/white"
-        android:background="@color/purple_500"/>
+    <ImageView
+        android:id="@+id/user_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/logo"
+        android:rotation="-90"
+        />
 
     <SurfaceView
         android:id="@+id/sf"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        />
 
-<!--    <cn.forward.androids.views.BitmapScrollPicker-->
-<!--        android:id="@+id/picker"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="220dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:background="#888888"-->
-<!--        app:spv_disallow_intercept_touch="true"-->
-<!--        app:spv_draw_bitmap_height="50dp"-->
-<!--        app:spv_draw_bitmap_mode="center"-->
-<!--        app:spv_draw_bitmap_width="50dp"-->
-<!--        app:spv_is_circulation="false"-->
-<!--        app:spv_max_scale="1.2"-->
-<!--        app:spv_min_scale="0.6"-->
-<!--        app:spv_visible_item_count="3"-->
-<!--        />-->
+    <ImageView
+        android:id="@+id/mirror"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_mirror_round"
+        android:layout_margin="10dp"
+        />
+
+    <ImageView
+        android:id="@+id/start_it"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/ic_start_round"
+        />
+
+    <LinearLayout
+        android:id="@+id/layout_d"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        >
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:text="难度:"
+        android:textColor="@color/white"
+        android:layout_marginRight="2dp"
+        />
+        <TextView
+            android:id="@+id/difficulty"
+            android:layout_width="80dp"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"
+            android:text="未知"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pass_rate"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/layout_d"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="通过率:"
+            android:textColor="@color/white"
+            android:layout_marginRight="2dp"
+            />
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="未知"
+            android:textColor="@color/white"
+            />
+    </LinearLayout>
 
 </RelativeLayout>

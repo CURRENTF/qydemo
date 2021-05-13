@@ -93,11 +93,21 @@
 <!--                android:background="@drawable/button_circle_shape"-->
 <!--                android:text="镜子" />-->
 
+            <Button
+                android:id="@+id/humanPose"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_below="@id/mirror_btn"
+                android:layout_centerHorizontal="true"
+                android:text="huamn pose"
+                android:background="@color/qy_pink"
+                />
+
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/mirror_btn"
+                android:layout_below="@id/humanPose"
                 android:src="@drawable/ic_up_arrow2"
                 android:scaleType="fitCenter"
                 android:id="@+id/menu_btn"
@@ -202,25 +212,12 @@
         android:textColor="@color/red"
         />
 
-    <Button
-        android:text="开始"
-        android:id="@+id/start_a"
-        android:layout_height="50dp"
-        android:layout_width="100dp"
-        />
-    <Button
-        android:text="结束"
-        android:id="@+id/end_a"
-        android:layout_height="50dp"
-        android:layout_width="100dp"
-        android:layout_toRightOf="@+id/start_a"
-        />
-    <Button
-        android:text="取消"
-        android:id="@+id/cancel_a"
-        android:layout_height="50dp"
-        android:layout_width="100dp"
-        android:layout_toRightOf="@id/end_a"
+    <TextView
+        android:id="@+id/centerTextView"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         />
 
 </RelativeLayout>

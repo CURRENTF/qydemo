@@ -41,6 +41,7 @@ import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.example.qydemo0.Widget.QYDIalog;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 
@@ -48,6 +49,9 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +91,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     String path_cur;
     private Boolean is_record;
     private Boolean is_compare;
-    private ProgressDialog progressDialog;
+    private QYDIalog progressDialog;
+    private AVLoadingIndicatorView avi;
     SeekBar cur_process;
 
     RelativeLayout menu_op;
@@ -239,6 +244,10 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
 //        param.append(SpeechConstant.ENGINE_MODE+"="+ SpeechConstant.MODE_MSC);
 //        SpeechUtility.createUtility(GlobalVariable.mInstance.appContext, param.toString());
 
+        init_kqw();
+    }
+
+    private void init_kqw(){
         handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -284,6 +293,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     void init_detail_player(){
         detailPlayer.setUp(all_learn_video.get(0), true, "自由舞");
 
+        detailPlayer.setmSwitchSize(all_learn_video.get(0).get(0).getName());
         //增加封面
         coverImageView = new ImageView(this);
         coverImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -671,7 +681,10 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             is_record = false;
             //重置
             mRecorder.reset();
-            showProgressDialog("提示","保存中，请稍等...");
+            progressDialog = new QYDIalog(FreeDanceActivity.this, R.layout.loading_dialog, new int[]{R.id.avi});
+            progressDialog.show();
+            avi = progressDialog.findViewById(R.id.avi);
+            avi.smoothToShow();
             new waitForSave().execute(path_cur);
         } catch (Exception e) {
             e.printStackTrace();
@@ -766,31 +779,6 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         }
     }
 
-    public void showProgressDialog(String title, String message) {
-        if (progressDialog == null) {
-
-            progressDialog = ProgressDialog.show(FreeDanceActivity.this, title,
-                    message, true, false);
-        } else if (progressDialog.isShowing()) {
-            progressDialog.setTitle(title);
-            progressDialog.setMessage(message);
-        }
-
-        progressDialog.show();
-
-    }
-
-    /*
-     * 隐藏提示加载
-     */
-    public void hideProgressDialog() {
-
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-
-    }
-
     @Override
     protected void onResume() {
         getCurPlay().onVideoResume();
@@ -823,7 +811,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         @Override
         protected void onPostExecute(Boolean is_success) {
             super.onPostExecute(is_success);
-            hideProgressDialog();
+            avi.smoothToHide();
+            progressDialog.dismiss();
             if(!is_success){
                 Toast.makeText(FreeDanceActivity.this,"出错啦,请重新录制",Toast.LENGTH_LONG).show();
             }
@@ -841,6 +830,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
                     File f=new File(strings[0]);
                     if(f.exists())
                     {
+                        Log.i("whc_", "Yes");
                         return true;
                     }
 

@@ -3,6 +3,7 @@ package com.example.qydemo0;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.Image;
@@ -142,6 +143,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Bundle bundle = this.getIntent().getExtras();
         ButterKnife.bind(this);
         qyscrollview_comment = (QYScrollView) findViewById(R.id.qyscrollview_comment);
@@ -281,6 +283,37 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 postDetailNestedScroll.startAnimation(l_out);
                 qyscrollview_comment.startAnimation(l_in);
                 recall_pager.startAnimation(l_in);
+            }
+        });
+
+        findViewById(R.id.segment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PlayerActivity.this, HumanDeposeActivity.class);
+                ArrayList<String> data1 = new ArrayList<String>();
+                try {
+                    JSONObject cur_urls = player_urls;
+                    if(cur_urls.has("1080P")) {
+                        data1.add(cur_urls.getString("1080P"));
+                    }
+                    else if(cur_urls.has("720P")) {
+                        data1.add(cur_urls.getString("720P"));
+                    }
+                    else if(cur_urls.has("480P")) {
+                        data1.add(cur_urls.getString("480P"));
+                    }
+                    else if(cur_urls.has("360P")) {
+                        data1.add(cur_urls.getString("360P"));
+                    }
+                    else if(cur_urls.has("自动")) {
+                        data1.add(cur_urls.getString("自动"));
+                    }
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                intent.putStringArrayListExtra("params", data1);
+                startActivity(intent);
             }
         });
     }
@@ -575,7 +608,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         //打开  实现竖屏全屏动画
         detailPlayer.setShowFullAnimation(true);
 
-        detailPlayer.setNeedLockFull(true);
+//        detailPlayer.setNeedLockFull(true);
         detailPlayer.setSeekRatio(1);
         //detailPlayer.setOpenPreView(false);
         detailPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
