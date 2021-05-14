@@ -128,9 +128,9 @@ public class HumanDeposeActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_human_depose_acivity);
-//        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
-//        init_player(list.get(0));
-        init_player("/sdcard/Pictures/QQ/res123.mp4");
+        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+        init_player(list.get(0));
+        //init_player("/sdcard/Pictures/QQ/res123.mp4");
         dm = getApplicationContext().getResources().getDisplayMetrics();
         width_px = dm.widthPixels;
         deposing_video_duration = videoPlayer.getGSYVideoManager().getDuration();
