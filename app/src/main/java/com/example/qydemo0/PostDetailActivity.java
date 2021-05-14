@@ -122,8 +122,14 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
-                 if(like_op == 1) postItem.like_img.setImageResource(R.drawable.like_gray);
-                 else postItem.like_img.setImageResource(R.drawable.ic_like);
+                 if(like_op == 1) {
+                     postItem.like_img.setImageResource(R.drawable.like_gray);
+                     postItem.incLikes();
+                 }
+                 else {
+                     postItem.like_img.setImageResource(R.drawable.ic_like);
+                     postItem.decLikes();
+                 }
             }
             else {
                 like_op *= -1;

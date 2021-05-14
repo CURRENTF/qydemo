@@ -64,7 +64,10 @@ public class PostItem extends LinearLayoutItem {
         if(filled) return;
         try{
             boolean a = json.getBoolean("a"), b = json.getBoolean("b");
-            init(json, a, b, true);
+            if(json.has("is_detail")){
+                init(json, a, b, json.getBoolean("is_detail"));
+            }
+            else init(json, a, b, true);
             filled = true;
         }catch (JSONException e){
             init(json, true, true, true);
@@ -119,6 +122,18 @@ public class PostItem extends LinearLayoutItem {
         }
     }
 
+    TextView like_num;
+    public void incLikes(){
+        CharSequence t = like_num.getText();
+        int k = Integer.parseInt(t.toString());
+        like_num.setText(String.valueOf(k + 1));
+    }
+    public void decLikes(){
+        CharSequence t = like_num.getText();
+        int k = Integer.parseInt(t.toString());
+        like_num.setText(String.valueOf(k - 1));
+    }
+
     // mode:
     // 0 只有文字
     // 1 文字+作品
@@ -148,6 +163,7 @@ public class PostItem extends LinearLayoutItem {
         post_content = mView.findViewById(R.id.post_content);
         btn_follow = mView.findViewById(R.id.btn_follow);
         like_img = mView.findViewById(R.id.like_img);
+        like_num = mView.findViewById(R.id.like_num);
         try {
             if(json.getString("follow").equals("true")){
                 btn_follow.setText("已关注");
@@ -169,9 +185,8 @@ public class PostItem extends LinearLayoutItem {
             else {
                 btn_follow.setText("");
             }
-            TextView txt = mView.findViewById(R.id.like_num);
-            txt.setText(String.valueOf(json.getInt("like_num")));
-            txt = mView.findViewById(R.id.post_comment_num);
+            like_num.setText(String.valueOf(json.getInt("like_num")));
+            TextView txt = mView.findViewById(R.id.post_comment_num);
             txt.setText(json.getString("comment_num"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -275,10 +290,16 @@ public class PostItem extends LinearLayoutItem {
         }
     }
 
+    LinearLayout operation;
+
     public void init(JSONObject json, boolean a, boolean b, boolean is_detail){
         init(json);
         if(a) setIntentToDetail();
         if(b) setIntentToPostDetail();
+        if(!is_detail){
+//            operation = mView.findViewById(R.id.operation);
+//            operation.setVisibility(GONE);
+        }
     }
 
     public int getQYHeight(){

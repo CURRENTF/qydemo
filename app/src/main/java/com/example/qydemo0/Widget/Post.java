@@ -217,6 +217,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                     JSONObject json = jsonArray.getJSONObject(i);
                     json.put("a", "true");
                     json.put("b", "true");
+                    json.put("is_detail", "false");
                     adapter_follow.addData(json);
                     wrapper_follow.notifyDataSetChanged();
                 } catch (JSONException e) {
