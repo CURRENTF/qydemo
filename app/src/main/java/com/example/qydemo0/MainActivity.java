@@ -34,6 +34,7 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.WaveLoadDialog;
 import com.example.qydemo0.Widget.Category;
 import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.Widget.Game;
@@ -163,8 +164,11 @@ public class MainActivity extends AppCompatActivity {
 //                intent.putStringArrayListExtra("GameParams", params);
 //                startActivity(intent);
 
-                QYLoading qyLoading = new QYLoading(MainActivity.this);
-                qyLoading.start_dialog();
+//                QYLoading qyLoading = new QYLoading(MainActivity.this);
+//                qyLoading.start_dialog();
+                WaveLoadDialog mWave = new WaveLoadDialog(MainActivity.this);
+                mWave.start_progress();
+                mWave.set_progress(0.5f);
             }
         });
         if (getSupportActionBar() != null) {

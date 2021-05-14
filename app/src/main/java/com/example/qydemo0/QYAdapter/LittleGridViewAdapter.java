@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,27 +18,17 @@ import com.example.qydemo0.DetailCategoryActivity;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class GridViewAdapter extends ArrayAdapter<Map<String, Object>> {
+public class LittleGridViewAdapter extends GridViewAdapter {
 
-    Context mContext;
-    int layoutResId;
-    List<Map<String, Object>> dataList;
-
-
-    public GridViewAdapter(@NonNull Context context, int resource, @NonNull List<Map<String, Object>> objects) {
+    TextView outer;
+    ViewHolder lastHolder;
+    public LittleGridViewAdapter(@NonNull Context context, int resource, @NonNull List<Map<String, Object>> objects, TextView txt) {
         super(context, resource, objects);
-        mContext = context;
-        layoutResId = resource;
-        dataList = objects;
-    }
-
-    public void addData(Map<String, Object> m){
-        dataList.add(m);
-        notifyDataSetChanged();
+        lastHolder = null;
+        outer = txt;
     }
 
     @NonNull
@@ -63,23 +52,16 @@ public class GridViewAdapter extends ArrayAdapter<Map<String, Object>> {
         Img.url2imgViewRoundRectangle(url, holder.img, mContext, 20);
         holder.text.setText(text);
         holder.clas.setOnClickListener(new View.OnClickListener(){
-
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass((Activity)mContext, DetailCategoryActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("name", (String) holder.text.getText());
-                intent.putExtras(bundle);
-                ((Activity)mContext).startActivity(intent);
+                holder.clas.setBackground(mContext.getDrawable(R.drawable.gradient_color_orange_no_padding));
+                outer.setText(holder.text.getText());
+                if(lastHolder != null){
+                    lastHolder.clas.setBackgroundResource(0);
+                }
+                lastHolder = holder;
             }
         });
         return convertView;
-    }
-
-    public class ViewHolder {
-        TextView text;
-        ImageView img;
-        LinearLayout clas;
     }
 }

@@ -85,7 +85,8 @@
                     android:drawableLeft="@drawable/ic_note"
                     android:drawablePadding="8dp"
                     android:text="@string/learning_list"
-                    android:textSize="18dp"/>
+                    android:textColor="@color/white"
+                    android:textSize="18sp"/>
 
                 <Button
                     android:id="@+id/button_image_free_dance"
@@ -97,7 +98,8 @@
                     android:drawableLeft="@drawable/ic_freedom"
                     android:drawablePadding="8dp"
                     android:text="@string/dance_free"
-                    android:textSize="18dp" />
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
 
             </LinearLayout>
 

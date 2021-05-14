@@ -68,7 +68,7 @@
                 android:layout_height="match_parent"
                 android:text="CoolBoy"
                 android:textSize="12sp"
-                android:textColor="@color/real_pink"
+                android:textColor="@color/red"
                 android:id="@+id/uploader"/>
         </LinearLayout>
         <LinearLayout

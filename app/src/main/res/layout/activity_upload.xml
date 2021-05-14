@@ -38,6 +38,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.4"
                         android:id="@+id/button_browse_file"
+                        android:textColor="@color/white"
                         android:text="@string/browse"/>
                 </LinearLayout>
 
@@ -98,13 +99,35 @@
                         android:layout_height="wrap_content"
                         android:useDefaultMargins="true"
                         android:id="@+id/tags"/>
-                    <AutoCompleteTextView
+                    <TextView
                         android:layout_width="match_parent"
                         android:textSize="14sp"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
                         android:id="@+id/text_class_upload"
+                        android:visibility="gone"
                         android:hint="@string/video_category"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="start"
+                            android:gravity="center"
+                            android:layout_margin="3dp"
+                            android:text="分类"
+                            android:textSize="16sp"/>
+                        <com.example.qydemo0.Widget.MyGridView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:numColumns="auto_fit"
+                            android:columnWidth="50dp"
+                            android:horizontalSpacing="10dp"
+                            android:verticalSpacing="10dp"
+                            android:id="@+id/class_grid"/>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -141,6 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/upload"
+                android:textColor="@color/white"
                 android:id="@+id/button_upload_selected_video"/>
 
 

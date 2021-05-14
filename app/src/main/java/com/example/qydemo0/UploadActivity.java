@@ -26,12 +26,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.qydemo0.QYAdapter.GridViewAdapter;
+import com.example.qydemo0.QYAdapter.LittleGridViewAdapter;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -60,6 +63,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.channels.AsynchronousChannelGroup;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -76,10 +80,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     Set<String> tagSet = new TreeSet<>();
     Map<String, Integer> class_map = new HashMap<>();
     String[] classfi = null;
-    AutoCompleteTextView clas = null;
+    TextView clas = null;
     JSONObject cover_json = null, video_json = null;
     PlayerView p;
-
+    GridView class_list;
+    LittleGridViewAdapter gridViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +105,10 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         addTag.setOnClickListener(this);
 
         clas = findViewById(R.id.text_class_upload);
-        clas.setThreshold(0);//最多几个字符开始匹配
-        clas.setDropDownHeight(500);//设置下拉菜单高度
-        clas.setDropDownHorizontalOffset(10);//设置下路列表和文本框水平偏移
-        clas.setDropDownVerticalOffset(-500-200);//设置下拉列表和文本框垂直偏移
-        clas.setDropDownWidth(800);//设置下拉列表宽度
+
+        class_list = findViewById(R.id.class_grid);
+        gridViewAdapter = new LittleGridViewAdapter(this, R.layout.little_category_item, new ArrayList<Map<String, Object>>(), clas);
+        class_list.setAdapter(gridViewAdapter);
 
         GetClasInfo g = new GetClasInfo();
         g.execute();
@@ -140,7 +144,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.button_upload_selected_video:
                 if(videoUri != null){
                     String video_name = ((EditText)findViewById(R.id.edit_text_file_name)).getText().toString(),
-                            classification = ((EditText)findViewById(R.id.text_class_upload)).getText().toString();
+                            classification = ((TextView)findViewById(R.id.text_class_upload)).getText().toString();
                     String[] tags = new String[tagSet.size()];
                     String intro = ((EditText)findViewById(R.id.edit_text_introduction)).getText().toString();
                     int i = 0;
@@ -190,7 +194,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     newTag.setPadding(pad, pad, pad, pad);
                     newTag.setText(s);
                     newTag.setBackground(ContextCompat.getDrawable(this, R.drawable.tag));
-                    newTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+                    newTag.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
                     newTag.setTextColor(ContextCompat.getColor(this, R.color.exo_white));
                     Integer id = View.generateViewId();
                     idSet.add(id);
@@ -248,11 +252,18 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     JSONArray ja = json.getJSONArray("classification");
                     classfi = new String[ja.length()];
                     for(int i = 0; i < ja.length(); i++){
+//                        Log.d("hjt.show_data", ((JSONObject)ja.get(i)).toString());
                         classfi[i] = ((JSONObject)ja.get(i)).getString("name");
                         class_map.put(classfi[i], ((JSONObject)ja.get(i)).getInt("id"));
                     }
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(UploadActivity.this, R.layout.auto_complete_textview, classfi);//适配器
-                    clas.setAdapter(adapter);//设置适配器
+
+                    for(int i = 0; i < ja.length(); i++){
+                        JSONObject js = ja.getJSONObject(i);
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("text", js.getString("name"));
+                        map.put("image", js.getString("img_url"));
+                        gridViewAdapter.addData(map);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
