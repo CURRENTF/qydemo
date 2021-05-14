@@ -1,32 +1,25 @@
 package com.example.qydemo0;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.hardware.Camera;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseIntArray;
-import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -36,9 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -61,19 +52,14 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.KqwOneShot;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.QYpack.WaveLoadDialog;
-import com.example.qydemo0.Widget.QYDIalog;
-import com.example.qydemo0.utils.FucUtil;
-import com.example.qydemo0.utils.JsonParser;
-import com.example.qydemo0.utils.XmlParser;
-import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.SpeechUtility;
-import com.iflytek.cloud.VoiceWakeuper;
+import com.example.qydemo0.utils.SoundTipUtil;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
@@ -84,13 +70,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -99,21 +83,6 @@ import moe.codeest.enviews.ENDownloadView;
 import moe.codeest.enviews.ENPlayView;
 
 import static android.view.View.GONE;
-
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.GrammarListener;
-import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.LexiconListener;
-import com.iflytek.cloud.RecognizerListener;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
-import com.iflytek.cloud.util.ContactManager;
-import com.iflytek.cloud.util.ContactManager.ContactListener;
-import com.iflytek.cloud.util.ResourceUtil;
-import com.iflytek.cloud.util.ResourceUtil.RESOURCE_TYPE;
-import com.example.qydemo0.utils.FucUtil;
 
 /**
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
@@ -189,7 +158,6 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private int wid;
 
     RelativeLayout.LayoutParams people_all = new RelativeLayout.LayoutParams(350, 910);
-    RelativeLayout.LayoutParams people_tiny = new RelativeLayout.LayoutParams(1,1);
     private JSONArray urls_jsonarry = new JSONArray();
 
     private QYrequest learn_request = new QYrequest();
@@ -212,11 +180,13 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     RelativeLayout.LayoutParams fill_all_r = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT);
-    DisplayMetrics dm = getResources().getDisplayMetrics();
-    int heightPixels = dm.heightPixels;
-    RelativeLayout.LayoutParams fill_all = new RelativeLayout.LayoutParams((int) heightPixels*1280/720, heightPixels);
+    RelativeLayout.LayoutParams fill_all;
 
     Handler handler;
+
+    ImageView cover_start_icon;
+
+    private KqwOneShot kqw;
 
     private boolean is_playing = true;
     private PoseHuman phl,phr;
@@ -234,6 +204,10 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         smile_word = (TextView) findViewById(R.id.smile_word);
 
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int heightPixels = dm.heightPixels;
+        fill_all = new RelativeLayout.LayoutParams((int) heightPixels*1280/720, heightPixels);
 
         fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
         fill_tiny = new RelativeLayout.LayoutParams(1,1);
@@ -280,7 +254,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         initViews();
         ButterKnife.bind(this);
         new InitAllLearn().execute(wid);
-        init_view();
+        init_pose_view();
         findViewById(R.id.humanPose).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -288,6 +262,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             }
         });
         init_kqw();
+
+
+
     }
 
     private void init_kqw(){
@@ -298,9 +275,13 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 super.handleMessage(msg);
                 Bundle bundle = msg.getData();
                 String dataa = bundle.getString("msg");
-                if(dataa.equals("【打开】镜子") || dataa.equals("【关闭】镜子")) {
-                    btn_mirrors();
-                    if(!is_compare) {
+                if(dataa.equals("【打开】镜子")) {
+                    if(btn_mirrors(1) && !detailPlayer.getGSYVideoManager().isPlaying()) {
+                        SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
+                    }
+                }
+                else if(dataa.equals("【关闭】镜子")) {
+                    if(btn_mirrors(0) && !detailPlayer.getGSYVideoManager().isPlaying()) {
                         SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
                     }
                 }
@@ -320,12 +301,14 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
                 }
                 else if (dataa.equals("【镜像】翻转")) {
                     detailPlayer.MirrorRoa();
-                    SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
+                    if(!detailPlayer.getGSYVideoManager().isPlaying()) {
+                        SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
+                    }
                 }
             }
         };
 
-        KqwOneShot kqw = new KqwOneShot(this, handler);
+        kqw = new KqwOneShot(this, handler);
         kqw.btn_grammar();
     }
 
@@ -353,25 +336,29 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         }
     }
 
-    private void btn_mirrors(){
+    private boolean btn_mirrors(int isi){
         if(!is_compare) {
-            if (!mirror_status) {
+            if (!mirror_status && isi == 1) {
 //                        btn1.setText("恢复");
                 mirror_status = true;
                 mSurfaceView.setLayoutParams(fill_all);
                 black_back.setLayoutParams(fill_all_r);
-            } else {
+                return true;
+            } else if(mirror_status && isi == 0){
 //                        btn1.setText("镜子");
                 mirror_status = false;
                 mSurfaceView.setLayoutParams(fill_tiny);
                 black_back.setLayoutParams(fill_tiny);
+                return true;
             }
         }
+        return false;
     }
 
     private void btn_start(){
         if (!is_compare) {
             if (!is_learn) {
+                cover_start_icon.setVisibility(View.VISIBLE);
                 is_learn = true;
                 init_learn_view();
                 detailPlayer.startPlayLogic();
@@ -483,9 +470,8 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             }
         });
 
-
-
         detailPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+
             @Override
             public void onPrepared(String url, Object... objects) {
                 super.onPrepared(url, objects);
@@ -536,6 +522,12 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             @Override
             public void onClickStartError(String url, Object... objects) {
                 super.onClickStartError(url, objects);
+            }
+
+            @Override
+            public void onClickResume(String url, Object... objects) {
+                super.onClickResume(url, objects);
+                Log.i("whc_lll", "here");
             }
         });
 
@@ -608,7 +600,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_mirrors();
+                if(!btn_mirrors(0)){
+                    btn_mirrors(1);
+                }
             }
         });
 
@@ -756,6 +750,9 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         holder.setFormat(PixelFormat.TRANSPARENT);
         holder.setKeepScreenOn(true);
         holder.addCallback(this); // holder加入回调接口
+
+        cover_start_icon = findViewById(R.id.cover_start_icon);
+        cover_start_icon.setVisibility(GONE);
     }
 
     /**
@@ -819,6 +816,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         }
         mCVClient.releaseService();
         mCVClient = null;
+        kqw.btn_stop();
     }
 
     private GSYVideoPlayer getCurPlay() {
@@ -861,7 +859,6 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
      * 开始录制
      */
     private void startRecord() {
-
         if (mRecorder == null) {
             mRecorder = new MediaRecorder(); // 创建MediaRecorder
         }
@@ -935,6 +932,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             e.printStackTrace();
         }
         isRecording = false;
+        cover_start_icon.setVisibility(GONE);
     }
 
     private void init_compare_video(){
@@ -1254,7 +1252,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         }
     }
 
-    private void init_view(){
+    private void init_pose_view(){
         phl = new PoseHuman(this, rawPointsL);
         phr = new PoseHuman(this, rawPointsR);
         RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(800, 800);
