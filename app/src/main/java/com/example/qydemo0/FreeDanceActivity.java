@@ -1,7 +1,6 @@
 package com.example.qydemo0;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -27,7 +26,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -38,20 +36,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYpack.AudioPlayer;
 import com.example.qydemo0.QYpack.DeviceInfo;
-import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.KqwOneShot;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.Widget.QYDIalog;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechUtility;
+import com.example.qydemo0.Widget.QYLoading;
+import com.example.qydemo0.utils.SoundTipUtil;
 
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +61,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 
 /**
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
@@ -91,7 +88,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     String path_cur;
     private Boolean is_record;
     private Boolean is_compare;
-    private QYDIalog progressDialog;
+    private QYLoading qyLoading;
     private AVLoadingIndicatorView avi;
     SeekBar cur_process;
 
@@ -136,6 +133,10 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     boolean mirror_status = false;
 
     static private Handler handler;
+
+    ImageView cover_start_icon;
+
+    private KqwOneShot kqw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +216,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             public void onClick(View v) {
                 if (!is_compare) {
                     if (!is_learn) {
+                        cover_start_icon.setVisibility(VISIBLE);
                         is_learn = true;
                         init_learn_view();
                         detailPlayer.startPlayLogic();
@@ -264,7 +266,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             }
         };
 
-        KqwOneShot kqw = new KqwOneShot(this, handler);
+        kqw = new KqwOneShot(this, handler);
         kqw.btn_grammar();
     }
 
@@ -460,6 +462,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         holder.setFormat(PixelFormat.TRANSPARENT);
         holder.setKeepScreenOn(true);
         holder.addCallback(this); // holder加入回调接口
+        cover_start_icon = findViewById(R.id.cover_start_icon);
+        cover_start_icon.setVisibility(GONE);
     }
 
     private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
@@ -567,6 +571,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             mCoverMedia.release();
             mCoverMedia = null;
         }
+        kqw.btn_stop();
     }
 
     private GSYVideoPlayer getCurPlay() {
@@ -617,7 +622,6 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
      * 开始录制
      */
     private void startRecord() {
-
         if (mRecorder == null) {
             mRecorder = new MediaRecorder(); // 创建MediaRecorder
         }
@@ -681,15 +685,14 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             is_record = false;
             //重置
             mRecorder.reset();
-            progressDialog = new QYDIalog(FreeDanceActivity.this, R.layout.loading_dialog, new int[]{R.id.avi});
-            progressDialog.show();
-            avi = progressDialog.findViewById(R.id.avi);
-            avi.smoothToShow();
             new waitForSave().execute(path_cur);
         } catch (Exception e) {
             e.printStackTrace();
         }
         isRecording = false;
+
+        cover_start_icon.setVisibility(GONE);
+
     }
 
     private void init_compare_video(){
@@ -808,11 +811,18 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     }
 
     public class waitForSave extends AsyncTask<String, Void,Boolean>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            qyLoading = new QYLoading(FreeDanceActivity.this);
+            qyLoading.start_dialog();
+        }
+
         @Override
         protected void onPostExecute(Boolean is_success) {
             super.onPostExecute(is_success);
-            avi.smoothToHide();
-            progressDialog.dismiss();
+            qyLoading.stop_dialog();
             if(!is_success){
                 Toast.makeText(FreeDanceActivity.this,"出错啦,请重新录制",Toast.LENGTH_LONG).show();
             }

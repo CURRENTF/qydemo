@@ -15,8 +15,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -38,7 +38,6 @@
         <activity android:name=".ViewImageActivity" />
         <activity android:name=".GameChallengeModeActivity"></activity>
         <activity android:name=".DetailCategoryActivity" />
-        <activity android:name=".ViewImageActivity" />
         <activity
             android:name=".PostDetailActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -68,11 +67,7 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".SegmentPreLookActivity"
-        <activity
-            android:name=".VideoRenderActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="landscape" />
+            android:name=".SegmentPreLookActivity"/>
         <activity
             android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"

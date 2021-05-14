@@ -1,4 +1,4 @@
-package com.example.qydemo0;
+package com.example.qydemo0.QYpack;
 
 import java.io.InputStream;
 
@@ -31,7 +31,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-class KqwOneShot{
+public class KqwOneShot{
     private String TAG = "ivw";
     private Toast mToast;
     private TextView textView;

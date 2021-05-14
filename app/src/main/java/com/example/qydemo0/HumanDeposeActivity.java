@@ -36,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.aiunit.core.FrameData;
@@ -59,6 +60,7 @@ import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.entry.Image;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
@@ -117,14 +119,18 @@ public class HumanDeposeActivity extends AppCompatActivity{
 
     long timeDown, timeUp;
 
+    private EditText intro;
+
+    private QYDIalog qydIalog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_human_depose_acivity);
-        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
-        init_player(list.get(0));
-//        init_player("/sdcard/Pictures/QQ/res_r11.mp4");
+//        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+//        init_player(list.get(0));
+        init_player("/sdcard/Pictures/QQ/res123.mp4");
         dm = getApplicationContext().getResources().getDisplayMetrics();
         width_px = dm.widthPixels;
         deposing_video_duration = videoPlayer.getGSYVideoManager().getDuration();
@@ -225,7 +231,10 @@ public class HumanDeposeActivity extends AppCompatActivity{
             @Override
             public void onClick(View view){
                 Log.i("whc__", "clicking");
-                new sendParams().execute();
+                qydIalog = new QYDIalog(HumanDeposeActivity.this, R.layout.human_seg_intro, new int[]{R.id.upload, R.id.cancel});
+                qydIalog.show();
+                intro = qydIalog.findViewById(R.id.intro);
+                qydIalog.setOnCenterItemClickListener(new lsr());
             }
         });
     }
@@ -351,6 +360,27 @@ public class HumanDeposeActivity extends AppCompatActivity{
             }
             else{
                 Log.i("whc__","YES!");
+            }
+        }
+    }
+
+    class lsr implements QYDIalog.OnCenterItemClickListener{
+
+        @Override
+        public void OnCenterItemClick(QYDIalog dialog, View view) {
+            switch (view.getId()){
+                case R.id.upload:
+                    String content = intro.getText().toString();
+                    if(content.equals("")){
+                        Toast.makeText(HumanDeposeActivity.this, "输入简介不能为空", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(HumanDeposeActivity.this, content, Toast.LENGTH_SHORT).show();
+                        //new sendParams().execute();
+                    }
+                    break;
+                case R.id.cancel:
+                    qydIalog.dismiss();
+                    break;
             }
         }
     }

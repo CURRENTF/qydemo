@@ -36,7 +36,8 @@ public class Constant {
         learn_url = "https://api.yhf2000.cn/api/qingying/v1/learning/",
         learn_list_url = "https://api.yhf2000.cn/api/qingying/v1/learning/learn/",
         record_url = "https://api.yhf2000.cn/api/qingying/v1/learning/record/",
-        render_progress_url = "https://api.yhf2000.cn/api/qingying/v1/task/schedule/";
+        render_progress_url = "https://api.yhf2000.cn/api/qingying/v1/task/schedule/",
+        game_url = "https://api.yhf2000.cn/api/qingying/v1/game/";
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
 
