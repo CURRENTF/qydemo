@@ -6,7 +6,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -168,6 +172,8 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    TextView outLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,6 +183,20 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         ((LinearLayout)findViewById(R.id.setting_username)).setOnClickListener(this);
         ((LinearLayout)findViewById(R.id.setting_sign)).setOnClickListener(this);
         GlobalVariable.mInstance.appContext = this;
+        outLogin = findViewById(R.id.cancel_login);
+        outLogin.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                GlobalVariable.mInstance.tokenExisted = false;
+                SharedPreferences sp = getSharedPreferences(Constant.mInstance.database, Context.MODE_PRIVATE);
+                GlobalVariable.mInstance.saveAllVar(sp);
+                Intent it = new Intent();
+                it.setClass(UserSettingActivity.this, LoginActivity.class);
+                it.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(it);
+                finish();
+            }
+        });
     }
 
     void writeInfo(){
@@ -308,4 +328,6 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
             super.onPostExecute(aBoolean);
         }
     }
+
+
 }

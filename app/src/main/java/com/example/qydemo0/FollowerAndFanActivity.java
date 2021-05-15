@@ -89,7 +89,7 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
         else {
             for(int i = 0; i < jsonArray.length(); i++){
                 try {
-                    JSONObject json = jsonArray.getJSONObject(i);
+                    JSONObject json = jsonArray.getJSONObject(i).getJSONObject("info");
                     LittleUserItem littleUserItem = new LittleUserItem(this);
                     littleUserItem.init(json);
                     if(viewGroup == list_right) littleUserItem.hideBtn();
@@ -112,7 +112,7 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
 
         @Override
         protected void onPostExecute(String s) {
-//            Log.e("hjt.fans", s);
+            Log.e("hjt.fans", s);
             if(!MsgProcess.checkMsg(s, true, "followersAndFans")) return;
             write(MsgProcess.msgProcessArr(s, false, null), list_right);
             super.onPostExecute(s);
@@ -128,7 +128,7 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
 
         @Override
         protected void onPostExecute(String s) {
-//            Log.e("hjt.followers", s);
+            Log.e("hjt.followers", s);
             write(MsgProcess.msgProcessArr(s, false, null), list_left);
             super.onPostExecute(s);
         }

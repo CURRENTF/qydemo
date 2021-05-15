@@ -37,7 +37,10 @@ public class Constant {
         learn_list_url = "https://api.yhf2000.cn/api/qingying/v1/learning/learn/",
         record_url = "https://api.yhf2000.cn/api/qingying/v1/learning/record/",
         render_progress_url = "https://api.yhf2000.cn/api/qingying/v1/task/schedule/",
-        game_url = "https://api.yhf2000.cn/api/qingying/v1/game/";
+        game_url = "https://api.yhf2000.cn/api/qingying/v1/game/",
+        challenge_url = "https://api.yhf2000.cn/api/qingying/v1/game/challenge/",
+        postImage_url = "https://api.yhf2000.cn/api/qingying/v1/game/free/",
+        gameRank_url = "https://api.yhf2000.cn/api/qingying/v1/game/ranking/";
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
 

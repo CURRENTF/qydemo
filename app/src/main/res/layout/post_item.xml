@@ -178,18 +178,21 @@
             android:gravity="center"
             android:paddingVertical="5dp"
             android:paddingHorizontal="10dp"
+            android:id="@+id/operation"
             android:orientation="horizontal">
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_forward"
                 android:layout_marginEnd="5dp"
+                android:visibility="gone"
                 android:scaleType="fitXY"/>
             <TextView
                 android:layout_width="40dp"
                 android:layout_height="20dp"
                 android:layout_marginEnd="50dp"
                 android:gravity="center"
+                android:visibility="gone"
                 android:text="转发"/>
             <ImageView
                 android:layout_width="20dp"

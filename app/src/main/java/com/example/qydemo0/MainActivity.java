@@ -34,6 +34,7 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.GestureListener;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.WaveLoadDialog;
 import com.example.qydemo0.Widget.Category;
 import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.Widget.Game;
@@ -222,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        GlobalVariable.mInstance.tokenExisted = false;
+//        GlobalVariable.mInstance.tokenExisted = false;
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.saveAllVar(sp);
         super.onDestroy();

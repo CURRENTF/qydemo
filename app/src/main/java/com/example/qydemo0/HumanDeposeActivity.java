@@ -94,13 +94,14 @@ import static android.telecom.DisconnectCause.LOCAL;
 import static android.view.Gravity.*;
 import static android.view.View.GONE;
 import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
+
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import butterknife.OnClick;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
-public class HumanDeposeActivity extends AppCompatActivity{
+public class HumanDeposeActivity extends AppCompatActivity {
 
     private List<List<SwitchVideoModel>> video_list = new ArrayList<>();
 
@@ -136,7 +137,7 @@ public class HumanDeposeActivity extends AppCompatActivity{
         deposing_video_duration = videoPlayer.getGSYVideoManager().getDuration();
         ProgressDepose pd = new ProgressDepose(this);
         RelativeLayout allActivity = findViewById(R.id.activity_play);
-        RelativeLayout.LayoutParams  pd_params = new RelativeLayout.LayoutParams(-1,10);
+        RelativeLayout.LayoutParams pd_params = new RelativeLayout.LayoutParams(-1, 10);
         pd_params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         pd.setLayoutParams(pd_params);
         pd.setStateListAnimator(null);
@@ -147,7 +148,7 @@ public class HumanDeposeActivity extends AppCompatActivity{
             public void onClick(View view) {
                 long cur_time = videoPlayer.getGSYVideoManager().getCurrentPosition();
                 cur_time -= tinyChange;
-                Log.i("whc__bac", ""+cur_time);
+                Log.i("whc__bac", "" + cur_time);
                 videoPlayer.getCurrentPlayer().seekTo(cur_time);
             }
         });
@@ -158,7 +159,7 @@ public class HumanDeposeActivity extends AppCompatActivity{
             public void onClick(View view) {
                 long cur_time = videoPlayer.getGSYVideoManager().getCurrentPosition();
                 cur_time += tinyChange;
-                Log.i("whc__bac", ""+cur_time);
+                Log.i("whc__bac", "" + cur_time);
                 videoPlayer.getCurrentPlayer().seekTo(cur_time);
             }
         });
@@ -168,32 +169,32 @@ public class HumanDeposeActivity extends AppCompatActivity{
             public void onClick(View view) {
                 ImageView depose_point = new ImageView(HumanDeposeActivity.this);
                 depose_point.setImageResource(R.drawable.water);
-                RelativeLayout.LayoutParams dp = new RelativeLayout.LayoutParams(100,100);
+                RelativeLayout.LayoutParams dp = new RelativeLayout.LayoutParams(100, 100);
                 dp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                float a = (float)((double)videoPlayer.getGSYVideoManager().getCurrentPosition()/(double)videoPlayer.getGSYVideoManager().getDuration());
-                dp.leftMargin = (int)(a * width_px)-60;
+                float a = (float) ((double) videoPlayer.getGSYVideoManager().getCurrentPosition() / (double) videoPlayer.getGSYVideoManager().getDuration());
+                dp.leftMargin = (int) (a * width_px) - 60;
                 Log.i("whc__", String.valueOf(dp.leftMargin));
                 depose_point.setLayoutParams(dp);
-                double current_time = (double)videoPlayer.getGSYVideoManager().getCurrentPosition()/(double)1000;
-                Log.i("whc_current_time", ""+videoPlayer.getGSYVideoManager().getCurrentPosition());
-                if(!depose_points.contains(current_time)){
-                depose_points.add(current_time);
-                allActivity.addView(depose_point);
-                depose_pointss.add(depose_point);
+                double current_time = (double) videoPlayer.getGSYVideoManager().getCurrentPosition() / (double) 1000;
+                Log.i("whc_current_time", "" + videoPlayer.getGSYVideoManager().getCurrentPosition());
+                if (!depose_points.contains(current_time)) {
+                    depose_points.add(current_time);
+                    allActivity.addView(depose_point);
+                    depose_pointss.add(depose_point);
 
                     depose_point.setOnTouchListener(new View.OnTouchListener() {
                         @SuppressLint("ClickableViewAccessibility")
                         @Override
                         public boolean onTouch(View view, MotionEvent motionEvent) {
-                            switch (motionEvent.getAction()){
+                            switch (motionEvent.getAction()) {
                                 case MotionEvent.ACTION_DOWN:
                                     timeDown = System.currentTimeMillis();
                                     break;
                                 case MotionEvent.ACTION_MOVE:
                                     timeUp = System.currentTimeMillis();
-                                    if(timeUp-timeDown>500){
-                                        for(int i=0;i<depose_pointss.size();i++){
-                                            if(depose_pointss.get(i)==depose_point){
+                                    if (timeUp - timeDown > 500) {
+                                        for (int i = 0; i < depose_pointss.size(); i++) {
+                                            if (depose_pointss.get(i) == depose_point) {
                                                 allActivity.removeView(depose_point);
                                                 depose_pointss.remove(i);
                                                 depose_points.remove(i);
@@ -206,30 +207,29 @@ public class HumanDeposeActivity extends AppCompatActivity{
                                 case MotionEvent.ACTION_UP:
 //                                    timeUp = System.currentTimeMillis();
                                     int ind = -1;
-                                    for(int i=0;i<depose_pointss.size();i++){
-                                        if(depose_pointss.get(i)==depose_point){
+                                    for (int i = 0; i < depose_pointss.size(); i++) {
+                                        if (depose_pointss.get(i) == depose_point) {
                                             ind = i;
                                             break;
                                         }
                                     }
 
 
-
-                                        videoPlayer.getCurrentPlayer().seekTo((long)(depose_points.get(ind)*1000));
-                                        Log.i("whc_seek", ""+(depose_points.get(ind)*1000));
+                                    videoPlayer.getCurrentPlayer().seekTo((long) (depose_points.get(ind) * 1000));
+                                    Log.i("whc_seek", "" + (depose_points.get(ind) * 1000));
 //                                    }
                                     break;
                             }
                             return true;
                         }
                     });
-            }
+                }
             }
         });
         Button sendMessage = findViewById(R.id.send_message);
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 Log.i("whc__", "clicking");
                 qydIalog = new QYDIalog(HumanDeposeActivity.this, R.layout.human_seg_intro, new int[]{R.id.upload, R.id.cancel});
                 qydIalog.show();
@@ -240,15 +240,15 @@ public class HumanDeposeActivity extends AppCompatActivity{
     }
 
     private void vibrate() {
-            Vibrator vibrator = (Vibrator) this.getSystemService(this.VIBRATOR_SERVICE);
-            vibrator.vibrate(100);
+//            Vibrator vibrator = (Vibrator) this.getSystemService(this.VIBRATOR_SERVICE);
+//            vibrator.vibrate(100);
     }
-    
-    private void init_player (String video_url){
+
+    private void init_player(String video_url) {
 
         videoPlayer = findViewById(R.id.video_player);
 
-        videoPlayer.setUp(video_url , true, "待分解视频");
+        videoPlayer.setUp(video_url, true, "待分解视频");
 
         //增加title
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
@@ -299,7 +299,7 @@ public class HumanDeposeActivity extends AppCompatActivity{
         fullScreenView.setVisibility(GONE);
     }
 
-    private List<Double> getSegmentPoints(){
+    private List<Double> getSegmentPoints() {
         Collections.sort(depose_points);
 
         if(depose_points.get(0)!=0){
@@ -318,7 +318,7 @@ public class HumanDeposeActivity extends AppCompatActivity{
         videoPlayer.getGSYVideoManager().stop();
     }
 
-    class ProgressDepose extends View{
+    class ProgressDepose extends View {
         Paint paintBlue, paintGray;
 
         public ProgressDepose(Context context) {
@@ -342,17 +342,17 @@ public class HumanDeposeActivity extends AppCompatActivity{
         @Override
         protected void onDraw(Canvas canvas) {
             long cur_time = videoPlayer.getGSYVideoManager().getCurrentPosition();
-            float a= (float)cur_time/(float)deposing_video_duration;
-            if(num%100==0) Log.i("whc__", String.valueOf(depose_points));
+            float a = (float) cur_time / (float) deposing_video_duration;
+            if (num % 100 == 0) Log.i("whc__", String.valueOf(depose_points));
             num++;
-            canvas.drawLine(5,0, a*width_px,0, paintBlue);
-            canvas.drawLine(a*width_px,0, width_px, 0, paintGray);
+            canvas.drawLine(5, 0, a * width_px, 0, paintBlue);
+            canvas.drawLine(a * width_px, 0, width_px, 0, paintGray);
             postInvalidate();
         }
 
     }
 
-    public class sendParams extends AsyncTask<Void, Void, Boolean>{
+    public class sendParams extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -365,11 +365,10 @@ public class HumanDeposeActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            if(!aBoolean){
-                Log.i("whc__","NO!");
-            }
-            else{
-                Log.i("whc__","YES!");
+            if (!aBoolean) {
+                Log.i("whc__", "NO!");
+            } else {
+                Log.i("whc__", "YES!");
             }
         }
     }

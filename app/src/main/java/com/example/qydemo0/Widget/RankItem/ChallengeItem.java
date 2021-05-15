@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.qydemo0.R;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ChallengeItem extends RelativeLayout {
@@ -35,7 +36,30 @@ public class ChallengeItem extends RelativeLayout {
         stars = mView.findViewById(R.id.stars);
     }
 
-    void fill(JSONObject json){
-
+    public void fill(JSONObject json, int loc){
+        try {
+            JSONObject user = json.getJSONObject("user");
+            userName.setText(user.getString("username"));
+            stars.setText(json.getString("star"));
+            int rank_i = json.getInt("rank");
+            if(loc <= rank_i){
+                rank_i = loc;
+            }
+            else {
+                mView.setVisibility(GONE);
+                return;
+            }
+            if(rank_i > 3){
+                medal.setVisibility(GONE);
+                rank.setVisibility(VISIBLE);
+                rank.setText(String.valueOf(rank_i));
+            }
+            else {
+                if(rank_i == 2) medal.setImageResource(R.drawable.ic__silver_medal);
+                else if(rank_i == 3) medal.setImageResource(R.drawable.ic__bronze_medal);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

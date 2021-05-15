@@ -120,9 +120,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
 
             @Override
             public void onLoadMore() {
-                wrapper_follow.setLoadState(wrapper_follow.LOADING);
-                GetFollowedPost getFollowedPost = new GetFollowedPost();
-                getFollowedPost.execute();
+                wrapper_follow.setLoadState(wrapper_follow.LOADING_END);
+//                GetFollowedPost getFollowedPost = new GetFollowedPost();
+//                getFollowedPost.execute();
             }
         });
 
@@ -186,12 +186,13 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.follow.post", "null_json");
                 return;
             }
-            if(jsonArray.length() == 0){
-                wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
-            }
-            else {
-                wrapper_follow.setLoadState(wrapper_rec.LOADING_COMPLETE);
-            }
+//            if(jsonArray.length() == 0){
+//                wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
+//            }
+//            else {
+//                wrapper_follow.setLoadState(wrapper_rec.LOADING_COMPLETE);
+//            }
+            wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
             cnt_f += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 // 原方法
@@ -216,6 +217,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                     JSONObject json = jsonArray.getJSONObject(i);
                     json.put("a", "true");
                     json.put("b", "true");
+                    json.put("is_detail", "false");
                     adapter_follow.addData(json);
                     wrapper_follow.notifyDataSetChanged();
                 } catch (JSONException e) {

@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class QYFile {
+    public static int ImageCode = 0, VideoCode = 2, MusicCode = 1;
+
     public String hashFile(Uri uri, Activity ac){
         try {
             InputStream inputStream = ac.getContentResolver().openInputStream(uri);
@@ -102,6 +104,11 @@ public class QYFile {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String uploadFileAllIn(String file_url, int file_type){
+        String hash = hashFileUrl(file_url);
+        return uploadFileAllIn(Constant.mInstance.file_upload_verify_url, file_url, file_type, hash);
     }
 
     public static class ResultContract extends ActivityResultContract<Boolean, Uri> {
