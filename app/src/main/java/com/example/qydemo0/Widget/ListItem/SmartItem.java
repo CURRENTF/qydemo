@@ -181,6 +181,8 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
                         records.addView(item);
                     } catch (JSONException e) {
                         e.printStackTrace();
+
+                        //
                     }
                 }
             }
