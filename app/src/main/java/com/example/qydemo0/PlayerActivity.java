@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -128,6 +129,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private int breakdown_id = -1;
     private int work_id = 0;
     QYScrollView qyscrollview_comment;
+    private int llid = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -568,6 +570,26 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         user_name.setText(work_bean.getData().getBelong().getUsername());
     }
 
+    private void test_deplayer(){
+        Handler handler=new Handler();
+
+        Runnable runnable=new Runnable() {
+            @Override
+
+            public void run() {
+
+
+                Log.i("whc__", String.valueOf(detailPlayer.getGSYVideoManager().getCurrentPosition()));
+                handler.postDelayed(this, 2000);
+
+            }
+
+        };
+
+        handler.postDelayed(runnable, 1000);//每两秒执行一次runnable.
+
+    }
+
     private void init_player(List<String> sources, List<String> list_name, String coverUrl){
 
         List<SwitchVideoModel> list = new ArrayList<>();
@@ -654,6 +676,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         loadFirstFrameCover(coverUrl);
+
+        test_deplayer();
     }
 
     private void init_work(String cur_Json){
@@ -1087,6 +1111,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 Log.e("whc_player_urls", String.valueOf(player_urls));
                 player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
                 breakdown_id = (new JSONObject(cur_work_json)).getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
+                llid = (new JSONObject(cur_work_json)).getJSONObject("data").getInt("lid");
                 Log.e("breakdown_id", String.valueOf(breakdown_id));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1319,52 +1344,32 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(Integer[] integer) {
             super.onPostExecute(integer);
-            if(integer != null){
-                if(integer[0]== -1) Toast.makeText(PlayerActivity.this, "该舞蹈目前不可学习，请稍后再试", Toast.LENGTH_LONG).show();
-                if(integer[2]!=3){
-                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
-                ArrayList<String> data1 = new ArrayList<String>();
-                data1.add(""+integer[1]);
-                data1.add(""+work_id);
-                data1.add("0");
-                intent.putStringArrayListExtra("params", data1);
+            if(integer[0]==-1) {
+                Intent intent = new Intent(PlayerActivity.this, SegmentChoiceActivity.class);
+                ArrayList<String> params = new ArrayList<>();
+                params.add(String.valueOf(work_id));
+                intent.putStringArrayListExtra("params", params);
                 startActivity(intent);
-                }
-                else{
-                    Intent intent = new Intent(PlayerActivity.this, LearningListActivity.class);
-                    startActivity(intent);
-                }
+            } else {
+                //get last learn_list index
+                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
+                ArrayList<String> params = new ArrayList<>();
+                params.add(String.valueOf(integer[0]));
+                params.add(String.valueOf(work_id));
+                params.add(String.valueOf(integer[1]));
+                startActivity(intent);
             }
         }
 
         @Override
         protected Integer[] doInBackground(Void... voids) {
-            String[] callTo = {"work", "int", ""+ work_id, "breakdown", "int", ""+breakdown_id};
-            try {
-                Log.e("callTo", GenerateJson.universeJson2(callTo));
-                JSONObject rjs = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callTo), Constant.mInstance.learn_url,"Authorization", GlobalVariable.mInstance.token));
-
-                Log.e("rjs", String.valueOf(rjs));
-
-                if(rjs.getString("msg").equals("Success")){
-                    int cur_lid = rjs.getJSONObject("data").getInt("lid");
-//                    if(!work_bean.getData().getIs_learning()){
-                        Integer[] res_to_call = {0, cur_lid, 0};
-                        return res_to_call;
-//                    }
-//                    else{
-//                        Integer[] res_to_call = {0, 1, 3};
-//                        return res_to_call;
-//
-//                    }
-                } else {
-                    Integer[] res_to_call = {-1, 0, 0};
-                    return res_to_call;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(work_bean.getData().getIs_learning()){
+                //get index
+                int lid = llid, ind=0;
+                String res = work_request.advanceGet(Constant.mInstance.learn_url+"learn/"+lid+"/?start=0&lens=1", "Authorization", GlobalVariable.mInstance.token);
+                return new Integer[]{lid, ind};
             }
-            return null;
+            else  return new Integer[]{-1};
         }
     }
 

@@ -27,6 +27,67 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/human_icons"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:id="@+id/left_foots"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/left_foot"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/left_hands"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/right_hand"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/human_head"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/head"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/human_body"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/body"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/right_hands"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/left_hand"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/right_foots"
+            android:layout_width="35dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/right_foot"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"

@@ -541,8 +541,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                                     "Authorization",GlobalVariable.mInstance.token));
                             Log.i("whc123",tid+" "+res_json_rendered.getJSONObject("data").getString("schedule"));
                             String cur_schedule = res_json_rendered.getJSONObject("data").getString("schedule");
-                            if(isYuLan) publishProgress(Integer.valueOf(cur_schedule.substring(0, cur_schedule.length()-1)));
-                            if(cur_schedule.equals("100%")){
+                            if(res_json_rendered.getJSONObject("data").getBoolean("is_finish")){
                                 JSONObject cur_urls = res_json_rendered.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url");
                                 if(cur_urls.has("1080P"))
                                     return cur_urls.getString("1080P");
@@ -554,6 +553,9 @@ public class VideoRenderActivity extends AppCompatActivity {
                                     return cur_urls.getString("360P");
                                 if(cur_urls.has("自动"))
                                     return cur_urls.getString("自动");
+                            } else {
+                                Integer sch = Integer.valueOf(cur_schedule.substring(0, cur_schedule.length()-1));
+                                publishProgress(sch==100?99:sch);
                             }
                         }
                         return null;

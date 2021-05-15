@@ -157,10 +157,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                Log.i("StartCode",""+startCode);
                 ArrayList<String> params = new ArrayList<>();
-                params.add("2");
-                params.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20190508%2F18%2F1557312867-xFCRluDivm.jpeg&refer=http%3A%2F%2Fimage.biaobaiju.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623054775&t=eda060d1b9671a786cb1e5c41f75d61b");
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putStringArrayListExtra("GameParams", params);
+                params.add("1");
+                Intent intent = new Intent(MainActivity.this, SegmentChoiceActivity.class);
+                intent.putStringArrayListExtra("params", params);
                 startActivity(intent);
 
 //                QYLoading qyLoading = new QYLoading(MainActivity.this);

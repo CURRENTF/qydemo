@@ -86,6 +86,7 @@
             android:layout_marginRight="2dp"
             />
         <TextView
+            android:id="@+id/pass_rate_content"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:text="未知"

@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="选择一个你喜欢的舞蹈分段吧！"
+        android:textStyle="bold"
         android:textAlignment="center"
-        android:textSize="20dp"
-        android:layout_margin="10dp"
-        android:textColor="@color/qy_pink"
+        android:textSize="26dp"
+        android:layout_margin="20dp"
+        android:textColor="@color/black"
         />
 
     <ScrollView
@@ -26,8 +27,6 @@
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
             android:orientation="vertical"
             >
         </LinearLayout>

@@ -301,6 +301,14 @@ public class HumanDeposeActivity extends AppCompatActivity{
 
     private List<Double> getSegmentPoints(){
         Collections.sort(depose_points);
+
+        if(depose_points.get(0)!=0){
+            depose_points.add(0, (double)0);
+        }
+
+        if(depose_points.get(depose_points.size()-1)!=(double)(deposing_video_duration)/(double)(1000)){
+            depose_points.add((double)(deposing_video_duration)/(double)(1000));
+        }
         return depose_points;
     }
 
@@ -348,8 +356,10 @@ public class HumanDeposeActivity extends AppCompatActivity{
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            //List<Double> res = getSegmentPoints();
-            return false;
+            List<Double> res = getSegmentPoints();
+            List<Double> s = res.subList(0, res.size()-1), e = res.subList(1, res.size());
+            //发送人工分段
+            return true;
         }
 
         @Override
