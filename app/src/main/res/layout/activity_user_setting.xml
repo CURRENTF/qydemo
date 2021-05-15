@@ -185,7 +185,8 @@
         android:background="@color/text_background"
         android:translationZ="10dp"
         android:paddingLeft="10dp"
-        android:paddingVertical="10dp">
+        android:paddingVertical="10dp"
+        android:layout_marginBottom="20dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -209,5 +210,18 @@
         </FrameLayout>
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/text_background"
+        android:translationZ="10dp"
+        android:paddingLeft="10dp"
+        android:paddingVertical="10dp"
+        android:text="退出登录"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:id="@+id/cancel_login"
+        android:textColor="#d71345"/>
 
 </LinearLayout>

@@ -6,14 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="5dp"
-    android:background="@color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#6a6da9"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="60dp"
@@ -31,7 +29,7 @@
                 android:layout_height="0dp"
                 android:text="豪哥"
                 android:padding="5dp"
-                android:textColor="@color/white"
+                android:textColor="#f58220"
                 android:textStyle="bold"
                 android:id="@+id/username"
                 android:layout_weight="0.5"/>
@@ -41,7 +39,7 @@
                 android:layout_weight="0.5"
                 android:padding="5dp"
                 android:text="我可能有点太帅了"
-                android:textColor="#d3d7d4"
+                android:textColor="@color/gray"
                 android:textSize="12sp"
                 android:maxLines="1"
                 android:id="@+id/sign"/>
@@ -54,14 +52,14 @@
             android:id="@+id/cancel_follow"
             android:layout_gravity="center"
             android:layout_marginHorizontal="5dp"
-            android:textColor="#fdb933"
+            android:textColor="@color/white"
             android:background="@drawable/gradient_color_orange_no_padding"
-            android:text="取消关注"/>
+            android:text="取消关注" />
 
     </LinearLayout>
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white"/>
+        android:layout_height="0.3dp"
+        android:background="@color/gray"/>
 
 </RelativeLayout>
