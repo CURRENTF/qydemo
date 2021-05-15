@@ -29,6 +29,8 @@ import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.ListItem.LittleWorkItem;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.utils.ImageSelector;
 import com.example.qydemo0.QYpack.Img;
@@ -44,7 +46,7 @@ import java.util.Set;
 import java.util.Vector;
 
 
-public class UploadPostActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
+public class UploadPostActivity extends MyAppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnClickListener{
 
     GridLayout g = null;
     int[] imgs = {R.id.up_img1, R.id.up_img2, R.id.up_img3,
@@ -102,7 +104,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         myWork.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
-                GetMyWork getMyWork = new GetMyWork();
+                GetMyWork getMyWork = new GetMyWork(UploadPostActivity.this);
                 getMyWork.execute();
             }
 
@@ -127,7 +129,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
             FloatingActionButton fbtn = findViewById(R.id.button_upload_post);
             fbtn.setVisibility(View.GONE);
             switcher = 1;
-            GetMyWork getMyWork = new GetMyWork();
+            GetMyWork getMyWork = new GetMyWork(UploadPostActivity.this);
             getMyWork.execute();
 
         }
@@ -157,7 +159,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
         else if(v.getId() == R.id.button_upload_post){
             if(switcher == 0){
-                UploadImage uploadImage = new UploadImage();
+                UploadImage uploadImage = new UploadImage(UploadPostActivity.this);
                 uploadImage.execute();
             }
             else {
@@ -203,7 +205,11 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-    class UploadImage extends AsyncTask<String, Integer, Vector<String>>{
+    class UploadImage extends MyAsyncTask<String, Integer, Vector<String>> {
+
+        protected UploadImage(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Vector<String> doInBackground(String... strings) {
@@ -226,13 +232,17 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
                     "ap_img_set", "list", GenerateJson.listString(0, data),
                 "is_public", "int", "1"};
             String json = GenerateJson.universeJson2(l);
-            UploadPostImageType uploadPostImageType = new UploadPostImageType();
+            UploadPostImageType uploadPostImageType = new UploadPostImageType(UploadPostActivity.this);
             uploadPostImageType.execute(json);
             Log.d("hjt.post.post.json", json);
         }
     }
 
-    class UploadPostImageType extends AsyncTask<String, Integer, Boolean>{
+    class UploadPostImageType extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected UploadPostImageType(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -253,7 +263,11 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
 
     int workStart = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
 
-    class GetMyWork extends AsyncTask<String, Integer, JSONArray>{
+    class GetMyWork extends MyAsyncTask<String, Integer, JSONArray>{
+
+        protected GetMyWork(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {
@@ -285,7 +299,7 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
                         @Override
                         public void onClick(View v) {
                             v.setBackgroundResource(R.drawable.highlight);
-                            UploadPostWorkType uploadPostWorkType = new UploadPostWorkType();
+                            UploadPostWorkType uploadPostWorkType = new UploadPostWorkType(UploadPostActivity.this);
                             uploadPostWorkType.execute(String.valueOf(((LittleWorkItem)v).id));
                         }
                     });
@@ -295,7 +309,11 @@ public class UploadPostActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-    class UploadPostWorkType extends AsyncTask<String, Integer, Boolean>{
+    class UploadPostWorkType extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected UploadPostWorkType(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {

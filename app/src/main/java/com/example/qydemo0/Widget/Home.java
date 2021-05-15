@@ -78,8 +78,8 @@ public class Home extends RelativeLayout implements View.OnClickListener {
 
     Button ezDance;
 
-    private Activity getActivity(){
-        return context;
+    private MyAppCompatActivity getActivity(){
+        return (MyAppCompatActivity) context;
     }
 
     public Home(@NonNull Context context) {
@@ -123,12 +123,12 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             public void onLoadMore() {
                 Log.d("hjt.o", "bottom");
                 wrapper.setLoadState(wrapper.LOADING);
-                GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
+                GetUserRecommendation getUserRecommendation = new GetUserRecommendation(getActivity());
                 getUserRecommendation.execute();
             }
         });
         wrapper.setLoadState(wrapper.LOADING);
-        GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
+        GetUserRecommendation getUserRecommendation = new GetUserRecommendation(getActivity());
         getUserRecommendation.execute();
 
         // 设置一些监听
@@ -189,7 +189,11 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         }
     }
 
-    class GetUserRecommendation extends AsyncTask<String, Integer, JSONArray> {
+    class GetUserRecommendation extends MyAsyncTask<String, Integer, JSONArray> {
+
+        protected GetUserRecommendation(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {

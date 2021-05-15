@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -16,7 +17,7 @@ import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
-public class SimplePlayerActivity extends AppCompatActivity {
+public class SimplePlayerActivity extends MyAppCompatActivity {
 
     StandardGSYVideoPlayer videoPlayer;
 

@@ -18,6 +18,7 @@ import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
 import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
 import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailCategoryActivity extends AppCompatActivity {
+public class DetailCategoryActivity extends MyAppCompatActivity {
 
     String name;
     RecyclerView main;

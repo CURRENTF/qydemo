@@ -26,6 +26,8 @@ import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.RenderQueueActivity;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.entry.Image;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
@@ -195,7 +197,7 @@ public class RenderItem extends RelativeLayoutItem {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                GetProgress getProgress = new GetProgress();
+                GetProgress getProgress = new GetProgress((MyAppCompatActivity) ac);
                 getProgress.execute();
                 if(!render_finished) handler.postDelayed(this, 10000);
             }
@@ -203,7 +205,11 @@ public class RenderItem extends RelativeLayoutItem {
         handler.post(runnable);
     }
 
-    class GetProgress extends AsyncTask<String, Integer, JSONObject>{
+    class GetProgress extends MyAsyncTask<String, Integer, JSONObject> {
+
+        protected GetProgress(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONObject doInBackground(String... strings) {

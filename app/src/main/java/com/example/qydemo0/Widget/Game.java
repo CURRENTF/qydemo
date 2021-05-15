@@ -192,7 +192,11 @@ public class Game extends RelativeLayout {
         AdvanceHttp.getGameRank(imageHandler, 3);
     }
 
-    class UploadImage extends AsyncTask<String, Integer, String>{
+    class UploadImage extends MyAsyncTask<String, Integer, String>{
+
+        protected UploadImage(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

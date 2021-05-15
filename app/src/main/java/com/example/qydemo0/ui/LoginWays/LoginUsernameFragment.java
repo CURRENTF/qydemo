@@ -25,6 +25,8 @@ import com.example.qydemo0.QYpack.MD5encrypt;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,13 +55,17 @@ public class LoginUsernameFragment extends Fragment {
             Log.d("hjt.password", password.toString());
 
             GenerateJson g = new GenerateJson();
-            PostLoginMsg po = new PostLoginMsg();
+            PostLoginMsg po = new PostLoginMsg((MyAppCompatActivity) getActivity());
             Log.d("hjt.password.encrypt", MD5encrypt.encrypt(password.toString()));
             po.execute(g.loginJson(username.toString(), MD5encrypt.encrypt(password.toString()), 0), C.login_url);
         }
     }
 
-    class PostLoginMsg extends AsyncTask<String, Integer, String> {
+    class PostLoginMsg extends MyAsyncTask<String, Integer, String> {
+
+        protected PostLoginMsg(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

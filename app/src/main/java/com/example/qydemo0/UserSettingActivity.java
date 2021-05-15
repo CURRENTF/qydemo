@@ -34,12 +34,14 @@ import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.Uri2RealPath;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserSettingActivity extends AppCompatActivity implements View.OnClickListener {
+public class UserSettingActivity extends MyAppCompatActivity implements View.OnClickListener {
 
     TextView username, gender, sign;
     ImageView userAvatar;
@@ -72,7 +74,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 gender.setText(list[which]);
-                ChangeGender changeGender = new ChangeGender(); // 服务端改变
+                ChangeGender changeGender = new ChangeGender(UserSettingActivity.this); // 服务端改变
                 changeGender.execute(which + 1);
                 try {
                     GlobalVariable.mInstance.fragmentDataForMain.userInfoJson.put("gender", which + 1);
@@ -133,7 +135,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
                         Toast.makeText(UserSettingActivity.this, "请选择图片", Toast.LENGTH_SHORT).show();
                         break;
                     }
-                    ChangeAvatar changeAvatar = new ChangeAvatar();
+                    ChangeAvatar changeAvatar = new ChangeAvatar(UserSettingActivity.this);
                     QYFile qyFile = new QYFile();
                     changeAvatar.execute(Uri2RealPath.getRealPathFromUri_AboveApi19(UserSettingActivity.this, avatar_uri), "0",
                             qyFile.hashFile(avatar_uri, UserSettingActivity.this));
@@ -149,7 +151,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         public void OnCenterItemClick(QYDIalog dialog, View view) {
             switch (view.getId()){
                 case R.id.button_upload_username:
-                    ChangeUsername changeUsername = new ChangeUsername();
+                    ChangeUsername changeUsername = new ChangeUsername(UserSettingActivity.this);
                     changeUsername.execute(((EditText)qydIalog.findViewById(R.id.edit_text_setting_username)).getText().toString());
                     dialog.dismiss();
                     break;
@@ -164,7 +166,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         public void OnCenterItemClick(QYDIalog dialog, View view) {
             switch (view.getId()){
                 case R.id.button_upload_sign:
-                    ChangeUserSign changeUserSign = new ChangeUserSign();
+                    ChangeUserSign changeUserSign = new ChangeUserSign(UserSettingActivity.this);
                     changeUserSign.execute(((EditText)qydIalog.findViewById(R.id.edit_text_setting_sign)).getText().toString());
                     dialog.dismiss();
                     break;
@@ -231,7 +233,11 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
 
     /* --------internet---------*/
 
-    class ChangeGender extends AsyncTask<Integer, Integer, String>{
+    class ChangeGender extends MyAsyncTask<Integer, Integer, String> {
+
+        protected ChangeGender(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(Integer... integers) {
@@ -248,7 +254,11 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class ChangeAvatar extends AsyncTask<String, Integer, Boolean>{
+    class ChangeAvatar extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected ChangeAvatar(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         // params: String file_url, int file_type, String hash
         @Override
@@ -263,7 +273,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
-                UpdateInfo info = new UpdateInfo();
+                UpdateInfo info = new UpdateInfo(UserSettingActivity.this);
                 info.execute();
             }
             Log.d("hjt.set-avatar", String.valueOf(aBoolean));
@@ -278,7 +288,11 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class ChangeUsername extends AsyncTask<String, Integer, Boolean>{
+    class ChangeUsername extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected ChangeUsername(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -289,7 +303,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
-                UpdateInfo info = new UpdateInfo();
+                UpdateInfo info = new UpdateInfo(UserSettingActivity.this);
                 info.execute();
             }
             if(aBoolean) Toast.makeText(UserSettingActivity.this, "用户名修改成功", Toast.LENGTH_SHORT).show();
@@ -297,7 +311,11 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class ChangeUserSign extends AsyncTask<String, Integer, Boolean>{
+    class ChangeUserSign extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected ChangeUserSign(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -307,7 +325,7 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
-                UpdateInfo info = new UpdateInfo();
+                UpdateInfo info = new UpdateInfo(UserSettingActivity.this);
                 info.execute();
             }
             if(aBoolean) Toast.makeText(UserSettingActivity.this, "个性签名修改成功", Toast.LENGTH_SHORT).show();
@@ -315,7 +333,11 @@ public class UserSettingActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    class UpdateInfo extends AsyncTask<String, Integer, Boolean>{
+    class UpdateInfo extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected UpdateInfo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {

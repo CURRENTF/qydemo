@@ -20,6 +20,8 @@ import com.example.qydemo0.QYpack.MD5encrypt;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,7 +73,7 @@ public class RegisterUsernameFragment extends Fragment {
             Log.d("hjt", password.toString());
 
             GenerateJson g = new GenerateJson();
-            postRegisterMsg po = new postRegisterMsg();
+            postRegisterMsg po = new postRegisterMsg((MyAppCompatActivity) getActivity());
             // 密码的加密处理
             po.execute(g.registerPostJson(username.toString(), MD5encrypt.encrypt(password.toString()), phone.toString()), C.register_url, "post");
 
@@ -83,7 +85,11 @@ public class RegisterUsernameFragment extends Fragment {
         ((LoginActivity) getActivity()).showRegister2UsernameFragment();
     }
 
-    class postRegisterMsg extends AsyncTask<String, Integer, String> {
+    class postRegisterMsg extends MyAsyncTask<String, Integer, String> {
+
+        protected postRegisterMsg(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

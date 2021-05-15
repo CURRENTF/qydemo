@@ -7,9 +7,10 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.qydemo0.QYpack.Img;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 
 
-public class ViewImageActivity extends AppCompatActivity {
+public class ViewImageActivity extends MyAppCompatActivity {
 
     ImageView img;
 

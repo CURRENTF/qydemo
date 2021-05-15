@@ -34,6 +34,8 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.KqwOneShot;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.utils.SoundTipUtil;
 
@@ -50,7 +52,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class GameActivity extends Activity {
+public class GameActivity extends MyAppCompatActivity {
 
     private SurfaceView sf;
     private Camera.Size mSize = null;//相机的尺寸
@@ -103,7 +105,7 @@ public class GameActivity extends Activity {
         initUI();
         if(mode == 0){
             guan = Integer.valueOf(params.get(1));
-            new getTZImageList().execute(guan);
+            new getTZImageList(this).execute(guan);
         }
         else if(mode == 2 || mode == 3){
             img_list.add(params.get(1));
@@ -113,7 +115,7 @@ public class GameActivity extends Activity {
             refresh_img();
         }
         else{
-            new getImageList().execute();
+            new getImageList(this).execute();
         }
         initKqw();
         star_num = 0;
@@ -185,7 +187,7 @@ public class GameActivity extends Activity {
                             public void onPictureTaken(byte[] data, Camera camera) {//拍完之后回调；
                                 String res_path = savePhoto(data);
                                 if (res_path!=null) {
-                                    new SendPic().execute(res_path);
+                                    new SendPic(GameActivity.this).execute(res_path);
                                 } else {
                                     Toast.makeText(GameActivity.this, "保存出错啦！", Toast.LENGTH_LONG).show();
                                     Toast.makeText(GameActivity.this, "保存出错啦！", Toast.LENGTH_LONG).show();
@@ -254,11 +256,11 @@ public class GameActivity extends Activity {
             cur_img_ind++;
         } else {
             if(mode==0){
-                new FinishTZ().execute(star_num);
+                new FinishTZ(this).execute(star_num);
             }
             else {
             cur_img_ind = 0;
-            new getImageList().execute();
+            new getImageList(this).execute();
             }
         }
     }
@@ -437,7 +439,11 @@ public class GameActivity extends Activity {
         }
     }
 
-    public class SendPic extends AsyncTask<String, Void, List<Integer> >{
+    public class SendPic extends MyAsyncTask<String, Void, List<Integer> > {
+
+        protected SendPic(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected void onPostExecute(List<Integer> score) {
@@ -499,7 +505,11 @@ public class GameActivity extends Activity {
         }
     }
 
-    public class getTZImageList extends AsyncTask<Integer, Void, Boolean >{
+    public class getTZImageList extends MyAsyncTask<Integer, Void, Boolean >{
+
+        protected getTZImageList(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
@@ -535,7 +545,11 @@ public class GameActivity extends Activity {
         }
     }
 
-    public class getImageList extends AsyncTask<Void, Void, Boolean >{
+    public class getImageList extends MyAsyncTask<Void, Void, Boolean >{
+
+        protected getImageList(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -578,7 +592,11 @@ public class GameActivity extends Activity {
         }
     }
 
-    public class FinishTZ extends AsyncTask<Integer, Void, Boolean >{
+    public class FinishTZ extends MyAsyncTask<Integer, Void, Boolean >{
+
+        protected FinishTZ(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Integer... voids) {

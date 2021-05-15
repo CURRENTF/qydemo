@@ -53,24 +53,24 @@ import java.util.ArrayList;
 
 public class Dashboard extends RelativeLayout {
 
-    private Activity context;
+    private MyAppCompatActivity context;
     public View mView;
     private Tab tab;
     QYScrollView scrollView;
 
-    private Activity getActivity(){
+    private MyAppCompatActivity getActivity(){
         return context;
     }
 
     public Dashboard(@NonNull Context context) {
         super(context);
-        this.context = (Activity) context;
+        this.context = (MyAppCompatActivity) context;
         init();
     }
 
     public Dashboard(Context context, AttributeSet attrs){
         super(context, attrs);
-        this.context = (Activity) context;
+        this.context = (MyAppCompatActivity) context;
         init();
     }
 
@@ -103,7 +103,7 @@ public class Dashboard extends RelativeLayout {
             getActivity().startActivity(intent);
         });
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
-            GetUserInfo g = new GetUserInfo();
+            GetUserInfo g = new GetUserInfo(getActivity());
             g.execute();
         }
         else reWriteInfo(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson);
@@ -253,7 +253,11 @@ public class Dashboard extends RelativeLayout {
 
 
 
-    class GetUserInfo extends AsyncTask<String, Integer, String> {
+    class GetUserInfo extends MyAsyncTask<String, Integer, String> {
+
+        protected GetUserInfo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

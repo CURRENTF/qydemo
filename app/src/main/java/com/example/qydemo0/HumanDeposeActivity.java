@@ -60,6 +60,8 @@ import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.entry.Image;
@@ -101,7 +103,7 @@ import org.w3c.dom.Text;
 import butterknife.OnClick;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
-public class HumanDeposeActivity extends AppCompatActivity {
+public class HumanDeposeActivity extends MyAppCompatActivity {
 
     private List<List<SwitchVideoModel>> video_list = new ArrayList<>();
 
@@ -352,7 +354,11 @@ public class HumanDeposeActivity extends AppCompatActivity {
 
     }
 
-    public class sendParams extends AsyncTask<Void, Void, Boolean> {
+    public class sendParams extends MyAsyncTask<Void, Void, Boolean> {
+
+        protected sendParams(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -393,5 +399,4 @@ public class HumanDeposeActivity extends AppCompatActivity {
             }
         }
     }
-
 }

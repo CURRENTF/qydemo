@@ -12,12 +12,13 @@ import android.widget.RelativeLayout;
 
 import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.Widget.GameCheckPointItem;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GameChallengeModeActivity extends AppCompatActivity {
+public class GameChallengeModeActivity extends MyAppCompatActivity {
 
     int[] cs_id = {R.id.imageView2, R.id.imageView, R.id.imageView3, R.id.imageView4, R.id.imageView5};
     int[] pic_id = {R.drawable.ic_a, R.drawable.ic_b, R.drawable.ic_c, R.drawable.ic_d, R.drawable.ic_e};

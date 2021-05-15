@@ -39,6 +39,8 @@ import com.example.qydemo0.Widget.Category;
 import com.example.qydemo0.Widget.Dashboard;
 import com.example.qydemo0.Widget.Game;
 import com.example.qydemo0.Widget.Home;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
@@ -59,7 +61,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MyAppCompatActivity {
 
     Constant C = Constant.mInstance;
     private GestureDetector gestureDetector = null;
@@ -177,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
         DeviceInfo.info(this);
 
         if(GlobalVariable.mInstance.fragmentDataForMain.userInfoJson == null){
-            GetUserInfo g = new GetUserInfo();
+            GetUserInfo g = new GetUserInfo(this);
             g.execute();
         }
 
@@ -257,7 +259,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    class GetUserInfo extends AsyncTask<String, Integer, String> {
+    class GetUserInfo extends MyAsyncTask<String, Integer, String> {
+
+        protected GetUserInfo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

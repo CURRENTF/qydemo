@@ -59,6 +59,8 @@ import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.QYpack.WaveLoadDialog;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.utils.SoundTipUtil;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
@@ -92,7 +94,7 @@ import static android.view.View.GONE;
  * Created by guoshuyu on 2017/6/18.
  */
 
-public class LearnDanceActivity extends Activity implements SurfaceHolder.Callback{
+public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHolder.Callback{
 
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
@@ -259,7 +261,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         init_wrong_kuang();
         initViews();
         ButterKnife.bind(this);
-        new InitAllLearn().execute(wid);
+        new InitAllLearn(this).execute(wid);
         init_pose_view();
         findViewById(R.id.humanPose).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -389,7 +391,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
     private void btn_nOb(){
         try {
             if (!is_learn) {
-                new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
+                new PostRecord(this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
             } else if (is_compare) {
                 stop_compare_video();
                 detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
@@ -424,7 +426,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private void init_learn_pager(){
         try {
-            new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
+            new PostRecord(this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -696,7 +698,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     private void go_to_next_segment(){
         try {
-        new PostRecord().execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
+        new PostRecord(this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"), 1);
         current_video_number++;
         if (current_video_number >= all_learn_depose_video_num) {
             Toast.makeText(LearnDanceActivity.this, "恭喜您！您已学会整支舞蹈", Toast.LENGTH_LONG);
@@ -950,7 +952,7 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
             //重置
             mRecorder.reset();
             //showProgressDialog("提示","正在努力解析中，请稍等...");
-            new SendUserDanceVideo().execute();
+            new SendUserDanceVideo(this).execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1074,7 +1076,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
         super.onBackPressed();
     }
 
-    public class SendUserDanceVideo extends AsyncTask<String, Integer, JSONObject> {
+    public class SendUserDanceVideo extends MyAsyncTask<String, Integer, JSONObject> {
+
+        protected SendUserDanceVideo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected void onPreExecute() {
@@ -1204,7 +1210,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     }
 
-    public class InitAllLearn extends AsyncTask<Integer, Void ,Boolean>{
+    public class InitAllLearn extends MyAsyncTask<Integer, Void ,Boolean>{
+        protected InitAllLearn(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
@@ -1236,7 +1246,11 @@ public class LearnDanceActivity extends Activity implements SurfaceHolder.Callba
 
     }
 
-    public class PostRecord extends AsyncTask<Integer, Void, Integer[]>{
+    public class PostRecord extends MyAsyncTask<Integer, Void, Integer[]>{
+        protected PostRecord(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(Integer[] ints) {
             super.onPostExecute(ints);

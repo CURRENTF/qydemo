@@ -1,5 +1,6 @@
 package com.example.qydemo0;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -39,6 +41,8 @@ import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.KqwOneShot;
 import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.utils.SoundTipUtil;
@@ -71,7 +75,7 @@ import static android.view.View.VISIBLE;
  * Created by guoshuyu on 2017/6/18.
  */
 
-public class FreeDanceActivity extends Activity implements SurfaceHolder.Callback{
+public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHolder.Callback{
 
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
@@ -250,7 +254,8 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
     }
 
     private void init_kqw(){
-        handler = new Handler() {
+        handler = new Handler(Looper.myLooper()) {
+            @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -685,7 +690,7 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
             is_record = false;
             //重置
             mRecorder.reset();
-            new waitForSave().execute(path_cur);
+            new waitForSave(this).execute(path_cur);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -810,7 +815,11 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         super.onBackPressed();
     }
 
-    public class waitForSave extends AsyncTask<String, Void,Boolean>{
+    public class waitForSave extends MyAsyncTask<String, Void,Boolean> {
+
+        protected waitForSave(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected void onPreExecute() {

@@ -14,6 +14,8 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.ListItem.RenderItem;
 
@@ -22,7 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class RenderQueueActivity extends AppCompatActivity implements View.OnClickListener{
+public class RenderQueueActivity extends MyAppCompatActivity implements View.OnClickListener{
 
     QYScrollView left, right;
     LinearLayout l_left, l_right;
@@ -47,7 +49,7 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         r_in = AnimationUtils.loadAnimation(this, R.anim.ani_right_translate_in_alpha_500ms);
         l_out = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_alpha_500ms);
         l_in = AnimationUtils.loadAnimation(this, R.anim.ani_left_translate_in_alpha_500ms);
-        GetList getList = new GetList();
+        GetList getList = new GetList(RenderQueueActivity.this);
         getList.execute();
     }
 
@@ -77,7 +79,11 @@ public class RenderQueueActivity extends AppCompatActivity implements View.OnCli
         last = view;
     }
 
-    class GetList extends AsyncTask<String, Integer, JSONArray>{
+    class GetList extends MyAsyncTask<String, Integer, JSONArray> {
+
+        protected GetList(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {

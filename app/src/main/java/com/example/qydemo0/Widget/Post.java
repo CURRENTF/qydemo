@@ -58,8 +58,8 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     LinearLayoutAdapter adapter_rec, adapter_follow;
     LoadMoreAndRefreshWrapper wrapper_rec, wrapper_follow;
 
-    private Activity getActivity(){
-        return context;
+    private MyAppCompatActivity getActivity(){
+        return (MyAppCompatActivity) context;
     }
 
     public Post(@NonNull Context context) {
@@ -103,7 +103,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
             @Override
             public void onLoadMore() {
                 wrapper_rec.setLoadState(wrapper_rec.LOADING);
-                GetRecommendationPost getRecommendationPost = new GetRecommendationPost();
+                GetRecommendationPost getRecommendationPost = new GetRecommendationPost(getActivity());
                 getRecommendationPost.execute();
             }
         });
@@ -126,9 +126,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
             }
         });
 
-        GetRecommendationPost getRecommendationPost = new GetRecommendationPost();
+        GetRecommendationPost getRecommendationPost = new GetRecommendationPost(getActivity());
         getRecommendationPost.execute();
-        GetFollowedPost getFollowedPost = new GetFollowedPost();
+        GetFollowedPost getFollowedPost = new GetFollowedPost(getActivity());
         getFollowedPost.execute();
     }
 
@@ -151,7 +151,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 f_layout.startAnimation(animation);
                 Animation a2 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_right_translate_in_alpha_500ms);
                 rc_layout.startAnimation(a2);
-                ChangeVisibility changeVisibility = new ChangeVisibility();
+                ChangeVisibility changeVisibility = new ChangeVisibility(getActivity());
                 changeVisibility.execute(true);
                 break;
             case R.id.button_post_follow:
@@ -164,14 +164,18 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 rc_layout.startAnimation(animation2);
                 Animation a3 = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_in_alpha_500ms);
                 f_layout.startAnimation(a3);
-                ChangeVisibility changeVisibility2 = new ChangeVisibility();
+                ChangeVisibility changeVisibility2 = new ChangeVisibility(getActivity());
                 changeVisibility2.execute(false);
                 break;
         }
     }
 
     int lastF_id = -1;
-    class GetFollowedPost extends AsyncTask<String, Integer, JSONArray>{
+    class GetFollowedPost extends MyAsyncTask<String, Integer, JSONArray>{
+
+        protected GetFollowedPost(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {
@@ -228,7 +232,11 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     }
 
     int lastRc_id = -1;
-    class GetRecommendationPost extends AsyncTask<String, Integer, JSONArray>{
+    class GetRecommendationPost extends MyAsyncTask<String, Integer, JSONArray>{
+        protected GetRecommendationPost(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
@@ -280,7 +288,11 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         }
     }
 
-    class ChangeVisibility extends AsyncTask<Boolean, Integer, Boolean>{
+    class ChangeVisibility extends MyAsyncTask<Boolean, Integer, Boolean>{
+
+        protected ChangeVisibility(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Boolean... booleans) {
