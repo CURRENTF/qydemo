@@ -7,14 +7,12 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="5dp"
     android:paddingVertical="2dp"
-    android:background="@color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#feeeed"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="60dp"
@@ -46,12 +44,13 @@
             android:maxLines="1"/>
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.2"
             android:layout_height="match_parent"
             android:id="@+id/count"
             android:textColor="#ffc20e"
             android:text="9"
-            android:gravity="center"
+            android:gravity="end|center_vertical"
+            android:paddingEnd="10dp"
             android:textStyle="bold"
             android:textSize="20sp"/>
 

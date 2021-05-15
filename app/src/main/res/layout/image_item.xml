@@ -6,20 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="5dp"
-    android:paddingVertical="2dp"
-    android:background="@color/white"
+    android:paddingVertical="6dp"
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="#feeeed"
         android:orientation="horizontal"
         android:gravity="center_vertical">
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:id="@+id/medal"
             android:src="@drawable/ic__gold_medal"/>
         <TextView
@@ -31,12 +29,12 @@
             android:textSize="22sp"
             android:gravity="center"
             android:id="@+id/rank"
-            android:visibility="gone"
-            android:layout_marginHorizontal="10dp"/>
+            android:visibility="gone"/>
         <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginStart="5dp"
+            android:layout_gravity="center_vertical"
             android:id="@+id/pic"/>
         <TextView
             android:layout_width="0dp"

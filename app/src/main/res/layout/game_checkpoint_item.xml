@@ -46,7 +46,7 @@
     <ImageView
         android:layout_width="20dp"
         android:layout_height="3dp"
-        android:src="@color/star_dark"
+        android:background="@color/star_dark"
         android:tag="star"
         android:id="@+id/star_1_0"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +56,7 @@
         android:id="@+id/star_1_1"
         android:layout_width="3dp"
         android:layout_height="20dp"
-        android:src="@color/star_dark"
+        android:background="@color/star_dark"
         android:tag="star"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/img" />
@@ -65,7 +65,7 @@
         android:id="@+id/star_2"
         android:layout_width="3dp"
         android:layout_height="40dp"
-        android:src="@color/star_dark"
+        android:background="@color/star_dark"
         android:tag="star"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/star_1_1"
@@ -74,7 +74,7 @@
     <ImageView
         android:layout_width="3dp"
         android:layout_height="20dp"
-        android:src="@color/star_light"
+        android:background="@color/star_light"
         android:tag="star"
         android:id="@+id/star_3_0"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +83,7 @@
     <ImageView
         android:layout_width="20dp"
         android:layout_height="3dp"
-        android:src="@color/star_light"
+        android:background="@color/star_light"
         android:id="@+id/star_3_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -91,7 +91,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="3dp"
-        android:src="@color/star_light"
+        android:background="@color/star_light"
         android:tag="star"
         android:id="@+id/star_4"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -101,7 +101,7 @@
     <ImageView
         android:layout_width="20dp"
         android:layout_height="3dp"
-        android:src="@color/star_dark"
+        android:background="@color/star_dark"
         android:tag="star"
         android:id="@+id/star_5_0"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -111,7 +111,7 @@
         android:id="@+id/star_5_1"
         android:layout_width="3dp"
         android:layout_height="20dp"
-        android:src="@color/star_dark"
+        android:background="@color/star_dark"
         android:tag="star"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -120,7 +120,7 @@
         android:id="@+id/star_6"
         android:layout_width="3dp"
         android:layout_height="40dp"
-        android:src="@color/star_light"
+        android:background="@color/star_light"
         android:tag="star"
         app:layout_constraintBottom_toTopOf="@id/star_5_1"
         app:layout_constraintStart_toStartOf="parent" />
@@ -129,14 +129,14 @@
         android:id="@+id/star_7_0"
         android:layout_width="3dp"
         android:layout_height="20dp"
-        android:src="@color/star_light"
+        android:background="@color/star_light"
         app:layout_constraintBottom_toTopOf="@id/star_6"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:layout_width="20dp"
         android:layout_height="3dp"
-        android:src="@color/star_light"
+        android:background="@color/star_light"
         app:layout_constraintStart_toStartOf="parent"
         android:id="@+id/star_7_1"
         app:layout_constraintTop_toTopOf="@id/star_7_0"/>

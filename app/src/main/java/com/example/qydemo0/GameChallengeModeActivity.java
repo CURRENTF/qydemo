@@ -10,6 +10,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.RelativeLayout;
 
+import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.Widget.GameCheckPointItem;
 
 import org.json.JSONArray;
@@ -39,16 +40,29 @@ public class GameChallengeModeActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
+                boolean first = true;
                 for(int i = 0; i < ja.length(); i++){
                     try {
                         JSONObject json = ja.getJSONObject(i);
-                        items[i].setStar(json.getInt("stars"));
+                        int star_num = json.getInt("star_num");
+                        double star = json.getDouble("star");
+                        if(star_num == 0 && first){
+                            first = false;
+                        }
+                        else if(star_num == 0){
+                            items[i].lockSelf();
+                        }
+                        else {
+                            items[i].setStar(star_num / star);
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+                for(int j = ja.length(); j < 5; j++) items[j].lockSelf();
             }
         };
+        AdvanceHttp.getGameChallengeStars(handler);
     }
 
 }

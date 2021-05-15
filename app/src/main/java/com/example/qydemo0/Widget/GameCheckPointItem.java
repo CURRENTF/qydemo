@@ -48,20 +48,20 @@ public class GameCheckPointItem extends ConstraintLayout implements View.OnClick
         medal.setVisibility(GONE);
         src = mView.findViewById(R.id.img);
         src.setImageResource(resId);
-        for(int i = 0; i < 8; i++){
+        for(int i = 0; i < 12; i++){
             stars[i] = mView.findViewById(stars_id[i]);
-            stars[i].setBackgroundColor(activity.getColor(R.color.star_dark));
+            stars[i].setBackgroundResource(R.color.star_dark);
         }
     }
 
     void setStarLine(int x){
         for(int i = 0; i < x; i++){
-            if((i & 1) == 1){
-                stars[3 * (i/2)].setBackgroundColor(activity.getColor(R.color.star_light));
+            if((i & 1) == 0){
+                stars[3 * (i/2)].setBackgroundResource(R.color.star_light);
             }
             else {
-                stars[3 * (i/2) + 1].setBackgroundColor(activity.getColor(R.color.star_light));
-                stars[3 * (i/2) + 2].setBackgroundColor(activity.getColor(R.color.star_light));
+                stars[3 * (i/2) + 1].setBackgroundResource(R.color.star_light);
+                stars[3 * (i/2) + 2].setBackgroundResource(R.color.star_light);
             }
         }
     }
@@ -72,7 +72,6 @@ public class GameCheckPointItem extends ConstraintLayout implements View.OnClick
     }
 
     public void setStar(int x){
-        if(x == 0) lockSelf();
         if(x == 9){
             medal.setVisibility(VISIBLE);
             setStarLine(8);
@@ -85,6 +84,13 @@ public class GameCheckPointItem extends ConstraintLayout implements View.OnClick
     public void lockSelf(){
         lock.setVisibility(VISIBLE);
         src.setAlpha((float) 0.5);
+        mView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                // do nothing
+            }
+        });
     }
 
     @Override
