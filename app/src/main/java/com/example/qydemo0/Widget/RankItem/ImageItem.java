@@ -2,17 +2,21 @@ package com.example.qydemo0.Widget.RankItem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.qydemo0.GameActivity;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class ImageItem extends RelativeLayout {
 
@@ -62,6 +66,7 @@ public class ImageItem extends RelativeLayout {
             }
             JSONObject img = json.getJSONObject("img");
             Img.url2imgViewRoundRectangle(img.getString("url"), this.img, activity, 10);
+            setOnClick(img, json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -91,9 +96,34 @@ public class ImageItem extends RelativeLayout {
             }
             JSONObject img = json.getJSONObject("img");
             Img.url2imgViewRoundRectangle(img.getString("url"), this.img, activity, 10);
+            setOnClick(img, json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    void setOnClick(JSONObject img, JSONObject json){
+        mView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> arrayList = new ArrayList<>();
+                arrayList.add("3");
+                try {
+                    arrayList.add(img.getString("url"));
+                    arrayList.add(json.getString("pass_rate"));
+                    arrayList.add(json.getString("gid"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.setClass(activity, GameActivity.class);
+                intent.putStringArrayListExtra("GameParams", arrayList);
+                activity.startActivity(intent);
+            }
+        });
     }
 
 }

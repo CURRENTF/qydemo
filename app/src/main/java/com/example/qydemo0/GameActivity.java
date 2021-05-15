@@ -107,8 +107,8 @@ public class GameActivity extends Activity {
         }
         else if(mode == 2 || mode == 3){
             img_list.add(params.get(1));
-            diffi_list.add(params.get(2));
-            if(mode==2) will_upload_img=params.get(3);
+            diffi_list.add(mode==3?params.get(2):"未知");
+            if(mode==2) will_upload_img=img_list.get(0);
             else gid_list.add(Integer.valueOf(params.get(3)));
             refresh_img();
         }

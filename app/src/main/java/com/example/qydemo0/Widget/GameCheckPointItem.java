@@ -35,7 +35,7 @@ public class GameCheckPointItem extends ConstraintLayout implements View.OnClick
         stars = new ImageView[12];
         activity = (Activity) context;
         this.resId = resId;
-        this.ser = ser;
+        this.ser = ser + 1;
         INFLATE();
     }
 

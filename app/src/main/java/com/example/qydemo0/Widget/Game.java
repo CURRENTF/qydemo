@@ -108,8 +108,15 @@ public class Game extends RelativeLayout {
             public void onActivityResult(Uri result) {
                 if(result == null) return;
                 String realPath = Uri2RealPath.getRealPathFromUri_AboveApi19(ac, result);
-                UploadImage uploadImage = new UploadImage();
-                uploadImage.execute(realPath);
+                Intent intent = new Intent();
+                intent.setClass(ac, GameActivity.class);
+                ArrayList<String> list = new ArrayList<>();
+                list.add("2");
+                list.add(realPath);
+                intent.putStringArrayListExtra("GameParams", list);
+                ac.startActivity(intent);
+//                UploadImage uploadImage = new UploadImage();
+//                uploadImage.execute(realPath);
             }
         });
         upload.setOnClickListener(new View.OnClickListener(){

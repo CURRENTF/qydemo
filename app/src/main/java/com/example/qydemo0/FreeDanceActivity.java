@@ -147,11 +147,11 @@ public class FreeDanceActivity extends Activity implements SurfaceHolder.Callbac
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         initViews();
         ButterKnife.bind(this);
-        //ArrayList<String> list = getIntent().getStringArrayListExtra("params");
-        ArrayList<String> list = new ArrayList<>();
-        list.add("0");
-        list.add("1080P");
-        list.add("/sdcard/DCIM/Camera/B612Kaji_20200707_201816_832.mp4");
+        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+//        ArrayList<String> list = new ArrayList<>();
+//        list.add("0");
+//        list.add("1080P");
+//        list.add("/sdcard/DCIM/Camera/B612Kaji_20200707_201816_832.mp4");
         initLearnVideo(list);
         is_learn = false;
 
