@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.i("StartCode",""+startCode);
                 ArrayList<String> params = new ArrayList<>();
                 params.add("1");
-                Intent intent = new Intent(MainActivity.this, SegmentChoiceActivity.class);
+                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
                 intent.putStringArrayListExtra("params", params);
                 startActivity(intent);
 

@@ -49,6 +49,7 @@ import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.QYpack.WaveLoadDialog;
 import com.example.qydemo0.Widget.QYDIalog;
+import com.example.qydemo0.Widget.QYDialogUncancelable;
 import com.example.qydemo0.bean.CallBackBean;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.gson.Gson;
@@ -85,10 +86,10 @@ public class VideoRenderActivity extends AppCompatActivity {
     StandardGSYVideoPlayer videoPlayer;
     
     private WaveLoadDialog dialog;
-    private QYDIalog dialog_loading;
+    private QYDialogUncancelable dialog_loading;
     private AVLoadingIndicatorView avi;
 
-    private int[] render_paras = {0,0,0,1};
+    private int[] render_paras = {0,0,0};
 
     private Boolean isYuLan = false;
 
@@ -107,10 +108,10 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-        final Intent intent = getIntent();
-        free_dance_url = intent.getStringExtra("free_dance_url");
+//        final Intent intent = getIntent();
+//        free_dance_url = intent.getStringExtra("free_dance_url");
 
-//        free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
+        free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
         Log.e("free_dance_url",free_dance_url);
 
         inti_clip_video();
@@ -166,19 +167,19 @@ public class VideoRenderActivity extends AppCompatActivity {
             }
         });
 
-        Button btn_mode = (Button) findViewById(R.id.render_mode);
-        btn_mode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(btn_mode.getText().equals("快速")){
-                    render_paras[3] = 0;
-                    btn_mode.setText("精准");
-                } else {
-                    render_paras[3] = 1;
-                    btn_mode.setText("快速");
-                }
-            }
-        });
+//        Button btn_mode = (Button) findViewById(R.id.render_mode);
+//        btn_mode.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(btn_mode.getText().equals("快速")){
+//                    render_paras[3] = 0;
+//                    btn_mode.setText("精准");
+//                } else {
+//                    render_paras[3] = 1;
+//                    btn_mode.setText("快速");
+//                }
+//            }
+//        });
 
         mCVClient = CVUnit.getVideoStyleTransferDetectorClient
                 (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
@@ -421,7 +422,7 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public class SendRenderVideo extends AsyncTask<String , Integer, String>{
+    public class SendRenderVideo extends AsyncTask<String , String, String>{
 
 
         private String doBG(){
@@ -434,8 +435,11 @@ public class VideoRenderActivity extends AppCompatActivity {
             if (st == 1) {
                 for (int o = 0; o < 5; o++) {
                     if (startCode == 0) {
-                        if (bg == -2)
-                            render_img = Img.saveImg(Img.compressImage(getStyleBitmap(Img.getBitmapFromLocalUrl(render_img))), "", VideoRenderActivity.this);
+                        if (bg == -2) {
+                            Bitmap crs = getStyleBitmap(Img.getBitmapFromLocalUrl(render_img));
+                            Log.i("whc_crs", String.valueOf(crs==null));
+                            render_img = Img.saveImg(crs, "", VideoRenderActivity.this);
+                        }
                         else {
                                 render_img = Img.saveImg(getStyleBitmap(BitmapFactory.decodeResource(getResources(), imgs[bg-1])), "", VideoRenderActivity.this);
                         }
@@ -449,11 +453,13 @@ public class VideoRenderActivity extends AppCompatActivity {
                         return null;
                     }
                 }
-                render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, Img.compressWithUrl(render_img,VideoRenderActivity.this), 0, cur_file.hashFileUrl(render_img));
+                String cu = Img.compressWithUrl(render_img,VideoRenderActivity.this);
+                render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cu, 0, cur_file.hashFileUrl(cu));
                 Log.e("render_img_id_after_style",String.valueOf(render_img_id==null));
             } else {
                 if (bg == -2) {
-                    render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, Img.compressWithUrl(render_img, VideoRenderActivity.this), 0, cur_file.hashFileUrl(render_img));
+                    String cu = Img.compressWithUrl(render_img,VideoRenderActivity.this);
+                    render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cu, 0, cur_file.hashFileUrl(cu));
                     Log.i("12312","成功上传！");
                 } else {
                     try {
@@ -480,7 +486,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                 dialog.start_progress();
             }
             else{
-                dialog_loading = new QYDIalog(VideoRenderActivity.this, R.layout.loading_dialog, new int[]{R.id.avi});
+                dialog_loading = new QYDialogUncancelable(VideoRenderActivity.this, R.layout.loading_dialog, new int[]{R.id.avi});
                 dialog_loading.show();
                 avi = (AVLoadingIndicatorView) dialog_loading.findViewById(R.id.avi);
                 avi.smoothToShow();
@@ -514,7 +520,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                     } else {
                         callToJson.add("is_background");callToJson.add("bool");callToJson.add("false");
                     }
-                    callToJson.add("mode");callToJson.add("bool");callToJson.add(render_paras[3]==1?"true":"false");
+//                    callToJson.add("mode");callToJson.add("bool");callToJson.add(render_paras[3]==1?"true":"false");
                     if(render_paras[1]!=0){
                         callToJson.add("is_filter");callToJson.add("bool");callToJson.add("true");
                         callToJson.add("filter_id");callToJson.add("string");callToJson.add(""+(render_paras[1]-1));
@@ -535,14 +541,15 @@ public class VideoRenderActivity extends AppCompatActivity {
                         else {
                             return null;
                         }
-                        for(int i=0;i<20;i++){
+                        for(int i=0;i<200;i++){
                             Thread.sleep(1000);
                             JSONObject res_json_rendered = new JSONObject(cur_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
                                     "Authorization",GlobalVariable.mInstance.token));
-                            Log.i("whc123",tid+" "+res_json_rendered.getJSONObject("data").getString("schedule"));
-                            String cur_schedule = res_json_rendered.getJSONObject("data").getString("schedule");
-                            if(res_json_rendered.getJSONObject("data").getBoolean("is_finish")){
+                            Log.i("whc123",tid+" "+res_json_rendered.getJSONObject("data").getJSONObject("task").getInt("prog"));
+                            int cur_schedule = res_json_rendered.getJSONObject("data").getJSONObject("task").getInt("prog");
+                            if(res_json_rendered.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1){
                                 JSONObject cur_urls = res_json_rendered.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url");
+                                Log.i("whc_urls", String.valueOf(cur_urls));
                                 if(cur_urls.has("1080P"))
                                     return cur_urls.getString("1080P");
                                 if(cur_urls.has("720P"))
@@ -554,8 +561,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                                 if(cur_urls.has("自动"))
                                     return cur_urls.getString("自动");
                             } else {
-                                Integer sch = Integer.valueOf(cur_schedule.substring(0, cur_schedule.length()-1));
-                                publishProgress(sch==100?99:sch);
+                                publishProgress(cur_schedule==100?"99":String.valueOf(cur_schedule), res_json_rendered.getJSONObject("data").getJSONObject("task").isNull("step")?"":res_json_rendered.getJSONObject("data").getJSONObject("task").getString("step"));
                             }
                         }
                         return null;
@@ -572,25 +578,24 @@ public class VideoRenderActivity extends AppCompatActivity {
             //hideProgressDialog();
             if(s==null){
                 Toast.makeText(VideoRenderActivity.this,"渲染出错，请重新尝试",Toast.LENGTH_LONG).show();
+            } else {
+                if (isYuLan) {
+                    dialog.stop_progress();
+                    Log.i("whc_url", s);
+                    updatePlayer(s);
+                } else {
+                    avi.smoothToHide();
+                    dialog_loading.dismiss();
+                    Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
-            if(isYuLan){
-                dialog.stop_progress();
-                 Log.i("whc_url",s);
-                 updatePlayer(s);
-            }
-            else{
-                avi.smoothToHide();
-                dialog_loading.dismiss();
-                Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-
             }
         @Override
-        protected void onProgressUpdate(Integer... values) {
+        protected void onProgressUpdate(String... values) {
                 super.onProgressUpdate(values);
-                dialog.set_progress(values[0]/100f);
+                dialog.set_progress(Integer.valueOf(values[0])/100f, values[1]);
             }
 
         }

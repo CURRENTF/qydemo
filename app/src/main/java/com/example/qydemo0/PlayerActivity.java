@@ -49,6 +49,7 @@ import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentBean;
 import com.example.qydemo0.bean.CommentDetailBean;
 import com.example.qydemo0.bean.ReplyDetailBean;
+import com.example.qydemo0.bean.UIDataBean;
 import com.example.qydemo0.bean.WorkBean;
 import com.example.qydemo0.view.CommentExpandableListView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -119,6 +120,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private WorkBean work_bean = new WorkBean();
 
+    private UIDataBean ui_bean = new UIDataBean();
+
     private LinearLayout render_content;
     private List<WorkItem> render_items = new ArrayList<>();
     private QYrequest cur_request = new QYrequest();
@@ -130,6 +133,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private int work_id = 0;
     QYScrollView qyscrollview_comment;
     private int llid = -1;
+    private int bid = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -312,9 +316,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
     private void init_work_status(){
         like_it = findViewById(R.id.video_like);
-        if(work_bean.getData().getIs_like()){
+        if(ui_bean.getIs_like()){
             isLikeWork = true;
             like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+        } else {
+            like_it.setColorFilter(Color.parseColor("#aaaaaa"));
         }
         like_it.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,7 +338,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
                             if(res.getString("msg").equals("Success")) {
                             isLikeWork = false;
-                            work_bean.getData().setLike_num(work_bean.getData().getLike_num() - 1);
+                            ui_bean.setLike_num(ui_bean.getLike_num() - 1);
                         }
                         runOnUiThread(new Runnable() {
                             @Override
@@ -340,8 +346,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                 try {
                                     if(res.getString("msg").equals("Success"))
                                 {
-                                    if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
-                                    else video_like_num.setText(""+work_bean.getData().getLike_num());
+                                    if(ui_bean.getLike_num() == 0)  video_like_num.setText("");
+                                    else video_like_num.setText(""+ui_bean.getLike_num());
                                     like_it.setColorFilter(Color.parseColor("#aaaaaa"));
                                 }
                                 } catch (JSONException e) {
@@ -371,7 +377,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                             Log.i("whc_like_it_log", String.valueOf(res));
                             if(res.getString("msg").equals("Success")) {
                                 isLikeWork = true;
-                                work_bean.getData().setLike_num(work_bean.getData().getLike_num() + 1);
+                                ui_bean.setLike_num(ui_bean.getLike_num() + 1);
                             }
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -379,13 +385,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                     try {
                                         if(res.getString("msg").equals("Success"))
                                         {
-                                            video_like_num.setText(""+work_bean.getData().getLike_num());
+                                            video_like_num.setText(""+ui_bean.getLike_num());
                                             like_it.setColorFilter(Color.parseColor("#FF5C5C"));
                                             if(isDislikeWork){
                                                 isDislikeWork = false;
-                                                work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() - 1);
-                                                if(work_bean.getData().getDislike_num() == 0)  video_dislike_num.setText("");
-                                                else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                ui_bean.setDislike_num(ui_bean.getDislike_num() - 1);
+                                                if(ui_bean.getDislike_num() == 0)  video_dislike_num.setText("");
+                                                else video_dislike_num.setText(""+ui_bean.getDislike_num());
                                                 dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
                                             }
                                         }
@@ -404,9 +410,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         });
 
         dislike_it = findViewById(R.id.video_dislike);
-        if(work_bean.getData().getIs_dislike()){
+        if(ui_bean.getIs_dislike()){
             isDislikeWork = true;
             dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+        }
+        else {
+            dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
         }
         dislike_it.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,7 +433,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
                                 if(res.getString("msg").equals("Success")) {
                                     isDislikeWork = false;
-                                    work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() - 1);
+                                    ui_bean.setDislike_num(ui_bean.getDislike_num() - 1);
                                 }
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -432,8 +441,8 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                         try {
                                             if(res.getString("msg").equals("Success"))
                                             {
-                                                if(work_bean.getData().getDislike_num() == 0)  video_dislike_num.setText("");
-                                                else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                if(ui_bean.getDislike_num() == 0)  video_dislike_num.setText("");
+                                                else video_dislike_num.setText(""+ui_bean.getDislike_num());
                                                 dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
                                             }
                                         } catch (JSONException e) {
@@ -460,7 +469,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
                                 if(res.getString("msg").equals("Success")) {
                                     isDislikeWork = true;
-                                    work_bean.getData().setDislike_num(work_bean.getData().getDislike_num() + 1);
+                                    ui_bean.setDislike_num(ui_bean.getDislike_num() + 1);
                                 }
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -468,13 +477,13 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                                         try {
                                             if(res.getString("msg").equals("Success"))
                                             {
-                                                video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+                                                video_dislike_num.setText(""+ui_bean.getDislike_num());
                                                 dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
                                                 if(isLikeWork) {
                                                     isLikeWork = false;
-                                                    work_bean.getData().setLike_num(work_bean.getData().getLike_num() - 1);
-                                                    if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
-                                                    else video_like_num.setText(""+work_bean.getData().getLike_num());
+                                                    ui_bean.setLike_num(ui_bean.getLike_num() - 1);
+                                                    if(ui_bean.getLike_num() == 0)  video_like_num.setText("");
+                                                    else video_like_num.setText(""+ui_bean.getLike_num());
                                                     like_it.setColorFilter(Color.parseColor("#aaaaaa"));
                                                 }
                                             }
@@ -497,12 +506,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         isFollow = (Button) findViewById(R.id.is_follow);
         isCanceF = (Button) findViewById(R.id.is_cancel_follow);
 
-        if(work_bean.getData().getIs_follow()==null){
+        if(ui_bean.getIs_follow()==null){
             isFollow.setVisibility(View.GONE);
             isCanceF.setVisibility(View.GONE);
         }
         else {
-            if (work_bean.getData().getIs_follow()) {
+            if (ui_bean.getIs_follow()) {
                 isCanceF.setVisibility(View.VISIBLE);
                 isFollow.setVisibility(View.GONE);
             } else {
@@ -568,26 +577,6 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 .transform(/*new CenterInside(), */new RoundedCorners(50)).into(head_img);
         TextView user_name = (TextView) findViewById(R.id.detail_page_userName);
         user_name.setText(work_bean.getData().getBelong().getUsername());
-    }
-
-    private void test_deplayer(){
-        Handler handler=new Handler();
-
-        Runnable runnable=new Runnable() {
-            @Override
-
-            public void run() {
-
-
-                Log.i("whc__", String.valueOf(detailPlayer.getGSYVideoManager().getCurrentPosition()));
-                handler.postDelayed(this, 2000);
-
-            }
-
-        };
-
-        handler.postDelayed(runnable, 1000);//每两秒执行一次runnable.
-
     }
 
     private void init_player(List<String> sources, List<String> list_name, String coverUrl){
@@ -677,12 +666,12 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
         loadFirstFrameCover(coverUrl);
 
-        test_deplayer();
     }
 
-    private void init_work(String cur_Json){
+    private void init_work(String cur_Json, String cur_Json1) throws JSONException {
         Gson gson = new Gson();
         work_bean = gson.fromJson(cur_Json, WorkBean.class);
+        ui_bean = gson.fromJson((new JSONObject(cur_Json1)).getString("data"), UIDataBean.class);
         Log.i("whc123",""+work_bean.getMsg());
         List<String> lists = new ArrayList<>();
         List<String> list_name = new ArrayList<>();
@@ -725,22 +714,22 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
         init_player(lists,list_name,work_bean.getData().getCover_url().getUrl());
         init_button_and_pager();
-        init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), work_bean.getData().getLike_num(),
-                work_bean.getData().getDislike_num(), work_bean.getData().getPlay_num(), work_bean.getData().getComment_num());
+        init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), ui_bean.getLike_num(),
+                ui_bean.getDislike_num(), work_bean.getData().getPlay_num(), work_bean.getData().getComment_num());
         init_work_status();
     }
 
     private void do_like_btn(){
         if(isLikeWork){
             isLikeWork = false;
-            work_bean.getData().setLike_num(work_bean.getData().getLike_num()-1);
-            if(work_bean.getData().getLike_num() == 0)  video_like_num.setText("");
-            else video_like_num.setText(""+work_bean.getData().getLike_num());
+            ui_bean.setLike_num(ui_bean.getLike_num()-1);
+            if(ui_bean.getLike_num() == 0)  video_like_num.setText("");
+            else video_like_num.setText(""+ui_bean.getLike_num());
             like_it.setColorFilter(Color.parseColor("#aaaaaa"));
         } else{
             isLikeWork = true;
-            work_bean.getData().setLike_num(work_bean.getData().getLike_num()+1);
-            video_like_num.setText(""+work_bean.getData().getLike_num());
+            ui_bean.setLike_num(ui_bean.getLike_num()+1);
+            video_like_num.setText(""+ui_bean.getLike_num());
             like_it.setColorFilter(Color.parseColor("#FF5C5C"));
         }
     }
@@ -748,14 +737,14 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     private void do_dislike_btn(){
         if(isDislikeWork){
             isDislikeWork = false;
-            work_bean.getData().setDislike_num(work_bean.getData().getDislike_num()-1);
-            if(work_bean.getData().getDislike_num() == 0) video_dislike_num.setText("");
-            else video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+            ui_bean.setDislike_num(ui_bean.getDislike_num()-1);
+            if(ui_bean.getDislike_num() == 0) video_dislike_num.setText("");
+            else video_dislike_num.setText(""+ui_bean.getDislike_num());
             dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
         } else{
             isDislikeWork = true;
-            work_bean.getData().setDislike_num(work_bean.getData().getDislike_num()+1);
-            video_dislike_num.setText(""+work_bean.getData().getDislike_num());
+            ui_bean.setDislike_num(ui_bean.getDislike_num()+1);
+            video_dislike_num.setText(""+ui_bean.getDislike_num());
             dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
         }
     }
@@ -1094,29 +1083,37 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(PlayerActivity.this,"回复成功",Toast.LENGTH_SHORT).show();
     }
 
-    public class GetWorkJson extends AsyncTask<Integer, Void, String>{
+    public class GetWorkJson extends AsyncTask<Integer, Void, List<String> >{
 
         @Override
-        protected String doInBackground(Integer... idd) {
+        protected List<String> doInBackground(Integer... idd) {
             String res = work_request.advanceGet(Constant.mInstance.work+idd[0]+"/", "Authorization", GlobalVariable.mInstance.token);
             Log.i("workJson",res);
-            return res;
+            String res1 = work_request.advanceGet(Constant.mInstance.work+"ui/"+idd[0]+"/", "Authorization", GlobalVariable.mInstance.token);
+            Log.i("workJson",res1);
+            List<String> res2 = new ArrayList<>();
+            res2.add(res);
+            res2.add(res1);
+            return res2;
         }
 
         @Override
-        protected void onPostExecute(String cur_work_json) {
+        protected void onPostExecute(List<String> cur_work_json) {
             super.onPreExecute();
             try {
-                player_urls = new JSONObject(cur_work_json);
+                player_urls = new JSONObject(cur_work_json.get(0));
                 Log.e("whc_player_urls", String.valueOf(player_urls));
                 player_urls = player_urls.getJSONObject("data").getJSONObject("video").getJSONObject("url");
-                breakdown_id = (new JSONObject(cur_work_json)).getJSONObject("data").getJSONArray("breakdown").getJSONObject(0).getInt("id");
-                llid = (new JSONObject(cur_work_json)).getJSONObject("data").getInt("lid");
-                Log.e("breakdown_id", String.valueOf(breakdown_id));
+                Log.i("whc_work_json0", cur_work_json.get(0));
+                Log.i("whc_work_json1", cur_work_json.get(1));
+                llid = (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("lid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
+                // 获取breakdown_id
+                bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
+                init_work(cur_work_json.get(0), cur_work_json.get(1));
+                new WorkChange().execute(0);
             } catch (JSONException e) {
                 e.printStackTrace();
-            }init_work(cur_work_json);
-            new WorkChange().execute(0);
+            }
         }
     }
 
@@ -1344,30 +1341,44 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         protected void onPostExecute(Integer[] integer) {
             super.onPostExecute(integer);
-            if(integer[0]==-1) {
-                Intent intent = new Intent(PlayerActivity.this, SegmentChoiceActivity.class);
-                ArrayList<String> params = new ArrayList<>();
-                params.add(String.valueOf(work_id));
-                intent.putStringArrayListExtra("params", params);
-                startActivity(intent);
-            } else {
-                //get last learn_list index
-                Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
-                ArrayList<String> params = new ArrayList<>();
-                params.add(String.valueOf(integer[0]));
-                params.add(String.valueOf(work_id));
-                params.add(String.valueOf(integer[1]));
-                startActivity(intent);
+            if(integer==null){Toast.makeText(PlayerActivity.this, "出错啦！", Toast.LENGTH_SHORT).show();}
+            else {
+                if (integer[0] == -1) {
+                    Intent intent = new Intent(PlayerActivity.this, SegmentChoiceActivity.class);
+                    ArrayList<String> params = new ArrayList<>();
+                    params.add(String.valueOf(work_id));
+                    intent.putStringArrayListExtra("params", params);
+                    startActivity(intent);
+                } else {
+                    //get last learn_list index
+                    Intent intent = new Intent(PlayerActivity.this, LearnDanceActivity.class);
+                    ArrayList<String> params = new ArrayList<>();
+                    params.add(String.valueOf(integer[0]));
+                    params.add(String.valueOf(bid));
+                    params.add(String.valueOf(integer[1]));
+                    params.add("1");
+                    intent.putStringArrayListExtra("params", params);
+                    startActivity(intent);
+                }
             }
         }
 
         @Override
         protected Integer[] doInBackground(Void... voids) {
-            if(work_bean.getData().getIs_learning()){
+            if(llid!=-1){
                 //get index
                 int lid = llid, ind=0;
-                String res = work_request.advanceGet(Constant.mInstance.learn_url+"learn/"+lid+"/?start=0&lens=1", "Authorization", GlobalVariable.mInstance.token);
-                return new Integer[]{lid, ind};
+                try {
+                    Log.i("whc_lid", ""+lid);
+                    JSONObject res = new JSONObject(work_request.advanceGet(Constant.mInstance.learn_url+"record/"+lid+"/?start=0&lens=1", "Authorization", GlobalVariable.mInstance.token));
+                    Log.i("whc_ind_res", String.valueOf(res));
+                    if(res.getJSONArray("data").isNull(0)) ind = 0;
+                    else ind = res.getJSONArray("data").getJSONObject(0).getJSONObject("segment_info").getInt("b_index")-1;
+                    return new Integer[]{lid, ind};
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
             }
             else  return new Integer[]{-1};
         }

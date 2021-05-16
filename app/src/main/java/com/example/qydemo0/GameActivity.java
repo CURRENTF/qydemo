@@ -3,7 +3,9 @@ package com.example.qydemo0;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -35,12 +37,14 @@ import com.example.qydemo0.QYpack.KqwOneShot;
 import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.QYDIalog;
+import com.example.qydemo0.Widget.QYDialogUncancelable;
 import com.example.qydemo0.utils.SoundTipUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -73,7 +77,7 @@ public class GameActivity extends Activity {
     private Handler handler;
     private int star_num;
     private boolean is_mirror = false;
-    private QYDIalog qydIalog;
+    private QYDialogUncancelable qydIalog;
     private QYrequest cur_request = new QYrequest();
     private QYFile cur_file = new QYFile();
     private int guan;
@@ -378,12 +382,20 @@ public class GameActivity extends Activity {
                 if (!dir.exists()) {
                     dir.mkdir();
                 }
+
+                Matrix matrix = new Matrix();
+                matrix.postRotate(-90);
+                Bitmap curb = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Bitmap resizeBitmap = Bitmap.createBitmap(curb, 0, 0, curb.getWidth(), curb.getHeight(), matrix, true);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                resizeBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] datas = baos.toByteArray();
                 path_cur = dir + "/" + System.currentTimeMillis() + ".jpg";
                 FileOutputStream fos = new FileOutputStream(path_cur);
-                fos.write(bytes);
+                fos.write(datas);
                 fos.flush();
                 fos.close();
-                user_image.setImageBitmap(BitmapFactory.decodeByteArray(bytes, 0, bytes.length));
+                user_image.setImageBitmap(BitmapFactory.decodeByteArray(datas, 0, datas.length));
                 return path_cur;
             }
         } catch (FileNotFoundException e) {
@@ -395,14 +407,16 @@ public class GameActivity extends Activity {
     }
 
     private String upload_img(String path){
-        String render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, Img.compressWithUrl(path, GameActivity.this), 0, cur_file.hashFileUrl(path));
+        String cu = Img.compressWithUrl(path, GameActivity.this);
+        String render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cu, 0, cur_file.hashFileUrl(cu));
         return render_img_id;
     }
 
     private Boolean post_is_pass(int gid, int oper){
         try {
             String[] j = new String[0];
-            JSONObject res_json = new JSONObject(cur_request.advancePut(GenerateJson.universeJson2(j), Constant.mInstance.game_url + "/free/"+gid+"/"+oper+"/", "Authorization", GlobalVariable.mInstance.token));
+            JSONObject res_json = new JSONObject(cur_request.advancePut(GenerateJson.universeJson2(j), Constant.mInstance.game_url + "free/"+gid+"/"+oper+"/", "Authorization", GlobalVariable.mInstance.token));
+            Log.i("whc_res_json", String.valueOf(res_json));
             if(res_json.getString("msg").equals("Success")){
                 return true;
             }
@@ -443,7 +457,8 @@ public class GameActivity extends Activity {
         protected void onPostExecute(List<Integer> score) {
             super.onPostExecute(score);
             Log.i("user_score",""+score);
-            showResult(score.get(0));
+            if(score==null) Log.i("whc_score", "empty");
+            else showResult(score.get(0));
         }
 
         @Override
@@ -454,30 +469,31 @@ public class GameActivity extends Activity {
             String[] callToJson;
             if(mode==2) {
                 String cur_img_game_id = upload_img(will_upload_img);
-                callToJson = new String[]{"img_game", "int", "" + cur_img_game_id,
-                        "img", "string", cur_img_id};
+                callToJson = new String[]{"img_game", "string", cur_img_game_id,
+                        "img_user", "string", cur_img_id};
             }
             else {
                 callToJson = new String[]{"game", "int", "" + gid_list.get(cur_img_ind - 1),
-                        "img", "string", cur_img_id};
+                        "img_user", "string", cur_img_id};
             }
             try {
-                JSONObject res_json = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callToJson),Constant.mInstance.task_url+"/"+"game/", "Authorization", GlobalVariable.mInstance.token));
+                Log.i("whc_callToJson", GenerateJson.universeJson2(callToJson));
+                JSONObject res_json = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callToJson),Constant.mInstance.task_url+"game/", "Authorization", GlobalVariable.mInstance.token));
                 Log.i("whc_res_json", String.valueOf(res_json));
                 if(!res_json.getString("msg").equals("Success")) return null;
                 String tid = res_json.getJSONObject("data").getString("tid");
                 boolean isi = false;
                 for(int i=0;i<10;i++){
-                    JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/task/schedule"+tid+"/","Authorization", GlobalVariable.mInstance.token));
+                    JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/task/schedule/"+tid+"/","Authorization", GlobalVariable.mInstance.token));
                     Log.i("whc_cur_res", String.valueOf(cur_res));
                     if(!cur_res.getString("msg").equals("Success")) return null;
                     JSONObject cur_data = cur_res.getJSONObject("data");
-                    if(cur_data.getBoolean("is_finish")){
+                    if(cur_data.getJSONObject("task").getInt("is_finish")==1){
                         isi = true;
                         cur_star_num = cur_data.getJSONObject("data").getInt("star");
                         break;
                     }
-                    Thread.sleep(200);
+                    Thread.sleep(1000);
                 }
                 if(!isi) return null;
             } catch (JSONException | InterruptedException e) {
@@ -611,15 +627,15 @@ public class GameActivity extends Activity {
 
     public class GameDialog {
         ImageView content;
-        int[] ui = {R.id.content, R.id.retry, R.id.next, R.id.out};
+        int[] ui = {R.id.retry, R.id.next, R.id.out};
         int[] star_img = {R.drawable.star0, R.drawable.star1, R.drawable.star2, R.drawable.star3};
         public GameDialog(Context context, int[] p, int star_num, QYDIalog.OnCenterItemClickListener lsr){
-            qydIalog = new QYDIalog(context, R.layout.game_dialog, ui);
+            qydIalog = new QYDialogUncancelable(context, R.layout.game_dialog, ui);
             qydIalog.show();
             content = qydIalog.findViewById(R.id.content);
             set_content(star_num);
             for(int i=0;i<p.length;i++){
-                (qydIalog.findViewById(ui[p[i]])).setVisibility(View.GONE);
+                (qydIalog.findViewById(ui[p[i]-1])).setVisibility(View.GONE);
             }
             qydIalog.setOnCenterItemClickListener(lsr);
         }

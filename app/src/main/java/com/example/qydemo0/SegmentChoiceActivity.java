@@ -17,6 +17,7 @@ import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,8 +27,6 @@ import java.util.List;
 public class SegmentChoiceActivity extends AppCompatActivity {
 
     LinearLayout all_main;
-
-    List<String> segments = new ArrayList<>();
 
     LinearLayout.LayoutParams php = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -40,8 +39,6 @@ public class SegmentChoiceActivity extends AppCompatActivity {
                         useNum = new ArrayList<>(),
                         breakdownid = new ArrayList<>();
 
-    private List<ArrayList<String> > videos_url = new ArrayList<>(), covers_url = new ArrayList<>();
-
     SegmentChoiceItem sci;
 
     @Override
@@ -52,7 +49,7 @@ public class SegmentChoiceActivity extends AppCompatActivity {
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
         work_id = Integer.valueOf(list.get(0));
         php.setMargins(10,10,10,10);
-        new getBreakDown().execute();
+        new getBreakDown().execute(work_id);
     }
 
     private void addNewView(String[] allPms){
@@ -64,12 +61,10 @@ public class SegmentChoiceActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(SegmentChoiceActivity.this, SegmentPreLookActivity.class);
-                intent.putStringArrayListExtra("params", videos_url.get(Integer.valueOf(allPms[3])));
                 ArrayList<String > p1 = new ArrayList<>();
                 p1.add(String.valueOf(work_id));
                 p1.add(String.valueOf(breakdownid.get(Integer.valueOf(allPms[3]))));
-                intent.putStringArrayListExtra("params1", p1);
-                intent.putStringArrayListExtra("params2", covers_url.get(Integer.valueOf(allPms[3])));
+                intent.putStringArrayListExtra("params", p1);
                 startActivity(intent);
              }
         });
@@ -80,28 +75,23 @@ public class SegmentChoiceActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
-//            try {
-//                JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/work/breakdown/"+integers[0]+"/","Authorization", GlobalVariable.mInstance.token));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-            intro.add("很良心的一个分段");
-            upload_user.add("郭书宇");
-            useNum.add("100");
-
-            intro.add("很牛的一个分段");
-            upload_user.add("郝继泰");
-            useNum.add("80");
-
-            intro.add("呕心沥血之作呀！");
-            upload_user.add("尹浩飞");
-            useNum.add("70");
-
-            intro.add("着重分解卡点，让你体会最舒服的学习流程");
-            upload_user.add("王昊晨");
-            useNum.add("60");
-
-            return true;
+            try {
+                JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/work/breakdown/"+integers[0]+"/","Authorization", GlobalVariable.mInstance.token));
+                if(!cur_res.getString("msg").equals("Success")) return false;
+                Log.i("whc_cur_res", String.valueOf(cur_res));
+                JSONArray bda = cur_res.getJSONArray("data");
+                for(int i=0;i<bda.length();i++){
+                    intro.add(bda.getJSONObject(i).getString("introduction"));
+                    // 需要校准
+                    upload_user.add(bda.getJSONObject(i).getJSONObject("belong").getString("username"));
+                    useNum.add(bda.getJSONObject(i).getString("used_num"));
+                    breakdownid.add(bda.getJSONObject(i).getString("id"));
+                }
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
 
         @Override

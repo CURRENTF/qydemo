@@ -358,6 +358,15 @@ public class HumanDeposeActivity extends AppCompatActivity {
         protected Boolean doInBackground(Void... voids) {
             List<Double> res = getSegmentPoints();
             List<Double> s = res.subList(0, res.size()-1), e = res.subList(1, res.size());
+            String ss = "", ee = "";
+            for(int i=0;i<s.size();i++){
+                ss += String.valueOf(s.get(i));
+                ee += String.valueOf(e.get(i));
+                if(i!=s.size()-1){
+                    ss += ",";
+                    ee += ",";
+                }
+            }
             //发送人工分段
             return true;
         }
