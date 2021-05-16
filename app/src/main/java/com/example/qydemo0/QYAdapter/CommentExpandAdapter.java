@@ -29,6 +29,8 @@ import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.bean.CommentDetailBean;
 import com.example.qydemo0.bean.ReplyDetailBean;
@@ -402,7 +404,11 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         notifyDataSetChanged();
     }
 
-    public class CommentChange extends AsyncTask<Integer, Void, Integer>{
+    public class CommentChange extends MyAsyncTask<Integer, Void, Integer> {
+        protected CommentChange(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(Integer aVoid) {
             super.onPostExecute(aVoid);

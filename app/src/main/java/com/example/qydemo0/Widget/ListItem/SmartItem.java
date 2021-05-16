@@ -24,6 +24,8 @@ import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
 import com.example.qydemo0.Widget.ListItem.LittleLearnItem;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,12 +119,16 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
             flag = 1; expanded = true;
         }
         else flag = 2;
-        GetRecords getRecords = new GetRecords();
+        GetRecords getRecords = new GetRecords((MyAppCompatActivity) getActivity());
         getRecords.execute();
     }
 
 
-    class GetRecords extends AsyncTask<String, Integer, JSONArray>{
+    class GetRecords extends MyAsyncTask<String, Integer, JSONArray> {
+
+        protected GetRecords(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {
@@ -175,6 +181,8 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
                         records.addView(item);
                     } catch (JSONException e) {
                         e.printStackTrace();
+
+                        //
                     }
                 }
             }

@@ -18,6 +18,7 @@ import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
 import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
 import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.QYpack.Constant;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailCategoryActivity extends AppCompatActivity {
+public class DetailCategoryActivity extends MyAppCompatActivity {
 
     String name;
     RecyclerView main;
@@ -51,10 +52,13 @@ public class DetailCategoryActivity extends AppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
+                if(ja.length() == 0) loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING_COMPLETE);
+                else loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING_COMPLETE);
                 for(int i = 0; i < ja.length(); i++){
                     try {
                         JSONObject json = ja.getJSONObject(i);
                         linearLayoutAdapter.addData(json);
+                        loadMoreAndRefreshWrapper.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -64,11 +68,13 @@ public class DetailCategoryActivity extends AppCompatActivity {
         main.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
             public void onLoadMore() {
+                loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING);
                 AdvanceHttp.getCategoryWorks(handler, htp_pos, Constant.mInstance.MAX_UPDATE_LEN, name);
                 htp_pos += Constant.mInstance.MAX_UPDATE_LEN;
             }
         });
         AdvanceHttp.getCategoryWorks(handler, htp_pos, Constant.mInstance.MAX_UPDATE_LEN, name);
         htp_pos += Constant.mInstance.MAX_UPDATE_LEN;
+        loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING);
     }
 }

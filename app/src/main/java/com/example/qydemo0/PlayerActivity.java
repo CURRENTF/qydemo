@@ -42,6 +42,8 @@ import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.QYpack.TimeTool;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.ListItem.WorkItem;
 import com.example.qydemo0.bean.Belong;
@@ -80,7 +82,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
  */
 
-public class PlayerActivity extends AppCompatActivity implements View.OnClickListener {
+public class PlayerActivity extends MyAppCompatActivity implements View.OnClickListener {
     @BindView(R.id.post_detail_nested_scroll)
     QYScrollView postDetailNestedScroll;
 
@@ -185,10 +187,10 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onStart() {
         Log.i("whc","重新开始了！");
         Log.i("work_id",""+work_id);
-        new GetCommentJson().execute(work_id,0,20);
-        new GetWorkJson().execute(work_id);
+        new GetCommentJson(this).execute(work_id,0,20);
+        new GetWorkJson(this).execute(work_id);
         super.onStart();
-        new getRec().execute(work_id,start_next,10);
+        new getRec(this).execute(work_id,start_next,10);
     }
 
     Animation l_out, l_in, r_out, r_in;
@@ -199,7 +201,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         btn_learn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    new readyToJumpToLearn().execute();
+                    new readyToJumpToLearn(PlayerActivity.this).execute();
             }
         });
 
@@ -522,14 +524,14 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
             isFollow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new doFollow().execute();
+                    new doFollow(PlayerActivity.this).execute();
                 }
             });
 
             isCanceF.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new cancelFollow().execute();
+                    new cancelFollow(PlayerActivity.this).execute();
                 }
             });
         }
@@ -974,7 +976,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
 
                     //commentOnWork(commentContent);
                     dialog.dismiss();
-                    new doComment().execute(commentContent);
+                    new doComment(PlayerActivity.this).execute(commentContent);
 
                 }else {
                     Toast.makeText(PlayerActivity.this,"评论内容不能为空",Toast.LENGTH_SHORT).show();
@@ -1034,7 +1036,7 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 String replyContent = commentText.getText().toString().trim();
                 if(!TextUtils.isEmpty(replyContent)){
                     dialog.dismiss();
-                    new doReply().execute(""+position, ""+second_position, replyContent);
+                    new doReply(PlayerActivity.this).execute(""+position, ""+second_position, replyContent);
                 }else {
                     Toast.makeText(PlayerActivity.this,"回复内容不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -1083,7 +1085,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         Toast.makeText(PlayerActivity.this,"回复成功",Toast.LENGTH_SHORT).show();
     }
 
-    public class GetWorkJson extends AsyncTask<Integer, Void, List<String> >{
+    public class GetWorkJson extends MyAsyncTask<Integer, Void, List<String>> {
+
+        protected GetWorkJson(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected List<String> doInBackground(Integer... idd) {
@@ -1110,14 +1116,18 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
                 // 获取breakdown_id
                 bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("bid");
                 init_work(cur_work_json.get(0), cur_work_json.get(1));
-                new WorkChange().execute(0);
+                new WorkChange(PlayerActivity.this).execute(0);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public class GetCommentJson extends AsyncTask<Integer, Void, String>{
+    public class GetCommentJson extends MyAsyncTask<Integer, Void, String>{
+
+        protected GetCommentJson(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(Integer... ints) {
@@ -1136,7 +1146,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class WorkChange extends AsyncTask<Integer, Void, Integer>{
+    public class WorkChange extends MyAsyncTask<Integer, Void, Integer>{
+
+        protected WorkChange(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Integer doInBackground(Integer... ope) {
@@ -1173,7 +1187,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class doComment extends AsyncTask<String, Void, String[]>{
+    public class doComment extends MyAsyncTask<String, Void, String[]>{
+        protected doComment(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(String... contentt) {
             super.onPostExecute(contentt);
@@ -1205,7 +1223,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class doReply extends AsyncTask<String, Void, String[]>{
+    public class doReply extends MyAsyncTask<String, Void, String[]>{
+        protected doReply(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(String[] contentt) {
             super.onPostExecute(contentt);
@@ -1242,7 +1264,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class doFollow extends AsyncTask<Void,Void,Boolean>{
+    public class doFollow extends MyAsyncTask<Void,Void,Boolean>{
+
+        protected doFollow(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -1267,7 +1293,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class cancelFollow extends AsyncTask<Void,Void,Boolean>{
+    public class cancelFollow extends MyAsyncTask<Void,Void,Boolean>{
+
+        protected cancelFollow(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
@@ -1290,7 +1320,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class getRec extends AsyncTask<Integer, Void, JSONArray>{
+    public class getRec extends MyAsyncTask<Integer, Void, JSONArray>{
+        protected getRec(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(JSONArray aVoid) {
             super.onPostExecute(aVoid);
@@ -1336,7 +1370,11 @@ public class PlayerActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    public class readyToJumpToLearn extends AsyncTask<Void, Void, Integer[]>{
+    public class readyToJumpToLearn extends MyAsyncTask<Void, Void, Integer[]>{
+
+        protected readyToJumpToLearn(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected void onPostExecute(Integer[] integer) {

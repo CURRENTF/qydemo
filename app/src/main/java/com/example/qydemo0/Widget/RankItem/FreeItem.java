@@ -2,6 +2,7 @@ package com.example.qydemo0.Widget.RankItem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.qydemo0.R;
+import com.example.qydemo0.UserDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +60,23 @@ public class FreeItem extends RelativeLayout {
                 if(rank_i == 2) medal.setImageResource(R.drawable.ic__silver_medal);
                 else if(rank_i == 3) medal.setImageResource(R.drawable.ic__bronze_medal);
             }
+            mView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, UserDetailActivity.class);
+                    try {
+                        intent.putExtra("uid", user.getInt("uid"));
+                        intent.putExtra("username", user.getString("username"));
+                        intent.putExtra("avatar", user.getString("img_url"));
+                        intent.putExtra("sign", user.getString("sign"));
+                        activity.startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

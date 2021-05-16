@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class DetailPostActivity extends AppCompatActivity {
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+
+public class DetailPostActivity extends MyAppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

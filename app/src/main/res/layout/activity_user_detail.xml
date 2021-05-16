@@ -13,22 +13,25 @@
     <com.example.qydemo0.Widget.QYScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
         android:id="@+id/main_main">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
+            android:layout_gravity="bottom"
             android:orientation="vertical">
-            
+
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"/>
+                android:layout_height="200dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/top_radius_user_info"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -70,6 +73,7 @@
                                 android:gravity="center_vertical"
                                 android:padding="5dp"
                                 android:maxLines="1"
+                                android:id="@+id/sign"
                                 android:text="帅就一个字"/>
 
                         </LinearLayout>

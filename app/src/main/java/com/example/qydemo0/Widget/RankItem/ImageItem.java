@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.qydemo0.GameActivity;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
+import com.example.qydemo0.UserDetailActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,6 +68,23 @@ public class ImageItem extends RelativeLayout {
             JSONObject img = json.getJSONObject("img");
             Img.url2imgViewRoundRectangle(img.getString("url"), this.img, activity, 10);
             setOnClick(img, json);
+            userName.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, UserDetailActivity.class);
+                    try {
+                        intent.putExtra("uid", user.getInt("uid"));
+                        intent.putExtra("username", user.getString("username"));
+                        intent.putExtra("avatar", user.getString("img_url"));
+                        intent.putExtra("sign", user.getString("sign"));
+                        activity.startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

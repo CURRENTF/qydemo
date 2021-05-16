@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+
 import org.w3c.dom.Text;
 
-public class SegmentGameChoiceActivity extends AppCompatActivity {
+public class SegmentGameChoiceActivity extends MyAppCompatActivity {
 
     private int[] segmentView = {R.id.one, R.id.two, R.id.three, R.id.four, R.id.five, R.id.six, R.id.seven, R.id.eight, R.id.nine};
 

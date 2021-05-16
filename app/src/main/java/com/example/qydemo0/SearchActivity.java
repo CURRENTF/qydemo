@@ -20,6 +20,8 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.ListItem.WorkItem;
 
@@ -27,7 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends MyAppCompatActivity {
 
     private int startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
     public EditText search_txt = null;
@@ -89,7 +91,7 @@ public class SearchActivity extends AppCompatActivity {
 
         @Override
         public void onScrolledToBottom() {
-            Search s = new Search();
+            Search s = new Search(SearchActivity.this);
             s.execute(search_txt.getText().toString());
         }
 
@@ -106,7 +108,7 @@ public class SearchActivity extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
                 qyScrollView.removeAllViews();
-                Search s = new Search();
+                Search s = new Search(SearchActivity.this);
                 s.execute(((EditText)findViewById(R.id.edit_text_search)).getText().toString());
                 search_txt.clearFocus();
                 hideInput();
@@ -134,7 +136,11 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    class Search extends AsyncTask<String, Integer, String>{
+    class Search extends MyAsyncTask<String, Integer, String> {
+
+        protected Search(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

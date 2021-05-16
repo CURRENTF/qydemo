@@ -22,6 +22,8 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.entry.Image;
 
 import org.json.JSONException;
@@ -81,7 +83,7 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
     @Override
     public void onClick(View view) {
 
-        CancelFollow cancelFollow = new CancelFollow();
+        CancelFollow cancelFollow = new CancelFollow((MyAppCompatActivity)mContext);
         cancelFollow.execute();
     }
 
@@ -90,7 +92,11 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
     }
 
 
-    class CancelFollow extends AsyncTask<String, Integer, Boolean>{
+    class CancelFollow extends MyAsyncTask<String, Integer, Boolean> {
+        protected CancelFollow(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected Boolean doInBackground(String... strings) {
             QYrequest htp = new QYrequest();

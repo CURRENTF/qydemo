@@ -168,7 +168,7 @@ public class Game extends RelativeLayout {
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
-                Log.d("hjt.c", ja.toString());
+//                Log.d("hjt.c", ja.toString());
                 for(int i = 0; i < Math.min(ja.length(), 10); i++){
                     ImageItem imageItem = new ImageItem(ac);
                     try {
@@ -192,7 +192,11 @@ public class Game extends RelativeLayout {
         AdvanceHttp.getGameRank(imageHandler, 3);
     }
 
-    class UploadImage extends AsyncTask<String, Integer, String>{
+    class UploadImage extends MyAsyncTask<String, Integer, String>{
+
+        protected UploadImage(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

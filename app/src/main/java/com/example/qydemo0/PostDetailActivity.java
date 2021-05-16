@@ -26,6 +26,9 @@ import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.Widget.ListItem.PostItem;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
+import com.example.qydemo0.Widget.Post;
 import com.example.qydemo0.bean.Belong;
 import com.example.qydemo0.bean.CommentBean;
 import com.example.qydemo0.bean.CommentDetailBean;
@@ -42,7 +45,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class PostDetailActivity extends MyAppCompatActivity implements View.OnClickListener {
 
     LinearLayout main;
     PostItem postItem;
@@ -78,7 +81,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             main.addView(postItem);
             Log.e("whc_post", String.valueOf(json));
             post_id = json.getInt("pid");
-            new GetCommentJson().execute(post_id,0,20);
+            new GetCommentJson(PostDetailActivity.this).execute(post_id,0,20);
         } catch (JSONException e) {
             Log.e("hjt.json.post.detail.wrong", "onCreate");
             e.printStackTrace();
@@ -88,7 +91,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
             public void onClick(View view) {
                 like_op *= -1;
                 if(status == 0){
-                    OPPost opPost = new OPPost();
+                    OPPost opPost = new OPPost(PostDetailActivity.this);
                     opPost.execute(like_op);
                 }
             }
@@ -103,7 +106,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    class OPPost extends AsyncTask<Integer, Integer, Boolean>{
+    class OPPost extends MyAsyncTask<Integer, Integer, Boolean> {
+
+        protected OPPost(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Integer... strings) {
@@ -233,7 +240,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
                     //commentOnWork(commentContent);
                     dialog.dismiss();
-                    new doComment().execute(commentContent);
+                    new doComment(PostDetailActivity.this).execute(commentContent);
 
                 }else {
                     Toast.makeText(PostDetailActivity.this,"评论内容不能为空",Toast.LENGTH_SHORT).show();
@@ -293,7 +300,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 String replyContent = commentText.getText().toString().trim();
                 if(!TextUtils.isEmpty(replyContent)){
                     dialog.dismiss();
-                    new doReply().execute(""+position, ""+second_position, replyContent);
+                    new doReply(PostDetailActivity.this).execute(""+position, ""+second_position, replyContent);
                 }else {
                     Toast.makeText(PostDetailActivity.this,"回复内容不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -342,7 +349,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         Toast.makeText(PostDetailActivity.this,"回复成功",Toast.LENGTH_SHORT).show();
     }
 
-    public class GetCommentJson extends AsyncTask<Integer, Void, String> {
+    public class GetCommentJson extends MyAsyncTask<Integer, Void, String> {
+
+        protected GetCommentJson(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(Integer... ints) {
@@ -361,7 +372,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public class doComment extends AsyncTask<String, Void, String[]>{
+    public class doComment extends MyAsyncTask<String, Void, String[]>{
+        protected doComment(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(String... contentt) {
             super.onPostExecute(contentt);
@@ -393,7 +408,11 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public class doReply extends AsyncTask<String, Void, String[]>{
+    public class doReply extends MyAsyncTask<String, Void, String[]>{
+        protected doReply(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected void onPostExecute(String[] contentt) {
             super.onPostExecute(contentt);

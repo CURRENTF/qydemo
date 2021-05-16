@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.qydemo0.R;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LoadMoreAndRefreshWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

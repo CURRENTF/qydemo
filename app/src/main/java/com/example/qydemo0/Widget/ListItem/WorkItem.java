@@ -57,6 +57,7 @@ public class WorkItem extends LinearLayoutItem {
 //        if(filled) return;
 //        filled = true;
         try {
+            Log.d("hjt.work.json.content", json.toString());
             JSONObject coverInfo = json.getJSONObject("cover");
             init(coverInfo.getString("url"), json.getString("name"),
                     json.getInt("like_num"), json.getInt("play_num"),

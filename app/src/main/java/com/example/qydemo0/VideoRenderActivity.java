@@ -48,6 +48,8 @@ import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.VideoClip;
 import com.example.qydemo0.QYpack.WaveLoadDialog;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.Widget.QYDialogUncancelable;
 import com.example.qydemo0.bean.CallBackBean;
@@ -75,16 +77,17 @@ import org.json.JSONObject;
 import static android.telecom.DisconnectCause.LOCAL;
 import static android.view.Gravity.*;
 import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
+
 import org.json.JSONObject;
 
-public class VideoRenderActivity extends AppCompatActivity {
+public class VideoRenderActivity extends MyAppCompatActivity {
 
     String free_dance_url = "";
 
     String clip_video_url = "";
 
     StandardGSYVideoPlayer videoPlayer;
-    
+
     private WaveLoadDialog dialog;
     private QYDialogUncancelable dialog_loading;
     private AVLoadingIndicatorView avi;
@@ -140,8 +143,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         int[] render_paras_cur = new int[3];
-                       render_paras_cur = popupWindowRight.getRenderParams();
-                       render_paras[0] = render_paras_cur[0];
+                        render_paras_cur = popupWindowRight.getRenderParams();
                         render_paras[1] = render_paras_cur[1];
                         render_paras[2] = render_paras_cur[2];
                         render_reset.setVisibility(View.GONE);
@@ -149,7 +151,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                         render_choice.setVisibility(View.VISIBLE);
                         isYuLan = true;
                         //showProgressDialog("提示","正在努力加载渲染预览视频...");
-                        new SendRenderVideo().execute(clip_video_url);
+                        new SendRenderVideo(VideoRenderActivity.this).execute(clip_video_url);
                     }
                 });
 
@@ -163,7 +165,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                 Log.i("paras",""+render_paras[0]+" "+render_paras[1]+" "+render_paras[2]);
                 //showProgressDialog("提示","加载中...");
                 isYuLan = false;
-                new SendRenderVideo().execute(free_dance_url);
+                new SendRenderVideo(VideoRenderActivity.this).execute(free_dance_url);
             }
         });
 
@@ -210,14 +212,14 @@ public class VideoRenderActivity extends AppCompatActivity {
 
     }
 
-    public long getDurationLong(String url,int type){
+    public long getDurationLong(String url, int type) {
         String duration = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
             //如果是网络路径
-            if(type == NETWORK){
-                retriever.setDataSource(url,new HashMap<String, String>());
-            }else if(type == LOCAL){//如果是本地路径
+            if (type == NETWORK) {
+                retriever.setDataSource(url, new HashMap<String, String>());
+            } else if (type == LOCAL) {//如果是本地路径
                 retriever.setDataSource(url);
             }
             duration = retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -230,9 +232,9 @@ public class VideoRenderActivity extends AppCompatActivity {
                 Log.d("nihao", "释放MediaMetadataRetriever资源失败");
             }
         }
-        if(!TextUtils.isEmpty(duration)){
+        if (!TextUtils.isEmpty(duration)) {
             return Long.parseLong(duration);
-        }else{
+        } else {
             return 0;
         }
     }
@@ -240,7 +242,7 @@ public class VideoRenderActivity extends AppCompatActivity {
     private void inti_clip_video() {
 
         long total_time = getDurationLong(free_dance_url, LOCAL);
-        long mid_time = total_time/2;
+        long mid_time = total_time / 2;
 
         VideoClip video_clip = new VideoClip();
         clip_video_url = getExternalCacheDir().getPath();
@@ -250,8 +252,8 @@ public class VideoRenderActivity extends AppCompatActivity {
                 dir.mkdir();
             }
             clip_video_url = dir + "/" + System.currentTimeMillis() + ".mp4";
-            long startTime = mid_time-2500 < 0 ? 0 : mid_time-2500;
-            long endTime = mid_time+2500 > total_time ? total_time : mid_time+2500;
+            long startTime = mid_time - 2500 < 0 ? 0 : mid_time - 2500;
+            long endTime = mid_time + 2500 > total_time ? total_time : mid_time + 2500;
 
             try {
                 video_clip.clip(free_dance_url, clip_video_url, startTime, endTime);
@@ -261,71 +263,70 @@ public class VideoRenderActivity extends AppCompatActivity {
         }
     }
 
-    private void init_player (){
+    private void init_player() {
 
-            videoPlayer = (StandardGSYVideoPlayer) findViewById(R.id.video_player);
+        videoPlayer = (StandardGSYVideoPlayer) findViewById(R.id.video_player);
 
-            videoPlayer.setUp(clip_video_url, true, "渲染视频预览");
+        videoPlayer.setUp(clip_video_url, true, "渲染视频预览");
 
-            //增加封面
-            ImageView imageView = new ImageView(this);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setImageResource(R.drawable.logo);
-            videoPlayer.setThumbImageView(imageView);
-            //增加title
-            videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-            //设置返回键
-            videoPlayer.getBackButton().setVisibility(View.VISIBLE);
-            //设置旋转
+        //增加封面
+        ImageView imageView = new ImageView(this);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.drawable.logo);
+        videoPlayer.setThumbImageView(imageView);
+        //增加title
+        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        //设置返回键
+        videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+        //设置旋转
 //            orientationUtils = new OrientationUtils(this, videoPlayer);
-            //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
-            videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //orientationUtils.resolveByClick();
-                }
-            });
-            //是否可以滑动调整
-            videoPlayer.setIsTouchWiget(false);
-            //设置返回按键功能
-            videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-            videoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
+        //设置全屏按键功能,这是使用的是选择屏幕，而不是全屏
+        videoPlayer.getFullscreenButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //orientationUtils.resolveByClick();
+            }
+        });
+        //是否可以滑动调整
+        videoPlayer.setIsTouchWiget(false);
+        //设置返回按键功能
+        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        videoPlayer.setVideoAllCallBack(new GSYSampleCallBack() {
 
-                @Override
-                public void onPrepared(String url, Object... objects) {
-                    super.onPrepared(url, objects);
-                    videoPlayer.onVideoPause();
-                }
+            @Override
+            public void onPrepared(String url, Object... objects) {
+                super.onPrepared(url, objects);
+                videoPlayer.onVideoPause();
+            }
 
-                @Override
-                public void onAutoComplete(String url, Object... objects) {
-                    super.onAutoComplete(url, objects);
-                    videoPlayer.startPlayLogic();
-                }
-            });
-            videoPlayer.startPlayLogic();
-        }
-        
+            @Override
+            public void onAutoComplete(String url, Object... objects) {
+                super.onAutoComplete(url, objects);
+                videoPlayer.startPlayLogic();
+            }
+        });
+        videoPlayer.startPlayLogic();
+    }
+
     private void updatePlayer(String res_urls) {
 
-        videoPlayer.setUp(res_urls,true,"渲染预览视频");
+        videoPlayer.setUp(res_urls, true, "渲染预览视频");
         videoPlayer.startPlayLogic();
-        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==2){
-            if(resultCode == RESULT_OK&&data!=null){
-                if(Build.VERSION.SDK_INT>=19){
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK && data != null) {
+                if (Build.VERSION.SDK_INT >= 19) {
                     render_img = handImage(data);
-                }
-                else{
+                } else {
                     render_img = handImageLow(data);
                 }
             }
@@ -334,23 +335,23 @@ public class VideoRenderActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private String handImage(Intent data){
-        String path =null;
+    private String handImage(Intent data) {
+        String path = null;
         Uri uri = data.getData();
         //根据不同的uri进行不同的解析
-        if (DocumentsContract.isDocumentUri(this,uri)){
+        if (DocumentsContract.isDocumentUri(this, uri)) {
             String docId = DocumentsContract.getDocumentId(uri);
-            if ("com.android.providers.media.documents".equals(uri.getAuthority())){
+            if ("com.android.providers.media.documents".equals(uri.getAuthority())) {
                 String id = docId.split(":")[1];
-                String selection = MediaStore.Images.Media._ID+"="+id;
-                path = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,selection);
-            }else if("com.android.providers.downloads.documents".equals(uri.getAuthority())){
-                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"),Long.valueOf(docId));
-                path = getImagePath(contentUri,null);
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                path = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                path = getImagePath(contentUri, null);
             }
-        }else if ("content".equalsIgnoreCase(uri.getScheme())){
-            path = getImagePath(uri,null);
-        }else if ("file".equalsIgnoreCase(uri.getScheme())){
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            path = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             path = uri.getPath();
         }
         return path;
@@ -360,18 +361,18 @@ public class VideoRenderActivity extends AppCompatActivity {
 
 
     //安卓小于4.4的处理方法
-    private String handImageLow(Intent data){
+    private String handImageLow(Intent data) {
         Uri uri = data.getData();
-        return getImagePath(uri,null);
+        return getImagePath(uri, null);
 //        displayImage(path);
     }
 
     //content类型的uri获取图片路径的方法
-    private String getImagePath(Uri uri,String selection) {
+    private String getImagePath(Uri uri, String selection) {
         String path = null;
-        Cursor cursor = getContentResolver().query(uri,null,selection,null,null);
-        if (cursor!=null){
-            if (cursor.moveToFirst()){
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
                 path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
             }
             cursor.close();
@@ -379,7 +380,7 @@ public class VideoRenderActivity extends AppCompatActivity {
         return path;
     }
 
-    public Bitmap getStyleBitmap(Bitmap cur_bitmap){
+    public Bitmap getStyleBitmap(Bitmap cur_bitmap) {
 
         FrameInputSlot inputSlot = (FrameInputSlot) mCVClient.createInputSlot();
         inputSlot.setTargetBitmap(cur_bitmap);
@@ -398,7 +399,7 @@ public class VideoRenderActivity extends AppCompatActivity {
 
                 int green = outImageBuffer[3 * (j * frameData.width + i) + 1];
 
-                int blue = outImageBuffer[3 * (j * frameData.width  + i) + 2];
+                int blue = outImageBuffer[3 * (j * frameData.width + i) + 2];
 
                 int alpha = 0xFF;
 
@@ -408,7 +409,7 @@ public class VideoRenderActivity extends AppCompatActivity {
         }
 
         Bitmap resultBmp = Bitmap.createBitmap(colors, frameData.width, frameData.height, Bitmap.Config.ARGB_8888);
-        System.out.println(String.valueOf(resultBmp==null));
+        System.out.println(String.valueOf(resultBmp == null));
         return resultBmp;
     }
 
@@ -422,8 +423,12 @@ public class VideoRenderActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public class SendRenderVideo extends AsyncTask<String , String, String>{
+    public class SendRenderVideo extends MyAsyncTask<String, String, String> {
 
+
+        protected SendRenderVideo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         private String doBG(){
             int bg = render_paras[0], st = render_paras[2];
@@ -591,6 +596,7 @@ public class VideoRenderActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             }
+
             }
         @Override
         protected void onProgressUpdate(String... values) {

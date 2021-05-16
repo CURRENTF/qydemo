@@ -19,6 +19,8 @@ import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.ListItem.PostItem;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.ListItem.WorkItem;
 
@@ -26,7 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UserDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class UserDetailActivity extends MyAppCompatActivity implements View.OnClickListener {
 
     LinearLayout posts, works;
     int uid;
@@ -51,20 +53,23 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
         uid = bundle.getInt("uid");
         if(uid == 0) uid = Integer.parseInt(bundle.getString("uid"));
         username.setText(bundle.getString("username"));
+        String sign_tmp = bundle.getString("sign");
+        if(sign_tmp != null)
+            sign.setText(sign_tmp);
         Img.roundImgUrl(this, avatar, bundle.getString("avatar"));
         Log.d("hjt.get.uid", String.valueOf(uid));
-        GetPosts getPosts = new GetPosts();
+        GetPosts getPosts = new GetPosts(UserDetailActivity.this);
         getPosts.execute();
-        GetWorks getWorks = new GetWorks();
+        GetWorks getWorks = new GetWorks(UserDetailActivity.this);
         getWorks.execute();
         left.setOnClickListener(this);
         right.setOnClickListener(this);
         all.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
-                GetPosts getPosts = new GetPosts();
+                GetPosts getPosts = new GetPosts(UserDetailActivity.this);
                 getPosts.execute();
-                GetWorks getWorks = new GetWorks();
+                GetWorks getWorks = new GetWorks(UserDetailActivity.this);
                 getWorks.execute();
             }
 
@@ -111,7 +116,11 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
     int w_startPos = 0;
 
-    class GetWorks extends AsyncTask<Integer, Integer, JSONArray>{
+    class GetWorks extends MyAsyncTask<Integer, Integer, JSONArray> {
+
+        protected GetWorks(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(Integer... integers) {
@@ -149,7 +158,11 @@ public class UserDetailActivity extends AppCompatActivity implements View.OnClic
 
     int p_startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
 
-    class GetPosts extends AsyncTask<Integer, Integer, JSONArray>{
+    class GetPosts extends MyAsyncTask<Integer, Integer, JSONArray>{
+
+        protected GetPosts(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(Integer... integers) {

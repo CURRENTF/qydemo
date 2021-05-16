@@ -16,6 +16,8 @@ import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.Widget.ListItem.SmartItem;
 
@@ -23,7 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LearningListActivity extends AppCompatActivity implements View.OnClickListener {
+public class LearningListActivity extends MyAppCompatActivity implements View.OnClickListener {
 
     LinearLayout list_progress, list_finished;
     QYScrollView view_progress, view_finished;
@@ -39,10 +41,13 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
         view_finished = findViewById(R.id.view_finished);
         progress = findViewById(R.id.btn_progress);
         finished = findViewById(R.id.btn_finished);
-        GetLearningListProgress getLearningListProgress = new GetLearningListProgress();
+        GetLearningListProgress getLearningListProgress = new GetLearningListProgress(this);
         getLearningListProgress.execute();
+        GetLearningListFinished getLearningListFinished = new GetLearningListFinished(this);
+        getLearningListFinished.execute();
         progress.setOnClickListener(this);
         finished.setOnClickListener(this);
+
     }
 
     int switcher = 0;
@@ -60,7 +65,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
                     , R.anim.ani_right_translate_in_alpha_500ms);
             view_finished.startAnimation(animation);
             view_progress.startAnimation(animation2);
-            ChangeVisibility changeVisibility = new ChangeVisibility();
+            ChangeVisibility changeVisibility = new ChangeVisibility(this);
             changeVisibility.execute(switcher == 1);
         }
         else if(v.getId() == R.id.btn_finished) {
@@ -74,20 +79,22 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
                     R.anim.ani_left_translate_in_alpha_500ms);
             view_progress.startAnimation(animation);
             view_finished.startAnimation(animation2);
-            ChangeVisibility changeVisibility = new ChangeVisibility();
+            ChangeVisibility changeVisibility = new ChangeVisibility(this);
             changeVisibility.execute(switcher == 1);
         }
     }
 
 
     int pr_startPos = 0, pr_len = Constant.mInstance.MAX_UPDATE_LEN;
-    class GetLearningListProgress extends AsyncTask<String, Integer, JSONArray>{
+    class GetLearningListProgress extends MyAsyncTask<String, Integer, JSONArray> {
+
+        protected GetLearningListProgress(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-//            Log.e("hjt.6666", Constant.mInstance.learn_list_url + "1/"
-//                    + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
                     "Authorization", GlobalVariable.mInstance.token), false, null);
@@ -103,6 +110,7 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
                 for(int i = 0; i < jsonArray.length(); i++){
                     try {
                         JSONObject json = jsonArray.getJSONObject(i);
+                        Log.d("hjt.smart.item", json.toString());
                         SmartItem smartItem = new SmartItem(LearningListActivity.this);
                         smartItem.init(json.getJSONObject("work_info"), json.getInt("record_num"),
                                 json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"));
@@ -113,9 +121,14 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
                 }
             }
         }
+
     }
 
-    class GetLearningListFinished extends AsyncTask<String, Integer, JSONArray>{
+    class GetLearningListFinished extends MyAsyncTask<String, Integer, JSONArray>{
+
+        protected GetLearningListFinished(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {
@@ -147,7 +160,11 @@ public class LearningListActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    class ChangeVisibility extends AsyncTask<Boolean, Integer, Boolean>{
+    class ChangeVisibility extends MyAsyncTask<Boolean, Integer, Boolean>{
+
+        protected ChangeVisibility(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Boolean... booleans) {

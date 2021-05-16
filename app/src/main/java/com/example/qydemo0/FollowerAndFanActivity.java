@@ -18,13 +18,15 @@ import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.ListItem.LittleUserItem;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FollowerAndFanActivity extends AppCompatActivity implements View.OnClickListener {
+public class FollowerAndFanActivity extends MyAppCompatActivity implements View.OnClickListener {
 
     TextView follow, fan;
     QYScrollView left, right;
@@ -44,9 +46,9 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
         list_right = findViewById(R.id.list_fans);
         follow.setOnClickListener(this);
         fan.setOnClickListener(this);
-        GetUserFans getUserFans = new GetUserFans();
+        GetUserFans getUserFans = new GetUserFans(this);
         getUserFans.execute();
-        GetUserFollows getUserFollows = new GetUserFollows();
+        GetUserFollows getUserFollows = new GetUserFollows(this);
         getUserFollows.execute();
     }
 
@@ -102,7 +104,11 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
     }
 
 
-    class GetUserFans extends AsyncTask<String, Integer, String> {
+    class GetUserFans extends MyAsyncTask<String, Integer, String> {
+
+        protected GetUserFans(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -118,7 +124,11 @@ public class FollowerAndFanActivity extends AppCompatActivity implements View.On
             super.onPostExecute(s);
         }
     }
-    class GetUserFollows extends AsyncTask<String, Integer, String>{
+    class GetUserFollows extends MyAsyncTask<String, Integer, String>{
+
+        protected GetUserFollows(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

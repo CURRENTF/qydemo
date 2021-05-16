@@ -23,6 +23,7 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +36,7 @@ import okhttp3.*;
 import static android.view.animation.AnimationUtils.loadAnimation;
 
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends MyAppCompatActivity {
 
     public static final MediaType JSON
             = MediaType.get("application/json; charset=utf-8");

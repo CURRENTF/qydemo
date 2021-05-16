@@ -6,9 +6,11 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.QYDIalog;
 
-public class GameContentActivity extends AppCompatActivity {
+public class GameContentActivity extends MyAppCompatActivity {
 
     private float cur_pro = 0.0f;
 

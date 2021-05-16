@@ -25,6 +25,8 @@ import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
 import com.example.qydemo0.Widget.Dashboard;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 
 import org.json.JSONObject;
 
@@ -69,13 +71,13 @@ public class Register2UsernameFragment extends Fragment {
             CharSequence ph = et_phone.getText();
             switch (v.getId()){
                 case R.id.button_send_register_code:
-                    SendMsgToPhone po = new SendMsgToPhone();
+                    SendMsgToPhone po = new SendMsgToPhone((MyAppCompatActivity) getActivity());
                     po.execute(GenerateJson.phoneOnlyJson(ph.toString()), C.verify_url);
                     break;
                 case R.id.button_finish_register:
                     EditText code = getActivity().findViewById(R.id.edit_text_verify_code);
                     CharSequence code_content = code.getText();
-                    VerifyCode vc = new VerifyCode();
+                    VerifyCode vc = new VerifyCode((MyAppCompatActivity) getActivity());
                     vc.execute(ph.toString(), code_content.toString(), C.verify_url);
                     break;
             }
@@ -85,7 +87,11 @@ public class Register2UsernameFragment extends Fragment {
 
     Handler handler = new Handler();
 
-    class SendMsgToPhone extends AsyncTask<String, Integer, String> {
+    class SendMsgToPhone extends MyAsyncTask<String, Integer, String> {
+
+        protected SendMsgToPhone(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -119,7 +125,11 @@ public class Register2UsernameFragment extends Fragment {
         }
     }
 
-    class VerifyCode extends AsyncTask<String, Integer, String> {
+    class VerifyCode extends MyAsyncTask<String, Integer, String> {
+
+        protected VerifyCode(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -136,14 +146,18 @@ public class Register2UsernameFragment extends Fragment {
         protected void onPostExecute(String s) {
             Log.d("hjt.register.2.verify", s);
             if(MsgProcess.checkMsg(s, true, "re2")){
-                PostLoginMsg postLoginMsg = new PostLoginMsg();
+                PostLoginMsg postLoginMsg = new PostLoginMsg((MyAppCompatActivity) getActivity());
                 postLoginMsg.execute();
             }
             super.onPostExecute(s);
         }
     }
 
-    class PostLoginMsg extends AsyncTask<String, Integer, String> {
+    class PostLoginMsg extends MyAsyncTask<String, Integer, String> {
+
+        protected PostLoginMsg(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {

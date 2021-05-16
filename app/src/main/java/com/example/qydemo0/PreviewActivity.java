@@ -23,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.adapter.ImagePagerAdapter;
 import com.example.qydemo0.entry.Image;
 import com.example.qydemo0.utils.ImageSelector;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 
 import static android.animation.ObjectAnimator.ofFloat;
 
-public class PreviewActivity extends AppCompatActivity {
+public class PreviewActivity extends MyAppCompatActivity {
 
     private MyViewPager vpImage;
     private TextView tvIndicator;

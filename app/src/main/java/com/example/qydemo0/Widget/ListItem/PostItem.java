@@ -27,6 +27,8 @@ import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.UserDetailActivity;
 import com.example.qydemo0.ViewImageActivity;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.koushikdutta.async.http.body.JSONArrayBody;
 
@@ -104,7 +106,11 @@ public class PostItem extends LinearLayoutItem {
             intent.putExtra("post", post_json);
         }
     }
-    public class Follow extends AsyncTask<Integer, Integer, Boolean> {
+    public class Follow extends MyAsyncTask<Integer, Integer, Boolean> {
+
+        protected Follow(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Integer... integers) {
@@ -173,7 +179,7 @@ public class PostItem extends LinearLayoutItem {
 
                     @Override
                     public void onClick(View v) {
-                        Follow follow = new Follow();
+                        Follow follow = new Follow((MyAppCompatActivity) activity);
                         try {
                             follow.execute(json.getJSONObject("belong").getInt("uid"));
                         } catch (JSONException e) {
@@ -321,6 +327,7 @@ public class PostItem extends LinearLayoutItem {
                     intent.putExtra("uid", belong.getInt("uid"));
                     intent.putExtra("username", belong.getString("username"));
                     intent.putExtra("avatar", belong.getString("img_url"));
+                    intent.putExtra("sign", belong.getString("sign"));
                     ((Activity)mContext).startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();

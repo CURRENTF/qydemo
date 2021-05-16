@@ -39,6 +39,7 @@ import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.QYpack.Uri2RealPath;
+import com.example.qydemo0.QYpack.UriUtil;
 import com.example.qydemo0.R;
 import com.example.qydemo0.SearchActivity;
 import com.example.qydemo0.UploadActivity;
@@ -123,12 +124,12 @@ public class Home extends RelativeLayout implements View.OnClickListener {
             public void onLoadMore() {
                 Log.d("hjt.o", "bottom");
                 wrapper.setLoadState(wrapper.LOADING);
-                GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
+                GetUserRecommendation getUserRecommendation = new GetUserRecommendation((MyAppCompatActivity) getActivity());
                 getUserRecommendation.execute();
             }
         });
         wrapper.setLoadState(wrapper.LOADING);
-        GetUserRecommendation getUserRecommendation = new GetUserRecommendation();
+        GetUserRecommendation getUserRecommendation = new GetUserRecommendation((MyAppCompatActivity) getActivity());
         getUserRecommendation.execute();
 
         // 设置一些监听
@@ -146,8 +147,11 @@ public class Home extends RelativeLayout implements View.OnClickListener {
                 if(result == null) return;
                 Intent intent1 = new Intent();
                 intent1.setClass(getActivity(), FreeDanceActivity.class);
+                Log.d("hjt.uri", result.toString());
                 ArrayList<String> list = new ArrayList<>();
-                list.add("1"); list.add(Uri2RealPath.getRealPathFromUri_AboveApi19(getActivity(), result));
+//                String path1 = Uri2RealPath.getRealPathFromUri_AboveApi19(getActivity(), result);
+                String path2 = UriUtil.getPath(getActivity(), result);
+                list.add("1"); list.add(path2);
                 Log.i("音频", list.get(1));
                 intent1.putExtra("params", list);
                 getActivity().startActivity(intent1);
@@ -189,7 +193,11 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         }
     }
 
-    class GetUserRecommendation extends AsyncTask<String, Integer, JSONArray> {
+    class GetUserRecommendation extends MyAsyncTask<String, Integer, JSONArray> {
+
+        protected GetUserRecommendation(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONArray doInBackground(String... strings) {

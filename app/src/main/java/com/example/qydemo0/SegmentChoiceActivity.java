@@ -16,6 +16,8 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +26,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SegmentChoiceActivity extends AppCompatActivity {
+public class SegmentChoiceActivity extends MyAppCompatActivity {
 
     LinearLayout all_main;
 
@@ -49,7 +51,7 @@ public class SegmentChoiceActivity extends AppCompatActivity {
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
         work_id = Integer.valueOf(list.get(0));
         php.setMargins(10,10,10,10);
-        new getBreakDown().execute(work_id);
+        new getBreakDown(SegmentChoiceActivity.this).execute(work_id);
     }
 
     private void addNewView(String[] allPms){
@@ -71,7 +73,11 @@ public class SegmentChoiceActivity extends AppCompatActivity {
         all_main.addView(sci);
     }
 
-    public class getBreakDown extends AsyncTask<Integer, Void, Boolean>{
+    public class getBreakDown extends MyAsyncTask<Integer, Void, Boolean> {
+
+        protected getBreakDown(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(Integer... integers) {

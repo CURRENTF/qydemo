@@ -47,6 +47,8 @@ import com.example.qydemo0.QYpack.ShowProgressDialog;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.Video.VideoInfo;
 import com.example.qydemo0.QYpack.VideoClip;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -70,7 +72,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class UploadActivity extends AppCompatActivity implements View.OnClickListener{
+public class UploadActivity extends MyAppCompatActivity implements View.OnClickListener{
 
     protected SimpleExoPlayer player = null;
     Uri videoUri = null;
@@ -110,7 +112,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         gridViewAdapter = new LittleGridViewAdapter(this, R.layout.little_category_item, new ArrayList<Map<String, Object>>(), clas);
         class_list.setAdapter(gridViewAdapter);
 
-        GetClasInfo g = new GetClasInfo();
+        GetClasInfo g = new GetClasInfo(UploadActivity.this);
         g.execute();
 
         GlobalVariable.mInstance.appContext = this;
@@ -158,7 +160,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     }
                     ShowProgressDialog.show(UploadActivity.this, "上传视频");
                     try {
-                        HashVideo h = new HashVideo();
+                        HashVideo h = new HashVideo(UploadActivity.this);
                         InputStream inputStream = getContentResolver().openInputStream(videoUri);
                         h.execute(inputStream);
                     } catch (FileNotFoundException e) {
@@ -169,13 +171,13 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
                     Bitmap cover = videoClip.getCoverFromVideo(videoUrl);
                     coverUrl = Img.saveImg(cover, String.valueOf(cover.hashCode()), UploadActivity.this);
                     try {
-                        HashCover hashCover = new HashCover();
+                        HashCover hashCover = new HashCover(UploadActivity.this);
                         InputStream inputStream = new FileInputStream(new File(coverUrl));
                         hashCover.execute(inputStream);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    UploadVideoInfo uploadVideoInfo = new UploadVideoInfo();
+                    UploadVideoInfo uploadVideoInfo = new UploadVideoInfo(UploadActivity.this);
                     uploadVideoInfo.execute(new VideoInfo(video_name, class_map.get(classification), intro, tags));
                 }
                 else
@@ -235,7 +237,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     });
 
-    class GetClasInfo extends AsyncTask<String, Integer, String>{
+    class GetClasInfo extends MyAsyncTask<String, Integer, String> {
+
+        protected GetClasInfo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(String... strings) {
@@ -273,8 +279,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    class UploadVideoInfo extends AsyncTask<VideoInfo, Integer, String>{
+    class UploadVideoInfo extends MyAsyncTask<VideoInfo, Integer, String>{
 
+
+        protected UploadVideoInfo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected String doInBackground(VideoInfo... v) {
@@ -300,8 +310,12 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    class UploadVideo extends AsyncTask<String, Integer, Boolean>{
+    class UploadVideo extends MyAsyncTask<String, Integer, Boolean>{
 
+
+        protected UploadVideo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -317,7 +331,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class UploadCover extends AsyncTask<String, Integer, Boolean>{
+    class UploadCover extends MyAsyncTask<String, Integer, Boolean>{
+
+        protected UploadCover(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected Boolean doInBackground(String... strings) {
@@ -334,7 +352,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    class HashVideo extends AsyncTask<InputStream, Integer, JSONObject>{
+    class HashVideo extends MyAsyncTask<InputStream, Integer, JSONObject>{
+
+        protected HashVideo(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONObject doInBackground(InputStream... inputStreams) {
@@ -357,7 +379,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
 //                        Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
                     }
                     else {
-                        UploadVideo uploadVideo = new UploadVideo();
+                        UploadVideo uploadVideo = new UploadVideo(UploadActivity.this);
                         uploadVideo.execute(videoUrl, json.getString("upload_url"), json.getString("token"));
                     }
                 } catch (JSONException e) {
@@ -370,7 +392,11 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class HashCover extends AsyncTask<InputStream, Integer, JSONObject>{
+    class HashCover extends MyAsyncTask<InputStream, Integer, JSONObject>{
+
+        protected HashCover(MyAppCompatActivity activity) {
+            super(activity);
+        }
 
         @Override
         protected JSONObject doInBackground(InputStream... inputStreams) {
@@ -388,7 +414,7 @@ public class UploadActivity extends AppCompatActivity implements View.OnClickLis
             if(jsonObject != null){
                 cover_json = jsonObject;
                 try {
-                    UploadCover uploadCover = new UploadCover();
+                    UploadCover uploadCover = new UploadCover(UploadActivity.this);
                     uploadCover.execute(jsonObject.getString("upload_url"), coverUrl, jsonObject.getString("token"));
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -17,6 +17,14 @@ import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.QYrequest;
+import com.example.qydemo0.QYpack.SwitchVideoModel;
+import com.example.qydemo0.QYpack.Uri2RealPath;
+import com.example.qydemo0.QYpack.VideoClip;
+import com.example.qydemo0.Widget.MyAppCompatActivity;
+import com.example.qydemo0.Widget.MyAsyncTask;
+import com.example.qydemo0.bean.CallBackBean;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.google.gson.Gson;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
@@ -30,12 +38,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class SegmentPreLookActivity extends AppCompatActivity {
+public class SegmentPreLookActivity extends MyAppCompatActivity {
 
     String free_dance_url = "";
 
 
     StandardGSYVideoPlayer videoPlayer;
+    String clip_video_url = "";
 
     private ProgressDialog dialog;
 
@@ -89,7 +98,7 @@ public class SegmentPreLookActivity extends AppCompatActivity {
         findViewById(R.id.start_learn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new start_learn().execute();
+                new start_learn(SegmentPreLookActivity.this).execute();
             }
         });
     }
@@ -192,7 +201,11 @@ public class SegmentPreLookActivity extends AppCompatActivity {
         }
     }
 
-    public class start_learn extends AsyncTask<Void, Void, Integer>{
+    public class start_learn extends MyAsyncTask<Void, Void, Integer> {
+        protected start_learn(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected Integer doInBackground(Void... voids) {
             return new_learning_object(wid, breakdown_id);
