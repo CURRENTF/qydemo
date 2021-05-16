@@ -81,7 +81,7 @@ public class WaveProgressView extends View {
 
     private int mAlpha = 50;// 透明度
 
-    private float mAmplitude = 10.0F; // 振幅
+    private float mAmplitude = 50.0F; // 振幅
 
     private float mWaterLevel = 0.5F;// 水高(0~1)
 

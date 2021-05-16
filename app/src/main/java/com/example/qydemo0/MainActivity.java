@@ -156,15 +156,18 @@ public class MainActivity extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.i("StartCode",""+startCode);
-                ArrayList<String> params = new ArrayList<>();
-                params.add("1");
-                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
-                intent.putStringArrayListExtra("params", params);
-                startActivity(intent);
 
-//                QYLoading qyLoading = new QYLoading(MainActivity.this);
-//                qyLoading.start_dialog();
+                Intent intent = new Intent(MainActivity.this, SimplePlayerActivity.class);
+                startActivity(intent);
+//                Log.i("StartCode",""+startCode);
+//                ArrayList<String> params = new ArrayList<>();
+//                params.add("1");
+//                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
+//                intent.putStringArrayListExtra("params", params);
+//                startActivity(intent);
+
+//                WaveLoadDialog qyLoading = new WaveLoadDialog(MainActivity.this);
+//                qyLoading.s;
             }
         });
         if (getSupportActionBar() != null) {
