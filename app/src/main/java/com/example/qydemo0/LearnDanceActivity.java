@@ -1,5 +1,6 @@
 package com.example.qydemo0;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -216,6 +217,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
     private List<List<Integer> > spt = new ArrayList<>();
 
+    private String nne, nnv, nnm, nni;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -235,14 +238,25 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         fill_all.addRule(RelativeLayout.CENTER_HORIZONTAL);
         fill_tiny = new RelativeLayout.LayoutParams(1,1);
 
-        //学习项目id
+        // 学习项目id
         learning_id = Integer.valueOf(list.get(0));
-        //breakdown id
+        // breakdown id
         bid = Integer.valueOf(list.get(1));
-        //开始位置
+        // 开始位置
         current_video_number = Integer.valueOf(list.get(2));
-        //是否正常学习
+        // 是否正常学习
         is_normal = Integer.valueOf(list.get(3));
+        // 非正常学习参数
+        if(is_normal==0){
+            // 对比视频
+            nnv = list.get(4);
+            // 评估
+            nne = list.get(5);
+            // pose model
+            nnm = list.get(6);
+            // pose input
+            nni = list.get(7);
+        }
 
         human_iconss = findViewById(R.id.human_icons);
         human_iconss.setVisibility(GONE);
@@ -291,12 +305,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         init_kqw();
 
         wrongShow = new WrongShow(LearnDanceActivity.this);
-
-        if(is_normal==0) {
-            repeat_mode_init(list.get(4), list.get(5));
-        } else if(is_normal==1){
-            new InitAllLearn(LearnDanceActivity.this).execute(bid);
-        }
+        new InitAllLearn(LearnDanceActivity.this).execute(bid);
 
     }
 
@@ -339,6 +348,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private void init_kqw(){
 
         handler = new Handler() {
+            @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -354,7 +364,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
                     }
                 }
-                else if (dataa.equals("【开始】游戏")) {
+                else if (dataa.equals("【开始】学习")) {
                     btn_start();
                     if (!is_compare) {
                         if (!is_learn) {
@@ -362,10 +372,25 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         }
                         }
                 }
-                else if (dataa.equals("【下】一段") || dataa.equals("【返】回")){
-                    btn_nOb();
-                    if(!is_learn || is_compare){
-                        SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
+                else if (dataa.equals("【下】一段")){
+                    if (!is_learn) {
+                        try {
+                            new PostRecord(LearnDanceActivity.this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
+                            SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                else if (dataa.equals("【返】回")){
+                    if (is_compare) {
+                        stop_compare_video();
+                        try {
+                            detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
+                            detailPlayer.startPlayLogic();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 else if (dataa.equals("【镜像】翻转")) {
@@ -379,49 +404,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
         kqw = new KqwOneShot(this, handler);
         kqw.btn_grammar();
-    }
-
-    private void repeat_mode_init(String compare_video_url, String error_info){
-    try{
-        is_learn = true;
-        is_compare = true;
-        detailPlayer.setUp(compare_video_url, true, "对比视频");
-        wrong_time.clear();
-        JSONArray wrong_time_json = new JSONArray(error_info);
-        wrong_id.clear();
-        for(int i=0;i<wrong_time_json.length();i++){
-            JSONObject wrong_time_json_item = wrong_time_json.getJSONObject(i);
-            List<Long> wrong_time_item = new ArrayList<>();
-            String str = wrong_time_json_item.getString("begin_time");
-            Log.d("hjt.learn.dance.begin_t", str);
-            wrong_time_item.add((long) (Double.parseDouble(str) * 1000.0));
-            String str2 = wrong_time_json_item.getString("end_time");
-            wrong_time_item.add((long) ((Double.parseDouble(str2) - Double.parseDouble(str))*1000.0));
-            int cur_wrong_id_2 = wrong_time_json_item.getInt("error_type");
-            List<Boolean> wrong_id_item = new ArrayList<>();
-            String s = Integer.toBinaryString(cur_wrong_id_2);
-            Integer s_int = Integer.valueOf(s);
-            for(int j = 6; j >0 ; j--){
-                wrong_id_item.add(s_int%10==1);
-                s_int /= 10;
-            }
-            wrong_time.add(wrong_time_item);
-            wrong_id.add(wrong_id_item);
-            Log.d("hjt.in.it", "?" + i);
-        }
-
-        Log.e("wrong_time", String.valueOf(wrong_time));
-        Log.e("wrong_id",String.valueOf(wrong_id));
-
-        Log.d("hjt.out.it", "1");
-        init_compare_video();
-        detailPlayer.startPlayLogic();
-        //hideProgressDialog();
-        Log.d("hjt.out.it", "2");
-      } catch (JSONException e) {
-        Log.d("hjt.json.wwww", "wwww");
-        e.printStackTrace();
-      }
     }
 
     private void btn_humanPose(){
@@ -616,7 +598,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 for(int k=0;k<10;k++)
                     wrong_kuang[k].setBackgroundResource(R.color.dark_color);
                 for(int k=0;k<6;k++)
-                    human_icons[k].setColorFilter(Color.parseColor("#FF5C5C"));
+                    human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
                 if(is_learn && !is_compare){
                     stopRecord();
                     if((new File(path_cur)).isFile()) {
@@ -683,6 +665,86 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         arrow = findViewById(R.id.menu_btn);
         shrink_menu_now();
 
+    }
+
+    private void repeat(String video_url_json, String evaluation_json, String pose_model_json, String pose_input_json) throws JSONException {
+        is_learn = true;
+        is_compare = true;
+        for(int k=0;k<10;k++)
+            wrong_kuang[k].setBackgroundResource(R.color.dark_color);
+        for(int k=0;k<6;k++)
+            human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
+
+        detailPlayer.setUp((new JSONObject(video_url_json)).getJSONObject("url").getString("自动"), true, "对比视频");
+                    wrong_time.clear();
+                    JSONArray wrong_time_json = (new JSONObject(evaluation_json)).getJSONArray("error");
+                    wrong_id.clear();
+                    for(int i=0;i<wrong_time_json.length();i++){
+                        JSONObject wrong_time_json_item = wrong_time_json.getJSONObject(i);
+                        List<Long> wrong_time_item = new ArrayList<>();
+                        String str = wrong_time_json_item.getString("begin_time");
+                        Log.d("hjt.learn.dance.begin_t", str);
+                        wrong_time_item.add((long) (Double.parseDouble(str) * 1000.0));
+                        String str2 = wrong_time_json_item.getString("end_time");
+                        wrong_time_item.add((long) ((Double.parseDouble(str2) - Double.parseDouble(str))*1000.0));
+                        int cur_wrong_id_2 = wrong_time_json_item.getInt("error_type");
+                        List<Boolean> wrong_id_item = new ArrayList<>();
+                        String s = Integer.toBinaryString(cur_wrong_id_2);
+                        Integer s_int = Integer.valueOf(s);
+                        for(int j = 6; j >0 ; j--){
+                            wrong_id_item.add(s_int%10==1);
+                            s_int /= 10;
+                        }
+                        wrong_time.add(wrong_time_item);
+                        wrong_id.add(wrong_id_item);
+                        Log.d("hjt.in.it", "?" + i);
+                    }
+
+                    Log.e("wrong_time", String.valueOf(wrong_time));
+                    Log.e("wrong_id",String.valueOf(wrong_id));
+
+                    Log.d("hjt.out.it", "1");
+
+                    rawPointsL.clear();
+                    rawPointsR.clear();
+
+                    JSONArray pose_model = new JSONArray(pose_model_json);
+                    JSONArray pose_input = new JSONArray(pose_input_json);
+                    for(int i=0;i<pose_model.length();i++){
+                        JSONArray pm1 = pose_model.getJSONArray(i);
+                        List<List<Double> > cur = new ArrayList<>();
+                        for(int j=0;j<pm1.length();j++){
+                            List<Double> curr = new ArrayList<>();
+                            curr.add(pm1.getJSONArray(j).getDouble(0));
+                            curr.add(pm1.getJSONArray(j).getDouble(1));
+                            cur.add(curr);
+                            cur.add(curr);
+                        }
+                        rawPointsL.add(cur);
+                    }
+
+                    for(int i=0;i<pose_input.length();i++){
+                        JSONArray pm1 = pose_input.getJSONArray(i);
+                        List<List<Double> > cur = new ArrayList<>();
+                        for(int j=0;j<pm1.length();j++){
+                            List<Double> curr = new ArrayList<>();
+                            curr.add(pm1.getJSONArray(j).getDouble(0));
+                            curr.add(pm1.getJSONArray(j).getDouble(1));
+                            cur.add(curr);
+                        }
+                        rawPointsR.add(cur);
+                    }
+
+                    phl.setPoints(List2Array(rawPointsL));
+                    phr.setPoints(List2Array(rawPointsR));
+
+                    Log.i("whc_pose_model", ""+rawPointsL);
+                    Log.i("whc_pose_input", ""+rawPointsR);
+                    cdg = new CompareDialog(LearnDanceActivity.this, (new JSONObject(evaluation_json)).getJSONArray("score").getJSONObject(0).getString("value"));
+                    init_compare_video();
+                    detailPlayer.startPlayLogic();
+                    //hideProgressDialog();
+                    Log.d("hjt.out.it", "2");
     }
 
     void shrink_menu_now(){
@@ -1266,7 +1328,14 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
                     Log.i("whc_pose_model", ""+rawPointsL);
                     Log.i("whc_pose_input", ""+rawPointsR);
-                    cdg = new CompareDialog(LearnDanceActivity.this, resJson[0].getJSONObject("evaluation").getJSONArray("score").getJSONObject(0).getString("value"));
+                    JSONArray t = resJson[0].getJSONObject("evaluation").getJSONArray("score");
+                    int r1 = 0;
+                    for(int y=1;y<7;y++){
+                        r1 = r1 + t.getJSONObject(y).getInt("value");
+                    }
+                    r1 /= 6;
+                    if(r1 < t.getJSONObject(0).getInt("value")) r1 = t.getJSONObject(0).getInt("value");
+                    cdg = new CompareDialog(LearnDanceActivity.this, ""+r1);
                     init_compare_video();
                     detailPlayer.startPlayLogic();
                     //hideProgressDialog();
@@ -1300,8 +1369,16 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         @Override
         protected void onPostExecute(Boolean aVoid) {
             super.onPostExecute(aVoid);
-            if(aVoid)
+            if(aVoid) {
                 init_learn_pager();
+                if(is_normal==0) {
+                    try {
+                        repeat(nnv, nne, nnm, nni);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             else
                 Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
         }
@@ -1377,10 +1454,10 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private void init_pose_view(){
         phl = new PoseHuman(this);
         phr = new PoseHuman(this);
-        RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(800, 800);
+        RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(300, 300);
         phpl.addRule(RelativeLayout.CENTER_VERTICAL);
         phpl.addRule(RelativeLayout.ALIGN_LEFT,R.id.centerTextView);
-        RelativeLayout.LayoutParams phpr = new RelativeLayout.LayoutParams(800, 800);
+        RelativeLayout.LayoutParams phpr = new RelativeLayout.LayoutParams(300, 300);
         phpr.addRule(RelativeLayout.CENTER_VERTICAL);
         phpr.addRule(RelativeLayout.ALIGN_RIGHT,R.id.centerTextView);
         phl.setLayoutParams(phpl);
@@ -1467,11 +1544,11 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     double wei_b = (now_time - ii * 0.25f) / 0.25f;
                     for (int i = 0; i < 17; i++) {
                         if(ii < raw_points.length && raw_points[ii][i][0]>=0&&raw_points[ii+1][i][0]>=0)
-                            points[i][0] = (int) (wei_a * raw_points[ii][i][0]*600 + wei_b * raw_points[ii + 1][i][0]*600);
+                            points[i][0] = (int) (wei_a * raw_points[ii][i][0]*300 + wei_b * raw_points[ii + 1][i][0]*300);
                         else
                             points[i][0] = -1;
                         if(ii < raw_points.length && raw_points[ii][i][1]>=0&&raw_points[ii+1][i][1]>=0)
-                            points[i][1] = (int) (wei_a * raw_points[ii][i][1]*600 + wei_b * raw_points[ii + 1][i][1]*600);
+                            points[i][1] = (int) (wei_a * raw_points[ii][i][1]*300 + wei_b * raw_points[ii + 1][i][1]*300);
                         else
                             points[i][1] = -1;
                     }

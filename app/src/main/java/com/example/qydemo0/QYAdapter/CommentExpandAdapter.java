@@ -354,8 +354,8 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
     public void addTheCommentData(CommentDetailBean commentDetailBean){
         if(commentDetailBean!=null){
 
-            commentBeanList.add(commentDetailBean);
-            Collections.swap(commentBeanList, commentBeanList.size()-1, 0);
+            commentBeanList.add(0,commentDetailBean);
+            //Collections.swap(commentBeanList, commentBeanList.size()-1, 0);
             notifyDataSetChanged();
         }else {
             throw new IllegalArgumentException("评论数据为空!");
@@ -376,7 +376,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             }else {
                 List<ReplyDetailBean> replyList = new ArrayList<>();
                 replyList.add(replyDetailBean);
-                Collections.swap(replyList, replyList.size()-1, 0);
+                //Collections.swap(replyList, replyList.size()-1, 0);
                 commentBeanList.get(groupPosition).setReplies(replyList);
             }
             notifyDataSetChanged();
