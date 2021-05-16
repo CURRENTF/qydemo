@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.qydemo0.LoginActivity;
 import com.example.qydemo0.QYpack.Constant;
@@ -111,7 +112,10 @@ public class RegisterUsernameFragment extends Fragment {
                 ((LoginActivity) getActivity()).password = password.toString();
                 toRegister2();
             }
-            else Log.e("hjt", "register1wrong");
+            else {
+                Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_LONG).show();
+                Log.e("hjt", "register1wrong");
+            }
             super.onPostExecute(s);
         }
     }

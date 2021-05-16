@@ -27,8 +27,8 @@
                 android:id="@+id/comment_item_userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#5B595A"
-                android:textSize="14sp"
+                android:textColor="@color/real_pink"
+                android:textSize="15sp"
                 android:text="沐风" />
             <TextView
                 android:id="@+id/comment_item_time"
@@ -50,10 +50,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:textColor="#484848"
-        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:textSize="13sp"
         android:layout_marginLeft="52dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginRight="10dp"
         android:text="从前有座山，山里有座庙，庙里有个老和尚"/>
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,12 +61,14 @@
         android:layout_marginLeft="52dp"
         android:layout_marginRight="24dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginTop="5dp"
         android:orientation="horizontal">
         <ImageView
             android:id="@+id/comment_item_like"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/icon_comment_like"
+            android:layout_marginEnd="5dp"
             android:padding="1dp"/>
         <TextView
             android:id="@+id/comment_like_num"

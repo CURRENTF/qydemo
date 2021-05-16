@@ -125,7 +125,6 @@ public class MainActivity extends MyAppCompatActivity {
         GlobalVariable.mInstance.readAllVar(sp);
         Log.d("hjt.uid", GlobalVariable.mInstance.uid + "?");
 
-        Log.d("hjt.uid", GlobalVariable.mInstance.uid);
         Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
         // 跳转登录
