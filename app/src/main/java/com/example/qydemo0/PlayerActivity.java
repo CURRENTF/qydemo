@@ -1114,7 +1114,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                 Log.i("whc_work_json1", cur_work_json.get(1));
                 llid = (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("lid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
                 // 获取breakdown_id
-                bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
+                bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("bid");
                 init_work(cur_work_json.get(0), cur_work_json.get(1));
                 new WorkChange(PlayerActivity.this).execute(0);
             } catch (JSONException e) {

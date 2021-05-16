@@ -23,7 +23,7 @@ public class SimplePlayerActivity extends MyAppCompatActivity {
 
     OrientationUtils orientationUtils;
 
-    String source1="https://file.yhf2000.cn/dash/14/5a/145a64e0deea986c65d2df3d8137806d503fb7d69fc4b2cb6c132bbea4bda8dd-qnPYbF./manifest.mpd";
+    String source1="https://file.yhf2000.cn/dash/e3/b0/e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855-HbxnjE.mp4/manifest.mpd";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -47,6 +47,7 @@ import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.utils.SoundTipUtil;
 
+import com.koushikdutta.ion.builder.Builders;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
@@ -218,23 +219,7 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!is_compare) {
-                    if (!is_learn) {
-                        cover_start_icon.setVisibility(VISIBLE);
-                        is_learn = true;
-                        init_learn_view();
-                        detailPlayer.startPlayLogic();
-                    }
-                } else {
-//                    btn3.setText("开始");
-                    if (!is_video_input) {
-                        surf.setLayoutParams(fill_all);
-                        black_back.setLayoutParams(fill_all_r);
-                    }
-                    stop_compare_video();
-                    detailPlayer.setUp(all_learn_video.get(0), true, "韩舞小姐姐");
-                    detailPlayer.startPlayLogic();
-                }
+                btn_start_it();
             }
         });
 
@@ -267,12 +252,35 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                 } else if(date.equals("【关闭】镜子")){
                     SoundTipUtil.soundTip(getBaseContext(), "好的");
                     do_mirror_close();
+                } else if(date.equals("【开始】录制")){
+                    SoundTipUtil.soundTip(getBaseContext(), "好的");
+                    btn_start_it();
                 }
             }
         };
 
         kqw = new KqwOneShot(this, handler);
         kqw.btn_grammar();
+    }
+
+    private void btn_start_it(){
+        if (!is_compare) {
+            if (!is_learn) {
+                cover_start_icon.setVisibility(VISIBLE);
+                is_learn = true;
+                init_learn_view();
+                detailPlayer.startPlayLogic();
+            }
+        } else {
+//                    btn3.setText("开始");
+            if (!is_video_input) {
+                surf.setLayoutParams(fill_all);
+                black_back.setLayoutParams(fill_all_r);
+            }
+            stop_compare_video();
+            detailPlayer.setUp(all_learn_video.get(0), true, "韩舞小姐姐");
+            detailPlayer.startPlayLogic();
+        }
     }
 
     private void do_mirror_open(){
@@ -577,6 +585,10 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
             mCoverMedia = null;
         }
         kqw.btn_stop();
+        File file1 = new File(path_cur);
+        if(file1.exists()){
+            file1.delete();
+        }
     }
 
     private GSYVideoPlayer getCurPlay() {

@@ -14,6 +14,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -66,6 +69,7 @@ public class MainActivity extends MyAppCompatActivity {
     Constant C = Constant.mInstance;
     private GestureDetector gestureDetector = null;
     private GestureListener gestureListener = null;
+    private QYrequest work_request = new QYrequest();
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -82,7 +86,9 @@ public class MainActivity extends MyAppCompatActivity {
     }
 
     ImageView img;
+    PoseHuman inn;
 
+    RelativeLayout activityDetailPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,19 +159,22 @@ public class MainActivity extends MyAppCompatActivity {
         param.append(SpeechConstant.ENGINE_MODE+"="+ SpeechConstant.MODE_MSC);
         SpeechUtility.createUtility(GlobalVariable.mInstance.appContext, param.toString());
 
+//        inn = new PoseHuman(MainActivity.this);
+//        activityDetailPlayer = new RelativeLayout(MainActivity.this);
+//        activityDetailPlayer = findViewById(R.id.main_main);
+//        RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(800, 800);
+//        phpl.addRule(RelativeLayout.CENTER_VERTICAL);
+//        phpl.addRule(RelativeLayout.ALIGN_LEFT,R.id.centerTextView);
+//        inn.setLayoutParams(phpl);
+//        inn.setBackgroundColor(Color.GRAY);
+//        inn.setAlpha(0.75f);
+//        activityDetailPlayer.addView(inn);
         Button btn1 = (Button) findViewById(R.id.btn1);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.i("StartCode",""+startCode);
-                ArrayList<String> params = new ArrayList<>();
-                params.add("1");
-                Intent intent = new Intent(MainActivity.this, VideoRenderActivity.class);
-                intent.putStringArrayListExtra("params", params);
-                startActivity(intent);
-
-//                QYLoading qyLoading = new QYLoading(MainActivity.this);
-//                qyLoading.start_dialog();
+//                inn.setPoints(new double[][]{{0.4685792349726776, 0.019125683060109287}, {0.4986338797814208, 0.0}, {0.43579234972677594, 0.00273224043715847}, {0.5396174863387978, 0.04918032786885246}, {0.39480874316939896, 0.05737704918032786}, {0.6215846994535519, 0.22677595628415298}, {0.3346994535519126, 0.24316939890710382}, {0.7199453551912569, 0.39344262295081966}, {0.2800546448087432, 0.4371584699453552}, {0.5806010928961749, 0.4808743169398907}, {0.4030054644808743, 0.49726775956284147}, {0.6079234972677596, 0.6775956284153005}, {0.4139344262295082, 0.6994535519125683}, {0.6215846994535519, 0.9999999999999999}, {0.39480874316939896, 0.9918032786885245}, {-1, -1}, {-1, -1}});
+                new GetTestData(MainActivity.this).execute();
             }
         });
         if (getSupportActionBar() != null) {
@@ -307,4 +316,115 @@ public class MainActivity extends MyAppCompatActivity {
         }
     }
 
-}
+    class GetTestData extends MyAsyncTask<String, Integer, String> {
+
+        protected GetTestData(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            JSONObject res = null;
+            try {
+                res = new JSONObject(work_request.advanceGet(Constant.mInstance.learn_url+"record/3/?start=0&lens=1", "Authorization", GlobalVariable.mInstance.token));
+                Log.i("whc_ind_res", String.valueOf(res));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return "1";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+        }
+    }
+
+    public class PoseHuman extends View {
+        private static final int ALPHA = 255;
+        private Paint mInnerPaintRed, mInnerPaintBlue, mInnerPaintPur,
+                pointsPaintRed,pointsPaintBlue,pointsPaintPur;
+        public int width;
+        public int height;
+        private int[][] points = new int[17][2];
+
+        public PoseHuman(Context context) {
+            super(context);
+            mInnerPaintRed = new Paint();
+            mInnerPaintRed.setARGB(ALPHA, 255, 0, 0);
+            mInnerPaintRed.setAntiAlias(true);
+            mInnerPaintRed.setStrokeWidth(8f);
+
+            mInnerPaintBlue = new Paint();
+            mInnerPaintBlue.setARGB(ALPHA, 0, 0, 255);
+            mInnerPaintBlue.setAntiAlias(true);
+            mInnerPaintBlue.setStrokeWidth(8f);
+
+            mInnerPaintPur = new Paint();
+            mInnerPaintPur.setARGB(ALPHA, 255, 0, 255);
+            mInnerPaintPur.setAntiAlias(true);
+            mInnerPaintPur.setStrokeWidth(8f);
+
+            pointsPaintRed = new Paint();
+            pointsPaintRed.setARGB(ALPHA, 255, 0, 0);
+            pointsPaintRed.setAntiAlias(true);
+            pointsPaintRed.setStrokeWidth(10f);
+
+            pointsPaintBlue = new Paint();
+            pointsPaintBlue.setARGB(ALPHA, 0, 0, 255);
+            pointsPaintBlue.setAntiAlias(true);
+            pointsPaintBlue.setStrokeWidth(10f);
+
+            pointsPaintPur = new Paint();
+            pointsPaintPur.setARGB(ALPHA, 255, 0, 255);
+            pointsPaintPur.setAntiAlias(true);
+            pointsPaintPur.setStrokeWidth(10f);
+            System.out.println("绘图初始化");
+        }
+
+        public void setPoints(double[][] d) {
+            for (int i = 0; i < d.length; i++) {
+                points[i][0] = (int)(d[i][0]*500);
+                points[i][1] = (int)(d[i][1]*500);
+            }
+        }
+
+        @Override
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            width = getMeasuredWidth();
+            height = getMeasuredHeight();
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+                if(points[0][0]!=-1)
+                    canvas.drawCircle(points[0][0], points[0][1],15, pointsPaintPur);
+                for(int i=1;i<17;i++){
+                    Log.i("points", ""+points[i][0]+" "+points[i][1]);
+                    if(points[i][0]!=-1 && points[i][1]!=-1)
+                        canvas.drawCircle(points[i][0],points[i][1],15, i%2==1?pointsPaintRed:pointsPaintBlue);
+                }
+                if(points[0][0]!=-1&&points[0][1]!=-1&&points[1][0]!=-1&&points[1][1]!=-1)canvas.drawLine(points[0][0], points[0][1], points[1][0], points[1][1], mInnerPaintRed);
+                if(points[0][0]!=-1&&points[0][1]!=-1&&points[2][0]!=-1&&points[2][1]!=-1)canvas.drawLine(points[0][0], points[0][1], points[2][0], points[2][1], mInnerPaintBlue);
+                if(points[0][0]!=-1&&points[0][1]!=-1&&points[5][0]!=-1&&points[5][1]!=-1)canvas.drawLine(points[0][0], points[0][1], points[5][0], points[5][1], mInnerPaintRed);
+                if(points[0][0]!=-1&&points[0][1]!=-1&&points[6][0]!=-1&&points[6][1]!=-1)canvas.drawLine(points[0][0], points[0][1], points[6][0], points[6][1], mInnerPaintBlue);
+                if(points[1][0]!=-1&&points[1][1]!=-1&&points[3][0]!=-1&&points[3][1]!=-1)canvas.drawLine(points[1][0], points[1][1], points[3][0], points[3][1], mInnerPaintRed);
+                if(points[2][0]!=-1&&points[2][1]!=-1&&points[4][0]!=-1&&points[4][1]!=-1)canvas.drawLine(points[2][0], points[2][1], points[4][0], points[4][1], mInnerPaintBlue);
+                if(points[5][0]!=-1&&points[5][1]!=-1&&points[6][0]!=-1&&points[6][1]!=-1)canvas.drawLine(points[5][0], points[5][1], points[6][0], points[6][1], mInnerPaintPur);
+                if(points[5][0]!=-1&&points[5][1]!=-1&&points[7][0]!=-1&&points[7][1]!=-1)canvas.drawLine(points[5][0], points[5][1], points[7][0], points[7][1], mInnerPaintRed);
+                if(points[5][0]!=-1&&points[5][1]!=-1&&points[11][0]!=-1&&points[11][1]!=-1)canvas.drawLine(points[5][0], points[5][1], points[11][0], points[11][1], mInnerPaintRed);
+                if(points[6][0]!=-1&&points[6][1]!=-1&&points[8][0]!=-1&&points[8][1]!=-1)canvas.drawLine(points[6][0], points[6][1], points[8][0], points[8][1], mInnerPaintBlue);
+                if(points[6][0]!=-1&&points[6][1]!=-1&&points[12][0]!=-1&&points[12][1]!=-1)canvas.drawLine(points[6][0], points[6][1], points[12][0], points[12][1], mInnerPaintBlue);
+                if(points[7][0]!=-1&&points[7][1]!=-1&&points[9][0]!=-1&&points[9][1]!=-1)canvas.drawLine(points[7][0], points[7][1], points[9][0], points[9][1], mInnerPaintRed);
+                if(points[8][0]!=-1&&points[8][1]!=-1&&points[10][0]!=-1&&points[10][1]!=-1)canvas.drawLine(points[8][0], points[8][1], points[10][0], points[10][1], mInnerPaintBlue);
+                if(points[11][0]!=-1&&points[11][1]!=-1&&points[12][0]!=-1&&points[12][1]!=-1)canvas.drawLine(points[11][0], points[11][1], points[12][0], points[12][1], mInnerPaintPur);
+                if(points[11][0]!=-1&&points[11][1]!=-1&&points[13][0]!=-1&&points[13][1]!=-1)canvas.drawLine(points[11][0], points[11][1], points[13][0], points[13][1], mInnerPaintRed);
+                if(points[12][0]!=-1&&points[12][1]!=-1&&points[14][0]!=-1&&points[14][1]!=-1)canvas.drawLine(points[12][0], points[12][1], points[14][0], points[14][1], mInnerPaintBlue);
+                if(points[13][0]!=-1&&points[13][1]!=-1&&points[15][0]!=-1&&points[15][1]!=-1)canvas.drawLine(points[13][0], points[13][1], points[15][0], points[15][1], mInnerPaintRed);
+                if(points[14][0]!=-1&&points[14][1]!=-1&&points[16][0]!=-1&&points[16][1]!=-1)canvas.drawLine(points[14][0], points[14][1], points[16][0], points[16][1], mInnerPaintBlue);
+                postInvalidate();
+        }
+        }
+
+    }
