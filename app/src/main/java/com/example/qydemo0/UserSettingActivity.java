@@ -137,8 +137,7 @@ public class UserSettingActivity extends MyAppCompatActivity implements View.OnC
                     }
                     ChangeAvatar changeAvatar = new ChangeAvatar(UserSettingActivity.this);
                     QYFile qyFile = new QYFile();
-                    changeAvatar.execute(Uri2RealPath.getRealPathFromUri_AboveApi19(UserSettingActivity.this, avatar_uri), "0",
-                            qyFile.hashFile(avatar_uri, UserSettingActivity.this));
+                    changeAvatar.execute(Img.compressWithUrl(Uri2RealPath.getRealPathFromUri_AboveApi19(UserSettingActivity.this, avatar_uri), UserSettingActivity.this), "0");
                     dialog.dismiss();
                     break;
             }
@@ -260,11 +259,11 @@ public class UserSettingActivity extends MyAppCompatActivity implements View.OnC
             super(activity);
         }
 
-        // params: String file_url, int file_type, String hash
+        // params: String file_url, int file_type
         @Override
         protected Boolean doInBackground(String... s) {
             QYFile qyFile = new QYFile();
-            String res = qyFile.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, s[0], Integer.parseInt(s[1]), s[2]);
+            String res = qyFile.uploadFileAllIn(s[0], Integer.parseInt(s[1]));
             if(res != null)
                 return QYUser.modify("img_id", "string", res);
             else return false;

@@ -46,7 +46,7 @@ public class MsgProcess {
             Log.e("hjt.MsgProcess", "jsonMsgProcessWrong");
             e.printStackTrace();
         }
-        return null;
+        return new JSONObject();
     }
     public static JSONArray msgProcessArr(String msg, Boolean status, String loc){
         Constant C = Constant.mInstance;
@@ -70,7 +70,7 @@ public class MsgProcess {
             if(status) Log.e("hjt.MsgProgress", msg);
             e.printStackTrace();
         }
-        return null;
+        return new JSONArray();
     }
 
 

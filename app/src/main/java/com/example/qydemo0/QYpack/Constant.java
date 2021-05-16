@@ -40,7 +40,8 @@ public class Constant {
         game_url = "https://api.yhf2000.cn/api/qingying/v1/game/",
         challenge_url = "https://api.yhf2000.cn/api/qingying/v1/game/challenge/",
         postImage_url = "https://api.yhf2000.cn/api/qingying/v1/game/free/",
-        gameRank_url = "https://api.yhf2000.cn/api/qingying/v1/game/ranking/";
+        gameRank_url = "https://api.yhf2000.cn/api/qingying/v1/game/ranking/",
+        work_c_url = "https://api.yhf2000.cn/api/qingying/v1/search/workc/";
 
     public String default_avatar = "https://file.yhf2000.cn/img/defult2.jpeg";
 

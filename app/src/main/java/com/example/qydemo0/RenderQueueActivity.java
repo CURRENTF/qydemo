@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RenderQueueActivity extends MyAppCompatActivity implements View.OnClickListener{
 
@@ -100,7 +101,9 @@ public class RenderQueueActivity extends MyAppCompatActivity implements View.OnC
                 for(int i = 0; i < jsonArray.length(); i++){
                     RenderItem renderItem = new RenderItem(RenderQueueActivity.this);
                     try {
-                        renderItem.init(jsonArray.getJSONObject(i));
+                        JSONObject json = jsonArray.getJSONObject(i);
+                        json.put("dashboard", false);
+                        renderItem.init(json);
                         if(renderItem.is_finished()){
                             l_right.addView(renderItem);
                         }

@@ -26,7 +26,7 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:progress="10"
         android:id="@+id/download_progress"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -51,17 +51,26 @@
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="豪哥睡觉之舞"
-                    android:textSize="20sp"
+                    android:textSize="12sp"
                     android:id="@+id/render_name"
                     android:maxLines="1"
                     android:gravity="center|start"
-                    android:layout_margin="5dp"/>
+                    android:layout_margin="2dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="豪哥睡觉之舞"
+                    android:textSize="12sp"
+                    android:id="@+id/render_time"
+                    android:maxLines="1"
+                    android:gravity="center|start"
+                    android:layout_margin="3dp"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"

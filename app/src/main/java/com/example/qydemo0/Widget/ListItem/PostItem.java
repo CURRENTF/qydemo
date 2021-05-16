@@ -327,6 +327,7 @@ public class PostItem extends LinearLayoutItem {
                     intent.putExtra("uid", belong.getInt("uid"));
                     intent.putExtra("username", belong.getString("username"));
                     intent.putExtra("avatar", belong.getString("img_url"));
+                    intent.putExtra("sign", belong.getString("sign"));
                     ((Activity)mContext).startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();

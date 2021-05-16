@@ -43,8 +43,11 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
         finished = findViewById(R.id.btn_finished);
         GetLearningListProgress getLearningListProgress = new GetLearningListProgress(this);
         getLearningListProgress.execute();
+        GetLearningListFinished getLearningListFinished = new GetLearningListFinished(this);
+        getLearningListFinished.execute();
         progress.setOnClickListener(this);
         finished.setOnClickListener(this);
+
     }
 
     int switcher = 0;
@@ -92,8 +95,6 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-//            Log.e("hjt.6666", Constant.mInstance.learn_list_url + "1/"
-//                    + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)));
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
                             + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
                     "Authorization", GlobalVariable.mInstance.token), false, null);
@@ -109,6 +110,7 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
                 for(int i = 0; i < jsonArray.length(); i++){
                     try {
                         JSONObject json = jsonArray.getJSONObject(i);
+                        Log.d("hjt.smart.item", json.toString());
                         SmartItem smartItem = new SmartItem(LearningListActivity.this);
                         smartItem.init(json.getJSONObject("work_info"), json.getInt("record_num"),
                                 json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"));

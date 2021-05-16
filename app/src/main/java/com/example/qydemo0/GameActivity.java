@@ -397,7 +397,7 @@ public class GameActivity extends MyAppCompatActivity {
     }
 
     private String upload_img(String path){
-        String render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, Img.compressWithUrl(path, GameActivity.this), 0, cur_file.hashFileUrl(path));
+        String render_img_id = cur_file.uploadFileAllIn( Img.compressWithUrl(path, GameActivity.this), 0);
         return render_img_id;
     }
 
@@ -461,24 +461,25 @@ public class GameActivity extends MyAppCompatActivity {
             if(mode==2) {
                 String cur_img_game_id = upload_img(will_upload_img);
                 callToJson = new String[]{"img_game", "int", "" + cur_img_game_id,
-                        "img", "string", cur_img_id};
+                        "img_user", "string", cur_img_id};
             }
             else {
                 callToJson = new String[]{"game", "int", "" + gid_list.get(cur_img_ind - 1),
-                        "img", "string", cur_img_id};
+                        "img_user", "string", cur_img_id};
             }
             try {
-                JSONObject res_json = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callToJson),Constant.mInstance.task_url+"/"+"game/", "Authorization", GlobalVariable.mInstance.token));
+                Log.i("whc_ss",GenerateJson.universeJson2(callToJson));
+                JSONObject res_json = new JSONObject(cur_request.advancePost(GenerateJson.universeJson2(callToJson),Constant.mInstance.task_url+"game/", "Authorization", GlobalVariable.mInstance.token));
                 Log.i("whc_res_json", String.valueOf(res_json));
                 if(!res_json.getString("msg").equals("Success")) return null;
                 String tid = res_json.getJSONObject("data").getString("tid");
                 boolean isi = false;
                 for(int i=0;i<10;i++){
-                    JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/task/schedule"+tid+"/","Authorization", GlobalVariable.mInstance.token));
+                    JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/task/schedule/"+tid+"/","Authorization", GlobalVariable.mInstance.token));
                     Log.i("whc_cur_res", String.valueOf(cur_res));
                     if(!cur_res.getString("msg").equals("Success")) return null;
                     JSONObject cur_data = cur_res.getJSONObject("data");
-                    if(cur_data.getBoolean("is_finish")){
+                    if(cur_data.getInt("is_finish")==1){
                         isi = true;
                         cur_star_num = cur_data.getJSONObject("data").getInt("star");
                         break;

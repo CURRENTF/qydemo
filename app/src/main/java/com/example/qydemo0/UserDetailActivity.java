@@ -53,6 +53,9 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
         uid = bundle.getInt("uid");
         if(uid == 0) uid = Integer.parseInt(bundle.getString("uid"));
         username.setText(bundle.getString("username"));
+        String sign_tmp = bundle.getString("sign");
+        if(sign_tmp != null)
+            sign.setText(sign_tmp);
         Img.roundImgUrl(this, avatar, bundle.getString("avatar"));
         Log.d("hjt.get.uid", String.valueOf(uid));
         GetPosts getPosts = new GetPosts(UserDetailActivity.this);

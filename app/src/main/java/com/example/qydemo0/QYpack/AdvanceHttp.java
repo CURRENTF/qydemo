@@ -54,6 +54,7 @@ public class AdvanceHttp {
                 QYrequest htp = new QYrequest();
                 Message msg = new Message();
                 String res = htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token);
+                Log.i("hjt.get.render", res);
                 msg.obj = MsgProcess.msgProcessArr(res, false, null);
                 handler.sendMessage(msg);
             }
@@ -82,7 +83,14 @@ public class AdvanceHttp {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
+                QYrequest htp = new QYrequest();
+                String[] data = {"text", "string", name, "start", "int", String.valueOf(startPos), "lens", "int", String.valueOf(len)};
+                String res = htp.advancePost(GenerateJson.universeJson2(data), Constant.mInstance.work_c_url, "Authorization", GlobalVariable.mInstance.token);
+                Log.d("hjt.out", res);
+                JSONArray ja = MsgProcess.msgProcessArr(res, false, null);
+                Message msg = new Message();
+                msg.obj = ja;
+                handler.sendMessage(msg);
             }
         }).start();
     }
@@ -127,6 +135,7 @@ public class AdvanceHttp {
                         JSONObject t = json.getJSONObject("user");
                         ja.put(t);
                         msg.obj = ja;
+                        handler.sendMessage(msg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -139,11 +148,11 @@ public class AdvanceHttp {
                             ja.put(t.getJSONObject(i));
                         }
                         msg.obj = ja;
+                        handler.sendMessage(msg);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-                handler.sendMessage(msg);
             }
         }).start();
     }

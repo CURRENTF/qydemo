@@ -271,6 +271,10 @@ public class Dashboard extends RelativeLayout {
             JSONObject json = MsgProcess.msgProcess(s, false, null);
             if(json != null){
                 try {
+                    if(json.has("uid")){
+                        Log.d("hjt.uid.now", json.getString("uid"));
+                        GlobalVariable.mInstance.uid = json.getString("uid");
+                    }
                     if(json.getString("img_url").equals("null"))
                         json.put("img_url", Constant.mInstance.default_avatar);
                 } catch (JSONException e) {
