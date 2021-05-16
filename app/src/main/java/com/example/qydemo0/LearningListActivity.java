@@ -100,7 +100,7 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
                             + Json2X.Json2StringGet("start", String.valueOf(counter_1.start), "lens", String.valueOf(counter_1.len)),
-                    "Authorization", GlobalVariable.mInstance.token), false, null);
+                    "Authorization", GlobalVariable.mInstance.token), true, "hjt.get.learn.list");
         }
 
         @Override
@@ -117,7 +117,7 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
                         Log.d("hjt.smart.item", json.toString());
                         SmartItem smartItem = new SmartItem(LearningListActivity.this);
                         smartItem.init(json.getJSONObject("work_info"), json.getInt("record_num"),
-                                json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"));
+                                json.getInt("segment_num"), json.getInt("avg_score"), json.getInt("lid"), json.getInt("breakdown_info"));
                         list_progress.addView(smartItem);
                     } catch (JSONException e) {
                         e.printStackTrace();

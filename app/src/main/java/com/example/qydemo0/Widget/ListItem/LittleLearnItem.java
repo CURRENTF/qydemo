@@ -2,6 +2,7 @@ package com.example.qydemo0.Widget.ListItem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,12 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.qydemo0.LearnDanceActivity;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.R;
 import com.example.qydemo0.entry.Image;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class LittleLearnItem extends LinearLayoutItem {
 
@@ -43,12 +47,12 @@ public class LittleLearnItem extends LinearLayoutItem {
 
     @Override
     public void fill(JSONObject json) {
-        try {
-            int i = json.getInt("i");
-            init(json, i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            int i = json.getInt("i");
+////            init(json, i);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void initDf(){
@@ -56,7 +60,7 @@ public class LittleLearnItem extends LinearLayoutItem {
         mView = inflater.inflate(R.layout.little_learn_item, this, true);
     }
 
-    public void init(JSONObject jsonObject, int i){
+    public void init(JSONObject jsonObject, int i, int lid, int bid){
         icon = mView.findViewById(R.id.medal);
         score = mView.findViewById(R.id.score);
         remark = mView.findViewById(R.id.remark);
@@ -79,7 +83,31 @@ public class LittleLearnItem extends LinearLayoutItem {
                 remark.setText("你做的很棒");
             }
             remark.setMaxHeight(1);
-            ser.setText(String.valueOf(i + 1));
+            ser.setText(String.valueOf(i));
+            mView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass((Activity) mContext, LearnDanceActivity.class);
+                    ArrayList<String > list = new ArrayList<>();
+                    list.add(String.valueOf(lid));
+                    list.add(String.valueOf(bid));
+                    list.add(String.valueOf(i - 1));
+                    list.add("0");
+                    try {
+                        list.add(jsonObject.getString("video"));
+                        list.add(jsonObject.getString("result"));
+                        list.add(jsonObject.getString("pose_model"));
+                        list.add(jsonObject.getString("pose_input"));
+                        intent.putStringArrayListExtra("params", list);
+                        mContext.startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

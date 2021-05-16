@@ -113,7 +113,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private int current_video_number = 0;
     private Boolean is_learn;
     private int all_num = 4;
-    String path_cur;
+    String path_cur = "";
     private Boolean is_record;
     private Boolean is_compare;
     private List<List<Long>> wrong_time = new ArrayList<>();
@@ -601,11 +601,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
                 if(is_learn && !is_compare){
                     stopRecord();
-                    if((new File(path_cur)).isFile()) {
-                        Log.i("whc233","用户视频已保存");}
-                        else{
-                                Log.i("whc233","用户视频保存失败");
-                        }
                     }
                 }
 
@@ -942,8 +937,12 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         mCVClient.releaseService();
         mCVClient = null;
         kqw.btn_stop();
-        File file1 = new File(path_cur);
-        file1.delete();
+        if(!path_cur.equals("")){
+            File file1 = new File(path_cur);
+            if(file1.exists()){
+                file1.delete();
+            }
+        }
     }
 
     private GSYVideoPlayer getCurPlay() {
