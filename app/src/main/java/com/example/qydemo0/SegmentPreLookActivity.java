@@ -1,52 +1,21 @@
 package com.example.qydemo0;
 
-import androidx.annotation.DrawableRes;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.media.Image;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 
-import com.aiunit.core.FrameData;
-import com.aiunit.vision.common.ConnectionCallback;
-import com.aiunit.vision.common.FrameInputSlot;
-import com.aiunit.vision.common.FrameOutputSlot;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.coloros.ocs.ai.cv.CVUnit;
-import com.coloros.ocs.ai.cv.CVUnitClient;
-import com.coloros.ocs.base.common.ConnectionResult;
-import com.coloros.ocs.base.common.api.OnConnectionFailedListener;
-import com.coloros.ocs.base.common.api.OnConnectionSucceedListener;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
-import com.example.qydemo0.QYpack.Img;
-import com.example.qydemo0.QYpack.QYFile;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.Uri2RealPath;
@@ -58,27 +27,15 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.gson.Gson;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
-import com.transitionseverywhere.extra.Scale;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import android.media.MediaMetadataRetriever;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import static android.telecom.DisconnectCause.LOCAL;
-import static android.view.Gravity.*;
-import static com.google.android.exoplayer2.scheduler.Requirements.NETWORK;
 import org.json.JSONObject;
 
 public class SegmentPreLookActivity extends MyAppCompatActivity {
@@ -103,7 +60,7 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
     LinearLayout.LayoutParams php, phpC;
     private String wid, breakdown_id;
 
-    private QYrequest cur_request;
+    private QYrequest cur_request = new QYrequest();
 
 //    OrientationUtils orientationUtils;
 
@@ -116,29 +73,18 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
         dialog.setCancelable(false);// 让dialog不能失去焦点，一直在最上层显示
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
 
-        ArrayList<String> list1 = getIntent().getStringArrayListExtra("params1");
+        wid = list.get(0);
+        breakdown_id = list.get(1);
 
-        ArrayList<String> list2 = getIntent().getStringArrayListExtra("params2");
-
-        wid = list1.get(0);
-        breakdown_id = list1.get(1);
-
-        init_videoes_list(list, list2);
+        new get_videos().execute();
         init_UI();
-        free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
+        //free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
 //        videos_list.add(free_dance_url);
 //        videos_list.add("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
 //        videos_list.add("http://vjs.zencdn.net/v/oceans.mp4");
 //        covers_list.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171021%2Fa49af86fb5ee48f0a13d578ea793eb72.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622962679&t=91aafd77adc99d87c21f364cc7a0378c");
 //        covers_list.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171021%2Fa49af86fb5ee48f0a13d578ea793eb72.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622962679&t=91aafd77adc99d87c21f364cc7a0378c");
 //        covers_list.add("https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171021%2Fa49af86fb5ee48f0a13d578ea793eb72.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1622962679&t=91aafd77adc99d87c21f364cc7a0378c");
-        init_player();
-        restart_player(0);
-
-        for(int i=0;i<videos_list.size();i++){
-            addSegment(i);
-        }
-        refreshKuang(0);
     }
 
     private void init_UI(){
@@ -155,12 +101,6 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
                 new start_learn(SegmentPreLookActivity.this).execute();
             }
         });
-    }
-    private void init_videoes_list(ArrayList<String> url_list, ArrayList<String> cover_list){
-        for(int i=0;i<url_list.size();i++){
-            videos_list.add(url_list.get(i));
-            covers_list.add(cover_list.get(i));
-        }
     }
 
     private void init_player (){
@@ -244,6 +184,7 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        videoPlayer.getGSYVideoManager().stop();
     }
 
     private int new_learning_object(String work_id, String breakdown_id){
@@ -279,9 +220,56 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
                 Intent intent = new Intent(SegmentPreLookActivity.this, LearnDanceActivity.class);
                 ArrayList<String> params = new ArrayList<>();
                 params.add(String.valueOf(integer));
-                params.add(wid);
+                params.add(breakdown_id);
                 params.add("0");
+                params.add("1");
+                intent.putStringArrayListExtra("params", params);
                 startActivity(intent);
+            }
+        }
+    }
+
+    public class get_videos extends AsyncTask<Void, Void, Boolean>{
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                JSONObject cur_res = new JSONObject(cur_request.advanceGet("https://api.yhf2000.cn/api/qingying/v1/work/segment/"+breakdown_id+"/","Authorization", GlobalVariable.mInstance.token));
+                Log.i("whc_cur_res", String.valueOf(cur_res));
+                if(!cur_res.getString("msg").equals("Success")) return false;
+                JSONArray cur_a_res = cur_res.getJSONArray("data");
+                for(int i=0;i<cur_a_res.length();i++){
+                    JSONObject video_urls = cur_a_res.getJSONObject(i).getJSONObject("video").getJSONObject("url");
+                    if(!video_urls.isNull("1080P"))
+                        videos_list.add(video_urls.getString("1080P"));
+                    else if(!video_urls.isNull("720P"))
+                        videos_list.add(video_urls.getString("720P"));
+                    else if(!video_urls.isNull("480P"))
+                        videos_list.add(video_urls.getString("480P"));
+                    else if(!video_urls.isNull("360P"))
+                        videos_list.add(video_urls.getString("360P"));
+                    else if(!video_urls.isNull("自动"))
+                        videos_list.add(video_urls.getString("自动"));
+                    covers_list.add(cur_a_res.getJSONObject(i).getJSONObject("cover").getString("url"));
+                }
+                return true;
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean integer) {
+            super.onPostExecute(integer);
+            if(!integer){
+                Toast.makeText(SegmentPreLookActivity.this, "出错啦！", Toast.LENGTH_SHORT).show();
+            } else {
+                init_player();
+                restart_player(0);
+                for(int i=0;i<videos_list.size();i++){
+                    addSegment(i);
+                }
+                refreshKuang(0);
             }
         }
     }

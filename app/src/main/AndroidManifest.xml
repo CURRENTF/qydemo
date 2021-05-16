@@ -26,7 +26,6 @@
         android:theme="@style/Theme.Qydemo0"
         android:usesCleartextTraffic="true">
         <activity android:name=".SegmentChoiceActivity"></activity>
-        <activity android:name=".PopupSegmentPreLookActivity" />
         <activity
             android:name=".SegmentGameChoiceActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -67,7 +66,9 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".SegmentPreLookActivity"/>
+            android:name=".SegmentPreLookActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".FreeDanceActivity"
             android:configChanges="keyboardHidden|orientation"

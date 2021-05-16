@@ -153,10 +153,11 @@ public class WaveProgressView extends View {
 
     }
 
-    public void setmWaterLevel(float mWaterLevel) {
+    public void setmWaterLevel(float mWaterLevel, String step) {
 
         this.mWaterLevel = mWaterLevel;
         this.flowNum = (int)(mWaterLevel*100)+"%";
+        this.flowLeft = step;
     }
 
     @SuppressLint("ResourceAsColor")
@@ -399,7 +400,7 @@ public class WaveProgressView extends View {
 
         canvas.drawText(flowLeft, mScreenWidth * 4 / 8 - left / 2,
 
-                mScreenHeight * 3 / 8, leftPaint);
+                mScreenHeight * 5 / 8, leftPaint);
 
 // 如果未开始(未调用startWave方法),绘制一个扇形
 
