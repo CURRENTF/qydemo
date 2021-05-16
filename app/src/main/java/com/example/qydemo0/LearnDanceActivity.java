@@ -289,7 +289,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         if(is_normal==0) {
             repeat_mode_init(list.get(4), list.get(5));
         } else if(is_normal==1){
-            new InitAllLearn().execute(bid);
+            new InitAllLearn(LearnDanceActivity.this).execute(bid);
         }
 
     }
@@ -1137,7 +1137,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         super.onBackPressed();
     }
 
-    public class SendUserDanceVideo extends MyAsyncTask<String, String, JSONObject> {
+    public class SendUserDanceVideo extends MyAsyncTask<String, String, JSONObject[]> {
 
         protected SendUserDanceVideo(MyAppCompatActivity activity) {
             super(activity);

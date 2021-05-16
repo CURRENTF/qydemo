@@ -1036,7 +1036,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                 String replyContent = commentText.getText().toString().trim();
                 if(!TextUtils.isEmpty(replyContent)){
                     dialog.dismiss();
-                    new doReply().execute(""+position, ""+second_position, replyContent);
+                    new doReply(PlayerActivity.this).execute(""+position, ""+second_position, replyContent);
                 }else {
                     Toast.makeText(PlayerActivity.this,"回复内容不能为空",Toast.LENGTH_SHORT).show();
                 }
@@ -1116,7 +1116,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                 // 获取breakdown_id
                 bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
                 init_work(cur_work_json.get(0), cur_work_json.get(1));
-                new WorkChange().execute(0);
+                new WorkChange(PlayerActivity.this).execute(0);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
