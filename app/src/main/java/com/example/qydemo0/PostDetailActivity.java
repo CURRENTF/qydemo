@@ -34,6 +34,7 @@ import com.example.qydemo0.bean.CommentBean;
 import com.example.qydemo0.bean.CommentDetailBean;
 import com.example.qydemo0.bean.ReplyDetailBean;
 import com.example.qydemo0.view.CommentExpandableListView;
+import com.google.android.exoplayer2.C;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -58,6 +59,7 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
     private BottomSheetDialog dialog;
     QYrequest work_request = new QYrequest();
     private int post_id;
+    String pid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +70,11 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
         main = findViewById(R.id.main);
         try {
             JSONObject json = new JSONObject(s);
+            pid = json.getString("pid");
             postItem = new PostItem(this);
             postItem.init(json, true, false, true);
-            if(json.getBoolean("like")) {
-                postItem.like_img.setImageResource(R.drawable.like_gray);
-                like_op = 1;
-            }
-            else {
-                postItem.like_img.setImageResource(R.drawable.ic_like);
-                like_op = -1;
-            }
+            GetIFLike getIFLike = new GetIFLike(this);
+            getIFLike.execute();
             main.addView(postItem);
             Log.e("whc_post", String.valueOf(json));
             post_id = json.getInt("pid");
@@ -86,16 +83,48 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
             Log.e("hjt.json.post.detail.wrong", "onCreate");
             e.printStackTrace();
         }
-        postItem.like_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                like_op *= -1;
-                if(status == 0){
-                    OPPost opPost = new OPPost(PostDetailActivity.this);
-                    opPost.execute(like_op);
+
+    }
+
+    class GetIFLike extends MyAsyncTask<String, Integer, JSONObject>{
+
+        protected GetIFLike(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... strings) {
+            QYrequest htp = new QYrequest();
+            return MsgProcess.msgProcess(htp.advanceGet(Constant.mInstance.post_url + "info/" + pid + "/", "Authorization", GlobalVariable.mInstance.token), false, null);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            try {
+                Log.d("hjt.json", json.toString());
+                if(json.getBoolean("like")) {
+                    postItem.like_img.setImageResource(R.drawable.like_gray);
+                    like_op = 1;
+                    postItem.like_num.setText(json.getString("like_num"));
                 }
+                else {
+                    postItem.like_img.setImageResource(R.drawable.ic_like);
+                    like_op = -1;
+                }
+                postItem.like_img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        like_op *= -1;
+                        if(status == 0){
+                            OPPost opPost = new OPPost(PostDetailActivity.this);
+                            opPost.execute(like_op);
+                        }
+                    }
+                });
+            } catch (JSONException e){
+                e.printStackTrace();
             }
-        });
+        }
     }
 
     private void initView() {
@@ -177,7 +206,6 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
             public void onGroupExpand(int groupPosition) {
-                //toast("展开第"+groupPosition+"个分组");
 
             }
         });

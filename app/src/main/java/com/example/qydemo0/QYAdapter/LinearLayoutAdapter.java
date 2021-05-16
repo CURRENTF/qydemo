@@ -114,4 +114,9 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
     public long getItemId(int position) {
         return dataList.get(position).hashCode();
     }
+
+    public void clearData(){
+        dataList.clear();
+        notifyDataSetChanged();
+    }
 }

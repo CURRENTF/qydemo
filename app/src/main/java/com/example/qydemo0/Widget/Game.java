@@ -40,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Game extends RelativeLayout {
 
@@ -75,6 +76,7 @@ public class Game extends RelativeLayout {
     FloatingActionButton upload;
     Tab tab;
     LinearLayout challenge_rank, free_rank, image_rank;
+    List<View> challenge_list = new ArrayList<>(), free_list = new ArrayList<>(), image_list = new ArrayList<>();
     ActivityResultLauncher launcher;
 
     void init(){
@@ -127,16 +129,21 @@ public class Game extends RelativeLayout {
                 launcher.launch(true);
             }
         });
-        Handler challengeHandler = new Handler(Looper.myLooper()){
+        challengeHandler = new Handler(Looper.myLooper()){
             @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
 //                Log.d("hjt.c", ja.toString());
+                for(View item : challenge_list){
+                    challenge_rank.removeView(item);
+                }
+                challenge_list.clear();
                 for(int i = 0; i < ja.length(); i++){
                     ChallengeItem challengeItem = new ChallengeItem(ac);
                     try {
                         challengeItem.fill(ja.getJSONObject(i), i + 1);
+                        challenge_list.add(challengeItem);
                         challenge_rank.addView(challengeItem);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -145,16 +152,21 @@ public class Game extends RelativeLayout {
             }
         };
         AdvanceHttp.getGameRank(challengeHandler, 1);
-        Handler freeHandler = new Handler(Looper.myLooper()){
+        freeHandler = new Handler(Looper.myLooper()){
             @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
 //                Log.d("hjt.c", ja.toString());
+                for(View item : free_list){
+                    free_rank.removeView(item);
+                }
+                free_list.clear();
                 for(int i = 0; i < ja.length(); i++){
                     FreeItem freeItem = new FreeItem(ac);
                     try {
                         freeItem.fill(ja.getJSONObject(i), i + 1);
+                        free_list.add(freeItem);
                         free_rank.addView(freeItem);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -163,16 +175,21 @@ public class Game extends RelativeLayout {
             }
         };
         AdvanceHttp.getGameRank(freeHandler, 2);
-        Handler imageHandler = new Handler(Looper.myLooper()){
+        imageHandler = new Handler(Looper.myLooper()){
             @SuppressLint("HandlerLeak")
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
 //                Log.d("hjt.c", ja.toString());
+                for(View item : image_list){
+                    image_rank.removeView(item);
+                }
+                image_list.clear();
                 for(int i = 0; i < Math.min(ja.length(), 10); i++){
                     ImageItem imageItem = new ImageItem(ac);
                     try {
                         imageItem.fill(ja.getJSONObject(i), i + 1);
+                        image_list.add(imageItem);
                         image_rank.addView(imageItem);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -190,6 +207,15 @@ public class Game extends RelativeLayout {
             }
         };
         AdvanceHttp.getGameRank(imageHandler, 3);
+    }
+    static Handler imageHandler;
+    static Handler freeHandler;
+    static Handler challengeHandler;
+
+    public void refreshRank(){
+        AdvanceHttp.getGameRank(challengeHandler, 1);
+        AdvanceHttp.getGameRank(imageHandler, 3);
+        AdvanceHttp.getGameRank(freeHandler, 2);
     }
 
     class UploadImage extends MyAsyncTask<String, Integer, String>{

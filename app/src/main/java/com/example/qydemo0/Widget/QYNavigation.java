@@ -126,7 +126,7 @@ public class QYNavigation extends RelativeLayout implements View.OnClickListener
         l_in = AnimationUtils.loadAnimation(getActivity(), R.anim.ani_left_translate_in_alpha_500ms);
     }
 
-    View last = null;
+    public View last = null;
 
 
 

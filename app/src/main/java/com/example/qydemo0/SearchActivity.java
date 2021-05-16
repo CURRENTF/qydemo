@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.HttpCounter;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
@@ -136,6 +137,7 @@ public class SearchActivity extends MyAppCompatActivity {
         }
     }
 
+    HttpCounter counter = new HttpCounter();
     class Search extends MyAsyncTask<String, Integer, String> {
 
         protected Search(MyAppCompatActivity activity) {
@@ -148,8 +150,7 @@ public class SearchActivity extends MyAppCompatActivity {
             if(txt == null || txt.equals("")) return null;
             QYrequest htp = new QYrequest();
             String[] data = {"text", "string", txt,
-                    "start", "int", String.valueOf(startPos), "lens", "int", String.valueOf(len)};
-            startPos += len;
+                    "start", "int", String.valueOf(counter.start), "lens", "int", String.valueOf(counter.len)};
             return htp.advancePost(
                     GenerateJson.universeJson2(data),
                     Constant.mInstance.search_url,
@@ -163,6 +164,7 @@ public class SearchActivity extends MyAppCompatActivity {
             if(s == null) return;
             Log.d("hjt.search", s);
             JSONArray ja = MsgProcess.msgProcessArr(s, false, null);
+            counter.inc(ja.length());
             for(int i = 0; i < ja.length(); i++){
                 try {
                     JSONObject json = (JSONObject)ja.get(i);

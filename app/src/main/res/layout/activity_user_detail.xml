@@ -135,6 +135,42 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/ll_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:background="@color/qy_real_background"
+                android:visibility="visible">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:alpha="0.5"
+                    android:background="#4DB6AC"
+                    android:gravity="start" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="没有更多了"
+                    android:textColor="#4DB6AC"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:alpha="0.5"
+                    android:background="#4DB6AC"
+                    android:gravity="end" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </com.example.qydemo0.Widget.QYScrollView>

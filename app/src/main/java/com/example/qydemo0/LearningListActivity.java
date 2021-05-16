@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.HttpCounter;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
@@ -86,7 +87,9 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
 
 
     int pr_startPos = 0, pr_len = Constant.mInstance.MAX_UPDATE_LEN;
+    HttpCounter counter_1 = new HttpCounter();
     class GetLearningListProgress extends MyAsyncTask<String, Integer, JSONArray> {
+
 
         protected GetLearningListProgress(MyAppCompatActivity activity) {
             super(activity);
@@ -96,7 +99,7 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "1/"
-                            + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
+                            + Json2X.Json2StringGet("start", String.valueOf(counter_1.start), "lens", String.valueOf(counter_1.len)),
                     "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
@@ -106,7 +109,8 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
                 Log.e("hjt.learn.list.progress", "null");
             }
             else {
-                pr_startPos += pr_len;
+                Log.d("hjt.learn", jsonArray.toString());
+                counter_1.inc(jsonArray.length());
                 for(int i = 0; i < jsonArray.length(); i++){
                     try {
                         JSONObject json = jsonArray.getJSONObject(i);
@@ -124,7 +128,9 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
 
     }
 
+    HttpCounter counter = new HttpCounter();
     class GetLearningListFinished extends MyAsyncTask<String, Integer, JSONArray>{
+
 
         protected GetLearningListFinished(MyAppCompatActivity activity) {
             super(activity);
@@ -134,7 +140,7 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.learn_list_url + "2/"
-                            + Json2X.Json2StringGet("start", String.valueOf(pr_startPos), "lens", String.valueOf(pr_len)),
+                            + Json2X.Json2StringGet("start", String.valueOf(counter.start), "lens", String.valueOf(counter.len)),
                     "Authorization", GlobalVariable.mInstance.token), false,  null);
         }
 
@@ -144,7 +150,7 @@ public class LearningListActivity extends MyAppCompatActivity implements View.On
                 Log.e("hjt.learn.list.progress", "null");
             }
             else {
-                pr_startPos += pr_len;
+                counter.inc(jsonArray.length());
                 for(int i = 0; i < jsonArray.length(); i++){
                     try {
                         JSONObject json = jsonArray.getJSONObject(i);

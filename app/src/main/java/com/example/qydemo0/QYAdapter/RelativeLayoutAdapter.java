@@ -99,4 +99,9 @@ public class RelativeLayoutAdapter extends RecyclerView.Adapter<RelativeLayoutAd
         dataList.add(item);
         notifyDataSetChanged();
     }
+
+    public void clearData(){
+        dataList.clear();
+        notifyDataSetChanged();
+    }
 }

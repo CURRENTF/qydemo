@@ -147,6 +147,7 @@ public class Dashboard extends RelativeLayout {
                                 w[finalI].setLoadState(w[finalI].LOADING_END);
                             else
                                 w[finalI].setLoadState(w[finalI].LOADING_COMPLETE);
+                            startPos[finalI] += arr.length();
                             for(int i = 0; i < arr.length(); i++){
                                 try {
                                     JSONObject jsonObject = arr.getJSONObject(i);
@@ -166,17 +167,17 @@ public class Dashboard extends RelativeLayout {
                     };
                     if(finalI == 0){
                         AdvanceHttp.getMyWorks(handler, startPos[finalI], len);
-                        startPos[finalI] += len;
+//                        startPos[finalI] += len;
                     } else if(finalI == 1){
                         AdvanceHttp.getMyPosts(handler, startPos[finalI], len);
-                        startPos[finalI] += len;
+//                        startPos[finalI] += len;
                     } else {
                         if(startPos[finalI] > 0){
                             w[finalI].setLoadState(w[finalI].LOADING_END);
                             return;
                         }
                         AdvanceHttp.getMyRenders(handler, startPos[finalI], len);
-                        startPos[finalI] += len;
+//                        startPos[finalI] += len;
                     }
                 }
             };
@@ -251,6 +252,10 @@ public class Dashboard extends RelativeLayout {
         }
     }
 
+    public void refresh() {
+        GetUserInfo g = new GetUserInfo(getActivity());
+        g.execute();
+    }
 
 
     class GetUserInfo extends MyAsyncTask<String, Integer, String> {
@@ -281,7 +286,6 @@ public class Dashboard extends RelativeLayout {
                     e.printStackTrace();
                 }
                 GlobalVariable.mInstance.fragmentDataForMain.userInfoJson = json;
-//                Log.d("hjt.user_json", json.toString());
                 reWriteInfo(json);
             }
         }

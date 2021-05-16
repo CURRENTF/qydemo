@@ -52,8 +52,9 @@ public class DetailCategoryActivity extends MyAppCompatActivity {
             @Override
             public void handleMessage(@NonNull Message msg){
                 JSONArray ja = (JSONArray) msg.obj;
-                if(ja.length() == 0) loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING_COMPLETE);
+                if(ja.length() == 0) loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING_END);
                 else loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING_COMPLETE);
+                htp_pos += ja.length();
                 for(int i = 0; i < ja.length(); i++){
                     try {
                         JSONObject json = ja.getJSONObject(i);
@@ -70,11 +71,9 @@ public class DetailCategoryActivity extends MyAppCompatActivity {
             public void onLoadMore() {
                 loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING);
                 AdvanceHttp.getCategoryWorks(handler, htp_pos, Constant.mInstance.MAX_UPDATE_LEN, name);
-                htp_pos += Constant.mInstance.MAX_UPDATE_LEN;
             }
         });
         AdvanceHttp.getCategoryWorks(handler, htp_pos, Constant.mInstance.MAX_UPDATE_LEN, name);
-        htp_pos += Constant.mInstance.MAX_UPDATE_LEN;
         loadMoreAndRefreshWrapper.setLoadState(loadMoreAndRefreshWrapper.LOADING);
     }
 }

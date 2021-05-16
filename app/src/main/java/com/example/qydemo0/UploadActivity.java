@@ -304,8 +304,14 @@ public class UploadActivity extends MyAppCompatActivity implements View.OnClickL
         protected void onPostExecute(String s) {
             ShowProgressDialog.wait.dismiss();
             Log.d("hjt.upload.video.info", s);
-            if(MsgProcess.checkMsg(s, false, null)) Toast.makeText(UploadActivity.this, "成功上传", Toast.LENGTH_SHORT).show();
-            else Toast.makeText(UploadActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+            if(MsgProcess.checkMsg(s, false, null)) {
+                Toast.makeText(UploadActivity.this, "成功上传", Toast.LENGTH_SHORT).show();
+                UploadActivity.this.finish();
+            }
+            else {
+                Toast.makeText(UploadActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                UploadActivity.this.finish();
+            }
         }
     }
 
