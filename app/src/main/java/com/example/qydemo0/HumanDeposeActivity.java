@@ -315,14 +315,19 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
     }
 
     private List<Double> getSegmentPoints() {
-        Collections.sort(depose_points);
+        if(depose_points.size()!=0) {
+            Collections.sort(depose_points);
 
-        if(depose_points.get(0)!=0){
-            depose_points.add(0, (double)0);
-        }
+            if (depose_points.get(0) != 0) {
+                depose_points.add(0, (double) 0);
+            }
 
-        if(depose_points.get(depose_points.size()-1)!=(double)(deposing_video_duration)/(double)(1000)){
-            depose_points.add((double)(deposing_video_duration)/(double)(1000));
+            if (depose_points.get(depose_points.size() - 1) != (double) (deposing_video_duration) / (double) (1000)) {
+                depose_points.add((double) (deposing_video_duration) / (double) (1000));
+            }
+        } else {
+            depose_points.add((double)0);
+            depose_points.add((double) (deposing_video_duration) / (double) (1000));
         }
         return depose_points;
     }
