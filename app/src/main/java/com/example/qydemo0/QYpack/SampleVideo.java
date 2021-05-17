@@ -205,6 +205,15 @@ public class SampleVideo extends StandardGSYVideoPlayer {
     public TextView getMspeed(){
         return mSpeed;
     }
+    
+    public TextView getMchangeTransform(){
+        return  mChangeTransform;
+    }
+
+    public void setmTransformSize(int a){
+        mTransformSize = a;
+        resolveTransform();
+    }
 
     public void setmSwitchSize(String switch_size){
         mSwitchSize.setText(switch_size);
