@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.85"
                 android:layout_height="match_parent"
-                android:hint="支持舞蹈类别/风格/BGM/创作者搜索"
+                android:hint="支持舞蹈类别/风格/创作者搜索"
                 android:background="@drawable/empty_edit_text"
                 android:textSize="14sp"
                 android:inputType="text"

@@ -76,7 +76,8 @@ public class MsgProcess {
 
     public static boolean checkMsg(String msg, Boolean status, String location){
         try {
-            if(status) Log.d("hjt.check.msg:" + location, msg);
+            if(status)
+                Log.d("hjt.check.msg:" + location, msg);
             JSONObject json = new JSONObject(msg);
             if(json.getInt("status") == Constant.mInstance.HTTP_OK) return true;
         } catch (JSONException e) {

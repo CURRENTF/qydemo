@@ -1300,10 +1300,14 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             String[] callJson = {"target","int",""+ work_bean.getData().getBelong().getUid()};
             String res = work_request.advancePost(GenerateJson.universeJson2(callJson),
                     Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
-            Log.i("关注", res);
-            Gson gson = new Gson();
-            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-            return call_back_bean.getMsg().equals("Success");
+            if(MsgProcess.checkMsg(res,false,null)){
+                return true;
+            }
+            else return  false;
+//            Log.i("关注", res);
+//            Gson gson = new Gson();
+//            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+//            return call_back_bean.getMsg().equals("Success");
 
         }
 
@@ -1328,10 +1332,12 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             String[] callJson = {"target","int",""+ work_bean.getData().getBelong().getUid()};
             String res = work_request.advanceMethod("DELETE",GenerateJson.universeJson2(callJson),
                     Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
-            Log.i("取消关注", res);
-            Gson gson = new Gson();
-            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-            return call_back_bean.getMsg().equals("Success");
+            if(MsgProcess.checkMsg(res, false, null)){
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
         @Override

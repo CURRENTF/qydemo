@@ -66,7 +66,6 @@ public class PostItem extends LinearLayoutItem {
                 init(json, a, b, json.getBoolean("is_detail"));
             }
             else init(json, a, b, true);
-            filled = true;
         }catch (JSONException e){
             init(json, true, true, true);
 //            e.printStackTrace();
@@ -234,6 +233,21 @@ public class PostItem extends LinearLayoutItem {
                     Img.setOnClickForView(img, (AppCompatActivity) mContext, ViewImageActivity.class, jsonObj.getString("url"));
                 }
                 else {
+                    if(mView == null) return;
+                    boolean flag = false;
+                    if(img_set == null){
+                        img_set = mView.findViewById(R.id.post_img_layout);
+                        if(img_set == null){
+                            Log.d("hjtsb", "666");
+//                            flag = true;
+//                            img_set = new GridLayout(mContext);
+//                            ((LinearLayout)mView.findViewById(R.id.post_main)).addView(img_set);
+//                            return;
+                        }
+                        if(mView == null){
+                            Log.d("hjtsb", "667");
+                        }
+                    }
                     img_set.setVisibility(VISIBLE);
                     img_set.removeAllViews();
                     for(int i = 0; i < ja.length(); i++){

@@ -28,8 +28,7 @@
             android:textSize="22sp"
             android:gravity="center"
             android:id="@+id/rank"
-            android:visibility="gone"
-            android:layout_marginHorizontal="10dp"/>
+            android:visibility="gone" />
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.6"

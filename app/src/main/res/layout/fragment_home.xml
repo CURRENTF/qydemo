@@ -56,7 +56,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.85"
                     android:gravity="center|start"
-                    android:hint="支持舞蹈类别/风格/BGM/创作者搜索" />
+                    android:hint="支持舞蹈类别/风格/创作者搜索" />
             </LinearLayout>
 
 

@@ -60,6 +60,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginRight="10dp"
             android:text="从前有座山，山里有座庙，庙里有个老和尚"
+            android:paddingEnd="50dp"
             android:textColor="@color/black"
             android:textSize="13sp" />
 
@@ -68,8 +69,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="52dp"
             android:layout_marginTop="5dp"
-            android:layout_marginRight="24dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="8dp"
+            android:gravity="end"
+            android:paddingEnd="50dp"
             android:orientation="horizontal">
 
             <ImageView

@@ -124,6 +124,7 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
                 });
                 if(json.getString("follow").equals("true")){
                     postItem.btn_follow.setText("已关注");
+                    postItem.btn_follow.setVisibility(View.VISIBLE);
                 }
                 else if(json.getString("follow").equals("false")) {
                     postItem.btn_follow.setOnClickListener(new View.OnClickListener(){
@@ -138,6 +139,7 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
                             }
                         }
                     });
+                    postItem.btn_follow.setVisibility(View.VISIBLE);
                 }
                 else {
                     postItem.btn_follow.setText("");
@@ -500,7 +502,7 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
             } else {
                 if(contentt[0].equals("success")){
                 try {
-                    success_reply(contentt[2], Integer.valueOf(contentt[1]), Integer.valueOf(contentt[0]), Integer.valueOf(contentt[3]));
+                    success_reply(contentt[3], Integer.valueOf(contentt[2]), Integer.valueOf(contentt[1]), Integer.valueOf(contentt[4]));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } } else {
