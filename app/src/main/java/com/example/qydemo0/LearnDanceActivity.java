@@ -176,6 +176,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private JSONArray urls_jsonarry = new JSONArray();
 
     private QYrequest learn_request = new QYrequest();
+
     private  QYFile learn_file = new QYFile();
 
     boolean mirror_status = false;
@@ -186,8 +187,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private int startCode = -1;
 
     private TextView smile_word;
-
-    private int cur_h = 480;
 
     private RelativeLayout.LayoutParams fill_tiny;
 
@@ -219,6 +218,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private List<List<Integer> > spt = new ArrayList<>();
 
     private String nne, nnv, nnm, nni;
+
+    AudioPlayer audioPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +281,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             @Override
             public void onServiceConnect() {
                 Log.i("TAG", "initService: onServiceConnect");
-                int startCode = mCVClient.start();
+                startCode = mCVClient.start();
                 if (startCode == 0) {
 
                 } else {
@@ -441,6 +442,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         if (!is_compare) {
             if (!is_learn) {
                 cover_start_icon.setVisibility(View.VISIBLE);
+                detailPlayer.setmTransformSize(1);
                 is_learn = true;
                 init_learn_view();
                 detailPlayer.startPlayLogic();
@@ -464,12 +466,14 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     }
 
     private String getFer(Bitmap bitmap){
+        Log.i("whc_bitmap", String.valueOf(bitmap==null));
         String res = "";
         FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
         inputSlot.setTargetBitmap(bitmap);
         FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
         mCVClient.process(inputSlot, outputSlot);
         FaceResultList faceList = outputSlot.getFaceList();
+        Log.i("whc_faceResult", String.valueOf(faceList));
         List<FaceResult> faceResultList = new ArrayList<>();
         faceResultList = faceList.getFaceResultList();
         for (FaceResult faceResult: faceResultList) {
@@ -567,7 +571,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
                     Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
-                    AudioPlayer audioPlayer = null;
                     try {
                         audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_10);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -957,6 +960,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         File file1 = new File(path_cur);
         if(file1.exists()) file1.delete();
         }
+        if(audioPlayer!=null) audioPlayer.stop();
     }
 
     private GSYVideoPlayer getCurPlay() {
@@ -1078,11 +1082,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         reset_learn_view();
         btn2.setScaleX(-1);
         for(int i=0;i<6;i++) human_icons[i].setVisibility(View.VISIBLE);
-        if(mirror_status){
-            mirror_status = false;
-            mSurfaceView.setLayoutParams(fill_tiny);
-            black_back.setLayoutParams(fill_tiny);
-        }
         wrongShow.start_show();
         human_iconss.setVisibility(View.VISIBLE);
         detailPlayer.setmTransformSize(0);
@@ -1202,15 +1201,19 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         protected Boolean doInBackground(Void... avoid) {
             is_fac = false;
             List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
+            Log.i("whc_fer_num", bitmaps.size()+"");
             for(int k=0;k<10;k++) {
                 try {
                     Thread.sleep(500);
                     if(startCode==0) {
+                        Log.i("whc_ee", "startCode==0");
                         for (int i = 0; i < bitmaps.size(); i++) {
+                            Log.i("whc_e", getFer(bitmaps.get(i)));
                             if (getFer(bitmaps.get(i)).equals("Sad")) {
                                 expressions_sad.add(i);
                             }
                         }
+                        //Log.i("whc_expressions", ""+expressions_sad);
                         return true;
                     }
                 } catch (InterruptedException e) {
@@ -1241,6 +1244,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            btn_mirrors(0);
             dialog = new WaveLoadDialog(LearnDanceActivity.this);
             dialog.start_progress();
         }
@@ -1451,15 +1455,14 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         go_to_next_segment();
                 }  else {
                     try {
+                        detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
+                        detailPlayer.getCurrentPlayer().startPlayLogic();
                         if(is_normal==0) {
                             try {
                                 repeat(nnv, nne, nnm, nni);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        } else {
-                        detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
-                        detailPlayer.getCurrentPlayer().startPlayLogic();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -111,10 +111,10 @@ public class VideoRenderActivity extends MyAppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-//        final Intent intent = getIntent();
-//        free_dance_url = intent.getStringExtra("free_dance_url");
+        final Intent intent = getIntent();
+        free_dance_url = intent.getStringExtra("free_dance_url");
 
-        free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
+        //free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
         Log.e("free_dance_url",free_dance_url);
 
         inti_clip_video();
@@ -144,6 +144,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                     public void onClick(View v) {
                         int[] render_paras_cur = new int[3];
                         render_paras_cur = popupWindowRight.getRenderParams();
+                        render_paras[0] = render_paras_cur[0];
                         render_paras[1] = render_paras_cur[1];
                         render_paras[2] = render_paras_cur[2];
                         render_reset.setVisibility(View.GONE);
@@ -421,6 +422,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
         mCVClient.releaseService();
         mCVClient = null;
         super.onDestroy();
+        videoPlayer.release();
     }
 
     public class SendRenderVideo extends MyAsyncTask<String, String, String> {
@@ -467,17 +469,11 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                     render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cu, 0, cur_file.hashFileUrl(cu));
                     Log.i("12312","成功上传！");
                 } else {
-                    try {
-                            String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                    + getApplicationContext().getPackageName() + "/" + imgs[bg-1])), "", VideoRenderActivity.this);
-                            cur_url = Img.compressWithUrl(cur_url, VideoRenderActivity.this);
-                            render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
+                    String cur_url = Img.saveImg(BitmapFactory.decodeResource(getResources(), imgs[bg-1]), "", VideoRenderActivity.this);
+                    //cur_url = Img.compressWithUrl(cur_url, VideoRenderActivity.this);
+                    render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
                 }
             }
             return render_img_id;
