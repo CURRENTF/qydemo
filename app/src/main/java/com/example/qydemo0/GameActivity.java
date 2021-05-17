@@ -713,8 +713,7 @@ public class GameActivity extends MyAppCompatActivity {
                     break;
                 case R.id.out:
                     qydIalog.dismiss();
-                    Intent intent = new Intent(GameActivity.this, GameContentActivity.class);
-                    startActivity(intent);
+                    finish();
                     break;
             }
         }
