@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.loader.content.AsyncTaskLoader;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -35,6 +39,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.qydemo0.QYAdapter.GridViewAdapter;
 import com.example.qydemo0.QYAdapter.LittleGridViewAdapter;
+import com.example.qydemo0.QYpack.AdvanceHttp;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GenerateJson;
 import com.example.qydemo0.QYpack.GlobalVariable;
@@ -153,32 +158,23 @@ public class UploadActivity extends MyAppCompatActivity implements View.OnClickL
                     for(String s : tagSet){
                         tags[i++] = s;
                     }
-                    String checkMsg = VideoInfo.checkMsg(video_name, classification, tags);
-                    if(checkMsg != null){
-                        Toast.makeText(this, checkMsg, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
                     ShowProgressDialog.show(UploadActivity.this, "上传视频");
-                    try {
-                        HashVideo h = new HashVideo(UploadActivity.this);
-                        InputStream inputStream = getContentResolver().openInputStream(videoUri);
-                        h.execute(inputStream);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    VideoClip videoClip = new VideoClip();
-                    videoUrl = Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), videoUri);
-                    Bitmap cover = videoClip.getCoverFromVideo(videoUrl);
-                    coverUrl = Img.saveImg(cover, String.valueOf(cover.hashCode()), UploadActivity.this);
-                    try {
-                        HashCover hashCover = new HashCover(UploadActivity.this);
-                        InputStream inputStream = new FileInputStream(new File(coverUrl));
-                        hashCover.execute(inputStream);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    UploadVideoInfo uploadVideoInfo = new UploadVideoInfo(UploadActivity.this);
-                    uploadVideoInfo.execute(new VideoInfo(video_name, class_map.get(classification), intro, tags));
+                    Handler handler = new Handler(Looper.myLooper()){
+                        @SuppressLint("HandlerLeak")
+                        @Override
+                        public void handleMessage(@NonNull Message msg){
+                            ShowProgressDialog.wait.dismiss();
+                            if(msg.arg1 != AdvanceHttp.finish_code){
+                                Toast.makeText(UploadActivity.this, msg.getData().getString("msg") + ".", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(UploadActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                                UploadActivity.this.finish();
+                            }
+                        }
+                    };
+                    AdvanceHttp.uploadWorkAllIn(handler, Uri2RealPath.getRealPathFromUri_AboveApi19(getApplicationContext(), videoUri),
+                            this, new VideoInfo(video_name, class_map.get(classification), intro, tags));
                 }
                 else
                     Toast.makeText(UploadActivity.this, "未选择视频", Toast.LENGTH_SHORT).show();
@@ -278,7 +274,6 @@ public class UploadActivity extends MyAppCompatActivity implements View.OnClickL
         }
     }
 
-
     class UploadVideoInfo extends MyAsyncTask<VideoInfo, Integer, String>{
 
 
@@ -314,7 +309,6 @@ public class UploadActivity extends MyAppCompatActivity implements View.OnClickL
             }
         }
     }
-
 
     class UploadVideo extends MyAsyncTask<String, Integer, Boolean>{
 
@@ -357,7 +351,6 @@ public class UploadActivity extends MyAppCompatActivity implements View.OnClickL
         }
     }
 
-
     class HashVideo extends MyAsyncTask<InputStream, Integer, JSONObject>{
 
         protected HashVideo(MyAppCompatActivity activity) {
@@ -382,7 +375,7 @@ public class UploadActivity extends MyAppCompatActivity implements View.OnClickL
                 video_json = json;
                 try {
                     if(json.getBoolean("rapid_upload")){
-//                        Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
+                        Toast.makeText(UploadActivity.this, "该视频已存在", Toast.LENGTH_LONG).show();
                     }
                     else {
                         UploadVideo uploadVideo = new UploadVideo(UploadActivity.this);

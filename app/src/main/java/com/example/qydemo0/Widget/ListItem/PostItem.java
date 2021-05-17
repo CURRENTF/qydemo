@@ -64,7 +64,7 @@ public class PostItem extends LinearLayoutItem {
 
     @Override
     public void fill(JSONObject json) {
-        if(filled) return;
+//        if(filled) return;
         try{
             boolean a = json.getBoolean("a"), b = json.getBoolean("b");
             if(json.has("is_detail")){
@@ -151,8 +151,8 @@ public class PostItem extends LinearLayoutItem {
 
     public void init(JSONObject json){
         Log.d("hjt.post", json.toString());
-        if(filled) return;
-        filled = true;
+//        if(filled) return;
+//        filled = true;
         this.json = json;
         mode = 0;
         try {
@@ -274,11 +274,13 @@ public class PostItem extends LinearLayoutItem {
                     JSONObject jsonObj = (JSONObject) ja.get(0);
                     Img.url2imgViewRoundRectangle(jsonObj.getString("url"), img, mContext, 20);
                     LinearLayout l = mView.findViewById(R.id.post_main);
+                    l.removeAllViews();
                     l.addView(img);
                     Img.setOnClickForView(img, (AppCompatActivity) mContext, ViewImageActivity.class, jsonObj.getString("url"));
                 }
                 else {
                     img_set.setVisibility(VISIBLE);
+                    img_set.removeAllViews();
                     for(int i = 0; i < ja.length(); i++){
                         ImageView img = new ImageView(mContext);
                         JSONObject j = (JSONObject) ja.get(i);
