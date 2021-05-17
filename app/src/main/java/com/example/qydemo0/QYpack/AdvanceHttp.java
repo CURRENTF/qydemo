@@ -1,20 +1,27 @@
 package com.example.qydemo0.QYpack;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
 import com.aiunit.vision.utils.gesture.Hand;
+import com.example.qydemo0.QYpack.Video.VideoInfo;
 import com.example.qydemo0.Widget.QYScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.InputStream;
+
 
 public class AdvanceHttp {
 
     static String null_data = "{}";
+    public static int finish_code = 114154;
 
     public static void getMyPosts(Handler handler, int startPos, int len){
         new Thread(new Runnable() {
@@ -152,6 +159,54 @@ public class AdvanceHttp {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }
+            }
+        }).start();
+    }
+    public static void uploadWorkAllIn(Handler finish, String video_path, Context context, VideoInfo info){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                QYFile qyFile = new QYFile();
+                String video_id = qyFile.uploadFileAllIn(video_path, QYFile.VideoCode);
+                Message msg = new Message();
+                msg.arg1 = 1;
+                Bundle str = new Bundle();
+                if(video_id == null){
+                    msg.arg1 = 0;
+                    str.putString("msg", "视频上传失败");
+                    msg.setData(str);
+                    finish.sendMessage(msg);
+                    return;
+                }
+                VideoClip videoClip = new VideoClip();
+                Bitmap cover = videoClip.getCoverFromVideo(video_path);
+                String coverUrl = Img.saveImg(cover, String.valueOf(cover.hashCode()), context);
+                String cover_id = qyFile.uploadFileAllIn(coverUrl, QYFile.ImageCode);
+                if(cover_id == null){
+                    msg.arg1 = 1;
+                    str.putString("msg", "封面上传失败");
+                    msg.setData(str);
+                    finish.sendMessage(msg);
+                    return;
+                }
+                QYrequest htp = new QYrequest();
+                info.coverId = cover_id;
+                info.videoId = video_id;
+                String res = htp.advancePost(info.toData(), Constant.mInstance.work_url,
+                        "Authorization", GlobalVariable.mInstance.token);
+                Log.d("hjt.params", info.toData() + '\n' +  Constant.mInstance.work_url+ '\n' +
+                        "Authorization"+ '\n' +   GlobalVariable.mInstance.token);
+                if(MsgProcess.checkMsg(res, false, null)){
+                    msg.arg1 = finish_code;
+                    finish.sendMessage(msg);
+                }
+                else {
+                    msg.arg1 = 2;
+                    Log.d("hjt.wrong.upload.work", res);
+                    str.putString("msg", MsgProcess.getWrongMsg(res));
+                    msg.setData(str);
+                    finish.sendMessage(msg);
                 }
             }
         }).start();

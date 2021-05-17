@@ -31,6 +31,9 @@ import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.Widget.ListItem.LittleWorkItem;
 import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
+import com.example.qydemo0.Widget.QYDIalog;
+import com.example.qydemo0.Widget.QYDialogUncancelable;
+import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.Widget.QYScrollView;
 import com.example.qydemo0.utils.ImageSelector;
 import com.example.qydemo0.QYpack.Img;
@@ -101,6 +104,7 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
         fbtn.setOnClickListener(this);
         myWork = findViewById(R.id.my_work_list);
         myWorkList = findViewById(R.id.work_list_for_post);
+        qyLoading = new QYLoading(this);
         myWork.setScanScrollChangedListener(new QYScrollView.ISmartScrollChangedListener() {
             @Override
             public void onScrolledToBottom() {
@@ -143,8 +147,7 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
     }
 
 
-
-
+    QYLoading qyLoading;
 
     @Override
     public void onClick(View v) {
@@ -159,6 +162,7 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
         }
         else if(v.getId() == R.id.button_upload_post){
             if(switcher == 0){
+                qyLoading.start_dialog();
                 UploadImage uploadImage = new UploadImage(UploadPostActivity.this);
                 uploadImage.execute();
             }
@@ -253,11 +257,14 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
+                qyLoading.stop_dialog();
                 Toast.makeText(UploadPostActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-               UploadPostActivity.this.finish();
+                UploadPostActivity.this.finish();
             }
-            else
+            else{
+                qyLoading.stop_dialog();
                 Toast.makeText(UploadPostActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -299,6 +306,7 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
                         @Override
                         public void onClick(View v) {
                             v.setBackgroundResource(R.drawable.highlight);
+                            qyLoading.start_dialog();
                             UploadPostWorkType uploadPostWorkType = new UploadPostWorkType(UploadPostActivity.this);
                             uploadPostWorkType.execute(String.valueOf(((LittleWorkItem)v).id));
                         }
@@ -326,10 +334,14 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
+                qyLoading.stop_dialog();
                 Toast.makeText(UploadPostActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            else Toast.makeText(UploadPostActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+            else {
+                qyLoading.stop_dialog();
+                Toast.makeText(UploadPostActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

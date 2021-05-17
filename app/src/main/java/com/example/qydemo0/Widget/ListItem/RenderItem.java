@@ -30,6 +30,7 @@ import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
 import com.example.qydemo0.RenderQueueActivity;
+import com.example.qydemo0.SimplePlayerActivity;
 import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.entry.Image;
@@ -42,6 +43,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.sql.Time;
+import java.util.ArrayList;
 
 public class RenderItem extends RelativeLayoutItem {
 
@@ -108,6 +110,24 @@ public class RenderItem extends RelativeLayoutItem {
             boolean dashboard = json.getBoolean("dashboard");
             if(dashboard){
                 onDashboard();
+            }
+            else {
+                mView.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), SimplePlayerActivity.class);
+                        ArrayList<String> list = new ArrayList<>();
+                        try {
+                            list.add(json.getString("video"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        intent.putStringArrayListExtra("params", list);
+                        getActivity().startActivity(intent);
+                    }
+                });
             }
             if(json.getInt("is_finish") == 1 && !dashboard){
                 String video = json.getString("video");
