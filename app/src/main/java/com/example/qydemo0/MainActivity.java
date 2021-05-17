@@ -127,6 +127,8 @@ public class MainActivity extends MyAppCompatActivity {
             e.printStackTrace();
         }
 
+        Log.e("global.uid4", GlobalVariable.mInstance.uid);
+
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);
         Log.d("hjt.uid", GlobalVariable.mInstance.uid + "?");

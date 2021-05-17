@@ -80,8 +80,14 @@ public class LoginUsernameFragment extends Fragment {
             JSONObject json = MsgProcess.msgProcess(s, false, null);
             Log.d("hjtLoginReturnMsg", s);
             if(json != null){
-                GetUserInfo getUserInfo = new GetUserInfo((MyAppCompatActivity) getActivity());
-                getUserInfo.execute(json);
+                try {
+                    GlobalVariable.mInstance.token = json.getString("token");
+                    GetUserInfo getUserInfo = new GetUserInfo((MyAppCompatActivity) getActivity());
+                    getUserInfo.execute(json);
+                } catch (JSONException e) {
+                    Toast.makeText(getActivity(), "登录失败.", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
             else {
                 Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_SHORT).show();
@@ -107,6 +113,7 @@ public class LoginUsernameFragment extends Fragment {
                 try {
                     jsonObjects[0].put("uid", json.getString("uid"));
                     GlobalVariable.mInstance.uid = json.getString("uid");
+                    Log.e("global.uid0", GlobalVariable.mInstance.uid);
                     return jsonObjects[0];
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -118,7 +125,9 @@ public class LoginUsernameFragment extends Fragment {
         @Override
         protected void onPostExecute(JSONObject json) {
             if(json != null){
+                Log.e("global.uid1", GlobalVariable.mInstance.uid);
                 ((LoginActivity) getActivity()).savMsg(json);
+                Log.e("global.uid2", GlobalVariable.mInstance.uid);
                 Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
 
                 Intent intent = new Intent();
