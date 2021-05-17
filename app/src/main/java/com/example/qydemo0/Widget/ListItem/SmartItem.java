@@ -191,18 +191,21 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
                 for(int i = 0; i < jsonArray.length(); i++){
                     try {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        if(jsonObject.getString("avg_score").equals("null")){
-                            Toast.makeText(getActivity(), "学习记录无得分", Toast.LENGTH_SHORT).show();
-                            continue;
-                        }
+//                        if(jsonObject.getString("avg_score").equals("null")){
+//                            Toast.makeText(getActivity(), "学习记录无得分", Toast.LENGTH_SHORT).show();
+//                            continue;
+//                        }
                         LittleLearnItem item = new LittleLearnItem(mContext);
-                        item.init(jsonArray.getJSONObject(i), jsonArray.length() - i, lid, bid);
+                        item.init(jsonObject, jsonArray.length() - i, lid, bid);
                         records.addView(item);
                     } catch (JSONException e) {
                         e.printStackTrace();
-
-                        //
                     }
+                }
+                if(jsonArray.length() > 0){
+                    start += jsonArray.length();
+                    GetRecords getRecords = new GetRecords((MyAppCompatActivity)mContext);
+                    getRecords.execute();
                 }
             }
         }

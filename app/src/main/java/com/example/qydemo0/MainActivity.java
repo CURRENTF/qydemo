@@ -127,6 +127,8 @@ public class MainActivity extends MyAppCompatActivity {
             e.printStackTrace();
         }
 
+        Log.e("global.uid4", GlobalVariable.mInstance.uid);
+
         SharedPreferences sp = getSharedPreferences(C.database, Context.MODE_PRIVATE);
         GlobalVariable.mInstance.readAllVar(sp);
         Log.d("hjt.uid", GlobalVariable.mInstance.uid + "?");
@@ -144,9 +146,10 @@ public class MainActivity extends MyAppCompatActivity {
             setContentView(R.layout.activity_main);
             return;
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("hjt.uid2", GlobalVariable.mInstance.uid + "?");
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
 
