@@ -78,7 +78,6 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
         }else {
             return commentBeanList.get(i).getReplies().size()>0 ? commentBeanList.get(i).getReplies().size():0;
         }
-
     }
 
     @Override
@@ -308,7 +307,7 @@ public class CommentExpandAdapter extends BaseExpandableListAdapter {
             }
         });
         if(!commentBeanList.get(groupPosition).getReplies().get(childPosition).getIs_delete()) {
-            childHolder.tv_content.setText(commentBeanList.get(groupPosition).getReplies().get(childPosition).getText());
+            childHolder.tv_content.setText("➥" + commentBeanList.get(groupPosition).getReplies().get(childPosition).getText());
         } else {
             childHolder.tv_content.setText("");
         }

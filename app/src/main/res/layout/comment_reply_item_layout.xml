@@ -20,7 +20,7 @@
             android:translationZ="1dp"
             android:layout_marginLeft="5dp"
             android:text="未知 回复 未知:"
-            android:textColor="#626262"
+            android:textColor="#2a5caa"
             android:textSize="14sp" />
 
         <LinearLayout

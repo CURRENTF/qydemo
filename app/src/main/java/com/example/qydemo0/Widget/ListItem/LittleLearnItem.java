@@ -68,6 +68,57 @@ public class LittleLearnItem extends LinearLayoutItem {
         int scores = 0;
         try {
             Log.e("hjt.log.little.learn.item", jsonObject.toString());
+            remark.setMaxHeight(1);
+            ser.setText(jsonObject.getJSONObject("segment_info").getString("name"));
+            i = jsonObject.getJSONObject("segment_info").getInt("b_index");
+            int finalI = i;
+            mView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass((Activity) mContext, LearnDanceActivity.class);
+                    ArrayList<String > list = new ArrayList<>();
+                    try {
+                        if(!jsonObject.getString("avg_score").equals("null")){
+                            list.add(String.valueOf(lid));
+                            list.add(String.valueOf(bid));
+                            list.add(String.valueOf(finalI - 1));
+                            list.add("0");
+                            try {
+                                list.add(jsonObject.getString("video"));
+                                list.add(jsonObject.getString("result"));
+                                list.add(jsonObject.getString("pose_model"));
+                                list.add(jsonObject.getString("pose_input"));
+                                intent.putStringArrayListExtra("params", list);
+                                mContext.startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else {
+                            list.add(String.valueOf(lid));
+                            list.add(String.valueOf(bid));
+                            list.add(String.valueOf(finalI - 1));
+                            list.add("1");
+                            intent.putStringArrayListExtra("params", list);
+                            mContext.startActivity(intent);
+//                            try {
+//                                list.add(jsonObject.getString("video"));
+//                                list.add(jsonObject.getString("result"));
+//                                list.add(jsonObject.getString("pose_model"));
+//                                list.add(jsonObject.getString("pose_input"));
+//                                intent.putStringArrayListExtra("params", list);
+//                                mContext.startActivity(intent);
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
             scores = jsonObject.getInt("avg_score");
             score.setText(String.valueOf(jsonObject.getInt("avg_score")));
             if(scores < 60){
@@ -82,32 +133,6 @@ public class LittleLearnItem extends LinearLayoutItem {
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic__gold_medal));
                 remark.setText("你做的很棒");
             }
-            remark.setMaxHeight(1);
-            ser.setText(String.valueOf(i));
-            mView.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent();
-                    intent.setClass((Activity) mContext, LearnDanceActivity.class);
-                    ArrayList<String > list = new ArrayList<>();
-                    list.add(String.valueOf(lid));
-                    list.add(String.valueOf(bid));
-                    list.add(String.valueOf(i - 1));
-                    list.add("0");
-                    try {
-                        list.add(jsonObject.getString("video"));
-                        list.add(jsonObject.getString("result"));
-                        list.add(jsonObject.getString("pose_model"));
-                        list.add(jsonObject.getString("pose_input"));
-                        intent.putStringArrayListExtra("params", list);
-                        mContext.startActivity(intent);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            });
         } catch (JSONException e) {
             e.printStackTrace();
         }

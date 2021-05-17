@@ -60,7 +60,6 @@
             android:screenOrientation="portrait" />
         <activity android:name=".UploadPostActivity" />
         <activity android:name=".LearningListActivity" />
-        <activity android:name=".DetailPostActivity" />
         <activity
             android:name=".VideoRenderActivity"
             android:configChanges="keyboardHidden|orientation"

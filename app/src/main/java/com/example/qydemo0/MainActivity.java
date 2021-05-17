@@ -144,9 +144,10 @@ public class MainActivity extends MyAppCompatActivity {
             setContentView(R.layout.activity_main);
             return;
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Log.d("hjt.uid2", GlobalVariable.mInstance.uid + "?");
 
         GlobalVariable.mInstance.fragmentDataForMain = new FragmentDataForMain();
 

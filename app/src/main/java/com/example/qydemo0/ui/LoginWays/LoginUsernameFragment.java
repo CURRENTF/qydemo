@@ -80,6 +80,44 @@ public class LoginUsernameFragment extends Fragment {
             JSONObject json = MsgProcess.msgProcess(s, false, null);
             Log.d("hjtLoginReturnMsg", s);
             if(json != null){
+                GetUserInfo getUserInfo = new GetUserInfo((MyAppCompatActivity) getActivity());
+                getUserInfo.execute(json);
+            }
+            else {
+                Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_SHORT).show();
+            }
+            super.onPostExecute(s);
+        }
+    }
+
+    class GetUserInfo extends MyAsyncTask<JSONObject, Integer, JSONObject>{
+
+        protected GetUserInfo(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected JSONObject doInBackground(JSONObject... jsonObjects) {
+            QYrequest htp = new QYrequest();
+            JSONObject json = MsgProcess.msgProcess(htp.advanceGet(Constant.mInstance.userInfo_url, "Authorization", GlobalVariable.mInstance.token), false, null);
+            if(json == null){
+                return null;
+            }
+            else {
+                try {
+                    jsonObjects[0].put("uid", json.getString("uid"));
+                    GlobalVariable.mInstance.uid = json.getString("uid");
+                    return jsonObjects[0];
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            if(json != null){
                 ((LoginActivity) getActivity()).savMsg(json);
                 Toast.makeText(getContext(), "登录成功", Toast.LENGTH_LONG).show();
 
@@ -88,10 +126,6 @@ public class LoginUsernameFragment extends Fragment {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
-            else {
-                Toast.makeText(getActivity(), MsgProcess.getWrongMsg(s), Toast.LENGTH_SHORT).show();
-            }
-            super.onPostExecute(s);
         }
     }
 

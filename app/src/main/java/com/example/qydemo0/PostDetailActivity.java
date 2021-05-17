@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
 import com.example.qydemo0.QYpack.MsgProcess;
+import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.QYAdapter.CommentExpandAdapter;
 import com.example.qydemo0.QYpack.GenerateJson;
@@ -121,6 +122,26 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
                         }
                     }
                 });
+                if(json.getString("follow").equals("true")){
+                    postItem.btn_follow.setText("已关注");
+                }
+                else if(json.getString("follow").equals("false")) {
+                    postItem.btn_follow.setOnClickListener(new View.OnClickListener(){
+
+                        @Override
+                        public void onClick(View v) {
+                            Follow follow = new Follow(PostDetailActivity.this);
+                            try {
+                                follow.execute(json.getJSONObject("belong").getInt("uid"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+                else {
+                    postItem.btn_follow.setText("");
+                }
             } catch (JSONException e){
                 e.printStackTrace();
             }
@@ -132,6 +153,28 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
         bt_comment = (TextView) findViewById(R.id.detail_page_do_comment);
         bt_comment.setOnClickListener(this);
         initExpandableListView(commentsList);
+    }
+
+    public class Follow extends MyAsyncTask<Integer, Integer, Boolean> {
+
+        protected Follow(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            return QYUser.follow(integers[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            if(aBoolean){
+                postItem.btn_follow.setText("已关注");
+            }
+            else {
+                Toast.makeText(PostDetailActivity.this, "关注失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

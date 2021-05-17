@@ -2,6 +2,7 @@ package com.example.qydemo0.Widget.ListItem;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Layout;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
 import com.example.qydemo0.R;
+import com.example.qydemo0.UserDetailActivity;
 import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.entry.Image;
@@ -75,6 +77,22 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
             if(json.getString("img_url").equals("null")) json.put("img_url", Constant.mInstance.default_avatar);
             Img.roundImgUrl((Activity) mContext, avatar, json.getString("img_url"));
             sign.setText(json.getString("sign"));
+            mView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass((Activity) mContext, UserDetailActivity.class);
+                    try {
+                        intent.putExtra("uid", json.getInt("uid"));
+                        intent.putExtra("username", json.getString("username"));
+                        intent.putExtra("sign", json.getString("sign"));
+                        ((Activity)mContext).startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -82,7 +100,6 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-
         CancelFollow cancelFollow = new CancelFollow((MyAppCompatActivity)mContext);
         cancelFollow.execute();
     }
@@ -109,7 +126,8 @@ public class LittleUserItem extends LinearLayoutItem implements View.OnClickList
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             if(aBoolean){
-                btn.setText("关注");
+//                btn.setText("关注");
+                mView.setVisibility(GONE);
             }
             else {
                 Toast.makeText((Activity)mContext, "取消失败", Toast.LENGTH_SHORT).show();

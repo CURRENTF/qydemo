@@ -3,7 +3,6 @@ package com.example.qydemo0.Widget.ListItem;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +15,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.qydemo0.DetailPostActivity;
 import com.example.qydemo0.PlayerActivity;
 import com.example.qydemo0.PostDetailActivity;
 import com.example.qydemo0.QYpack.DeviceInfo;
 import com.example.qydemo0.QYpack.Img;
-import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYUser;
 import com.example.qydemo0.QYpack.TimeTool;
 import com.example.qydemo0.R;
@@ -29,8 +26,6 @@ import com.example.qydemo0.UserDetailActivity;
 import com.example.qydemo0.ViewImageActivity;
 import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.koushikdutta.async.http.body.JSONArrayBody;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,7 +81,7 @@ public class PostItem extends LinearLayoutItem {
 
     public String post_json = null, img_json;
     int work_id = 0;
-    TextView btn_follow;
+    public TextView btn_follow;
 
     class GotoWork implements View.OnClickListener{
 
@@ -103,31 +98,11 @@ public class PostItem extends LinearLayoutItem {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent();
-            intent.setClass((Activity)mContext, DetailPostActivity.class);
+//            intent.setClass((Activity)mContext, DetailPostActivity.class);
             intent.putExtra("post", post_json);
         }
     }
-    public class Follow extends MyAsyncTask<Integer, Integer, Boolean> {
 
-        protected Follow(MyAppCompatActivity activity) {
-            super(activity);
-        }
-
-        @Override
-        protected Boolean doInBackground(Integer... integers) {
-            return QYUser.follow(integers[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            if(aBoolean){
-                btn_follow.setText("已关注");
-            }
-            else {
-                Toast.makeText(mContext, "关注失败", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     public TextView like_num;
     public void incLikes(){
@@ -173,26 +148,6 @@ public class PostItem extends LinearLayoutItem {
         like_img = mView.findViewById(R.id.like_img);
         like_num = mView.findViewById(R.id.like_num);
         try {
-            if(json.getString("follow").equals("true")){
-                btn_follow.setText("已关注");
-            }
-            else if(json.getString("follow").equals("false")) {
-                btn_follow.setOnClickListener(new View.OnClickListener(){
-
-                    @Override
-                    public void onClick(View v) {
-                        Follow follow = new Follow((MyAppCompatActivity) activity);
-                        try {
-                            follow.execute(json.getJSONObject("belong").getInt("uid"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-            else {
-                btn_follow.setText("");
-            }
             like_num.setText(String.valueOf(json.getInt("like_num")));
             TextView txt = mView.findViewById(R.id.post_comment_num);
             txt.setText(json.getString("comment_num"));
