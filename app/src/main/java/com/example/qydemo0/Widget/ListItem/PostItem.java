@@ -50,6 +50,7 @@ public class PostItem extends LinearLayoutItem {
     public PostItem(Context context) {
         super(context);
         mContext = context;
+        activity = (Activity) context;
         initDf();
     }
 
@@ -128,7 +129,7 @@ public class PostItem extends LinearLayoutItem {
         }
     }
 
-    TextView like_num;
+    public TextView like_num;
     public void incLikes(){
         CharSequence t = like_num.getText();
         int k = Integer.parseInt(t.toString());
@@ -149,6 +150,7 @@ public class PostItem extends LinearLayoutItem {
     public JSONObject json;
 
     public void init(JSONObject json){
+        Log.d("hjt.post", json.toString());
         if(filled) return;
         filled = true;
         this.json = json;

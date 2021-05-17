@@ -27,6 +27,7 @@ import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
 import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.HttpCounter;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
 import com.example.qydemo0.QYpack.QYrequest;
@@ -72,6 +73,16 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         super(context, attrs);
         this.context = (Activity) context;
         init();
+    }
+
+    public void refresh(){
+        adapter_follow.clearData();
+        adapter_rec.clearData();
+        counter.clear();
+        GetFollowedPost a = new GetFollowedPost((MyAppCompatActivity) getActivity());
+        GetRecommendationPost b = new GetRecommendationPost((MyAppCompatActivity) getActivity());
+        a.execute();
+        b.execute();
     }
 
     void init() {
@@ -173,6 +184,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     int lastF_id = -1;
     class GetFollowedPost extends MyAsyncTask<String, Integer, JSONArray>{
 
+
         protected GetFollowedPost(MyAppCompatActivity activity) {
             super(activity);
         }
@@ -232,7 +244,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     }
 
     int lastRc_id = -1;
+    HttpCounter counter = new HttpCounter();
     class GetRecommendationPost extends MyAsyncTask<String, Integer, JSONArray>{
+
         protected GetRecommendationPost(MyAppCompatActivity activity) {
             super(activity);
         }
@@ -241,7 +255,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(
-                    htp.advanceGet(Constant.mInstance.post_recommendation_url + Json2X.Json2StringGet("start", String.valueOf(rc_startPos), "lens", String.valueOf(rc_len)),
+                    htp.advanceGet(Constant.mInstance.post_recommendation_url + Json2X.Json2StringGet("start", String.valueOf(counter.start), "lens", String.valueOf(counter.len)),
                             "Authorization", GlobalVariable.mInstance.token), false, null
             );
         }
@@ -252,7 +266,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.recommendation.post", "null_json");
                 return;
             }
-            rc_startPos += rc_len;
+            counter.inc(jsonArray.length());
             if(jsonArray.length() == 0){
                 wrapper_rec.setLoadState(wrapper_rec.LOADING_END);
             }

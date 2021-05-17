@@ -32,6 +32,7 @@ import com.example.qydemo0.QYAdapter.LinearLayoutAdapter;
 import com.example.qydemo0.QYAdapter.LoadMoreAndRefreshWrapper;
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.HttpCounter;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
@@ -193,6 +194,8 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         }
     }
 
+
+    HttpCounter counter = new HttpCounter();
     class GetUserRecommendation extends MyAsyncTask<String, Integer, JSONArray> {
 
         protected GetUserRecommendation(MyAppCompatActivity activity) {
@@ -202,19 +205,19 @@ public class Home extends RelativeLayout implements View.OnClickListener {
         @Override
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
-            Log.d("hjt.recommendation.info", String.valueOf(startPos) + "," + String.valueOf(len));
+            Log.d("hjt.recommendation.info", counter.start + "," + counter.len);
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.user_recommendation_url +
-                            Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
+                            Json2X.Json2StringGet("start", String.valueOf(counter.start), "lens", String.valueOf(counter.len)),
                     "Authorization", GlobalVariable.mInstance.token), false, null);
         }
 
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
-            startPos += len;
             if(jsonArray == null){
                 Log.d("hjt.get.user.recommendation.fail", "null");
             }
             else {
+                counter.inc(jsonArray.length());
                 if(jsonArray.length() == 0) wrapper.setLoadState(wrapper.LOADING_END);
                 else wrapper.setLoadState(wrapper.LOADING_COMPLETE);
                 for(int i = 0; i < jsonArray.length(); i++){

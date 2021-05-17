@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.qydemo0.QYpack.Constant;
 import com.example.qydemo0.QYpack.GlobalVariable;
+import com.example.qydemo0.QYpack.HttpCounter;
 import com.example.qydemo0.QYpack.Img;
 import com.example.qydemo0.QYpack.Json2X;
 import com.example.qydemo0.QYpack.MsgProcess;
@@ -116,7 +117,9 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
 
     int w_startPos = 0;
 
+    HttpCounter counter = new HttpCounter();
     class GetWorks extends MyAsyncTask<Integer, Integer, JSONArray> {
+
 
         protected GetWorks(MyAppCompatActivity activity) {
             super(activity);
@@ -126,8 +129,8 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
         protected JSONArray doInBackground(Integer... integers) {
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(
-                    Constant.mInstance.userWork_url + uid + "/" + Json2X.Json2StringGet("start", String.valueOf(w_startPos)
-                            , "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token
+                    Constant.mInstance.userWork_url + uid + "/" + Json2X.Json2StringGet("start", String.valueOf(counter.start)
+                            , "lens", String.valueOf(counter.len)), "Authorization", GlobalVariable.mInstance.token
             ), false, null);
         }
 
@@ -137,7 +140,7 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
                 Log.e("hjt.user.other.posts", "null");
                 return;
             }
-            w_startPos += len;
+            counter.inc(jsonArray.length());
             work_cnt += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 WorkItem workItem = new WorkItem(UserDetailActivity.this);
@@ -158,6 +161,7 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
 
     int p_startPos = 0, len = Constant.mInstance.MAX_UPDATE_LEN;
 
+    HttpCounter counter2 = new HttpCounter();
     class GetPosts extends MyAsyncTask<Integer, Integer, JSONArray>{
 
         protected GetPosts(MyAppCompatActivity activity) {
@@ -169,7 +173,7 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
             QYrequest htp = new QYrequest();
             return MsgProcess.msgProcessArr(htp.advanceGet(
                     Constant.mInstance.post_url + "1/" + Json2X.Json2StringGet("user_id", String.valueOf(uid),
-                            "start", String.valueOf(p_startPos), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token
+                            "start", String.valueOf(counter2.start), "lens", String.valueOf(counter2.len)), "Authorization", GlobalVariable.mInstance.token
             ), false, null);
         }
 
@@ -179,7 +183,7 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
                 Log.e("hjt.user.other.posts", "null");
                 return;
             }
-            p_startPos += len;
+            counter2.inc(jsonArray.length());
             post_cnt += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 PostItem postItem = new PostItem(UserDetailActivity.this);

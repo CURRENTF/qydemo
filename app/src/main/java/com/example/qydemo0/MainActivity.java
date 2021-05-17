@@ -131,7 +131,6 @@ public class MainActivity extends MyAppCompatActivity {
         GlobalVariable.mInstance.readAllVar(sp);
         Log.d("hjt.uid", GlobalVariable.mInstance.uid + "?");
 
-        Log.d("hjt.uid", GlobalVariable.mInstance.uid);
         Log.d("hjt", "start LoginToken:" + GlobalVariable.mInstance.token);
 
         // 跳转登录
@@ -193,21 +192,27 @@ public class MainActivity extends MyAppCompatActivity {
         }
 
         LinearLayout mainLayout = findViewById(R.id.main_layout);
-        Dashboard dashboard = new Dashboard(this);
+
+        dashboard = new Dashboard(this);
         mainLayout.addView(dashboard);
         dashboard.setVisibility(View.GONE);
-        Home home = new Home(this);
+
+        home = new Home(this);
         mainLayout.addView(home);
-        Post post = new Post(this);
+
+        post = new Post(this);
         mainLayout.addView(post);
         post.setVisibility(View.GONE);
-        Category category = new Category(this);
+
+        category = new Category(this);
         mainLayout.addView(category);
         category.setVisibility(View.GONE);
-        Game game = new Game(this);
+
+        game = new Game(this);
         mainLayout.addView(game);
         game.setVisibility(View.GONE);
-        QYNavigation navigation = new QYNavigation(this);
+
+        navigation = new QYNavigation(this);
         View[] views = {post, category, home, game, dashboard};
         navigation.initView(views);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(this, 50));
@@ -217,9 +222,19 @@ public class MainActivity extends MyAppCompatActivity {
         main.addView(navigation);
     }
 
+    Dashboard dashboard;
+    Home home;
+    Post post;
+    Category category;
+    Game game;
+    QYNavigation navigation;
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("hjt.main.resume", "Resume!");
+        dashboard.refresh();
+        game.refreshRank();
+//        post.refresh();
     }
 
     @Override
