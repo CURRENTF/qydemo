@@ -160,7 +160,7 @@
                 android:layout_height="60dp"
                 android:layout_below="@id/mirror_btn"
                 android:layout_centerHorizontal="true"
-                android:text="huamn pose"
+                android:text="human pose"
                 android:background="@color/qy_pink"
                 />
 
@@ -267,7 +267,8 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
         android:text=""
         android:textSize="30dp"
         android:textColor="@color/red"

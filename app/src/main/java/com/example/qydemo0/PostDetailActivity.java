@@ -451,10 +451,18 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(String... contentt) {
             super.onPostExecute(contentt);
-            try {
-                success_commment(contentt[0], Integer.valueOf(contentt[1]));
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(contentt==null){
+                Toast.makeText(PostDetailActivity.this, "出错啦！", Toast.LENGTH_SHORT).show();
+            } else {
+                if(contentt[0].equals("success")) {
+                    try {
+                        success_commment(contentt[1], Integer.valueOf(contentt[2]));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(PostDetailActivity.this, contentt[1], Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -467,11 +475,11 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
                 JSONObject res_jsonobj = new JSONObject(res);
                 Log.i("comment_callback",res);
                 if(res_jsonobj.getString("msg").equals("Success")) {
-                    String[] res_reply_all = {strings[0], String.valueOf(res_jsonobj.getJSONObject("data").getInt("cid"))};
+                    String[] res_reply_all = {"success", strings[0], String.valueOf(res_jsonobj.getJSONObject("data").getInt("cid"))};
                     return res_reply_all;
+                } else {
+                    return new String[]{"wrong", MsgProcess.getWrongMsg(res)};
                 }
-                else
-                    return null;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -487,10 +495,17 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(String[] contentt) {
             super.onPostExecute(contentt);
-            try {
-                success_reply(contentt[2],Integer.valueOf(contentt[1]),Integer.valueOf(contentt[0]),Integer.valueOf(contentt[3]));
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(contentt==null){
+                Toast.makeText(PostDetailActivity.this, "出错啦！", Toast.LENGTH_SHORT).show();
+            } else {
+                if(contentt[0].equals("success")){
+                try {
+                    success_reply(contentt[2], Integer.valueOf(contentt[1]), Integer.valueOf(contentt[0]), Integer.valueOf(contentt[3]));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } } else {
+                    Toast.makeText(PostDetailActivity.this, contentt[1], Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -513,11 +528,11 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
             try {
 
                 if ((new JSONObject(res)).getString("msg").equals("Success")) {
-                    String[] res_to_reply = {strings[0], strings[1], strings[2], String.valueOf((new JSONObject(res)).getJSONObject("data").getInt("cid"))};
+                    String[] res_to_reply = {"success", strings[0], strings[1], strings[2], String.valueOf((new JSONObject(res)).getJSONObject("data").getInt("cid"))};
                     return res_to_reply;
+                } else {
+                    return new String[]{"wrong", MsgProcess.getWrongMsg(res)};
                 }
-                else
-                    return null;
             } catch (JSONException e) {
                 e.printStackTrace();
             }

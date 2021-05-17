@@ -59,14 +59,17 @@ import com.example.qydemo0.QYpack.SampleVideo;
 import com.example.qydemo0.QYpack.SwitchVideoModel;
 import com.example.qydemo0.QYpack.Uri2RealPath;
 import com.example.qydemo0.QYpack.VideoClip;
+import com.example.qydemo0.QYpack.WaveLoadDialog;
 import com.example.qydemo0.R;
 import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
+import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.bean.CallBackBean;
 import com.example.qydemo0.entry.Image;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.gson.Gson;
+import com.koushikdutta.async.http.body.JSONObjectBody;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.listener.GSYSampleCallBack;
 import com.shuyu.gsyvideoplayer.model.VideoOptionModel;
@@ -89,6 +92,7 @@ import android.widget.TextView;
 import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,6 +130,14 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
 
     private QYDIalog qydIalog;
 
+    private String wid="";
+
+    private QYrequest cur_request = new QYrequest();
+
+    private QYLoading qyLoading;
+
+    private WaveLoadDialog waveLoadDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,6 +145,7 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
         setContentView(R.layout.activity_human_depose_acivity);
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
         init_player(list.get(0));
+        wid = list.get(1);
         //init_player("/sdcard/Pictures/QQ/res123.mp4");
         dm = getApplicationContext().getResources().getDisplayMetrics();
         width_px = dm.widthPixels;
@@ -354,14 +367,21 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
 
     }
 
-    public class sendParams extends MyAsyncTask<Void, Void, Boolean> {
+    public class sendParams extends MyAsyncTask<String, String, Boolean> {
 
         protected sendParams(MyAppCompatActivity activity) {
             super(activity);
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected void onPreExecute() {
+            super.onPreExecute();
+            waveLoadDialog = new WaveLoadDialog(HumanDeposeActivity.this);
+            waveLoadDialog.start_progress();
+        }
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
             List<Double> res = getSegmentPoints();
             List<Double> s = res.subList(0, res.size()-1), e = res.subList(1, res.size());
             String ss = "", ee = "";
@@ -378,18 +398,58 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
             Log.i("whc_ee", ee);
 
             //发送人工分段
-            return true;
+
+            String[] callToJson = {"start", "string", ss, "end", "string", ee, "intro", "string", strings[0]};
+            Log.i("whc_human_depose", GenerateJson.universeJson2(callToJson));
+            String res_send = cur_request.advancePost(GenerateJson.universeJson2(callToJson),
+                    Constant.mInstance.work+"breakdown/"+wid+"/", "Authorization", GlobalVariable.mInstance.token);
+            Log.i("whc_res_send", res_send);
+            try {
+                if(!(new JSONObject(res_send)).getString("msg").equals("Success")){
+                    return false;
+                } else {
+                    JSONObject jo = new JSONObject(res_send);
+                    String tid = jo.getJSONObject("data").getString("task_id");
+                    for(int i=0;i<50;i++){
+                        JSONObject task_res = new JSONObject(cur_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid+"/",
+                                "Authorization",GlobalVariable.mInstance.token));
+                        Log.i("whc_task", String.valueOf(task_res));
+                        int cur_schedule = task_res.getJSONObject("data").getJSONObject("task").getInt("prog");
+                        if(task_res.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1){
+                            return true;
+                        } else {
+                            publishProgress(cur_schedule==100?"99":String.valueOf(cur_schedule), task_res.getJSONObject("data").getJSONObject("task").getString("step"));
+                        }
+                        Thread.sleep(500);
+                    }
+                    return false;
+                }
+            } catch (JSONException | InterruptedException jsonException) {
+                jsonException.printStackTrace();
+                return false;
+            }
         }
 
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
+            waveLoadDialog.stop_progress();
             if (!aBoolean) {
                 Log.i("whc__", "NO!");
+                Toast.makeText(HumanDeposeActivity.this, "出错啦！请重试！", Toast.LENGTH_SHORT).show();
             } else {
                 Log.i("whc__", "YES!");
+                Toast.makeText(HumanDeposeActivity.this, "上传成功！", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
+
+        @Override
+        protected void onProgressUpdate(String... values) {
+            super.onProgressUpdate(values);
+            waveLoadDialog.set_progress(Float.valueOf(values[0])/100f, values[1]);
+        }
+
     }
 
     class lsr implements QYDIalog.OnCenterItemClickListener{
@@ -402,8 +462,8 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
                     if(content.equals("")){
                         Toast.makeText(HumanDeposeActivity.this, "输入简介不能为空", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(HumanDeposeActivity.this, content, Toast.LENGTH_SHORT).show();
-                        //new sendParams().execute();
+                        //Toast.makeText(HumanDeposeActivity.this, content, Toast.LENGTH_SHORT).show();
+                        new sendParams(HumanDeposeActivity.this).execute(content);
                     }
                     break;
                 case R.id.cancel:

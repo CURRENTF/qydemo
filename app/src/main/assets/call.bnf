@@ -4,5 +4,5 @@
 !slot <callPhone>;
 !start <callStart>;
 <callStart>:<contact><callPhone>;
-<contact>:打开|关闭|开始;
-<callPhone>:镜子|游戏|学习;
+<contact>:打开|关闭|开始|镜像|恢;
+<callPhone>:镜子|游戏|学习|翻转|复;
