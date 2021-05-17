@@ -373,6 +373,10 @@ public class HumanDeposeActivity extends MyAppCompatActivity {
                     ee += ",";
                 }
             }
+
+            Log.i("whc_ss", ss);
+            Log.i("whc_ee", ee);
+
             //发送人工分段
             return true;
         }

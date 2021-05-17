@@ -715,7 +715,6 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             list_name.add("1080P");
         }
         init_player(lists,list_name,work_bean.getData().getCover_url().getUrl());
-        init_button_and_pager();
         init_content(work_bean.getData().getName(), work_bean.getData().getIntroduction(), ui_bean.getLike_num(),
                 ui_bean.getDislike_num(), work_bean.getData().getPlay_num(), work_bean.getData().getComment_num());
         init_work_status();
@@ -1114,8 +1113,9 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                 Log.i("whc_work_json1", cur_work_json.get(1));
                 llid = (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("lid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
                 // 获取breakdown_id
-                bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("lid");
+                bid =  (new JSONObject(cur_work_json.get(1))).getJSONObject("data").isNull("bid")?-1:(new JSONObject(cur_work_json.get(1))).getJSONObject("data").getInt("bid");
                 init_work(cur_work_json.get(0), cur_work_json.get(1));
+                init_button_and_pager();
                 new WorkChange(PlayerActivity.this).execute(0);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1412,6 +1412,9 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                     Log.i("whc_ind_res", String.valueOf(res));
                     if(res.getJSONArray("data").isNull(0)) ind = 0;
                     else ind = res.getJSONArray("data").getJSONObject(0).getJSONObject("segment_info").getInt("b_index")-1;
+                    Log.i("whc_ind_res_ind", String.valueOf(res.getJSONArray("data").getJSONObject(0).getJSONObject("segment_info")));
+
+                    Log.i("whc_ind_res_ind", ""+ind);
                     return new Integer[]{lid, ind};
                 } catch (JSONException e) {
                     e.printStackTrace();

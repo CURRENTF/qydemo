@@ -5,4 +5,4 @@
 !start <callStart>;
 <callStart>:<contact><callPhone>;
 <contact>:打开|关闭|开始;
-<callPhone>:镜子|游戏;
+<callPhone>:镜子|游戏|学习;

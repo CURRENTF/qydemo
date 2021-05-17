@@ -42,7 +42,7 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
     ProgressBar progressBar;
     RelativeLayout layout;
     LinearLayout records;
-    int lid;
+    int lid, bid;
     String wid;
 
     public SmartItem(Context context) {
@@ -101,10 +101,29 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
             else if(score < 85) medal.setImageDrawable(mContext.getDrawable(R.drawable.ic__silver_medal));
             else medal.setImageDrawable(mContext.getDrawable(R.drawable.ic__gold_medal));
             btn_expand.setOnClickListener(this);
-            layout.setOnClickListener(this);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void init(JSONObject json, int record_num, int segment_num, int score, int lid, int breakdown_id){
+        init(json, record_num, segment_num, score, lid);
+        bid = breakdown_id;
+        mView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                ArrayList<String> list = new ArrayList<>();
+                list.add(String.valueOf(lid));
+                list.add(String.valueOf(breakdown_id));
+                list.add(String.valueOf(record_num));
+                list.add("1");
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), LearnDanceActivity.class);
+                intent.putStringArrayListExtra("params", list);
+                getActivity().startActivity(intent);
+            }
+        });
     }
 
     int record_len = 0;
@@ -135,7 +154,7 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
             QYrequest htp = new QYrequest();
             Log.d("hjt.get.record", lid + ".");
             return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.record_url + lid + "/" +
-                    Json2X.Json2StringGet("start", String.valueOf(start), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token), false, null);
+                    Json2X.Json2StringGet("start", String.valueOf(start), "lens", String.valueOf(len)), "Authorization", GlobalVariable.mInstance.token), true, "smart.item");
         }
 
         @Override
@@ -172,18 +191,21 @@ public class SmartItem extends RelativeLayoutItem implements View.OnClickListene
                 for(int i = 0; i < jsonArray.length(); i++){
                     try {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        if(jsonObject.getString("avg_score").equals("null")){
-                            Toast.makeText(getActivity(), "学习记录无得分", Toast.LENGTH_SHORT).show();
-                            continue;
-                        }
+//                        if(jsonObject.getString("avg_score").equals("null")){
+//                            Toast.makeText(getActivity(), "学习记录无得分", Toast.LENGTH_SHORT).show();
+//                            continue;
+//                        }
                         LittleLearnItem item = new LittleLearnItem(mContext);
-                        item.init(jsonArray.getJSONObject(i), i);
+                        item.init(jsonObject, jsonArray.length() - i, lid, bid);
                         records.addView(item);
                     } catch (JSONException e) {
                         e.printStackTrace();
-
-                        //
                     }
+                }
+                if(jsonArray.length() > 0){
+                    start += jsonArray.length();
+                    GetRecords getRecords = new GetRecords((MyAppCompatActivity)mContext);
+                    getRecords.execute();
                 }
             }
         }

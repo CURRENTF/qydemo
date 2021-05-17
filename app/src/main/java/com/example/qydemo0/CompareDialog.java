@@ -18,6 +18,6 @@ public class CompareDialog {
         qydIalog = new QYDIalog(context, R.layout.compare_dialog, new int[]{});
         qydIalog.show();
         con = qydIalog.findViewById(R.id.content);
-        con.setText(conn);
+        con.setText("您的得分是："+conn);
     }
 }
