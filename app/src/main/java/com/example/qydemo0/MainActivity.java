@@ -159,24 +159,6 @@ public class MainActivity extends MyAppCompatActivity {
         param.append(SpeechConstant.ENGINE_MODE+"="+ SpeechConstant.MODE_MSC);
         SpeechUtility.createUtility(GlobalVariable.mInstance.appContext, param.toString());
 
-//        inn = new PoseHuman(MainActivity.this);
-//        activityDetailPlayer = new RelativeLayout(MainActivity.this);
-//        activityDetailPlayer = findViewById(R.id.main_main);
-//        RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(800, 800);
-//        phpl.addRule(RelativeLayout.CENTER_VERTICAL);
-//        phpl.addRule(RelativeLayout.ALIGN_LEFT,R.id.centerTextView);
-//        inn.setLayoutParams(phpl);
-//        inn.setBackgroundColor(Color.GRAY);
-//        inn.setAlpha(0.75f);
-//        activityDetailPlayer.addView(inn);
-        Button btn1 = (Button) findViewById(R.id.btn1);
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                inn.setPoints(new double[][]{{0.4685792349726776, 0.019125683060109287}, {0.4986338797814208, 0.0}, {0.43579234972677594, 0.00273224043715847}, {0.5396174863387978, 0.04918032786885246}, {0.39480874316939896, 0.05737704918032786}, {0.6215846994535519, 0.22677595628415298}, {0.3346994535519126, 0.24316939890710382}, {0.7199453551912569, 0.39344262295081966}, {0.2800546448087432, 0.4371584699453552}, {0.5806010928961749, 0.4808743169398907}, {0.4030054644808743, 0.49726775956284147}, {0.6079234972677596, 0.6775956284153005}, {0.4139344262295082, 0.6994535519125683}, {0.6215846994535519, 0.9999999999999999}, {0.39480874316939896, 0.9918032786885245}, {-1, -1}, {-1, -1}});
-                new GetTestData(MainActivity.this).execute();
-            }
-        });
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }

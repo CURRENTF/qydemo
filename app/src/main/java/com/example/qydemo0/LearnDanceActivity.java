@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.VibrationEffect;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Size;
@@ -453,6 +454,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 new PostRecord(this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
             } else if (is_compare) {
                 stop_compare_video();
+                btn2.setScaleX(1);
                 detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
                 detailPlayer.startPlayLogic();
             }
@@ -553,6 +555,12 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 detailPlayer.onVideoPause();
                 detailPlayer.getCurrentPlayer().getCurrentPlayer().setIsTouchWiget(true);
                 detailPlayer.getCurrentPlayer().setIsTouchWigetFull(true);
+
+                if(is_normal==0 && is_compare && is_learn){
+                    human_iconss.setVisibility(View.VISIBLE);
+                    for(int i=0;i<6;i++) human_icons[i].setVisibility(View.VISIBLE);
+                    btn2.setScaleX(-1);
+                }
 
                 if(is_learn && !is_compare){
                     detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
@@ -667,6 +675,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         for(int k=0;k<6;k++)
             human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
 
+        Log.i("whc_video_url", (new JSONObject(video_url_json)).getJSONObject("url").getString("自动"));
+
         detailPlayer.setUp((new JSONObject(video_url_json)).getJSONObject("url").getString("自动"), true, "对比视频");
                     wrong_time.clear();
                     JSONArray wrong_time_json = (new JSONObject(evaluation_json)).getJSONArray("error");
@@ -692,13 +702,13 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         Log.d("hjt.in.it", "?" + i);
                     }
 
-                    Log.e("wrong_time", String.valueOf(wrong_time));
-                    Log.e("wrong_id",String.valueOf(wrong_id));
+        Log.e("wrong_time", String.valueOf(wrong_time));
+        Log.e("wrong_id",String.valueOf(wrong_id));
 
-                    Log.d("hjt.out.it", "1");
+        Log.d("hjt.out.it", "1");
 
-                    JSONArray pose_model = new JSONArray(pose_model_json);
-                    JSONArray pose_input = new JSONArray(pose_input_json);
+        JSONArray pose_model = new JSONArray(pose_model_json);
+        JSONArray pose_input = new JSONArray(pose_input_json);
         double[][][] a = new double[pose_model.length()][17][2];
         double[][][] b = new double[pose_input.length()][17][2];
 
@@ -720,11 +730,19 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
         phr.setPoints(a);
         phl.setPoints(b);
-                    cdg = new CompareDialog(LearnDanceActivity.this, (new JSONObject(evaluation_json)).getJSONArray("score").getJSONObject(0).getString("value"));
-                    init_compare_video();
-                    detailPlayer.startPlayLogic();
-                    //hideProgressDialog();
-                    Log.d("hjt.out.it", "2");
+        JSONArray t = (new JSONObject("evaluation_json")).getJSONArray("score");
+        int r1 = 0;
+        for(int y=1;y<7;y++){
+            r1 = r1 + t.getJSONObject(y).getInt("value");
+        }
+        r1 /= 6;
+        if(r1 < t.getJSONObject(0).getInt("value")) r1 = t.getJSONObject(0).getInt("value");
+        cdg = new CompareDialog(LearnDanceActivity.this, ""+r1);
+        init_compare_video();
+        detailPlayer.getCurrentPlayer().startPlayLogic();
+        //hideProgressDialog();
+        for(int i=0;i<6;i++) human_icons[i].setVisibility(View.VISIBLE);
+        Log.d("hjt.out.it", "2");
     }
 
     void shrink_menu_now(){
@@ -742,9 +760,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     void expand_menu_now(){
         arrow.setImageResource(R.drawable.ic_up_arrow2);
         menu_op.setTranslationY(-DeviceInfo.dip2px(this, 0));
-//        btn1.setVisibility(View.VISIBLE);
-//        btn2.setVisibility(View.VISIBLE);
-//        btn3.setVisibility(View.VISIBLE);
         Animation animation = AnimationUtils.loadAnimation(this
                 , R.anim.ani_down_translate_300ms);
         menu_op.startAnimation(animation);
@@ -757,7 +772,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     }
 
     private void stop_compare_video(){
-        btn2.setScaleX(1);
         is_compare = false;
         is_learn = false;
         for(int i=0;i<6;i++) human_icons[i].setVisibility(GONE);
@@ -766,6 +780,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         detailPlayer.getMspeed().setText("1倍速");
         wrongShow.stop_show();
         human_iconss.setVisibility(GONE);
+        phl.stop_now();
+        phr.stop_now();
         reset_player();
     }
 
@@ -1351,13 +1367,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             super.onPostExecute(aVoid);
             if(aVoid) {
                 init_learn_pager();
-                if(is_normal==0) {
-                    try {
-                        repeat(nnv, nne, nnm, nni);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
             else
                 Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
@@ -1406,8 +1415,16 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         go_to_next_segment();
                 }  else {
                     try {
+                        if(is_normal==0) {
+                            try {
+                                repeat(nnv, nne, nnm, nni);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
                         detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
                         detailPlayer.getCurrentPlayer().startPlayLogic();
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

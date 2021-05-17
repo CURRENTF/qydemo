@@ -15,6 +15,8 @@ import com.shuyu.gsyvideoplayer.player.PlayerFactory;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
+import java.util.ArrayList;
+
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager;
 
 public class SimplePlayerActivity extends MyAppCompatActivity {
@@ -31,8 +33,8 @@ public class SimplePlayerActivity extends MyAppCompatActivity {
         setContentView(R.layout.activity_simple_player);
         PlayerFactory.setPlayManager(Exo2PlayerManager.class);
         Log.e("token", GlobalVariable.mInstance.token);
-//        Bundle bundle = this.getIntent().getBundleExtra("result");
-//        source1 = bundle.getString("video_url");
+        ArrayList<String> list = getIntent().getStringArrayListExtra("params");
+        source1 = list.get(0);
         init();
     }
 
@@ -42,11 +44,6 @@ public class SimplePlayerActivity extends MyAppCompatActivity {
 
         videoPlayer.setUp(source1, true, "");
 
-        //增加封面
-        ImageView imageView = new ImageView(this);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setImageResource(R.mipmap.logo);
-        videoPlayer.setThumbImageView(imageView);
         //增加title
         videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
         //设置返回键
