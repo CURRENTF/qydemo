@@ -81,14 +81,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="0dp"
+                            android:layout_height="match_parent"
                             android:layout_weight="0.3"
-                            android:layout_height="wrap_content"
-                            android:text="排名"
                             android:gravity="center"
-                            android:textStyle="bold"
-                            android:textSize="16sp"/>
+                            android:paddingEnd="25dp"
+                            android:text="排名"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                         <TextView
                             android:layout_width="0dp"
                             android:layout_weight="0.4"
@@ -103,6 +105,7 @@
                             android:layout_height="wrap_content"
                             android:text="星星数"
                             android:gravity="center"
+                            android:paddingStart="20dp"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
                     </LinearLayout>
@@ -123,6 +126,7 @@
                             android:layout_height="wrap_content"
                             android:text="排名"
                             android:gravity="center"
+                            android:paddingEnd="25dp"
                             android:textStyle="bold"
                             android:textSize="16sp"/>
                         <TextView

@@ -113,6 +113,7 @@ public class FollowerAndFanActivity extends MyAppCompatActivity implements View.
         @Override
         protected String doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
+            Log.d("hjt.params", Constant.mInstance.user_fans + Json2X.Json2StringGet("ftype", "1") + "\n" + "Authorization" + "\n" + GlobalVariable.mInstance.token);
             return htp.advanceGet(Constant.mInstance.user_fans + Json2X.Json2StringGet("ftype", "1"), "Authorization", GlobalVariable.mInstance.token);
         }
 

@@ -131,9 +131,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
 
             @Override
             public void onLoadMore() {
-                wrapper_follow.setLoadState(wrapper_follow.LOADING_END);
-//                GetFollowedPost getFollowedPost = new GetFollowedPost();
-//                getFollowedPost.execute();
+                wrapper_follow.setLoadState(wrapper_follow.LOADING);
+                GetFollowedPost getFollowedPost = new GetFollowedPost(getActivity());
+                getFollowedPost.execute();
             }
         });
 
@@ -141,6 +141,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         getRecommendationPost.execute();
         GetFollowedPost getFollowedPost = new GetFollowedPost(getActivity());
         getFollowedPost.execute();
+        counter_follow = new HttpCounter();
     }
 
     @Override
@@ -182,6 +183,7 @@ public class Post extends RelativeLayout implements View.OnClickListener {
     }
 
     int lastF_id = -1;
+    HttpCounter counter_follow;
     class GetFollowedPost extends MyAsyncTask<String, Integer, JSONArray>{
 
 
@@ -193,7 +195,9 @@ public class Post extends RelativeLayout implements View.OnClickListener {
         protected JSONArray doInBackground(String... strings) {
             QYrequest htp = new QYrequest();
             Log.d("hjt.get.followed.post", "1");
-            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.post_url + "0/", "Authorization", GlobalVariable.mInstance.token), false, null);
+            return MsgProcess.msgProcessArr(htp.advanceGet(Constant.mInstance.post_url + "0/"
+                    + Json2X.Json2StringGet("start", String.valueOf(counter_follow.start), "lens", String.valueOf(counter_follow.len)),
+                    "Authorization", GlobalVariable.mInstance.token), true, "followed.post");
         }
 
         @Override
@@ -202,12 +206,13 @@ public class Post extends RelativeLayout implements View.OnClickListener {
                 Log.d("hjt.get.follow.post", "null_json");
                 return;
             }
-//            if(jsonArray.length() == 0){
-//                wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
-//            }
-//            else {
-//                wrapper_follow.setLoadState(wrapper_rec.LOADING_COMPLETE);
-//            }
+            if(jsonArray.length() == 0){
+                wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
+            }
+            else {
+                wrapper_follow.setLoadState(wrapper_rec.LOADING_COMPLETE);
+            }
+            counter_follow.inc(jsonArray.length());
             wrapper_follow.setLoadState(wrapper_rec.LOADING_END);
             cnt_f += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){

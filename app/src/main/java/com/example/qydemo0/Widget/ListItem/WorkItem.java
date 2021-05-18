@@ -85,6 +85,22 @@ public class WorkItem extends LinearLayoutItem {
         this.id = id;
         setOnClick();
     }
+    public void init(String cover_url, String video_name, int play_num, String intro, String uploader_name, int id){
+        cover = mView.findViewById(R.id.cover);
+        name = mView.findViewById(R.id.video_name);
+        this.intro = mView.findViewById(R.id.text_intro);
+        like = mView.findViewById(R.id.text_like_num);
+        play = mView.findViewById(R.id.text_play_num);
+        uploader = mView.findViewById(R.id.uploader);
+
+        Img.url2imgViewRoundRectangle(cover_url, cover, mContext, 20);
+        name.setText(video_name);
+        play.setText(String.valueOf(play_num));
+        uploader.setText(uploader_name);
+        this.intro.setText(intro);
+        this.id = id;
+        setOnClick();
+    }
 
     public void setOnClick(){
         mView.setOnClickListener(new SendWorkId());

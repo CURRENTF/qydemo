@@ -131,7 +131,7 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
             return MsgProcess.msgProcessArr(htp.advanceGet(
                     Constant.mInstance.userWork_url + uid + "/" + Json2X.Json2StringGet("start", String.valueOf(counter.start)
                             , "lens", String.valueOf(counter.len)), "Authorization", GlobalVariable.mInstance.token
-            ), false, null);
+            ), true, "get.works");
         }
 
         @Override
@@ -141,16 +141,18 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
                 return;
             }
             counter.inc(jsonArray.length());
-            work_cnt += jsonArray.length();
+//            work_cnt += jsonArray.length();
             for(int i = 0; i < jsonArray.length(); i++){
                 WorkItem workItem = new WorkItem(UserDetailActivity.this);
                 try {
                     JSONObject json = jsonArray.getJSONObject(i);
+                    Log.d("hjt.de.work", json.toString());
                     JSONObject cover = json.getJSONObject("cover");
                     workItem.init(cover.getString("url"), json.getString("name"),
                             json.getInt("like_num"), json.getInt("play_num"),
                             json.getString("introduction"), json.getJSONObject("belong").getString("username"), json.getInt("id"));
                     works.addView(workItem);
+//                    posts.addView(workItem);
                     works.addView(Img.linearLayoutDivideLine(UserDetailActivity.this));
                 } catch (JSONException e) {
                     e.printStackTrace();

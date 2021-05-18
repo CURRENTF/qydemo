@@ -119,4 +119,5 @@ public class LinearLayoutAdapter extends RecyclerView.Adapter<LinearLayoutAdapte
         dataList.clear();
         notifyDataSetChanged();
     }
+
 }

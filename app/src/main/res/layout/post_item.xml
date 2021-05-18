@@ -51,6 +51,7 @@
                 android:text="+关注"
                 android:textColor="@color/real_pink"
                 android:id="@+id/btn_follow"
+                android:visibility="gone"
                 android:gravity="center"/>
         </LinearLayout>
     </LinearLayout>
@@ -74,6 +75,11 @@
             android:id="@+id/post_main"
             android:background="@color/smoke"
             android:orientation="vertical">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/post_single_image"
+                android:visibility="gone"/>
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

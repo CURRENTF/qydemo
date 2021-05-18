@@ -52,6 +52,7 @@ import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.Widget.QYDialogUncancelable;
+import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.bean.CallBackBean;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.gson.Gson;
@@ -89,7 +90,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
     StandardGSYVideoPlayer videoPlayer;
 
     private WaveLoadDialog dialog;
-    private QYDialogUncancelable dialog_loading;
+    private QYLoading dialog_loading;
     private AVLoadingIndicatorView avi;
 
     private int[] render_paras = {0,0,0};
@@ -111,10 +112,10 @@ public class VideoRenderActivity extends MyAppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_video_render);
-//        final Intent intent = getIntent();
-//        free_dance_url = intent.getStringExtra("free_dance_url");
+        final Intent intent = getIntent();
+        free_dance_url = intent.getStringExtra("free_dance_url");
 
-        free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
+        //free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
         Log.e("free_dance_url",free_dance_url);
 
         inti_clip_video();
@@ -144,6 +145,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                     public void onClick(View v) {
                         int[] render_paras_cur = new int[3];
                         render_paras_cur = popupWindowRight.getRenderParams();
+                        render_paras[0] = render_paras_cur[0];
                         render_paras[1] = render_paras_cur[1];
                         render_paras[2] = render_paras_cur[2];
                         render_reset.setVisibility(View.GONE);
@@ -414,6 +416,13 @@ public class VideoRenderActivity extends MyAppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    @Override
     protected void onDestroy() {
         if (mCVClient != null) {
             mCVClient.stop();
@@ -421,6 +430,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
         mCVClient.releaseService();
         mCVClient = null;
         super.onDestroy();
+        videoPlayer.release();
     }
 
     public class SendRenderVideo extends MyAsyncTask<String, String, String> {
@@ -467,17 +477,11 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                     render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cu, 0, cur_file.hashFileUrl(cu));
                     Log.i("12312","成功上传！");
                 } else {
-                    try {
-                            String cur_url = Img.saveImg(Img.getBitmapFormUri(VideoRenderActivity.this, Uri.parse("android.resource://"
-                                    + getApplicationContext().getPackageName() + "/" + imgs[bg-1])), "", VideoRenderActivity.this);
-                            cur_url = Img.compressWithUrl(cur_url, VideoRenderActivity.this);
-                            render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
+                    String cur_url = Img.saveImg(BitmapFactory.decodeResource(getResources(), imgs[bg-1]), "", VideoRenderActivity.this);
+                    //cur_url = Img.compressWithUrl(cur_url, VideoRenderActivity.this);
+                    render_img_id = cur_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, cur_url, 0, cur_file.hashFileUrl(cur_url));
 
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
                 }
             }
             return render_img_id;
@@ -491,10 +495,8 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                 dialog.start_progress();
             }
             else{
-                dialog_loading = new QYDialogUncancelable(VideoRenderActivity.this, R.layout.loading_dialog, new int[]{R.id.avi});
-                dialog_loading.show();
-                avi = (AVLoadingIndicatorView) dialog_loading.findViewById(R.id.avi);
-                avi.smoothToShow();
+                dialog_loading = new QYLoading(VideoRenderActivity.this);
+                dialog_loading.start_dialog();
             }
         }
 
@@ -589,10 +591,10 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                     Log.i("whc_url", s);
                     updatePlayer(s);
                 } else {
-                    avi.smoothToHide();
-                    dialog_loading.dismiss();
+                    dialog_loading.stop_dialog();
                     Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
             }

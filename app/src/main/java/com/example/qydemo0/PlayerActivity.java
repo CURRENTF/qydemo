@@ -77,6 +77,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.qydemo0.QYpack.MsgProcess.getWrongMsg;
+
 /**
  * Created by guoshuyu on 2017/6/18.
  * sampleVideo支持全屏与非全屏切换的清晰度，旋转，镜像等功能.
@@ -306,6 +308,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                     else if(cur_urls.has("自动")) {
                         data1.add(cur_urls.getString("自动"));
                     }
+                    data1.add(""+work_id);
                 }
                 catch (JSONException e) {
                     e.printStackTrace();
@@ -668,6 +671,8 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
 
         loadFirstFrameCover(coverUrl);
 
+        detailPlayer.startPlayLogic();
+
     }
 
     private void init_work(String cur_Json, String cur_Json1) throws JSONException {
@@ -782,6 +787,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
     protected void onDestroy() {
         super.onDestroy();
         isRelease = true;
+        detailPlayer.getCurrentPlayer().release();
         if (isPlay) {
             getCurPlay().release();
         }
@@ -1195,10 +1201,13 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String... contentt) {
             super.onPostExecute(contentt);
+            if(contentt[0].equals("success")){
             try {
-                success_commment(contentt[0], Integer.valueOf(contentt[1]));
+                success_commment(contentt[1], Integer.valueOf(contentt[2]));
             } catch (JSONException e) {
                 e.printStackTrace();
+            }} else {
+                Toast.makeText(PlayerActivity.this, contentt[1], Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -1207,11 +1216,16 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             String[] callToJson = {"text", "string",strings[0]};
             String res = work_request.advancePost(GenerateJson.universeJson2(callToJson),
                     Constant.mInstance.comment+"0/"+work_id+"/", "Authorization", GlobalVariable.mInstance.token);
+            Log.i("comment_callback",res);
             try {
                 JSONObject res_jsonobj = new JSONObject(res);
-                Log.i("comment_callback",res);
+                if(!res_jsonobj.getString("msg").equals("Success")){
+                    String wrong_text = getWrongMsg(res);
+                    Log.i("wrong_text", wrong_text);
+                    return new String[]{"wrong", wrong_text};
+                }
                 if(res_jsonobj.getString("msg").equals("Success")) {
-                    String[] res_reply_all = {strings[0], String.valueOf(res_jsonobj.getJSONObject("data").getInt("cid"))};
+                    String[] res_reply_all = {"success",strings[0], String.valueOf(res_jsonobj.getJSONObject("data").getInt("cid"))};
                     return res_reply_all;
                 }
                 else
@@ -1231,10 +1245,18 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String[] contentt) {
             super.onPostExecute(contentt);
-            try {
-                success_reply(contentt[2],Integer.valueOf(contentt[1]),Integer.valueOf(contentt[0]),Integer.valueOf(contentt[3]));
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(contentt == null){
+                Toast.makeText(PlayerActivity.this, "出错啦！", Toast.LENGTH_SHORT).show();
+            } else {
+                if(contentt[0].equals("success")) {
+                    try {
+                        success_reply(contentt[3], Integer.valueOf(contentt[2]), Integer.valueOf(contentt[1]), Integer.valueOf(contentt[4]));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(PlayerActivity.this, contentt[1], Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
@@ -1252,11 +1274,13 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             }
             try {
                 if ((new JSONObject(res)).getString("msg").equals("Success")) {
-                    String[] res_to_reply = {strings[0], strings[1], strings[2], String.valueOf((new JSONObject(res)).getJSONObject("data").getInt("cid"))};
+                    String[] res_to_reply = {"success", strings[0], strings[1], strings[2], String.valueOf((new JSONObject(res)).getJSONObject("data").getInt("cid"))};
                     return res_to_reply;
+                } else {
+                    String wrong_text = MsgProcess.getWrongMsg(res);
+                    return new String[]{"wrong", wrong_text};
+
                 }
-                else
-                    return null;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -1276,10 +1300,14 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             String[] callJson = {"target","int",""+ work_bean.getData().getBelong().getUid()};
             String res = work_request.advancePost(GenerateJson.universeJson2(callJson),
                     Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
-            Log.i("关注", res);
-            Gson gson = new Gson();
-            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-            return call_back_bean.getMsg().equals("Success");
+            if(MsgProcess.checkMsg(res,false,null)){
+                return true;
+            }
+            else return  false;
+//            Log.i("关注", res);
+//            Gson gson = new Gson();
+//            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
+//            return call_back_bean.getMsg().equals("Success");
 
         }
 
@@ -1304,10 +1332,12 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             String[] callJson = {"target","int",""+ work_bean.getData().getBelong().getUid()};
             String res = work_request.advanceMethod("DELETE",GenerateJson.universeJson2(callJson),
                     Constant.mInstance.userFollow_url, "Authorization", GlobalVariable.mInstance.token);
-            Log.i("取消关注", res);
-            Gson gson = new Gson();
-            CallBackBean call_back_bean = gson.fromJson(res, CallBackBean.class);
-            return call_back_bean.getMsg().equals("Success");
+            if(MsgProcess.checkMsg(res, false, null)){
+                return true;
+            }
+            else {
+                return false;
+            }
         }
 
         @Override

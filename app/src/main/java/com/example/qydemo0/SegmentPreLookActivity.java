@@ -218,6 +218,7 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
                 Toast.makeText(SegmentPreLookActivity.this, "出错啦！", Toast.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(SegmentPreLookActivity.this, LearnDanceActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 ArrayList<String> params = new ArrayList<>();
                 params.add(String.valueOf(integer));
                 params.add(breakdown_id);

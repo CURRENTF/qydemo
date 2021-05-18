@@ -135,6 +135,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
     private int is_normal;
 
+    private boolean is_fac = false;
+
     private List<Integer> expressions_sad = new ArrayList<>();
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
@@ -174,6 +176,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private JSONArray urls_jsonarry = new JSONArray();
 
     private QYrequest learn_request = new QYrequest();
+
     private  QYFile learn_file = new QYFile();
 
     boolean mirror_status = false;
@@ -184,8 +187,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private int startCode = -1;
 
     private TextView smile_word;
-
-    private int cur_h = 480;
 
     private RelativeLayout.LayoutParams fill_tiny;
 
@@ -217,6 +218,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private List<List<Integer> > spt = new ArrayList<>();
 
     private String nne, nnv, nnm, nni;
+
+    AudioPlayer audioPlayer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +281,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             @Override
             public void onServiceConnect() {
                 Log.i("TAG", "initService: onServiceConnect");
-                int startCode = mCVClient.start();
+                startCode = mCVClient.start();
                 if (startCode == 0) {
 
                 } else {
@@ -304,7 +307,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         });
         init_kqw();
 
-        wrongShow = new WrongShow(LearnDanceActivity.this);
         new InitAllLearn(LearnDanceActivity.this).execute(bid);
 
 //        phl.setPoints(trpl);
@@ -387,10 +389,9 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     }
                 }
                 else if (dataa.equals("【镜像】翻转")) {
-                    detailPlayer.MirrorRoa();
-                    if(!detailPlayer.getGSYVideoManager().isPlaying()) {
-                        SoundTipUtil.soundTip(LearnDanceActivity.this, "好的");
-                    }
+                    detailPlayer.setmTransformSize(1);
+                } else if (dataa.equals("【恢】复")) {
+                    detailPlayer.setmTransformSize(0);
                 }
             }
         };
@@ -441,6 +442,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         if (!is_compare) {
             if (!is_learn) {
                 cover_start_icon.setVisibility(View.VISIBLE);
+                detailPlayer.setmTransformSize(1);
                 is_learn = true;
                 init_learn_view();
                 detailPlayer.startPlayLogic();
@@ -464,12 +466,14 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     }
 
     private String getFer(Bitmap bitmap){
+        Log.i("whc_bitmap", String.valueOf(bitmap==null));
         String res = "";
         FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
         inputSlot.setTargetBitmap(bitmap);
         FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
         mCVClient.process(inputSlot, outputSlot);
         FaceResultList faceList = outputSlot.getFaceList();
+        Log.i("whc_faceResult", String.valueOf(faceList));
         List<FaceResult> faceResultList = new ArrayList<>();
         faceResultList = faceList.getFaceResultList();
         for (FaceResult faceResult: faceResultList) {
@@ -560,13 +564,13 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     human_iconss.setVisibility(View.VISIBLE);
                     for(int i=0;i<6;i++) human_icons[i].setVisibility(View.VISIBLE);
                     btn2.setScaleX(-1);
+                    wrongShow.start_show();
                 }
 
                 if(is_learn && !is_compare){
                     detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
                     Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
-                    AudioPlayer audioPlayer = null;
                     try {
                         audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_10);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -617,12 +621,12 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
         people_all.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         people_all.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        detailPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
-            @Override
-            public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
-                show_wrong();
-            }
-        });
+//        detailPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
+//            @Override
+//            public void onProgress(int progress, int secProgress, int currentPosition, int duration) {
+//                //show_wrong();
+//            }
+//        });
 
         detailPlayer.getCurrentPlayer().startPlayLogic();
 
@@ -674,6 +678,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             wrong_kuang[k].setBackgroundResource(R.color.dark_color);
         for(int k=0;k<6;k++)
             human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
+
+        Log.i("whc_eva", evaluation_json);
 
         Log.i("whc_video_url", (new JSONObject(video_url_json)).getJSONObject("url").getString("自动"));
 
@@ -747,7 +753,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
     void shrink_menu_now(){
         arrow.setImageResource(R.drawable.ic_down_arrow2);
-        menu_op.setTranslationY(-DeviceInfo.dip2px(LearnDanceActivity.this, 253));
+        menu_op.setTranslationY(-DeviceInfo.dip2px(LearnDanceActivity.this, 300));
 
         arrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -778,10 +784,10 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         for(int i=0;i<10;i++) wrong_kuang[i].setVisibility(GONE);
         detailPlayer.setSpeedPlaying(1.0f, true);
         detailPlayer.getMspeed().setText("1倍速");
-        wrongShow.stop_show();
         human_iconss.setVisibility(GONE);
         phl.stop_now();
         phr.stop_now();
+        wrongShow.stop_show();
         reset_player();
     }
 
@@ -797,6 +803,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         cur_process.setVisibility(GONE);
         changeSpeed.setVisibility(GONE);
         detailPlayer.setIs_double(false);
+        detailPlayer.setmTransformSize(1);
     }
 
     private void reset_learn_view(){
@@ -953,6 +960,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         File file1 = new File(path_cur);
         if(file1.exists()) file1.delete();
         }
+        if(audioPlayer!=null) audioPlayer.stop();
     }
 
     private GSYVideoPlayer getCurPlay() {
@@ -1060,6 +1068,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             //重置
             mRecorder.reset();
             //showProgressDialog("提示","正在努力解析中，请稍等...");
+            new getFaceExpression(this).execute();
             new SendUserDanceVideo(this).execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -1073,13 +1082,9 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         reset_learn_view();
         btn2.setScaleX(-1);
         for(int i=0;i<6;i++) human_icons[i].setVisibility(View.VISIBLE);
-        if(mirror_status){
-            mirror_status = false;
-            mSurfaceView.setLayoutParams(fill_tiny);
-            black_back.setLayoutParams(fill_tiny);
-        }
         wrongShow.start_show();
         human_iconss.setVisibility(View.VISIBLE);
+        detailPlayer.setmTransformSize(0);
         reset_player();
     }
 
@@ -1186,6 +1191,50 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         super.onBackPressed();
     }
 
+    public class getFaceExpression extends MyAsyncTask<Void, String, Boolean> {
+
+        protected getFaceExpression(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... avoid) {
+            is_fac = false;
+            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
+            Log.i("whc_fer_num", bitmaps.size()+"");
+            for(int k=0;k<10;k++) {
+                try {
+                    Thread.sleep(500);
+                    if(startCode==0) {
+                        Log.i("whc_ee", "startCode==0");
+                        for (int i = 0; i < bitmaps.size(); i++) {
+                            Log.i("whc_e", getFer(bitmaps.get(i)));
+                            if (getFer(bitmaps.get(i)).equals("Sad")) {
+                                expressions_sad.add(i);
+                            }
+                        }
+                        //Log.i("whc_expressions", ""+expressions_sad);
+                        return true;
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Log.i("expression_res", String.valueOf(expressions_sad));
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isi) {
+            is_fac = true;
+        }
+
+
+
+    }
+
     public class SendUserDanceVideo extends MyAsyncTask<String, String, JSONObject[]> {
 
         protected SendUserDanceVideo(MyAppCompatActivity activity) {
@@ -1195,32 +1244,13 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            btn_mirrors(0);
             dialog = new WaveLoadDialog(LearnDanceActivity.this);
             dialog.start_progress();
         }
 
         @Override
         protected JSONObject[] doInBackground(String... video_path) {
-
-
-            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
-            for(int k=0;k<10;k++) {
-                try {
-                    Thread.sleep(500);
-                    if(startCode==0) {
-                        for (int i = 0; i < bitmaps.size(); i++) {
-                            if (getFer(bitmaps.get(i)).equals("Sad")) {
-                                expressions_sad.add(i);
-                            }
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            Log.i("expression_res", String.valueOf(expressions_sad));
-
             try {String learn_dance_id = learn_file.uploadFileAllIn(Constant.mInstance.file_upload_verify_url, path_cur,
                     2,learn_file.hashFileUrl(path_cur));
             //Log.i("用户视频id", learn_dance_id);
@@ -1238,8 +1268,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 String tid_pose = res_json.getJSONObject("data").getString("tid_pose"),
                         tid_merge = res_json.getJSONObject("data").getString("tid_merge");
                 if(tid_pose==null||tid_merge==null) return null;
-                for(int i=0;i<20;i++){
-                    Thread.sleep(1000);
+                int csc = 0;
+                for(int i=0;i<100;i++){
                     JSONObject task_res = new JSONObject(learn_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid_pose+"/",
                             "Authorization",GlobalVariable.mInstance.token));
                     JSONObject task_res_merge = new JSONObject(learn_request.advanceGet(Constant.mInstance.task_url+"schedule/"+tid_merge+"/",
@@ -1247,11 +1277,23 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     Log.i("whc_task", String.valueOf(task_res));
                     Log.i("whc_merge", String.valueOf(task_res_merge));
                     int cur_schedule = task_res.getJSONObject("data").getJSONObject("task").getInt("prog");
-                    if(task_res.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1&&task_res_merge.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1&& task_res_merge.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url").has("自动")){
+                    if(task_res.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1 && task_res_merge.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1&& task_res_merge.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url").has("自动")){
+                        for(int kk = 0;kk<10;kk++){
+                            if(is_fac) break;
+                            Thread.sleep(500);
+                        }
+                        is_fac = false;
                         return new JSONObject[]{task_res.getJSONObject("data").getJSONObject("data"), task_res_merge.getJSONObject("data").getJSONObject("data")};
                     } else {
-                        publishProgress(cur_schedule==100?"99":String.valueOf(cur_schedule), task_res.getJSONObject("data").getJSONObject("task").getString("step"));
+                        if(cur_schedule!=0) {
+                            if(csc>cur_schedule&&csc+2<100) csc += 2;
+                            publishProgress(cur_schedule == 100 ? "99" : String.valueOf(Math.max(csc, cur_schedule)), task_res.getJSONObject("data").getJSONObject("task").getString("step"));
+                        } else {
+                            publishProgress(""+csc, "初始化中...");
+                            csc += 2;
+                        }
                     }
+                    Thread.sleep(500);
                 }
                 return null;
             } catch (JSONException | InterruptedException e) {
@@ -1262,7 +1304,6 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
         @Override
         protected void onPostExecute(JSONObject[] resJson) {
-            //hideProgressDialog();
             dialog.stop_progress();
             if(resJson != null){
                 try {
@@ -1342,9 +1383,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 }
             }
             else{
-                Toast.makeText(LearnDanceActivity.this,"出错啦！",Toast.LENGTH_LONG);
-                Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
-                startActivity(intent);
+                Toast.makeText(LearnDanceActivity.this,"出错啦！",Toast.LENGTH_LONG).show();
+                finish();
             }
         }
 
@@ -1415,15 +1455,14 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         go_to_next_segment();
                 }  else {
                     try {
+                        detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
+                        detailPlayer.getCurrentPlayer().startPlayLogic();
                         if(is_normal==0) {
                             try {
                                 repeat(nnv, nne, nnm, nni);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                        } else {
-                        detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
-                        detailPlayer.getCurrentPlayer().startPlayLogic();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1460,10 +1499,10 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     private void init_pose_view(){
         phl = new PoseHuman(this);
         phr = new PoseHuman(this);
-        RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(300, 300);
+        RelativeLayout.LayoutParams phpl = new RelativeLayout.LayoutParams(600, 600);
         phpl.addRule(RelativeLayout.CENTER_VERTICAL);
         phpl.addRule(RelativeLayout.ALIGN_LEFT,R.id.centerTextView);
-        RelativeLayout.LayoutParams phpr = new RelativeLayout.LayoutParams(300, 300);
+        RelativeLayout.LayoutParams phpr = new RelativeLayout.LayoutParams(600, 600);
         phpr.addRule(RelativeLayout.CENTER_VERTICAL);
         phpr.addRule(RelativeLayout.ALIGN_RIGHT,R.id.centerTextView);
         phl.setLayoutParams(phpl);
@@ -1476,6 +1515,9 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         pose_status = false;
         phl.setVisibility(GONE);
         phr.setVisibility(GONE);
+        wrongShow = new WrongShow(LearnDanceActivity.this);
+        wrongShow.setLayoutParams(fill_tiny);
+        activityDetailPlayer.addView(wrongShow);
         activityDetailPlayer.addView(phr);
     }
 
@@ -1556,11 +1598,11 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     for (int i = 0; i < 17; i++) {
                         List<Integer> cu = new ArrayList<>();
                         if(ii < raw_points.length && raw_points[ii][i][0]>=0&&raw_points[ii+1][i][0]>=0)
-                            cu.add((int) (wei_a * raw_points[ii][i][0]*300 + wei_b * raw_points[ii + 1][i][0]*300));
+                            cu.add((int) (wei_a * raw_points[ii][i][0]*500 + wei_b * raw_points[ii + 1][i][0]*500 + 50));
                         else
                             cu.add(-1);
                         if(ii < raw_points.length && raw_points[ii][i][1]>=0&&raw_points[ii+1][i][1]>=0)
-                            cu.add((int) (wei_a * raw_points[ii][i][1]*300 + wei_b * raw_points[ii + 1][i][1]*300));
+                            cu.add((int) (wei_a * raw_points[ii][i][1]*500 + wei_b * raw_points[ii + 1][i][1]*500 + 50));
                         else
                             cu.add(-1);
                         //Log.i("points",String.valueOf(cu));
@@ -1638,10 +1680,12 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 }
 
                 for (int i = 0; i < wrong_time.size(); i++) {
-                    if (currentPosition > wrong_time.get(i).get(0) - 500 && currentPosition < wrong_time.get(i).get(0) + wrong_time.get(i).get(1)) {
-                        if (detailPlayer.getSpeed() != 0.25f) {
-                            detailPlayer.getMspeed().setText("0.25倍速");
-                            detailPlayer.getCurrentPlayer().setSpeedPlaying(0.25f, true);
+                    if (currentPosition > wrong_time.get(i).get(0) - 10 && currentPosition < wrong_time.get(i).get(0) + wrong_time.get(i).get(1)) {
+                        if (detailPlayer.getSpeed() != 0.5f) {
+                            Log.i("whc_change", "0.5f");
+                            detailPlayer.getMspeed().setText("0.5倍速");
+                            detailPlayer.getCurrentPlayer().setSpeedPlaying(0.5f, true);
+                        }
                             Log.d("hjt.in.play", "change.it");
 
                             for (int k = 0; k < 2; k++) {
@@ -1664,20 +1708,20 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                                     human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
                                 }
                             }
-                        }
                         break;
                     } else {
                         for (int k = 0; k < 10; k++)
                             wrong_kuang[k].setBackgroundResource(R.color.dark_color);
                         for (int k = 0; k < 6; k++)
                             human_icons[k].setColorFilter(Color.parseColor("#aaaaaa"));
-                        if (detailPlayer.getSpeed() == 0.25f) {
+                        if (detailPlayer.getSpeed() == 0.5f) {
+                            Log.i("whc_change", "1f");
                             detailPlayer.getMspeed().setText("1倍速");
                             detailPlayer.getCurrentPlayer().setSpeedPlaying(1f, true);
                         }
                     }
                 }
-            }
+        }
     }
 
     public class WrongShow extends View {
@@ -1706,6 +1750,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         @Override
         protected void onDraw(Canvas canvas) {
             if(iscon) {
+                Log.i("whc_wrong_show", "y");
                 show_wrong();
                 postInvalidate();
             }

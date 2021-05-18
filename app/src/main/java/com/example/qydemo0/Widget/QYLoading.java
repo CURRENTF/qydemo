@@ -8,11 +8,11 @@ import com.example.qydemo0.R;
 import com.race604.drawable.wave.WaveDrawable;
 
 public class QYLoading {
-    QYDIalog qydIalog;
+    QYDialogUncancelable qydIalog;
     WaveDrawable mWaveDrawable ;
 
     public QYLoading(Context context){
-        qydIalog = new QYDIalog(context, R.layout.qy_loading_dialog, new int[]{R.id.loadingIcon});
+        qydIalog = new QYDialogUncancelable(context, R.layout.qy_loading_dialog, new int[]{});
         mWaveDrawable = new WaveDrawable(context, R.mipmap.logo);
         mWaveDrawable.setIndeterminate(true);
         mWaveDrawable.setWaveAmplitude(50);

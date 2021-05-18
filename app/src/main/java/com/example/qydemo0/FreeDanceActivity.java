@@ -90,7 +90,7 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
     private int current_video_number = 0;
     private Boolean is_learn;
     private int all_num = 1;
-    String path_cur;
+    String path_cur = "";
     private Boolean is_record;
     private Boolean is_compare;
     private QYLoading qyLoading;
@@ -99,6 +99,8 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
 
     RelativeLayout menu_op;
     ImageView arrow;
+
+    private AudioPlayer audioPlayer = null;
 
     private List<List<SwitchVideoModel>> all_learn_video = new ArrayList<>();
 
@@ -153,10 +155,6 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
         initViews();
         ButterKnife.bind(this);
         ArrayList<String> list = getIntent().getStringArrayListExtra("params");
-//        ArrayList<String> list = new ArrayList<>();
-//        list.add("0");
-//        list.add("1080P");
-//        list.add("/sdcard/DCIM/Camera/B612Kaji_20200707_201816_832.mp4");
         initLearnVideo(list);
         is_learn = false;
 
@@ -210,6 +208,7 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                 if (is_compare) {
                     stop_compare_video();
                     Intent intent = new Intent(FreeDanceActivity.this, VideoRenderActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("free_dance_url", path_cur);  // 传递参数，根据需要填写
                     startActivity(intent);
                 }
@@ -226,14 +225,6 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
         menu_op = findViewById(R.id.expand_menu);
         arrow = findViewById(R.id.menu_btn);
         shrink_menu_now();
-
-//        StringBuffer param = new StringBuffer();
-//        //IflytekAPP_id为我们申请的Appid
-//        param.append("appid=4f537480");
-//        param.append(",");
-//        // 设置使用v5+
-//        param.append(SpeechConstant.ENGINE_MODE+"="+ SpeechConstant.MODE_MSC);
-//        SpeechUtility.createUtility(GlobalVariable.mInstance.appContext, param.toString());
 
         init_kqw();
     }
@@ -352,7 +343,6 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                     detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
                     Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
-                    AudioPlayer audioPlayer = null;
                     try {
                         audioPlayer = new AudioPlayer(FreeDanceActivity.this, R.raw.count_number_10);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -360,6 +350,13 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                             public void onCompletion(MediaPlayer mp) {
                                 startRecord();
                                 detailPlayer.onVideoResume();
+                            }
+                        });
+                        audioPlayer.getMediaPlayer().setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                            @Override
+                            public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+                                Log.e("whc_audio_error", "audio_wrong");
+                                return false;
                             }
                         });
                         audioPlayer.getMediaPlayer().start();
@@ -585,9 +582,8 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
             mCoverMedia = null;
         }
         kqw.btn_stop();
-        File file1 = new File(path_cur);
-        if(file1.exists()){
-            file1.delete();
+        if(audioPlayer!=null){
+            audioPlayer.stop();
         }
     }
 
@@ -655,17 +651,16 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
             //设置文件的输出格式
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);//aac_adif， aac_adts， output_format_rtp_avp， output_format_mpeg2ts ，webm
             //设置audio的编码格式
-            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             //设置video的编码格式
             mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             //设置录制的视频编码比特率
-            mRecorder.setVideoEncodingBitRate(3200 * 1440);
+            mRecorder.setVideoEncodingBitRate(1000 * 1500);
             //设置录制的视频帧率,注意文档的说明:
             mRecorder.setVideoFrameRate(30);
             //设置要捕获的视频的宽度和高度
-            float cha = 1080.0f/480.0f;
-            mSurfaceHolder.setFixedSize((int)(640f*cha), 1080);//最高只能设置640x480
-            mRecorder.setVideoSize((int)(640f*cha), 1080);//最高只能设置640x480
+            mSurfaceHolder.setFixedSize(640, 480);//最高只能设置640x480
+            mRecorder.setVideoSize(640, 480);//最高只能设置640x480
             //设置记录会话的最大持续时间（毫秒）
             mRecorder.setMaxDuration(60 * 1000);
             mRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());

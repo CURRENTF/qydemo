@@ -111,7 +111,11 @@ public class RenderItem extends RelativeLayoutItem {
             if(dashboard){
                 onDashboard();
             }
-            else {
+            if(json.getInt("is_finish") == 1 && !dashboard){
+                String video = json.getString("video");
+                name.setVisibility(GONE);
+                time.setTextSize(20);
+                render_finished = true;
                 mView.setOnClickListener(new View.OnClickListener(){
 
                     @Override
@@ -128,12 +132,6 @@ public class RenderItem extends RelativeLayoutItem {
                         getActivity().startActivity(intent);
                     }
                 });
-            }
-            if(json.getInt("is_finish") == 1 && !dashboard){
-                String video = json.getString("video");
-                name.setVisibility(GONE);
-                time.setTextSize(20);
-                render_finished = true;
                 updateSelf(video,
                         Constant.mInstance.default_download_path);
 //                for(int i = 0; i < Constant.mInstance.video_quality.length; i++){
