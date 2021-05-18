@@ -146,11 +146,13 @@ public class UserDetailActivity extends MyAppCompatActivity implements View.OnCl
                 WorkItem workItem = new WorkItem(UserDetailActivity.this);
                 try {
                     JSONObject json = jsonArray.getJSONObject(i);
+                    Log.d("hjt.de.work", json.toString());
                     JSONObject cover = json.getJSONObject("cover");
                     workItem.init(cover.getString("url"), json.getString("name"),
                             json.getInt("like_num"), json.getInt("play_num"),
                             json.getString("introduction"), json.getJSONObject("belong").getString("username"), json.getInt("id"));
                     works.addView(workItem);
+//                    posts.addView(workItem);
                     works.addView(Img.linearLayoutDivideLine(UserDetailActivity.this));
                 } catch (JSONException e) {
                     e.printStackTrace();

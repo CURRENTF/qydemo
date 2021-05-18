@@ -36,11 +36,14 @@ public class PostItem extends LinearLayoutItem {
     private Context mContext = null;
     private Activity activity;
     public View mView = null;
-    public ImageView avatar = null, post_avatar = null, cover = null, like_img;
+    public ImageView avatar = null, post_avatar = null, like_img;
+    ImageView work_cover, img_cover1, img_cover, single_img;
     GridLayout img_set = null;
     LinearLayout work = null, post_post = null;
     TextView username = null, post_username = null, post_time = null, post_content = null, work_name = null;
+    TextView post_comment_num;
     Boolean filled = false;
+    LinearLayout post_main;
 
     public PostItem(Context context) {
         super(context);
@@ -49,12 +52,31 @@ public class PostItem extends LinearLayoutItem {
         initDf();
     }
 
+    public void findViews(){
+        img_set = mView.findViewById(R.id.post_img_layout);
+        work = mView.findViewById(R.id.post_work);
+        post_post = mView.findViewById(R.id.post_post);
+        avatar = mView.findViewById(R.id.post_user_avatar);
+        username = mView.findViewById(R.id.post_user_name);
+        post_time = mView.findViewById(R.id.post_time);
+        post_content = mView.findViewById(R.id.post_content);
+        btn_follow = mView.findViewById(R.id.btn_follow);
+        like_img = mView.findViewById(R.id.like_img);
+        like_num = mView.findViewById(R.id.like_num);
+        work_cover = mView.findViewById(R.id.post_work_cover);
+        post_comment_num = mView.findViewById(R.id.post_comment_num);
+        work_name = mView.findViewById(R.id.post_work_name);
+        post_main = mView.findViewById(R.id.post_main);
+        single_img = mView.findViewById(R.id.post_single_image);
+    }
+
     public PostItem(ViewGroup parent, Activity activity){
         super(activity);
         this.mContext = activity;
         this.activity = activity;
         mView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.post_item, parent,false);
+        findViews();
     }
 
     @Override
@@ -75,6 +97,7 @@ public class PostItem extends LinearLayoutItem {
     private void initDf(){
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.post_item, this, true);
+        findViews();
     }
 
 
@@ -134,22 +157,10 @@ public class PostItem extends LinearLayoutItem {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if(!filled){
-            img_set = mView.findViewById(R.id.post_img_layout);
-            work = mView.findViewById(R.id.post_work);
-            post_post = mView.findViewById(R.id.post_post);
-            avatar = mView.findViewById(R.id.post_user_avatar);
-            username = mView.findViewById(R.id.post_user_name);
-            post_time = mView.findViewById(R.id.post_time);
-            post_content = mView.findViewById(R.id.post_content);
-            btn_follow = mView.findViewById(R.id.btn_follow);
-            like_img = mView.findViewById(R.id.like_img);
-            like_num = mView.findViewById(R.id.like_num);
-        }
         filled = true;
         try {
             like_num.setText(String.valueOf(json.getInt("like_num")));
-            TextView txt = mView.findViewById(R.id.post_comment_num);
+            TextView txt = post_comment_num;
             txt.setText(json.getString("comment_num"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -169,6 +180,9 @@ public class PostItem extends LinearLayoutItem {
             e.printStackTrace();
             return;
         }
+
+        single_img.setVisibility(GONE);
+
         if(mode == 0){
 //            work.setVisibility(GONE);
 //            post_post.setVisibility(GONE);
@@ -176,14 +190,12 @@ public class PostItem extends LinearLayoutItem {
         }
         else if(mode == 1){
             img_set.setVisibility(GONE);
-            cover = mView.findViewById(R.id.post_work_cover);
-            work_name = mView.findViewById(R.id.post_work_name);
             work.setVisibility(VISIBLE);
             try {
                 JSONObject work = json.getJSONObject("work");
                 work_id = work.getInt("id");
                 JSONObject coverInfo = work.getJSONObject("cover");
-                Img.url2imgViewRoundRectangle(coverInfo.getString("url"), cover, mContext, 40);
+                Img.url2imgViewRoundRectangle(coverInfo.getString("url"), work_cover, mContext, 40);
                 work_name.setText(work.getString("name"));
                 this.work.setOnClickListener(new GotoWork());
             } catch (JSONException e) {
@@ -192,63 +204,63 @@ public class PostItem extends LinearLayoutItem {
             }
         }
         else if(mode == 2){
-            img_set.setVisibility(GONE);
-            post_post.setVisibility(VISIBLE);
-            post_post.setOnClickListener(new GotoPostDetail());
-            cover = mView.findViewById(R.id.post_forward_video_cover);
-            post_username = mView.findViewById(R.id.post_forward_username);
-            try {
-                JSONObject post = json.getJSONObject("post");
-                post_json = post.toString();
-                JSONObject post_user = post.getJSONObject("belong");
-                post_username.setText(post_user.getString("name"));
-                TextView forward_text = mView.findViewById(R.id.post_forward_text);
-                forward_text.setText(post.getString("text"));
-                TextView forward_name = mView.findViewById(R.id.post_forward_name);
-                JSONObject coverInfo = post.getJSONObject("cover");
-                if(coverInfo.getString("url").equals("null")){
-                    cover.setVisibility(GONE);
-                    forward_name.setVisibility(GONE);
-                    return;
-                }
-                JSONObject coverInfo2 = post.getJSONObject("cover");
-                Img.url2imgViewRoundRectangle(coverInfo2.getString("url"), cover, mContext, 40);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+//            img_set.setVisibility(GONE);
+//            post_post.setVisibility(VISIBLE);
+//            post_post.setOnClickListener(new GotoPostDetail());
+//            cover = mView.findViewById(R.id.post_forward_video_cover);
+//            post_username = mView.findViewById(R.id.post_forward_username);
+//            try {
+//                JSONObject post = json.getJSONObject("post");
+//                post_json = post.toString();
+//                JSONObject post_user = post.getJSONObject("belong");
+//                post_username.setText(post_user.getString("name"));
+//                TextView forward_text = mView.findViewById(R.id.post_forward_text);
+//                forward_text.setText(post.getString("text"));
+//                TextView forward_name = mView.findViewById(R.id.post_forward_name);
+//                JSONObject coverInfo = post.getJSONObject("cover");
+//                if(coverInfo.getString("url").equals("null")){
+//                    cover.setVisibility(GONE);
+//                    forward_name.setVisibility(GONE);
+//                    return;
+//                }
+//                JSONObject coverInfo2 = post.getJSONObject("cover");
+//                Img.url2imgViewRoundRectangle(coverInfo2.getString("url"), cover, mContext, 40);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
         }
         else {
             try {
                 JSONArray ja = json.getJSONArray("img_set");
                 if(ja.length() == 1){
-                    LinearLayout.LayoutParams layoutParams =
-                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,200));
-                    ImageView img = new ImageView(mContext);
-
-                    img.setLayoutParams(layoutParams);
+//                    LinearLayout.LayoutParams layoutParams =
+//                            new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceInfo.dip2px(mContext,200));
+//                    ImageView img = new ImageView(mContext);
+//                    img.setLayoutParams(layoutParams);
                     JSONObject jsonObj = (JSONObject) ja.get(0);
-                    Img.url2imgViewRoundRectangle(jsonObj.getString("url"), img, mContext, 20);
-                    LinearLayout l = mView.findViewById(R.id.post_main);
-                    l.removeAllViews();
-                    l.addView(img);
-                    Img.setOnClickForView(img, (AppCompatActivity) mContext, ViewImageActivity.class, jsonObj.getString("url"));
+                    Img.url2imgViewRoundRectangle(jsonObj.getString("url"), single_img, mContext, 20);
+//                    LinearLayout l = post_main;
+//                    l.addView(img);
+                    Img.setOnClickForView(single_img, (AppCompatActivity) mContext, ViewImageActivity.class, jsonObj.getString("url"));
+                    single_img.setVisibility(VISIBLE);
+                    img_set.removeAllViews();
                 }
                 else {
-                    if(mView == null) return;
-                    boolean flag = false;
-                    if(img_set == null){
-                        img_set = mView.findViewById(R.id.post_img_layout);
-                        if(img_set == null){
-                            Log.d("hjtsb", "666");
-//                            flag = true;
-//                            img_set = new GridLayout(mContext);
-//                            ((LinearLayout)mView.findViewById(R.id.post_main)).addView(img_set);
-//                            return;
-                        }
-                        if(mView == null){
-                            Log.d("hjtsb", "667");
-                        }
-                    }
+//                    if(mView == null) return;
+//                    boolean flag = false;
+//                    if(img_set == null){
+//                        img_set = mView.findViewById(R.id.post_img_layout);
+//                        if(img_set == null){
+//                            Log.d("hjtsb", "666");
+////                            flag = true;
+////                            img_set = new GridLayout(mContext);
+////                            ((LinearLayout)mView.findViewById(R.id.post_main)).addView(img_set);
+////                            return;
+//                        }
+//                        if(mView == null){
+//                            Log.d("hjtsb", "667");
+//                        }
+//                    }
                     img_set.setVisibility(VISIBLE);
                     img_set.removeAllViews();
                     for(int i = 0; i < ja.length(); i++){
