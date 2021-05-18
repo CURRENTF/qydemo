@@ -44,11 +44,13 @@ public class WorkItem extends LinearLayoutItem {
         mContext = activity;
         mView = LayoutInflater.from(activity)
                 .inflate(R.layout.work_item, parent, false);
+        findViews();
     }
 
     private void initDf(){
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.work_item, this, true);
+        findViews();
     }
 
     boolean filled = false;
@@ -68,13 +70,18 @@ public class WorkItem extends LinearLayoutItem {
         return;
     }
 
-    public void init(String cover_url, String video_name, int like_num, int play_num, String intro, String uploader_name, int id){
+    public void findViews(){
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.video_name);
         this.intro = mView.findViewById(R.id.text_intro);
         like = mView.findViewById(R.id.text_like_num);
         play = mView.findViewById(R.id.text_play_num);
         uploader = mView.findViewById(R.id.uploader);
+    }
+
+
+    public void init(String cover_url, String video_name, int like_num, int play_num, String intro, String uploader_name, int id){
+
 
         Img.url2imgViewRoundRectangle(cover_url, cover, mContext, 20);
         name.setText(video_name);
@@ -86,12 +93,6 @@ public class WorkItem extends LinearLayoutItem {
         setOnClick();
     }
     public void init(String cover_url, String video_name, int play_num, String intro, String uploader_name, int id){
-        cover = mView.findViewById(R.id.cover);
-        name = mView.findViewById(R.id.video_name);
-        this.intro = mView.findViewById(R.id.text_intro);
-        like = mView.findViewById(R.id.text_like_num);
-        play = mView.findViewById(R.id.text_play_num);
-        uploader = mView.findViewById(R.id.uploader);
 
         Img.url2imgViewRoundRectangle(cover_url, cover, mContext, 20);
         name.setText(video_name);
