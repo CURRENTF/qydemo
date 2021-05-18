@@ -60,7 +60,8 @@ public class GridViewAdapter extends ArrayAdapter<Map<String, Object>> {
         }
         String text = (String) dataList.get(position).get("text");
         String url = (String) dataList.get(position).get("image");
-        Img.url2imgViewRoundRectangle(url, holder.img, mContext, 20);
+        Img.url2imgViewRoundRectangleFitCenter(url, holder.img, mContext, 20);
+        holder.img.setPadding(15, 15, 15, 15);
         holder.text.setText(text);
         holder.clas.setOnClickListener(new View.OnClickListener(){
 
