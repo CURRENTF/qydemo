@@ -342,7 +342,7 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                 if(is_learn && !is_compare){
                     detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
-                    Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"你有5秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
                     try {
                         audioPlayer = new AudioPlayer(FreeDanceActivity.this, R.raw.count_number_5);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
