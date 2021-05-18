@@ -43,38 +43,13 @@
         />
 
     <LinearLayout
-        android:id="@+id/layout_d"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        >
-    <TextView
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:text="难度:"
-        android:textColor="@color/white"
-        android:layout_marginRight="2dp"
-        />
-        <TextView
-            android:id="@+id/difficulty"
-            android:layout_width="80dp"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content"
-            android:text="未知"
-            />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/pass_rate"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/layout_d"
+        android:layout_alignParentTop="true"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
         >
         <TextView
