@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
-                android:text="233"
+                android:text="0"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/text_like_num"/>
             <ImageView
