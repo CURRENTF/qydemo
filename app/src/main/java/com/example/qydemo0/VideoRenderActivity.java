@@ -52,6 +52,7 @@ import com.example.qydemo0.Widget.MyAppCompatActivity;
 import com.example.qydemo0.Widget.MyAsyncTask;
 import com.example.qydemo0.Widget.QYDIalog;
 import com.example.qydemo0.Widget.QYDialogUncancelable;
+import com.example.qydemo0.Widget.QYLoading;
 import com.example.qydemo0.bean.CallBackBean;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.google.gson.Gson;
@@ -89,7 +90,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
     StandardGSYVideoPlayer videoPlayer;
 
     private WaveLoadDialog dialog;
-    private QYDialogUncancelable dialog_loading;
+    private QYLoading dialog_loading;
     private AVLoadingIndicatorView avi;
 
     private int[] render_paras = {0,0,0};
@@ -415,6 +416,13 @@ public class VideoRenderActivity extends MyAppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    @Override
     protected void onDestroy() {
         if (mCVClient != null) {
             mCVClient.stop();
@@ -487,10 +495,8 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                 dialog.start_progress();
             }
             else{
-                dialog_loading = new QYDialogUncancelable(VideoRenderActivity.this, R.layout.loading_dialog, new int[]{R.id.avi});
-                dialog_loading.show();
-                avi = (AVLoadingIndicatorView) dialog_loading.findViewById(R.id.avi);
-                avi.smoothToShow();
+                dialog_loading = new QYLoading(VideoRenderActivity.this);
+                dialog_loading.start_dialog();
             }
         }
 
@@ -585,10 +591,10 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                     Log.i("whc_url", s);
                     updatePlayer(s);
                 } else {
-                    avi.smoothToHide();
-                    dialog_loading.dismiss();
+                    dialog_loading.stop_dialog();
                     Toast.makeText(VideoRenderActivity.this, "开始渲染，请到渲染列表查看进度", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(VideoRenderActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
             }

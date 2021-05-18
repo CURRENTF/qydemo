@@ -208,7 +208,7 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                 if (is_compare) {
                     stop_compare_video();
                     Intent intent = new Intent(FreeDanceActivity.this, VideoRenderActivity.class);
-                    //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("free_dance_url", path_cur);  // 传递参数，根据需要填写
                     startActivity(intent);
                 }

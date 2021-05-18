@@ -67,7 +67,7 @@ public class Img {
                 File pic = new File(path);
                 Log.d("hjt.IMG.path", path);
                 FileOutputStream outputStream = new FileOutputStream(pic);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, outputStream);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
                 return path;
             }
         } catch (FileNotFoundException e) {

@@ -124,9 +124,7 @@ public class PostItem extends LinearLayoutItem {
     public JSONObject json;
 
     public void init(JSONObject json){
-        Log.d("hjt.post", json.toString());
-//        if(filled) return;
-//        filled = true;
+//        Log.d("hjt.post", json.toString());
         this.json = json;
         mode = 0;
         try {
@@ -136,16 +134,19 @@ public class PostItem extends LinearLayoutItem {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        img_set = mView.findViewById(R.id.post_img_layout);
-        work = mView.findViewById(R.id.post_work);
-        post_post = mView.findViewById(R.id.post_post);
-        avatar = mView.findViewById(R.id.post_user_avatar);
-        username = mView.findViewById(R.id.post_user_name);
-        post_time = mView.findViewById(R.id.post_time);
-        post_content = mView.findViewById(R.id.post_content);
-        btn_follow = mView.findViewById(R.id.btn_follow);
-        like_img = mView.findViewById(R.id.like_img);
-        like_num = mView.findViewById(R.id.like_num);
+        if(!filled){
+            img_set = mView.findViewById(R.id.post_img_layout);
+            work = mView.findViewById(R.id.post_work);
+            post_post = mView.findViewById(R.id.post_post);
+            avatar = mView.findViewById(R.id.post_user_avatar);
+            username = mView.findViewById(R.id.post_user_name);
+            post_time = mView.findViewById(R.id.post_time);
+            post_content = mView.findViewById(R.id.post_content);
+            btn_follow = mView.findViewById(R.id.btn_follow);
+            like_img = mView.findViewById(R.id.like_img);
+            like_num = mView.findViewById(R.id.like_num);
+        }
+        filled = true;
         try {
             like_num.setText(String.valueOf(json.getInt("like_num")));
             TextView txt = mView.findViewById(R.id.post_comment_num);
