@@ -367,7 +367,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         }
                         }
                 }
-                else if (dataa.equals("【下】一段")){
+                else if (dataa.equals("下一段")){
                     if (!is_learn) {
                         try {
                             new PostRecord(LearnDanceActivity.this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
@@ -377,9 +377,10 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         }
                     }
                 }
-                else if (dataa.equals("【返】回")){
+                else if (dataa.equals("返【回")){
                     if (is_compare) {
                         stop_compare_video();
+                        btn2.setScaleX(1);
                         try {
                             detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
                             detailPlayer.startPlayLogic();
@@ -572,7 +573,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
                     Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
                     try {
-                        audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_10);
+                        audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_5);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
@@ -818,6 +819,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             if (current_video_number >= all_learn_depose_video_num) {
                 Toast.makeText(LearnDanceActivity.this, "恭喜您！您已学会整支舞蹈！", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
             else {
@@ -1025,6 +1027,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             //设置要捕获的视频的宽度和高度
             int[] r = getBestSupport(detailPlayer.getHeight(), detailPlayer.getWidth());
             Log.i("whc_r", ""+r[0]+"x"+r[1]);
+            Log.i("whc_rr", detailPlayer.getWidth()+"x"+detailPlayer.getHeight());
             mSurfaceHolder.setFixedSize(r[0], r[1]);//最高只能设置640x480
             mRecorder.setVideoSize(r[0], r[1]);//最高只能设置640x480
             //设置记录会话的最大持续时间（毫秒）
@@ -1188,7 +1191,10 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed();
+//        super.onBackPressed();
+        Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public class getFaceExpression extends MyAsyncTask<Void, String, Boolean> {
@@ -1257,6 +1263,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             if(learn_dance_id == null) {
                 Log.e("用户视频", "上传失败");
                 return null;}
+            Log.i("whc_urls_json", ""+urls_jsonarry.getJSONObject(current_video_number));
             String[] callToJson = {"record_id","int", ""+cur_rid,
                     "videoA","string", urls_jsonarry.getJSONObject(current_video_number).getJSONObject("video").getString("id"),
                     "videoB","string",learn_dance_id
@@ -1444,6 +1451,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             if(ints[0]==0){
                 Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
             else{

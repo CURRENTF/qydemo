@@ -344,7 +344,7 @@ public class FreeDanceActivity extends MyAppCompatActivity implements SurfaceHol
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
                     Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
                     try {
-                        audioPlayer = new AudioPlayer(FreeDanceActivity.this, R.raw.count_number_10);
+                        audioPlayer = new AudioPlayer(FreeDanceActivity.this, R.raw.count_number_5);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {

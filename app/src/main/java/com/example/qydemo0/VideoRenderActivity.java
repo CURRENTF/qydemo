@@ -104,6 +104,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
 
     private CVUnitClient mCVClient;
     private int startCode;
+    private boolean is_params_render = false;
 
 //    OrientationUtils orientationUtils;
 
@@ -148,6 +149,7 @@ public class VideoRenderActivity extends MyAppCompatActivity {
                         render_paras[0] = render_paras_cur[0];
                         render_paras[1] = render_paras_cur[1];
                         render_paras[2] = render_paras_cur[2];
+                        is_params_render = true;
                         render_reset.setVisibility(View.GONE);
                         popupWindowRight.dismiss();
                         render_choice.setVisibility(View.VISIBLE);
@@ -164,10 +166,14 @@ public class VideoRenderActivity extends MyAppCompatActivity {
         btn_render.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(is_params_render){
                 Log.i("paras",""+render_paras[0]+" "+render_paras[1]+" "+render_paras[2]);
                 //showProgressDialog("提示","加载中...");
                 isYuLan = false;
                 new SendRenderVideo(VideoRenderActivity.this).execute(free_dance_url);
+                } else {
+                    Toast.makeText(VideoRenderActivity.this, "请先查看预览视频，再来渲染完整的视频吧", Toast.LENGTH_SHORT);
+                }
             }
         });
 

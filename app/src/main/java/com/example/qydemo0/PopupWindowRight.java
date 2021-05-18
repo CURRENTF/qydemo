@@ -27,7 +27,7 @@ import com.example.qydemo0.QYpack.Img;
 public class PopupWindowRight extends PopupWindow implements View.OnClickListener{
     private static final String TAG = "PopupWindowRight";
     private View view;
-    private int bg_img=0, lj_id = 0, style_img = 0, is_fast = 1;
+    private int bg_img=0, lj_id = 0, style_img = 0;
     private ImageView img0,img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img_local,
             lj0,lj1,lj2,lj3,lj4,lj5,lj6,lj7,lj8,lj9,lj10,
             sty0,sty1;
