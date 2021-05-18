@@ -118,6 +118,7 @@ public class Img {
     public static void url2imgViewRoundRectangle(String img_url, ImageView img, Context context, int radius){
         Glide.with(context)
                 .load(img_url)
+                .placeholder(R.drawable.placeholder_image)
                 .transform(new MultiTransformation(new CenterCrop(), new RoundedCorners(radius)))
                 .into(img);
     }
