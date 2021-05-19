@@ -37,6 +37,7 @@ public class AdvanceHttp {
                                         "lens", String.valueOf(len)),
                         "Authorization", GlobalVariable.mInstance.token);
                 msg.obj = MsgProcess.msgProcessArr(res, false, null);
+                if(msg.obj == null) return;
                 handler.sendMessage(msg);
             }
         }).start();
@@ -50,6 +51,7 @@ public class AdvanceHttp {
                 String res = htp.advanceGet(Constant.mInstance.work_url + Json2X.Json2StringGet("start", String.valueOf(startPos), "lens", String.valueOf(len)),
                         "Authorization", GlobalVariable.mInstance.token);
                 msg.obj = MsgProcess.msgProcessArr(res, false, null);
+                if(msg.obj == null) return;
                 handler.sendMessage(msg);
             }
         }).start();
@@ -63,6 +65,7 @@ public class AdvanceHttp {
                 String res = htp.advanceGet(Constant.mInstance.task_url, "Authorization", GlobalVariable.mInstance.token);
                 Log.i("hjt.get.render", res);
                 msg.obj = MsgProcess.msgProcessArr(res, false, null);
+                if(msg.obj == null) return;
                 handler.sendMessage(msg);
             }
         }).start();
@@ -77,8 +80,10 @@ public class AdvanceHttp {
                 Log.e("hjt", res);
                 JSONObject json = MsgProcess.msgProcess(res, false, null);
                 try {
+                    if(json == null) return;
                     JSONArray ja = json.getJSONArray("classification");
                     msg.obj = ja;
+                    if(msg.obj == null) return;
                     handler.sendMessage(msg);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -97,6 +102,7 @@ public class AdvanceHttp {
                 JSONArray ja = MsgProcess.msgProcessArr(res, false, null);
                 Message msg = new Message();
                 msg.obj = ja;
+                if(msg.obj == null) return;
                 handler.sendMessage(msg);
             }
         }).start();
@@ -111,6 +117,7 @@ public class AdvanceHttp {
                 JSONArray ja = MsgProcess.msgProcessArr(res, false, null);
                 Message msg = new Message();
                 msg.obj = ja;
+                if(msg.obj == null) return;
                 handler.sendMessage(msg);
             }
         }).start();
@@ -136,6 +143,7 @@ public class AdvanceHttp {
                 Log.d("hjt.gameRank", res);
                 Message msg = new Message();
                 JSONObject json = MsgProcess.msgProcess(res, false, null);
+                if(json == null) return;
                 if(type == 1 || type == 2){
                     try {
                         JSONArray ja = json.getJSONArray("top");

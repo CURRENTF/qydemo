@@ -36,6 +36,8 @@ public class QYrequest {
                 .build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
@@ -60,6 +62,8 @@ public class QYrequest {
         Request request = tmp.build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
@@ -88,6 +92,7 @@ public class QYrequest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(response == null) return "null";
         try {
             return response.body().string();
         } catch (IOException e) {
@@ -106,6 +111,7 @@ public class QYrequest {
                 .build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
@@ -127,6 +133,7 @@ public class QYrequest {
         Request request = tmp.build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
@@ -144,6 +151,7 @@ public class QYrequest {
                 .build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
@@ -166,6 +174,7 @@ public class QYrequest {
         Request request = tmp.build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {
@@ -197,6 +206,8 @@ public class QYrequest {
         Request request = tmp.build();
         try {
             Response response = okHttpClient.newCall(request).execute();//执行请求
+
+            if(response == null) return "null";
             String mContent = response.body().string();//得到返回响应，注意response.body().string() 只能调用一次！
             return mContent;
         } catch (IOException e) {

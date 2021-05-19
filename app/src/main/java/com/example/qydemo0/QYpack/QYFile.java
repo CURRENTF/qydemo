@@ -89,6 +89,7 @@ public class QYFile {
     public Boolean uploadFile(String http_url, String file_url, String token){
         QYrequest htp = new QYrequest();
         String msg = htp.postWithFile(file_url, "no.use", http_url, token);
+        if(msg == null) return null;
         Log.d("hjt.QYfile.upload", msg);
         return MsgProcess.checkMsg(msg, false, null);
     }
@@ -96,6 +97,7 @@ public class QYFile {
     // 返回 file_id
     public String uploadFileAllIn(String verify_url, String file_url, int file_type, String hash) {
         JSONObject json = verifyFileUpload(verify_url, file_type, hash);
+        if(json == null) return null;
         Log.d("hjt.uploadFileAllIn.json", json.toString());
         try {
             if(json.getBoolean("rapid_upload") || uploadFile(json.getString("upload_url"), file_url, json.getString("token")))
