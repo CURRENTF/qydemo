@@ -173,9 +173,7 @@ public class GameActivity extends MyAppCompatActivity {
             }
         });
         template_image = findViewById(R.id.template_image);
-        template_image.setImageResource(R.drawable.test_game);
         user_image = findViewById(R.id.user_image);
-        user_image.setImageResource(R.drawable.test_game_user);
         user_image.setAlpha(cur_alpha);
         user_image.setVisibility(View.GONE);
         pass_rate = findViewById(R.id.pass_rate_content);
@@ -258,7 +256,7 @@ public class GameActivity extends MyAppCompatActivity {
                     .load(img_list.get(cur_img_ind))
                     .transform(/*new CenterInside(), */new RoundedCorners(20))
                     .into(template_image);
-            pass_rate.setText(diffi_list.get(cur_img_ind));
+            pass_rate.setText(diffi_list.get(cur_img_ind)+"%");
             cur_alpha = 0;
             is_ready = true;
             stop();

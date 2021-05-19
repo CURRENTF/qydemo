@@ -21,7 +21,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10dp"/>
 
-    <ScrollView
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
@@ -34,6 +34,6 @@
         android:gravity="center"
         android:orientation="horizontal">
     </LinearLayout>
-    </ScrollView>
+    </HorizontalScrollView>
 
 </RelativeLayout>

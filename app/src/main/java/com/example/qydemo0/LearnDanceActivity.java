@@ -85,6 +85,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -183,7 +184,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
 
     private ImageView[] wrong_kuang = new ImageView[10], human_icons = new ImageView[6];
 
-    private CVUnitClient mCVClient;
+//    private CVUnitClient mCVClient;
     private int startCode = -1;
 
     private TextView smile_word;
@@ -264,36 +265,36 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         human_iconss = findViewById(R.id.human_icons);
         human_iconss.setVisibility(GONE);
 
-        mCVClient = CVUnit.getFaceFerClient
-                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
-            @Override
-            public void onConnectionSucceed() {
-                Log.i("TAG", " authorize connect: onConnectionSucceed");
-            }
-        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
-            @Override
-            public void onConnectionFailed(ConnectionResult connectionResult) {
-                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
-            }
-        });
-
-        mCVClient.initService(this, new ConnectionCallback() {
-            @Override
-            public void onServiceConnect() {
-                Log.i("TAG", "initService: onServiceConnect");
-                startCode = mCVClient.start();
-                if (startCode == 0) {
-
-                } else {
-                    Log.i("whc123", "init wrong!");
-                }
-            }
-
-            @Override
-            public void onServiceDisconnect() {
-                Log.e("TAG", "initService: onServiceDisconnect: ");
-            }
-        });
+//        mCVClient = CVUnit.getFaceFerClient
+//                (this.getApplicationContext()).addOnConnectionSucceedListener(new OnConnectionSucceedListener() {
+//            @Override
+//            public void onConnectionSucceed() {
+//                Log.i("TAG", " authorize connect: onConnectionSucceed");
+//            }
+//        }).addOnConnectionFailedListener(new OnConnectionFailedListener() {
+//            @Override
+//            public void onConnectionFailed(ConnectionResult connectionResult) {
+//                Log.e("TAG", " authorize connect: onFailure: " + connectionResult.getErrorCode());
+//            }
+//        });
+//
+//        mCVClient.initService(this, new ConnectionCallback() {
+//            @Override
+//            public void onServiceConnect() {
+//                Log.i("TAG", "initService: onServiceConnect");
+//                startCode = mCVClient.start();
+//                if (startCode == 0) {
+//
+//                } else {
+//                    Log.i("whc123", "init wrong!");
+//                }
+//            }
+//
+//            @Override
+//            public void onServiceDisconnect() {
+//                Log.e("TAG", "initService: onServiceDisconnect: ");
+//            }
+//        });
 
         init_wrong_kuang();
         initViews();
@@ -332,8 +333,8 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
     }
 
     private int[] getBestSupport(int h, int w){
-        for(int i=spt.size()-1;i>=0;i--){
-            if(spt.get(i).get(0) < h && (spt.get(i).get(1) + w)/2 < 4000){
+        for(int i=0;i<spt.size();i++){
+            if(spt.get(i).get(0) >= h && (spt.get(i).get(1) + w)/2 < 4000){
                 return new int[]{spt.get(i).get(1), spt.get(i).get(0)};
             }
         }
@@ -367,7 +368,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         }
                         }
                 }
-                else if (dataa.equals("【下】一段")){
+                else if (dataa.equals("下一段")){
                     if (!is_learn) {
                         try {
                             new PostRecord(LearnDanceActivity.this).execute(learning_id, urls_jsonarry.getJSONObject(current_video_number).getInt("id"),2);
@@ -377,9 +378,10 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                         }
                     }
                 }
-                else if (dataa.equals("【返】回")){
+                else if (dataa.equals("返【回")){
                     if (is_compare) {
                         stop_compare_video();
+                        btn2.setScaleX(1);
                         try {
                             detailPlayer.setUp(all_learn_video.get(current_video_number), true, urls_jsonarry.getJSONObject(current_video_number).getString("name"));
                             detailPlayer.startPlayLogic();
@@ -465,22 +467,22 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         }
     }
 
-    private String getFer(Bitmap bitmap){
-        Log.i("whc_bitmap", String.valueOf(bitmap==null));
-        String res = "";
-        FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
-        inputSlot.setTargetBitmap(bitmap);
-        FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
-        mCVClient.process(inputSlot, outputSlot);
-        FaceResultList faceList = outputSlot.getFaceList();
-        Log.i("whc_faceResult", String.valueOf(faceList));
-        List<FaceResult> faceResultList = new ArrayList<>();
-        faceResultList = faceList.getFaceResultList();
-        for (FaceResult faceResult: faceResultList) {
-            res = faceResult.getExpression();
-        }
-        return res;
-    }
+//    private String getFer(Bitmap bitmap){
+//        Log.i("whc_bitmap", String.valueOf(bitmap==null));
+//        String res = "";
+//        FaceInputSlot inputSlot = (FaceInputSlot) mCVClient.createInputSlot();
+//        inputSlot.setTargetBitmap(bitmap);
+//        FaceOutputSlot outputSlot = (FaceOutputSlot) mCVClient.createOutputSlot();
+//        mCVClient.process(inputSlot, outputSlot);
+//        FaceResultList faceList = outputSlot.getFaceList();
+//        Log.i("whc_faceResult", String.valueOf(faceList));
+//        List<FaceResult> faceResultList = new ArrayList<>();
+//        faceResultList = faceList.getFaceResultList();
+//        for (FaceResult faceResult: faceResultList) {
+//            res = faceResult.getExpression();
+//        }
+//        return res;
+//    }
 
     private void init_wrong_kuang(){
         for(int i=0;i<10;i++)
@@ -570,9 +572,9 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                 if(is_learn && !is_compare){
                     detailPlayer.getCurrentPlayer().setIsTouchWiget(false);
                     detailPlayer.getCurrentPlayer().setIsTouchWigetFull(false);
-                    Toast.makeText(getBaseContext(),"你有10秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(),"你有5秒钟的时间到达录制位置",Toast.LENGTH_SHORT).show();
                     try {
-                        audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_10);
+                        audioPlayer = new AudioPlayer(LearnDanceActivity.this, R.raw.count_number_5);
                         audioPlayer.getMediaPlayer().setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
@@ -818,6 +820,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             if (current_video_number >= all_learn_depose_video_num) {
                 Toast.makeText(LearnDanceActivity.this, "恭喜您！您已学会整支舞蹈！", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
             else {
@@ -950,11 +953,11 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             mCoverMedia.release();
             mCoverMedia = null;
         }
-        if (mCVClient != null) {
-            mCVClient.stop();
-        }
-        mCVClient.releaseService();
-        mCVClient = null;
+//        if (mCVClient != null) {
+//            mCVClient.stop();
+//        }
+//        mCVClient.releaseService();
+//        mCVClient = null;
         kqw.btn_stop();
         if(!path_cur.equals("")){
         File file1 = new File(path_cur);
@@ -970,13 +973,11 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         return detailPlayer;
     }
 
-
     private void resolveNormalVideoUI() {
         //增加title
         detailPlayer.getTitleTextView().setVisibility(GONE);
         detailPlayer.getBackButton().setVisibility(GONE);
     }
-
 
     /**
      * 这里只是演示，并不建议直接这么做
@@ -1023,8 +1024,9 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             //设置录制的视频帧率,注意文档的说明:
             mRecorder.setVideoFrameRate(30);
             //设置要捕获的视频的宽度和高度
-            int[] r = getBestSupport(detailPlayer.getHeight(), detailPlayer.getWidth());
+            int[] r = getBestSupport(detailPlayer.getCurrentPlayer().getCurrentVideoHeight(), detailPlayer.getCurrentPlayer().getCurrentVideoWidth());
             Log.i("whc_r", ""+r[0]+"x"+r[1]);
+            Log.i("whc_rr", detailPlayer.getCurrentPlayer().getCurrentVideoHeight()+"x"+detailPlayer.getCurrentPlayer().getCurrentVideoWidth());
             mSurfaceHolder.setFixedSize(r[0], r[1]);//最高只能设置640x480
             mRecorder.setVideoSize(r[0], r[1]);//最高只能设置640x480
             //设置记录会话的最大持续时间（毫秒）
@@ -1068,7 +1070,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             //重置
             mRecorder.reset();
             //showProgressDialog("提示","正在努力解析中，请稍等...");
-            new getFaceExpression(this).execute();
+            //new getFaceExpression(this).execute();
             new SendUserDanceVideo(this).execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -1188,52 +1190,55 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
         if (GSYVideoManager.backFromWindowFull(this)) {
             return;
         }
-        super.onBackPressed();
+//        super.onBackPressed();
+        Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
-    public class getFaceExpression extends MyAsyncTask<Void, String, Boolean> {
-
-        protected getFaceExpression(MyAppCompatActivity activity) {
-            super(activity);
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... avoid) {
-            is_fac = false;
-            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
-            Log.i("whc_fer_num", bitmaps.size()+"");
-            for(int k=0;k<10;k++) {
-                try {
-                    Thread.sleep(500);
-                    if(startCode==0) {
-                        Log.i("whc_ee", "startCode==0");
-                        for (int i = 0; i < bitmaps.size(); i++) {
-                            Log.i("whc_e", getFer(bitmaps.get(i)));
-                            if (getFer(bitmaps.get(i)).equals("Sad")) {
-                                expressions_sad.add(i);
-                            }
-                        }
-                        //Log.i("whc_expressions", ""+expressions_sad);
-                        return true;
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            Log.i("expression_res", String.valueOf(expressions_sad));
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean isi) {
-            is_fac = true;
-        }
-
-
-
-    }
+//    public class getFaceExpression extends MyAsyncTask<Void, String, Boolean> {
+//
+//        protected getFaceExpression(MyAppCompatActivity activity) {
+//            super(activity);
+//        }
+//
+//        @Override
+//        protected Boolean doInBackground(Void... avoid) {
+//            is_fac = false;
+//            List<Bitmap> bitmaps = VideoClip.getFromTime(path_cur);
+//            Log.i("whc_fer_num", bitmaps.size()+"");
+//            for(int k=0;k<10;k++) {
+//                try {
+//                    Thread.sleep(500);
+//                    if(startCode==0) {
+//                        Log.i("whc_ee", "startCode==0");
+//                        for (int i = 0; i < bitmaps.size(); i++) {
+//                            Log.i("whc_e", getFer(bitmaps.get(i)));
+//                            if (getFer(bitmaps.get(i)).equals("Sad")) {
+//                                expressions_sad.add(i);
+//                            }
+//                        }
+//                        //Log.i("whc_expressions", ""+expressions_sad);
+//                        return true;
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            Log.i("expression_res", String.valueOf(expressions_sad));
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Boolean isi) {
+//            is_fac = true;
+//        }
+//
+//
+//
+//    }
 
     public class SendUserDanceVideo extends MyAsyncTask<String, String, JSONObject[]> {
 
@@ -1257,6 +1262,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             if(learn_dance_id == null) {
                 Log.e("用户视频", "上传失败");
                 return null;}
+            Log.i("whc_urls_json", ""+urls_jsonarry.getJSONObject(current_video_number));
             String[] callToJson = {"record_id","int", ""+cur_rid,
                     "videoA","string", urls_jsonarry.getJSONObject(current_video_number).getJSONObject("video").getString("id"),
                     "videoB","string",learn_dance_id
@@ -1278,11 +1284,11 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
                     Log.i("whc_merge", String.valueOf(task_res_merge));
                     int cur_schedule = task_res.getJSONObject("data").getJSONObject("task").getInt("prog");
                     if(task_res.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1 && task_res_merge.getJSONObject("data").getJSONObject("task").getInt("is_finish")==1&& task_res_merge.getJSONObject("data").getJSONObject("data").getJSONObject("video_url").getJSONObject("url").has("自动")){
-                        for(int kk = 0;kk<10;kk++){
-                            if(is_fac) break;
-                            Thread.sleep(500);
-                        }
-                        is_fac = false;
+//                        for(int kk = 0;kk<10;kk++){
+//                            if(is_fac) break;
+//                            Thread.sleep(500);
+//                        }
+//                        is_fac = false;
                         return new JSONObject[]{task_res.getJSONObject("data").getJSONObject("data"), task_res_merge.getJSONObject("data").getJSONObject("data")};
                     } else {
                         if(cur_schedule!=0) {
@@ -1444,6 +1450,7 @@ public class LearnDanceActivity extends MyAppCompatActivity implements SurfaceHo
             if(ints[0]==0){
                 Toast.makeText(LearnDanceActivity.this, "出错啦！", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(LearnDanceActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
             else{

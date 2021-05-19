@@ -69,6 +69,7 @@ public class RenderItem extends RelativeLayoutItem {
         this.context = activity;
         mView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.render_item, parent, false);
+        findViews();
     }
 
     @Override
@@ -83,14 +84,11 @@ public class RenderItem extends RelativeLayoutItem {
     private void initINFLATE(){
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mView = inflater.inflate(R.layout.render_item, this, true);
+        findViews();
     }
 
-    ImageView cover, download;
-    TextView name, progress, time;
-    ProgressBar progressBar, download_progress;
+    void findViews(){
 
-    public void init(JSONObject json){
-        FileDownloader.setup(ac);
         cover = mView.findViewById(R.id.cover);
         name = mView.findViewById(R.id.render_name);
         time = mView.findViewById(R.id.render_time);
@@ -98,6 +96,13 @@ public class RenderItem extends RelativeLayoutItem {
         progressBar = mView.findViewById(R.id.render_progress_bar);
         download = mView.findViewById(R.id.download_btn);
         download_progress = mView.findViewById(R.id.download_progress);
+    }
+
+    ImageView cover, download;
+    TextView name, progress, time;
+    ProgressBar progressBar, download_progress;
+
+    public void init(JSONObject json){
         try {
             String cover_url = json.getJSONObject("cover").getString("url");
             Img.url2imgViewRoundRectangle(cover_url, cover, context, 20);

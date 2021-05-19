@@ -10,7 +10,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="选择一个你喜欢的舞蹈分段吧！"
+        android:text="选择一个你喜欢的舞蹈分段"
         android:textStyle="bold"
         android:textAlignment="center"
         android:textSize="26dp"
