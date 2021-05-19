@@ -76,7 +76,7 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
         wid = list.get(0);
         breakdown_id = list.get(1);
 
-        new get_videos().execute();
+        new get_videos(this).execute();
         init_UI();
         //free_dance_url = "/sdcard/Pictures/QQ/【SPEC舞蹈】《Uh-Oh》-女团(G)I-DLE热单韩舞翻跳（单人版）.mp4";
 //        videos_list.add(free_dance_url);
@@ -230,7 +230,12 @@ public class SegmentPreLookActivity extends MyAppCompatActivity {
         }
     }
 
-    public class get_videos extends AsyncTask<Void, Void, Boolean>{
+    public class get_videos extends MyAsyncTask<Void, Void, Boolean>{
+
+        protected get_videos(MyAppCompatActivity activity) {
+            super(activity);
+        }
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {

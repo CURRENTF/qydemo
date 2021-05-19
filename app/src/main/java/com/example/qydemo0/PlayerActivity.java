@@ -1110,6 +1110,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
 
         @Override
         protected void onPostExecute(List<String> cur_work_json) {
+            if(cur_work_json == null) return;
             super.onPreExecute();
             try {
                 player_urls = new JSONObject(cur_work_json.get(0));
@@ -1147,6 +1148,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String cur_work_json) {
             super.onPreExecute();
+            if(cur_work_json == null) return;
             commentsList = generateTestData(cur_work_json);
             initView();
         }
@@ -1201,6 +1203,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
         @Override
         protected void onPostExecute(String... contentt) {
             super.onPostExecute(contentt);
+            if(contentt == null) return;
             if(contentt[0].equals("success")){
             try {
                 success_commment(contentt[1], Integer.valueOf(contentt[2]));

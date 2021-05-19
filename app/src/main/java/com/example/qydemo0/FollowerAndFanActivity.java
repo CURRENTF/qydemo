@@ -139,6 +139,7 @@ public class FollowerAndFanActivity extends MyAppCompatActivity implements View.
 
         @Override
         protected void onPostExecute(String s) {
+            if(s == null) return;
             Log.e("hjt.followers", s);
             write(MsgProcess.msgProcessArr(s, false, null), list_left);
             super.onPostExecute(s);

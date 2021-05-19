@@ -101,6 +101,7 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
 
         @Override
         protected void onPostExecute(JSONObject json) {
+            if(json == null) return;
             try {
                 Log.d("hjt.json", json.toString());
                 if(json.getBoolean("like")) {
@@ -439,6 +440,7 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
 
         @Override
         protected void onPostExecute(String cur_work_json) {
+            if(cur_work_json == null) return;
             super.onPreExecute();
             commentsList = generateTestData(cur_work_json);
             initView();

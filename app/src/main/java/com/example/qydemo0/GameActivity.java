@@ -473,6 +473,7 @@ public class GameActivity extends MyAppCompatActivity {
         protected void onPostExecute(List<Integer> score) {
             super.onPostExecute(score);
             qyLoading.stop_dialog();
+            if(score == null) return;
             Log.i("user_score",""+score);
             if(score==null) Log.i("whc_score", "empty");
             else showResult(score.get(0));

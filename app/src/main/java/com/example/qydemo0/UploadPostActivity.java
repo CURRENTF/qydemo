@@ -231,7 +231,10 @@ public class UploadPostActivity extends MyAppCompatActivity implements CompoundB
         protected void onPostExecute(Vector<String> s) {
             String[] data = new String[s.size()];
             int i = 0;
-            for(String id : s) data[i++] = id;
+            for(String id : s){
+                if(id == null) return;
+                data[i++] = id;
+            }
             String[] l = {"text", "string", p.getText().toString(),
                     "ap_img_set", "list", GenerateJson.listString(0, data),
                 "is_public", "int", "1"};
