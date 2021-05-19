@@ -323,9 +323,9 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
         like_it = findViewById(R.id.video_like);
         if(ui_bean.getIs_like()){
             isLikeWork = true;
-            like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+            like_it.setColorFilter(Color.parseColor("#f05b72"));
         } else {
-            like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+            like_it.setColorFilter(Color.parseColor("#FF000000"));
         }
         like_it.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -353,7 +353,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                                 {
                                     if(ui_bean.getLike_num() == 0)  video_like_num.setText("");
                                     else video_like_num.setText(""+ui_bean.getLike_num());
-                                    like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                    like_it.setColorFilter(Color.parseColor("#FF000000"));
                                 }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -391,13 +391,13 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                                         if(res.getString("msg").equals("Success"))
                                         {
                                             video_like_num.setText(""+ui_bean.getLike_num());
-                                            like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                            like_it.setColorFilter(Color.parseColor("#f05b72"));
                                             if(isDislikeWork){
                                                 isDislikeWork = false;
                                                 ui_bean.setDislike_num(ui_bean.getDislike_num() - 1);
                                                 if(ui_bean.getDislike_num() == 0)  video_dislike_num.setText("");
                                                 else video_dislike_num.setText(""+ui_bean.getDislike_num());
-                                                dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                                dislike_it.setColorFilter(Color.parseColor("#FF000000"));
                                             }
                                         }
                                     } catch (JSONException e) {
@@ -417,10 +417,10 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
         dislike_it = findViewById(R.id.video_dislike);
         if(ui_bean.getIs_dislike()){
             isDislikeWork = true;
-            dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+            dislike_it.setColorFilter(Color.parseColor("#f05b72"));
         }
         else {
-            dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+            dislike_it.setColorFilter(Color.parseColor("#FF000000"));
         }
         dislike_it.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -448,7 +448,7 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                                             {
                                                 if(ui_bean.getDislike_num() == 0)  video_dislike_num.setText("");
                                                 else video_dislike_num.setText(""+ui_bean.getDislike_num());
-                                                dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                                dislike_it.setColorFilter(Color.parseColor("#FF000000"));
                                             }
                                         } catch (JSONException e) {
                                             e.printStackTrace();
@@ -483,13 +483,13 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
                                             if(res.getString("msg").equals("Success"))
                                             {
                                                 video_dislike_num.setText(""+ui_bean.getDislike_num());
-                                                dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+                                                dislike_it.setColorFilter(Color.parseColor("#f05b72"));
                                                 if(isLikeWork) {
                                                     isLikeWork = false;
                                                     ui_bean.setLike_num(ui_bean.getLike_num() - 1);
                                                     if(ui_bean.getLike_num() == 0)  video_like_num.setText("");
                                                     else video_like_num.setText(""+ui_bean.getLike_num());
-                                                    like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+                                                    like_it.setColorFilter(Color.parseColor("#FF000000"));
                                                 }
                                             }
                                         } catch (JSONException e) {
@@ -731,12 +731,12 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             ui_bean.setLike_num(ui_bean.getLike_num()-1);
             if(ui_bean.getLike_num() == 0)  video_like_num.setText("");
             else video_like_num.setText(""+ui_bean.getLike_num());
-            like_it.setColorFilter(Color.parseColor("#aaaaaa"));
+            like_it.setColorFilter(Color.parseColor("#FF000000"));
         } else{
             isLikeWork = true;
             ui_bean.setLike_num(ui_bean.getLike_num()+1);
             video_like_num.setText(""+ui_bean.getLike_num());
-            like_it.setColorFilter(Color.parseColor("#FF5C5C"));
+            like_it.setColorFilter(Color.parseColor("#f05b72"));
         }
     }
 
@@ -746,12 +746,12 @@ public class PlayerActivity extends MyAppCompatActivity implements View.OnClickL
             ui_bean.setDislike_num(ui_bean.getDislike_num()-1);
             if(ui_bean.getDislike_num() == 0) video_dislike_num.setText("");
             else video_dislike_num.setText(""+ui_bean.getDislike_num());
-            dislike_it.setColorFilter(Color.parseColor("#aaaaaa"));
+            dislike_it.setColorFilter(Color.parseColor("#FF000000"));
         } else{
             isDislikeWork = true;
             ui_bean.setDislike_num(ui_bean.getDislike_num()+1);
             video_dislike_num.setText(""+ui_bean.getDislike_num());
-            dislike_it.setColorFilter(Color.parseColor("#FF5C5C"));
+            dislike_it.setColorFilter(Color.parseColor("#f05b72"));
         }
     }
 
