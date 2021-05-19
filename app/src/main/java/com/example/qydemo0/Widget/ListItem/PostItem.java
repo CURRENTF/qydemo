@@ -182,6 +182,7 @@ public class PostItem extends LinearLayoutItem {
         }
 
         single_img.setVisibility(GONE);
+        work.setVisibility(GONE);
 
         if(mode == 0){
 //            work.setVisibility(GONE);
