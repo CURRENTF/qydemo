@@ -116,8 +116,8 @@ public class PostDetailActivity extends MyAppCompatActivity implements View.OnCl
                 postItem.like_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        like_op *= -1;
                         if(status == 0){
+                            like_op *= -1;
                             OPPost opPost = new OPPost(PostDetailActivity.this);
                             opPost.execute(like_op);
                         }

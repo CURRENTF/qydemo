@@ -295,12 +295,6 @@ public class PostItem extends LinearLayoutItem {
         }
     }
 
-    public int getQYHeight(){
-        if(mode == 0) return 70 + 70 + 40;
-        else if(mode == 1) return 70 + 230 + 40;
-        else if(mode == 2) return 70 + 40 + 14 + 200 + 30 + 10 + 40;
-        else return 70 + 300;
-    }
 
     public void setIntentToDetail(){
         if(json == null) return;
